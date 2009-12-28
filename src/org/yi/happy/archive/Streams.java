@@ -1,6 +1,7 @@
 package org.yi.happy.archive;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -65,6 +66,10 @@ public class Streams {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		Streams.copy(in, out);
 		return out.toByteArray();
+	}
+
+	public static byte[] load(FileInputStream in, int limit) throws IOException {
+		return load(new InputStreamLimit(in, limit));
 	}
 
 }

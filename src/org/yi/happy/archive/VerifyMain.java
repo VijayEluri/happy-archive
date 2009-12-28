@@ -1,5 +1,6 @@
 package org.yi.happy.archive;
 
+import java.io.PrintWriter;
 import java.io.Writer;
 
 public class VerifyMain {
@@ -47,4 +48,12 @@ public class VerifyMain {
 		}
 	}
 
+	public static void main(String[] args) throws Exception {
+		FileSystem fs = new RealFileSystem();
+		Writer out = new PrintWriter(System.out, true);
+
+		new VerifyMain(fs, out).run(args);
+
+		out.flush();
+	}
 }
