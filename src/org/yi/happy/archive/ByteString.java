@@ -4,8 +4,6 @@ import java.io.UnsupportedEncodingException;
 
 /**
  * convert byte arrays to 8 bit strings and back.
- * 
- * @author sarah dot a dot happy at gmail dot com
  */
 public class ByteString {
     /**

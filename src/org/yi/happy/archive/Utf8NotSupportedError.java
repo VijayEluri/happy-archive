@@ -2,8 +2,6 @@ package org.yi.happy.archive;
 
 /**
  * An error for when the UTF-8 encoding is not available.
- * 
- * @author sarah dot a dot happy at gmail dot com
  */
 public class Utf8NotSupportedError extends Error {
 

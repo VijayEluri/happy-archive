@@ -1,0 +1,54 @@
+package org.yi.happy.archive;
+
+import org.yi.happy.crypt.Rijndael;
+
+/**
+ * specific implementation for Rijndael cipher.
+ * 
+ * @author sarah dot a dot happy at gmail dot com
+ * 
+ */
+public class CipherRijndael implements Cipher {
+    private Rijndael instance;
+
+    private byte[] iv;
+
+    private final int bs;
+
+    private final int ks;
+
+    /**
+     * create with the given block size and key size
+     * 
+     * @param bs
+     *            the block size
+     * @param ks
+     *            the key size
+     */
+    public CipherRijndael(int bs, int ks) {
+        this.bs = bs;
+        this.ks = ks;
+        instance = new Rijndael(bs, ks);
+    }
+
+    public void decrypt(byte[] out) {
+        instance.decryptCbc(out, iv);
+    }
+
+    public int getBlockSize() {
+        return bs;
+    }
+
+    public int getKeySize() {
+        return ks;
+    }
+
+    public void setPass(byte[] pass) {
+        instance.setKey(pass);
+        iv = new byte[bs];
+    }
+
+    public void encrypt(byte[] data) {
+        instance.encryptCbc(data, iv);
+    }
+}
