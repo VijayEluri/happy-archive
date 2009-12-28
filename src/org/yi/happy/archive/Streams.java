@@ -68,8 +68,19 @@ public class Streams {
 		return out.toByteArray();
 	}
 
+	/**
+	 * Load the entire content of the given stream into a byte array, unless it
+	 * is larger than limit.
+	 * 
+	 * @param in
+	 *            the stream to read from.
+	 * @param limit
+	 *            the maximum bytes allowed to be read.
+	 * @return the bytes loaded.
+	 * @throws IOException
+	 *             on error, including exceeding the limit.
+	 */
 	public static byte[] load(FileInputStream in, int limit) throws IOException {
 		return load(new InputStreamLimit(in, limit));
 	}
-
 }
