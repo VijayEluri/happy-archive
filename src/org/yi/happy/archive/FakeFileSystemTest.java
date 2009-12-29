@@ -27,7 +27,7 @@ public class FakeFileSystemTest {
 
 	@Test
 	public void testLoad() throws IOException {
-		fake.putFile("test.dat", new byte[0]);
+		fake.save("test.dat", new byte[0]);
 
 		byte[] data = real.load("test.dat");
 
@@ -36,7 +36,7 @@ public class FakeFileSystemTest {
 
 	@Test
 	public void testLoad2() throws IOException {
-		fake.putFile("test.dat", new byte[5]);
+		fake.save("test.dat", new byte[5]);
 
 		byte[] data = real.load("test.dat");
 
@@ -45,14 +45,14 @@ public class FakeFileSystemTest {
 
 	@Test(expected = IOException.class)
 	public void testLoadLimit() throws IOException {
-		fake.putFile("test.dat", ByteString.toUtf8("Hello\n"));
+		fake.save("test.dat", ByteString.toUtf8("Hello\n"));
 
 		real.load("test.dat", 5);
 	}
 
 	@Test
 	public void testOpenInput() throws Exception {
-		fake.putFile("test.dat", ByteString.toUtf8("Hello\n"));
+		fake.save("test.dat", ByteString.toUtf8("Hello\n"));
 
 		InputStream in = real.openInputStream("test.dat");
 

@@ -1,6 +1,7 @@
 package org.yi.happy.archive;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -31,4 +32,13 @@ public class RealFileSystem implements FileSystem {
 		return new FileInputStream(name);
 	}
 
+	@Override
+	public void save(String name, byte[] bytes) throws IOException {
+		FileOutputStream out = new FileOutputStream(name);
+		try {
+			out.write(bytes);
+		} finally {
+			out.close();
+		}
+	}
 }

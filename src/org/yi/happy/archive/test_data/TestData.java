@@ -17,6 +17,33 @@ public enum TestData {
 	CLEAR_CONTENT,
 
 	/**
+	 * blob block
+	 */
+	@Full("blob:200cf5031a53e822c3a29726b73a401600faacf2875f420dfe34"
+			+ "bf87db03e5b0:f6bd9f3b01b4ee40f60df2dc622f9d6f3aa"
+			+ "38a5673a87e820b40164e930edeac")
+	@Locator("blob:200cf5031a53e822c3a29726b73a401600faacf2875f420dfe34"
+			+ "bf87db03e5b0")
+	@Clear(CLEAR_CONTENT)
+	KEY_BLOB,
+
+	@Full("blob:8130021dcf770532dfd0502c5c59475ea4d79e3f:bb3"
+			+ "507d7611785dc392cbcab77af0c3cae14dd8b6f2f5011")
+	@Locator("blob:8130021dcf770532dfd0502c5c59475ea4d79e3f")
+	@Clear(CLEAR_CONTENT)
+	KEY_BLOB_SHA1_AES192,
+
+	/**
+	 * a blob block encrypted using a different cipher
+	 */
+	@Full("blob:936401d0ffc5e8fb8bf5de8d9cfa15b1d8a4daa10136bf37290f"
+			+ "b2a8311a681c:f6bd9f3b01b4ee40f60df2dc622f9d6f")
+	@Locator("blob:936401d0ffc5e8fb8bf5de8d9cfa15b1d8a4daa10136bf37290f"
+			+ "b2a8311a681c")
+	@Clear(CLEAR_CONTENT)
+	KEY_BLOB_AES128,
+
+	/**
 	 * version two content block
 	 */
 	@Full("content-hash:87c5f6fe4ea801c8eb227b8b218a0659c18ece76b7c2"

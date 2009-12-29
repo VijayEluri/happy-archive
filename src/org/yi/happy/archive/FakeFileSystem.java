@@ -11,12 +11,13 @@ public class FakeFileSystem implements FileSystem {
 
 	private Map<String, byte[]> files = new HashMap<String, byte[]>();
 
-	public void putFile(String name, byte[] bytes) {
+	@Override
+	public void save(String name, byte[] bytes) throws IOException {
 		files.put(name, bytes.clone());
 	}
 
 	@Override
-	public byte[] load(String name) throws FileNotFoundException {
+	public byte[] load(String name) throws IOException {
 		byte[] data = files.get(name);
 
 		if (data == null) {
@@ -42,7 +43,7 @@ public class FakeFileSystem implements FileSystem {
 	}
 
 	@Override
-	public InputStream openInputStream(String name) {
+	public InputStream openInputStream(String name) throws IOException {
 		return new ByteArrayInputStream(files.get(name));
 	}
 

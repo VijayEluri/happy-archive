@@ -12,7 +12,7 @@ public class VerifyMainTest {
 	public void testOk() throws Exception {
 		StringWriter out = new StringWriter();
 		FakeFileSystem fs = new FakeFileSystem();
-		fs.putFile(TestData.KEY_CONTENT.getFileName(), TestData.KEY_CONTENT
+		fs.save(TestData.KEY_CONTENT.getFileName(), TestData.KEY_CONTENT
 				.getBytes());
 		VerifyMain app = new VerifyMain(fs, out);
 

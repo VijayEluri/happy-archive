@@ -11,4 +11,6 @@ public interface FileSystem {
 
 	byte[] load(String name, int limit) throws IOException;
 
+	void save(String name, byte[] bytes) throws IOException;
+
 }
