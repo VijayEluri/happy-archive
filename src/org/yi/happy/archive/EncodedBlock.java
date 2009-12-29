@@ -5,8 +5,6 @@ import org.yi.happy.archive.key.LocatorKey;
 
 /**
  * an encoded and validated block of data.
- * 
- * @author sarah dot a dot happy at gmail dot com
  */
 public interface EncodedBlock extends Block {
     /**

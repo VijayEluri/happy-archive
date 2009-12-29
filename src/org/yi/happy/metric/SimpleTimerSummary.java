@@ -12,9 +12,6 @@ package org.yi.happy.metric;
  *     t.stop();
  * }
  * </pre>
- * 
- * @author sarah dot a dot happy at gmail dot com
- * 
  */
 public class SimpleTimerSummary {
 

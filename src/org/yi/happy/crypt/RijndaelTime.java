@@ -7,9 +7,6 @@ import org.yi.happy.metric.SimpleTimerSummary;
 
 /**
  * timing of the rijndael cypher
- * 
- * @author sarah dot a dot happy at gmail dot com
- * 
  */
 public class RijndaelTime {
     private static final int runLength = 1024 * 1024;

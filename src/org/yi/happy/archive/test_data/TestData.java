@@ -11,9 +11,19 @@ import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.KeyParse;
 import org.yi.happy.archive.key.LocatorKey;
 
+/**
+ * Various test data files, these represent the existing data formats in use and
+ * are used to verify encoding and decoding operations.
+ */
 public enum TestData {
+	/**
+	 * The empty file, it does not parse as a block.
+	 */
 	BAD_EMPTY,
 
+	/**
+	 * Some basic content, the string "hello\n" in a block.
+	 */
 	CLEAR_CONTENT,
 
 	/**
@@ -27,6 +37,9 @@ public enum TestData {
 	@Clear(CLEAR_CONTENT)
 	KEY_BLOB,
 
+	/**
+	 * A blob block encoded with different settings.
+	 */
 	@Full("blob:8130021dcf770532dfd0502c5c59475ea4d79e3f:bb3"
 			+ "507d7611785dc392cbcab77af0c3cae14dd8b6f2f5011")
 	@Locator("blob:8130021dcf770532dfd0502c5c59475ea4d79e3f")
@@ -44,7 +57,8 @@ public enum TestData {
 	KEY_BLOB_AES128,
 
 	/**
-	 * version two content block
+	 * version two content block, encoded with the sha-256 diesst and
+	 * rijndael256-256-cbc cipher.
 	 */
 	@Full("content-hash:87c5f6fe4ea801c8eb227b8b218a0659c18ece76b7c2"
 			+ "00c645ab4364becf68d5:f6bd9f3b01b4ee40f60df2dc622f9d6f3aa"
@@ -118,14 +132,32 @@ public enum TestData {
 	@Clear(CLEAR_CONTENT)
 	KEY_NAME_MD5_AES192;
 
+	/**
+	 * get the file name for this enumeration constant, relative to the
+	 * declaring class.
+	 * 
+	 * @return the file name of the data for this item.
+	 */
 	public String getFileName() {
 		return name().toLowerCase().replace('_', '-') + ".bin";
 	}
 
+	/**
+	 * get the address for this enumeration constant.
+	 * 
+	 * @return the address for this enumeration constant.
+	 */
 	public URL getUrl() {
 		return TestData.class.getResource(getFileName());
 	}
 
+	/**
+	 * get the bytes for this enumeration constant.
+	 * 
+	 * @return the bytes for this enumeration constant.
+	 * @throws IOException
+	 *             on error.
+	 */
 	public byte[] getBytes() throws IOException {
 		InputStream in = getUrl().openStream();
 		try {
@@ -142,7 +174,7 @@ public enum TestData {
 	 * @throws UnsupportedOperationException
 	 *             if the annotation is not present or not available
 	 */
-	public FullKey getFullKey() {
+	public FullKey getFullKey() throws UnsupportedOperationException {
 		try {
 			String raw = getAnnotation(Full.class).value();
 			return new KeyParse().parseFullKey(raw);
@@ -158,7 +190,7 @@ public enum TestData {
 	 * @throws UnsupportedOperationException
 	 *             if the annotation is not present or not available
 	 */
-	public LocatorKey getLocatorKey() {
+	public LocatorKey getLocatorKey() throws UnsupportedOperationException {
 		try {
 			String raw = getAnnotation(Locator.class).value();
 			return new KeyParse().parseLocatorKey(raw);
@@ -179,7 +211,8 @@ public enum TestData {
 	 *             if the annotation can not be found or access controls do not
 	 *             allow it to be looked up.
 	 */
-	private <T extends Annotation> T getAnnotation(Class<T> annotation) {
+	private <T extends Annotation> T getAnnotation(Class<T> annotation)
+			throws UnsupportedOperationException {
 		try {
 			Field field = getDeclaringClass().getField(name());
 			T found = field.getAnnotation(annotation);

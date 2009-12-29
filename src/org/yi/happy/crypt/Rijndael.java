@@ -4,8 +4,6 @@ package org.yi.happy.crypt;
  * an independent implementation from information at
  * 
  * http://csrc.nist.gov/CryptoToolkit/aes/rijndael/Rijndael-ammended.pdf
- * 
- * @author sarah dot a dot happy at gmail dot com
  */
 public class Rijndael {
 

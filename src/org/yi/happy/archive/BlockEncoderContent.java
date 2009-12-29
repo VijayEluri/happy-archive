@@ -6,8 +6,6 @@ import org.yi.happy.archive.key.ContentFullKey;
 
 /**
  * A block encoder for content hash blocks.
- * 
- * @author sarah dot a dot happy at gmail dot com
  */
 public class BlockEncoderContent implements BlockEncoder {
     public BlockEncoderContent(MessageDigest digest, NamedCipher cipher) {

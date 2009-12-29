@@ -4,8 +4,6 @@ import org.yi.happy.archive.key.FullKey;
 
 /**
  * the result of doing an encode of a block.
- * 
- * @author sarah dot a dot happy at gmail dot com
  */
 public final class BlockEncoderResult {
     /**

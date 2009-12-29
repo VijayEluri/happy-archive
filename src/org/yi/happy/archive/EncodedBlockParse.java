@@ -7,9 +7,6 @@ import java.net.URL;
 
 /**
  * parser for encoded blocks.
- * 
- * @author sarah dot a dot happy at gmail dot com
- * 
  */
 public class EncodedBlockParse {
     /**

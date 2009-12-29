@@ -4,8 +4,6 @@ import java.security.MessageDigest;
 
 /**
  * encode blob blocks
- * 
- * @author sarah dot a dot happy at gmail dot com
  */
 public class BlockEncoderImpl implements BlockEncoder {
     /**

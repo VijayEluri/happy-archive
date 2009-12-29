@@ -4,9 +4,6 @@ import org.yi.happy.archive.test_data.TestData;
 
 /**
  * utility methods for the test cases
- * 
- * @author sarah dot a dot happy at gmail dot com
- * 
  */
 public class TestUtil {
     /**

@@ -13,9 +13,6 @@ import org.yi.happy.archive.test_data.TestData;
 
 /**
  * tests on BlockUtil
- * 
- * @author sarah dot a dot happy at gmail dot com
- * 
  */
 public class BlockUtilTest {
     /**
@@ -33,7 +30,7 @@ public class BlockUtilTest {
     public void testVerifyClear() {
 		Block block = TestUtil.loadBlock(TestData.OK_SMALL);
 
-        BlockUtil.verify(block);
+		BlockUtil.verify(block);
     }
 
     /**

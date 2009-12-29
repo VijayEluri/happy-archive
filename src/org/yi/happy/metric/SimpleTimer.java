@@ -2,8 +2,6 @@ package org.yi.happy.metric;
 
 /**
  * I am a simple timer.
- * 
- * @author sarah dot a dot happy at gmail dot com
  */
 public class SimpleTimer {
 

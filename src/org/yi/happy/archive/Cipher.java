@@ -2,8 +2,6 @@ package org.yi.happy.archive;
 
 /**
  * interface for using various ciphers.
- * 
- * @author sarah dot a dot happy at gmail dot com
  */
 public interface Cipher {
     /**

@@ -7,8 +7,6 @@ import org.yi.happy.archive.key.HexDecode;
 /**
  * test encryption and decryption of Rijndael, this test data comes from the old
  * feather crypto tests.
- * 
- * @author sarah dot a dot happy at gmail dot com
  */
 public class RijndaelTest extends Assert {
     private static final String KEY128 = "0123456789abcdef"

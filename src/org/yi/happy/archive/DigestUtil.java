@@ -4,8 +4,6 @@ import java.security.MessageDigest;
 
 /**
  * utility functions for with making digests
- * 
- * @author sarah dot a dot happy at gmail dot com
  */
 public class DigestUtil {
     private DigestUtil() {

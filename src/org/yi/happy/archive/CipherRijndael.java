@@ -4,9 +4,6 @@ import org.yi.happy.crypt.Rijndael;
 
 /**
  * specific implementation for Rijndael cipher.
- * 
- * @author sarah dot a dot happy at gmail dot com
- * 
  */
 public class CipherRijndael implements Cipher {
     private Rijndael instance;

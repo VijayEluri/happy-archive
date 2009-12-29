@@ -1,7 +1,8 @@
 package org.yi.happy.archive;
 
 /**
- * An error for when the UTF-8 encoding is not available.
+ * An error for when the UTF-8 encoding is not available. This is an error
+ * because this encoding should always be available.
  */
 public class Utf8NotSupportedError extends Error {
 

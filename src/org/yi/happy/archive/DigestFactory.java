@@ -7,8 +7,6 @@ import org.yi.happy.archive.key.UnknownAlgorithmException;
 
 /**
  * simple factory to create message digest objects
- * 
- * @author sarah dot a dot happy at gmail dot com
  */
 public class DigestFactory {
     /**

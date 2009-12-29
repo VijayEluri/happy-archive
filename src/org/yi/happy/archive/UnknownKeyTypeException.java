@@ -10,22 +10,18 @@ public class UnknownKeyTypeException extends VerifyException {
 
     public UnknownKeyTypeException() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
     public UnknownKeyTypeException(String message, Throwable cause) {
         super(message, cause);
-        // TODO Auto-generated constructor stub
     }
 
     public UnknownKeyTypeException(String message) {
         super(message);
-        // TODO Auto-generated constructor stub
     }
 
     public UnknownKeyTypeException(Throwable cause) {
         super(cause);
-        // TODO Auto-generated constructor stub
     }
 
 }

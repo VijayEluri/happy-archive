@@ -7,9 +7,6 @@ import org.yi.happy.archive.key.UnknownAlgorithmException;
 
 /**
  * Factory for creating Cypher instances.
- * 
- * @author sarah dot a dot happy at gmail dot com
- * 
  */
 public class CipherFactory {
     /**

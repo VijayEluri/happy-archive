@@ -9,9 +9,6 @@ import org.yi.happy.archive.test_data.TestData;
 
 /**
  * tests for block encode
- * 
- * @author sarah dot a dot happy at gmail dot com
- * 
  */
 public class BlockEncodeTest {
     /**

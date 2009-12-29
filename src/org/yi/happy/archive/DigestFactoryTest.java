@@ -8,9 +8,6 @@ import org.yi.happy.archive.key.UnknownAlgorithmException;
 
 /**
  * check functioning of {@link DigestFactory}
- * 
- * @author sarah dot a dot happy at gmail dot com
- * 
  */
 public class DigestFactoryTest {
     /**

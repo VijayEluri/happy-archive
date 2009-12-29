@@ -13,8 +13,6 @@ import org.yi.happy.archive.key.UnknownAlgorithmException;
 
 /**
  * A valid blob encoded block.
- * 
- * @author sarah dot a dot happy at gmail dot com
  */
 public final class BlobEncodedBlock implements EncodedBlock {
     private final BlobLocatorKey key;

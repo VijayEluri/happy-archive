@@ -4,8 +4,6 @@ package org.yi.happy.archive;
  * a cipher that also knows it's name. I was created so that the Cipher
  * interface can more closely match the MessageDigest interface without
  * polluting the specific cipher implementations.
- * 
- * @author sarah dot a dot happy at gmail dot com
  */
 public class NamedCipher implements Cipher {
     private final Cipher delegate;

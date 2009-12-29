@@ -7,8 +7,6 @@ import org.yi.happy.archive.key.UnknownAlgorithmException;
 
 /**
  * Utility methods for blocks of data
- * 
- * @author sarah dot a dot happy at gmail dot com
  */
 public class BlockUtil {
 

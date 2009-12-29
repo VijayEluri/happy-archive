@@ -3,8 +3,6 @@ package org.yi.happy.archive;
 
 /**
  * an encoder for blocks.
- * 
- * @author sarah dot a dot happy at gmail dot com
  */
 public interface BlockEncoder {
     /**
