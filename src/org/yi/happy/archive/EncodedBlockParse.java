@@ -5,9 +5,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+import org.yi.happy.annotate.SmellsProcedural;
+
 /**
  * parser for encoded blocks.
  */
+@SmellsProcedural
 public class EncodedBlockParse {
     /**
      * parse an encoded block from an input stream.
