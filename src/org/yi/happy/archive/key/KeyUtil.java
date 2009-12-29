@@ -3,6 +3,7 @@ package org.yi.happy.archive.key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import org.yi.happy.annotate.TypeSwitch;
 import org.yi.happy.archive.ByteString;
 
 /**
@@ -16,6 +17,7 @@ public class KeyUtil {
      *            the key
      * @return a locator key
      */
+	@TypeSwitch
     public static LocatorKey toLocatorKey(Key key) {
         if (key instanceof LocatorKey) {
             return (LocatorKey) key;

@@ -1,5 +1,7 @@
 package org.yi.happy.archive.key;
 
+import org.yi.happy.annotate.ExternalName;
+
 
 /**
  * the key types.

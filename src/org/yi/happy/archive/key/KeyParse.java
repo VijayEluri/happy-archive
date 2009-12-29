@@ -3,6 +3,9 @@ package org.yi.happy.archive.key;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.yi.happy.annotate.SmellsProcedural;
+
+@SmellsProcedural
 public class KeyParse {
     /**
      * the pattern for blob locators
