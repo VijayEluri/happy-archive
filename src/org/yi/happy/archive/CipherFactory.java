@@ -38,17 +38,17 @@ public class CipherFactory {
         throw new UnknownAlgorithmException(name);
     }
 
-    /**
-     * create an instance, only give back a named cipher.
-     * 
-     * @param algorithm
-     *            the name of the cipher in the form "algo-keySize-mode", for
-     *            example "aes-128-cbc".
-     * @return a NamedCipher wrapping an object implementing the Cipher
-     *         interface.
-     * @throws UnknownAlgorithmException
-     *             if the name is not known
-     */
+	/**
+	 * create an instance, give back a named cipher.
+	 * 
+	 * @param algorithm
+	 *            the name of the cipher in the form "algo-keySize-mode", for
+	 *            example "aes-128-cbc".
+	 * @return a NamedCipher wrapping an object implementing the Cipher
+	 *         interface.
+	 * @throws UnknownAlgorithmException
+	 *             if the name is not known
+	 */
     public static NamedCipher createNamed(String algorithm) {
         return new NamedCipher(algorithm, create(algorithm));
     }
