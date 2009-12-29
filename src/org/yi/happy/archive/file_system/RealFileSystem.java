@@ -1,9 +1,11 @@
-package org.yi.happy.archive;
+package org.yi.happy.archive.file_system;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import org.yi.happy.archive.Streams;
 
 public class RealFileSystem implements FileSystem {
 

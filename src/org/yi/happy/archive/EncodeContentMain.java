@@ -6,6 +6,9 @@ import java.io.Writer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import org.yi.happy.archive.file_system.FileSystem;
+import org.yi.happy.archive.file_system.RealFileSystem;
+
 /**
  * command line tool to encode a content block. The clear data is read from the
  * file named in the first argument, the encoded block is written to the file

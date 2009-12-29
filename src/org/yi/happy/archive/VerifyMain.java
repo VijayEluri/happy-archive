@@ -3,6 +3,9 @@ package org.yi.happy.archive;
 import java.io.PrintWriter;
 import java.io.Writer;
 
+import org.yi.happy.archive.file_system.FileSystem;
+import org.yi.happy.archive.file_system.RealFileSystem;
+
 public class VerifyMain {
 
 	private final FileSystem fileSystem;

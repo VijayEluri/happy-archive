@@ -1,4 +1,4 @@
-package org.yi.happy.archive;
+package org.yi.happy.archive.file_system;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -9,6 +9,7 @@ import java.io.InputStream;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.yi.happy.archive.ByteString;
 
 public class FakeFileSystemTest {
 	private FakeFileSystem fake;

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.yi.happy.annotate.SmellsMessy;
+import org.yi.happy.archive.file_system.FileSystem;
+import org.yi.happy.archive.file_system.RealFileSystem;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.KeyParse;
 

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.StringWriter;
 
 import org.junit.Test;
+import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.test_data.TestData;
 
 public class EncodeContentMainTest {

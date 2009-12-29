@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 
 import org.junit.Test;
 import org.yi.happy.annotate.SmellsMessy;
+import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.test_data.TestData;
 
 public class DecodeBlockMainTest {
