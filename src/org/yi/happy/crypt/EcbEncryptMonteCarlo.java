@@ -50,6 +50,9 @@ public class EcbEncryptMonteCarlo {
 				key[k++] ^= pt[j];
 			}
 		}
+
+		record();
+		record();
 	}
 
 	private static void record() {
