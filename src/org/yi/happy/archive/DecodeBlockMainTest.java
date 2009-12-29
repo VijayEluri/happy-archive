@@ -5,10 +5,12 @@ import static org.junit.Assert.assertArrayEquals;
 import java.io.ByteArrayOutputStream;
 
 import org.junit.Test;
+import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.test_data.TestData;
 
 public class DecodeBlockMainTest {
 	@Test
+	@SmellsMessy
 	public void test1() throws Exception {
 		FakeFileSystem fs = new FakeFileSystem();
 		fs.save("test.dat", TestData.KEY_BLOB.getBytes());

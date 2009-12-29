@@ -3,6 +3,7 @@ package org.yi.happy.archive;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.KeyParse;
 
@@ -30,6 +31,7 @@ public class DecodeBlockMain {
 		out.flush();
 	}
 
+	@SmellsMessy
 	public void run(String... args) throws IOException {
 		EncodedBlock b = new EncodedBlockParse().parse(fs.load(args[0],
 				Blocks.MAX_SIZE));
