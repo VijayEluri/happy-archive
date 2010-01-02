@@ -1,14 +1,14 @@
 package org.yi.happy.archive.key;
 
 public final class BlobLocatorKey extends AbstractLocatorKey implements
-        LocatorKey {
+	LocatorKey {
 
     public BlobLocatorKey(byte[] hash) {
-        super(hash);
+	super(hash);
     }
 
     public String getType() {
-        return KeyType.BLOB;
+	return KeyType.BLOB;
     }
 
 }

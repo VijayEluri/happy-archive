@@ -28,35 +28,35 @@ public class BinaryStreamParserTest {
      */
     @Test
     public void test1() throws IOException {
-        ByteArrayInputStream in = new ByteArrayInputStream(BLOCK.getBytes());
-        try {
-            BinaryStreamParser p = new BinaryStreamParser();
+	ByteArrayInputStream in = new ByteArrayInputStream(BLOCK.getBytes());
+	try {
+	    BinaryStreamParser p = new BinaryStreamParser();
 
-            byte[] name = p.readTo(in, ENDL.getBytes());
-            byte[] term = p.getTerminal();
+	    byte[] name = p.readTo(in, ENDL.getBytes());
+	    byte[] term = p.getTerminal();
 
-			assertArrayEquals("a: 1".getBytes(), name);
-			assertArrayEquals(ENDL.getBytes(), term);
-            assertFalse(p.atEnd());
+	    assertArrayEquals("a: 1".getBytes(), name);
+	    assertArrayEquals(ENDL.getBytes(), term);
+	    assertFalse(p.atEnd());
 
-            name = p.readTo(in, ENDL.getBytes());
-            term = p.getTerminal();
+	    name = p.readTo(in, ENDL.getBytes());
+	    term = p.getTerminal();
 
-            assertSame(name, p.getFound());
-			assertArrayEquals("b: 2".getBytes(), name);
-			assertArrayEquals(ENDL.getBytes(), term);
-            assertFalse(p.atEnd());
+	    assertSame(name, p.getFound());
+	    assertArrayEquals("b: 2".getBytes(), name);
+	    assertArrayEquals(ENDL.getBytes(), term);
+	    assertFalse(p.atEnd());
 
-            name = p.readTo(in, ENDL.getBytes());
-            term = p.getTerminal();
+	    name = p.readTo(in, ENDL.getBytes());
+	    term = p.getTerminal();
 
-            assertSame(name, p.getFound());
-			assertArrayEquals(EMPTY, name);
-			assertArrayEquals(ENDL.getBytes(), term);
-            assertFalse(p.atEnd());
-        } finally {
-            in.close();
-        }
+	    assertSame(name, p.getFound());
+	    assertArrayEquals(EMPTY, name);
+	    assertArrayEquals(ENDL.getBytes(), term);
+	    assertFalse(p.atEnd());
+	} finally {
+	    in.close();
+	}
     }
 
     /**
@@ -66,26 +66,26 @@ public class BinaryStreamParserTest {
      */
     @Test
     public void test2() throws IOException {
-        ByteArrayInputStream in = new ByteArrayInputStream(BLOCK.getBytes());
-        try {
-            BinaryStreamParser p = new BinaryStreamParser();
+	ByteArrayInputStream in = new ByteArrayInputStream(BLOCK.getBytes());
+	try {
+	    BinaryStreamParser p = new BinaryStreamParser();
 
-            byte[] name = p.readTo(in, ENDL.getBytes(), SEPERATOR.getBytes());
-            byte[] term = p.getTerminal();
+	    byte[] name = p.readTo(in, ENDL.getBytes(), SEPERATOR.getBytes());
+	    byte[] term = p.getTerminal();
 
-			assertArrayEquals(name, "a".getBytes());
-			assertArrayEquals(term, SEPERATOR.getBytes());
-            assertFalse(p.atEnd());
+	    assertArrayEquals(name, "a".getBytes());
+	    assertArrayEquals(term, SEPERATOR.getBytes());
+	    assertFalse(p.atEnd());
 
-            name = p.readTo(in, ENDL.getBytes(), SEPERATOR.getBytes());
-            term = p.getTerminal();
+	    name = p.readTo(in, ENDL.getBytes(), SEPERATOR.getBytes());
+	    term = p.getTerminal();
 
-			assertArrayEquals(name, "1".getBytes());
-			assertArrayEquals(term, ENDL.getBytes());
-            assertFalse(p.atEnd());
-        } finally {
-            in.close();
-        }
+	    assertArrayEquals(name, "1".getBytes());
+	    assertArrayEquals(term, ENDL.getBytes());
+	    assertFalse(p.atEnd());
+	} finally {
+	    in.close();
+	}
     }
 
 }

@@ -14,10 +14,10 @@ public class NameLocatorKeyTest {
      */
     @Test
     public void testGood2() {
-        byte[] hash = { 0 };
-        LocatorKey key = new NameLocatorKey(hash);
-        assertEquals("name-hash", key.getType());
-        assertArrayEquals(hash, key.getHash());
+	byte[] hash = { 0 };
+	LocatorKey key = new NameLocatorKey(hash);
+	assertEquals("name-hash", key.getType());
+	assertArrayEquals(hash, key.getHash());
     }
 
     /**
@@ -25,8 +25,8 @@ public class NameLocatorKeyTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testBad1() {
-        byte[] hash = {};
-        new NameLocatorKey(hash);
+	byte[] hash = {};
+	new NameLocatorKey(hash);
     }
 
 }

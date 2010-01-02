@@ -22,7 +22,7 @@ public class VerifyException extends IllegalArgumentException {
      * @param message
      */
     public VerifyException(String message) {
-        super(message);
+	super(message);
     }
 
     /**
@@ -31,7 +31,7 @@ public class VerifyException extends IllegalArgumentException {
      * @param cause
      */
     public VerifyException(Throwable cause) {
-        super(cause);
+	super(cause);
     }
 
     /**
@@ -41,7 +41,7 @@ public class VerifyException extends IllegalArgumentException {
      * @param cause
      */
     public VerifyException(String message, Throwable cause) {
-        super(message, cause);
+	super(message, cause);
     }
 
 }

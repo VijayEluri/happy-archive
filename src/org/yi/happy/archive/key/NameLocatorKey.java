@@ -4,7 +4,7 @@ package org.yi.happy.archive.key;
  * a name locator key.
  */
 public final class NameLocatorKey extends AbstractLocatorKey implements
-        LocatorKey {
+	LocatorKey {
 
     /**
      * create
@@ -13,10 +13,10 @@ public final class NameLocatorKey extends AbstractLocatorKey implements
      *            the hash
      */
     public NameLocatorKey(byte[] hash) {
-        super(hash);
+	super(hash);
     }
 
     public String getType() {
-        return KeyType.NAME_HASH;
+	return KeyType.NAME_HASH;
     }
 }

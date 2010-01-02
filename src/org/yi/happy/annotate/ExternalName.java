@@ -10,10 +10,10 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.SOURCE)
 public @interface ExternalName {
     public enum Type {
-        /**
-         * the value of the constant is the external name.
-         */
-        VALUE;
+	/**
+	 * the value of the constant is the external name.
+	 */
+	VALUE;
     }
 
     public Type value() default Type.VALUE;

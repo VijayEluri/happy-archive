@@ -9,88 +9,88 @@ import java.io.InputStream;
  */
 public class InputStreamLimit extends InputStream {
 
-	/**
-	 * the maximum bytes before exceptions are thrown on read.
-	 */
-	private final int limit;
+    /**
+     * the maximum bytes before exceptions are thrown on read.
+     */
+    private final int limit;
 
-	/**
-	 * the number of bytes that have been read.
-	 */
-	private int used;
+    /**
+     * the number of bytes that have been read.
+     */
+    private int used;
 
-	/**
-	 * the real {@link InputStream}.
-	 */
-	private final InputStream in;
+    /**
+     * the real {@link InputStream}.
+     */
+    private final InputStream in;
 
-	/**
-	 * Make an input stream that throws exceptions after the given number of
-	 * bytes are read.
-	 * 
-	 * @param in
-	 *            the real input stream to read from.
-	 * @param limit
-	 *            the maximum number of bytes to read before errors are thrown.
-	 */
-	public InputStreamLimit(InputStream in, int limit) {
-		this.in = in;
-		this.limit = limit;
+    /**
+     * Make an input stream that throws exceptions after the given number of
+     * bytes are read.
+     * 
+     * @param in
+     *            the real input stream to read from.
+     * @param limit
+     *            the maximum number of bytes to read before errors are thrown.
+     */
+    public InputStreamLimit(InputStream in, int limit) {
+	this.in = in;
+	this.limit = limit;
 
-		used = 0;
+	used = 0;
+    }
+
+    @Override
+    public int read() throws IOException {
+	if (used > limit) {
+	    throw new IOException();
 	}
 
-	@Override
-	public int read() throws IOException {
-		if (used > limit) {
-			throw new IOException();
-		}
+	int out = in.read();
 
-		int out = in.read();
-
-		if (out >= 0) {
-			used++;
-		}
-		if (used > limit) {
-			throw new IOException();
-		}
-
-		return out;
+	if (out >= 0) {
+	    used++;
+	}
+	if (used > limit) {
+	    throw new IOException();
 	}
 
-	@Override
-	public int read(byte[] b) throws IOException {
-		if (used > limit) {
-			throw new IOException();
-		}
+	return out;
+    }
 
-		int out = in.read(b);
-
-		if (out > 0) {
-			used += out;
-		}
-		if (used > limit) {
-			throw new IOException();
-		}
-
-		return out;
+    @Override
+    public int read(byte[] b) throws IOException {
+	if (used > limit) {
+	    throw new IOException();
 	}
 
-	@Override
-	public int read(byte[] b, int off, int len) throws IOException {
-		if (used > limit) {
-			throw new IOException();
-		}
+	int out = in.read(b);
 
-		int out = in.read(b, off, len);
-
-		if (out > 0) {
-			used += out;
-		}
-		if (used > limit) {
-			throw new IOException();
-		}
-
-		return out;
+	if (out > 0) {
+	    used += out;
 	}
+	if (used > limit) {
+	    throw new IOException();
+	}
+
+	return out;
+    }
+
+    @Override
+    public int read(byte[] b, int off, int len) throws IOException {
+	if (used > limit) {
+	    throw new IOException();
+	}
+
+	int out = in.read(b, off, len);
+
+	if (out > 0) {
+	    used += out;
+	}
+	if (used > limit) {
+	    throw new IOException();
+	}
+
+	return out;
+    }
 }

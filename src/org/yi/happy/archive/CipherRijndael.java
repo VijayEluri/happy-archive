@@ -23,29 +23,29 @@ public class CipherRijndael implements Cipher {
      *            the key size
      */
     public CipherRijndael(int bs, int ks) {
-        this.bs = bs;
-        this.ks = ks;
-        instance = new Rijndael(bs, ks);
+	this.bs = bs;
+	this.ks = ks;
+	instance = new Rijndael(bs, ks);
     }
 
     public void decrypt(byte[] out) {
-        instance.decryptCbc(out, iv);
+	instance.decryptCbc(out, iv);
     }
 
     public int getBlockSize() {
-        return bs;
+	return bs;
     }
 
     public int getKeySize() {
-        return ks;
+	return ks;
     }
 
     public void setPass(byte[] pass) {
-        instance.setKey(pass);
-        iv = new byte[bs];
+	instance.setKey(pass);
+	iv = new byte[bs];
     }
 
     public void encrypt(byte[] data) {
-        instance.encryptCbc(data, iv);
+	instance.encryptCbc(data, iv);
     }
 }

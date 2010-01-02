@@ -8,8 +8,8 @@ import org.yi.happy.archive.test_data.TestData;
 public class BlockParseTest {
     @Test
     public void test1() {
-		Block block = BlockParse.load(TestData.KEY_CONTENT.getUrl());
+	Block block = BlockParse.load(TestData.KEY_CONTENT.getUrl());
 
-        assertEquals("content-hash", block.getMeta("key-type"));
+	assertEquals("content-hash", block.getMeta("key-type"));
     }
 }

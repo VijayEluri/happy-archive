@@ -1,26 +1,25 @@
 package org.yi.happy.archive;
 
-
 public class VersionNotNumberException extends VerifyException {
-	/**
+    /**
 	 * 
 	 */
-	private static final long serialVersionUID = 2402922998376793056L;
+    private static final long serialVersionUID = 2402922998376793056L;
 
-	public VersionNotNumberException() {
-        super();
+    public VersionNotNumberException() {
+	super();
     }
 
     public VersionNotNumberException(String message, Throwable cause) {
-        super(message, cause);
+	super(message, cause);
     }
 
     public VersionNotNumberException(String message) {
-        super(message);
+	super(message);
     }
 
     public VersionNotNumberException(Throwable cause) {
-        super(cause);
+	super(cause);
     }
 
 }

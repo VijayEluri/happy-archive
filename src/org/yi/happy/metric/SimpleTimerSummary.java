@@ -19,13 +19,13 @@ public class SimpleTimerSummary {
      * create with no stats.
      */
     public SimpleTimerSummary() {
-        started = 0;
-        count = 0;
-        totalTime = 0;
-        highTime = 0;
-        secondHighTime = 0;
-        lowTime = 0;
-        lastTime = 0;
+	started = 0;
+	count = 0;
+	totalTime = 0;
+	highTime = 0;
+	secondHighTime = 0;
+	lowTime = 0;
+	lastTime = 0;
     }
 
     /**
@@ -35,13 +35,13 @@ public class SimpleTimerSummary {
      * 
      */
     private class MyTimer extends SimpleTimer {
-        /**
-         * in addition to stopping the clock record the time.
-         */
-        public void stop() {
-            super.stop();
-            registerTime(getTime());
-        }
+	/**
+	 * in addition to stopping the clock record the time.
+	 */
+	public void stop() {
+	    super.stop();
+	    registerTime(getTime());
+	}
     }
 
     /**
@@ -51,23 +51,23 @@ public class SimpleTimerSummary {
      *            the time to record in ms
      */
     private synchronized void registerTime(long time) {
-        lastTime = time;
+	lastTime = time;
 
-        if (count == 0) {
-            lowTime = time;
-        } else if (time < lowTime) {
-            lowTime = time;
-        }
+	if (count == 0) {
+	    lowTime = time;
+	} else if (time < lowTime) {
+	    lowTime = time;
+	}
 
-        if (time > highTime) {
-            secondHighTime = highTime;
-            highTime = time;
-        } else if (time > secondHighTime) {
-            secondHighTime = time;
-        }
+	if (time > highTime) {
+	    secondHighTime = highTime;
+	    highTime = time;
+	} else if (time > secondHighTime) {
+	    secondHighTime = time;
+	}
 
-        totalTime += time;
-        count += 1;
+	totalTime += time;
+	count += 1;
     }
 
     /**
@@ -115,10 +115,10 @@ public class SimpleTimerSummary {
      * @return a timer
      */
     public SimpleTimer getTimer() {
-        synchronized (this) {
-            started += 1;
-        }
-        return new MyTimer();
+	synchronized (this) {
+	    started += 1;
+	}
+	return new MyTimer();
     }
 
     /**
@@ -127,7 +127,7 @@ public class SimpleTimerSummary {
      * @return the number of active timers
      */
     public synchronized int getActiveCount() {
-        return started - count;
+	return started - count;
     }
 
     /**
@@ -136,7 +136,7 @@ public class SimpleTimerSummary {
      * @return the count
      */
     public synchronized int getCount() {
-        return count;
+	return count;
     }
 
     /**
@@ -145,7 +145,7 @@ public class SimpleTimerSummary {
      * @return the total time in ms, zero if no timers have stopped
      */
     public synchronized long getTotalTime() {
-        return totalTime;
+	return totalTime;
     }
 
     /**
@@ -154,7 +154,7 @@ public class SimpleTimerSummary {
      * @return the highest time in ms, zero if no timers have stopped
      */
     public synchronized long getHighTime() {
-        return highTime;
+	return highTime;
     }
 
     /**
@@ -164,7 +164,7 @@ public class SimpleTimerSummary {
      * @return the second highest time in ms, zero if no timers have stopped
      */
     public synchronized long getSecondHighTime() {
-        return secondHighTime;
+	return secondHighTime;
     }
 
     /**
@@ -173,10 +173,10 @@ public class SimpleTimerSummary {
      * @return the average time in ms, zero if no timers have stopped
      */
     public synchronized long getAverageTime() {
-        if (count == 0) {
-            return 0;
-        }
-        return totalTime / count;
+	if (count == 0) {
+	    return 0;
+	}
+	return totalTime / count;
     }
 
     /**
@@ -185,7 +185,7 @@ public class SimpleTimerSummary {
      * @return the lowest time in ms, zero if no timers have stopped
      */
     public synchronized long getLowTime() {
-        return lowTime;
+	return lowTime;
     }
 
     /**
@@ -194,7 +194,7 @@ public class SimpleTimerSummary {
      * @return the last time.
      */
     public synchronized long getLastTime() {
-        return lastTime;
+	return lastTime;
     }
 
     /**
@@ -203,9 +203,9 @@ public class SimpleTimerSummary {
      * @return a string representation of the summary data.
      */
     public synchronized String toString() {
-        return "[active = " + getActiveCount() + ", count = " + getCount()
-                + ", high = " + getHighTime() + ", secondHigh = "
-                + getSecondHighTime() + ", average = " + getAverageTime()
-                + ", low = " + getLowTime() + ", last = " + getLastTime() + "]";
+	return "[active = " + getActiveCount() + ", count = " + getCount()
+		+ ", high = " + getHighTime() + ", secondHigh = "
+		+ getSecondHighTime() + ", average = " + getAverageTime()
+		+ ", low = " + getLowTime() + ", last = " + getLastTime() + "]";
     }
 }

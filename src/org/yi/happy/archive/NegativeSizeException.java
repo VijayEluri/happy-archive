@@ -1,26 +1,25 @@
 package org.yi.happy.archive;
 
-
 public class NegativeSizeException extends VerifyException {
 
     public NegativeSizeException() {
-        super();
-        // TODO Auto-generated constructor stub
+	super();
+	// TODO Auto-generated constructor stub
     }
 
     public NegativeSizeException(String message, Throwable cause) {
-        super(message, cause);
-        // TODO Auto-generated constructor stub
+	super(message, cause);
+	// TODO Auto-generated constructor stub
     }
 
     public NegativeSizeException(String message) {
-        super(message);
-        // TODO Auto-generated constructor stub
+	super(message);
+	// TODO Auto-generated constructor stub
     }
 
     public NegativeSizeException(Throwable cause) {
-        super(cause);
-        // TODO Auto-generated constructor stub
+	super(cause);
+	// TODO Auto-generated constructor stub
     }
 
     /**

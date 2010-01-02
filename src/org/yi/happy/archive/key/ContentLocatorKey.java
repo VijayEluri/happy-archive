@@ -4,10 +4,10 @@ package org.yi.happy.archive.key;
  * a content locator key
  */
 public final class ContentLocatorKey extends AbstractLocatorKey implements
-        LocatorKey {
+	LocatorKey {
 
     public String getType() {
-        return KeyType.CONTENT_HASH;
+	return KeyType.CONTENT_HASH;
     }
 
     /**
@@ -17,6 +17,6 @@ public final class ContentLocatorKey extends AbstractLocatorKey implements
      *            the hash
      */
     public ContentLocatorKey(byte[] hash) {
-        super(hash);
+	super(hash);
     }
 }

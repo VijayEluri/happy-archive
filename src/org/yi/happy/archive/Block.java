@@ -1,6 +1,5 @@
 package org.yi.happy.archive;
 
-
 /**
  * a data block is a set of simple headers and a body. The upper size of a block
  * is just over 1 MiB.

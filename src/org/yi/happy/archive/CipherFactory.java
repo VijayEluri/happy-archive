@@ -20,36 +20,36 @@ public class CipherFactory {
      *             if the name is not known
      */
     public static Cipher create(String name) {
-        Matcher m = Pattern.compile("(aes|rijndael)-(128|192|256)-cbc")
-                .matcher(name);
-        if (m.matches()) {
-            int ks = Integer.parseInt(m.group(2)) / 8;
-            return new CipherRijndael(16, ks);
-        }
+	Matcher m = Pattern.compile("(aes|rijndael)-(128|192|256)-cbc")
+		.matcher(name);
+	if (m.matches()) {
+	    int ks = Integer.parseInt(m.group(2)) / 8;
+	    return new CipherRijndael(16, ks);
+	}
 
-        m = Pattern.compile("rijndael(192|256)-(128|192|256)-cbc")
-                .matcher(name);
-        if (m.matches()) {
-            int bs = Integer.parseInt(m.group(1)) / 8;
-            int ks = Integer.parseInt(m.group(2)) / 8;
-            return new CipherRijndael(bs, ks);
-        }
+	m = Pattern.compile("rijndael(192|256)-(128|192|256)-cbc")
+		.matcher(name);
+	if (m.matches()) {
+	    int bs = Integer.parseInt(m.group(1)) / 8;
+	    int ks = Integer.parseInt(m.group(2)) / 8;
+	    return new CipherRijndael(bs, ks);
+	}
 
-        throw new UnknownAlgorithmException(name);
+	throw new UnknownAlgorithmException(name);
     }
 
-	/**
-	 * create an instance, give back a named cipher.
-	 * 
-	 * @param algorithm
-	 *            the name of the cipher in the form "algo-keySize-mode", for
-	 *            example "aes-128-cbc".
-	 * @return a NamedCipher wrapping an object implementing the Cipher
-	 *         interface.
-	 * @throws UnknownAlgorithmException
-	 *             if the name is not known
-	 */
+    /**
+     * create an instance, give back a named cipher.
+     * 
+     * @param algorithm
+     *            the name of the cipher in the form "algo-keySize-mode", for
+     *            example "aes-128-cbc".
+     * @return a NamedCipher wrapping an object implementing the Cipher
+     *         interface.
+     * @throws UnknownAlgorithmException
+     *             if the name is not known
+     */
     public static NamedCipher createNamed(String algorithm) {
-        return new NamedCipher(algorithm, create(algorithm));
+	return new NamedCipher(algorithm, create(algorithm));
     }
 }

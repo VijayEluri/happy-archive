@@ -9,8 +9,8 @@ public class SimpleTimer {
      * create started.
      */
     public SimpleTimer() {
-        startTime = System.currentTimeMillis();
-        stopTime = startTime - 1;
+	startTime = System.currentTimeMillis();
+	stopTime = startTime - 1;
     }
 
     /**
@@ -27,10 +27,10 @@ public class SimpleTimer {
      * stop the timer. A timer may only be stopped once.
      */
     public void stop() {
-        if (stopTime >= startTime) {
-            throw new IllegalStateException("stop may only be called once");
-        }
-        stopTime = System.currentTimeMillis();
+	if (stopTime >= startTime) {
+	    throw new IllegalStateException("stop may only be called once");
+	}
+	stopTime = System.currentTimeMillis();
     }
 
     /**
@@ -41,9 +41,9 @@ public class SimpleTimer {
      * @return the elapsed time in ms
      */
     public long getTime() {
-        if (stopTime < startTime) {
-            return System.currentTimeMillis() - startTime;
-        }
-        return stopTime - startTime;
+	if (stopTime < startTime) {
+	    return System.currentTimeMillis() - startTime;
+	}
+	return stopTime - startTime;
     }
 }

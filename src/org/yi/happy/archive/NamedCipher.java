@@ -19,28 +19,28 @@ public class NamedCipher implements Cipher {
      *            an object implementing the cipher interface
      */
     public NamedCipher(String algorithm, Cipher delegate) {
-        this.algorithm = algorithm;
-        this.delegate = delegate;
+	this.algorithm = algorithm;
+	this.delegate = delegate;
     }
 
     public void decrypt(byte[] data) {
-        delegate.decrypt(data);
+	delegate.decrypt(data);
     }
 
     public void encrypt(byte[] data) {
-        delegate.encrypt(data);
+	delegate.encrypt(data);
     }
 
     public int getBlockSize() {
-        return delegate.getBlockSize();
+	return delegate.getBlockSize();
     }
 
     public int getKeySize() {
-        return delegate.getKeySize();
+	return delegate.getKeySize();
     }
 
     public void setPass(byte[] pass) {
-        delegate.setPass(pass);
+	delegate.setPass(pass);
     }
 
     /**
@@ -49,6 +49,6 @@ public class NamedCipher implements Cipher {
      * @return the algorithm
      */
     public String getAlgorithm() {
-        return algorithm;
+	return algorithm;
     }
 }

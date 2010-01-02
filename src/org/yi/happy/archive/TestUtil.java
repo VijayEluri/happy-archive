@@ -15,8 +15,8 @@ public class TestUtil {
      * @throws LoadException
      *             on loading errors
      */
-	public static Block loadBlock(TestData name) throws LoadException {
-        return BlockParse.load(name.getUrl());
+    public static Block loadBlock(TestData name) throws LoadException {
+	return BlockParse.load(name.getUrl());
     }
 
     /**
@@ -25,6 +25,6 @@ public class TestUtil {
      * @return the clear content block
      */
     public static Block loadClear() {
-		return loadBlock(TestData.CLEAR_CONTENT);
+	return loadBlock(TestData.CLEAR_CONTENT);
     }
 }

@@ -21,9 +21,9 @@ public class DigestUtil {
      * @return the hashed data
      */
     public static byte[] digestData(byte[] data, MessageDigest digest) {
-        digest.reset();
-        digest.update(data);
-        return digest.digest();
+	digest.reset();
+	digest.update(data);
+	return digest.digest();
     }
 
 }

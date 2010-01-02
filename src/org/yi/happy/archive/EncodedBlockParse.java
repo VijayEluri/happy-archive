@@ -20,8 +20,8 @@ public class EncodedBlockParse {
      * @return the encoded block.
      */
     public EncodedBlock load(InputStream in) {
-        Block block = BlockParse.load(in);
-        return EncodedBlockFactory.parse(block);
+	Block block = BlockParse.load(in);
+	return EncodedBlockFactory.parse(block);
     }
 
     /**
@@ -32,22 +32,22 @@ public class EncodedBlockParse {
      * @return the encoded block.
      */
     public EncodedBlock load(File file) {
-        Block block = BlockParse.load(file);
-        return EncodedBlockFactory.parse(block);
+	Block block = BlockParse.load(file);
+	return EncodedBlockFactory.parse(block);
     }
 
     public EncodedBlock parse(byte[] data) {
-        Block block = BlockParse.load(data);
-        return EncodedBlockFactory.parse(block);
+	Block block = BlockParse.load(data);
+	return EncodedBlockFactory.parse(block);
     }
 
     public EncodedBlock load(URL url) throws IOException {
-        InputStream in = url.openStream();
-        try {
-            return load(in);
-        } finally {
-            in.close();
-        }
+	InputStream in = url.openStream();
+	try {
+	    return load(in);
+	} finally {
+	    in.close();
+	}
     }
 
 }

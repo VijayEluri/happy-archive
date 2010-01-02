@@ -17,6 +17,6 @@ import java.lang.annotation.Target;
      * 
      * @return the value
      */
-	TestData value();
+    TestData value();
 
 }

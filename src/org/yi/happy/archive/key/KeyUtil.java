@@ -17,36 +17,36 @@ public class KeyUtil {
      *            the key
      * @return a locator key
      */
-	@TypeSwitch
+    @TypeSwitch
     public static LocatorKey toLocatorKey(Key key) {
-        if (key instanceof LocatorKey) {
-            return (LocatorKey) key;
-        }
+	if (key instanceof LocatorKey) {
+	    return (LocatorKey) key;
+	}
 
-        if (key instanceof BlobFullKey) {
-            BlobFullKey k = (BlobFullKey) key;
-            return new BlobLocatorKey(k.getHash());
-        }
+	if (key instanceof BlobFullKey) {
+	    BlobFullKey k = (BlobFullKey) key;
+	    return new BlobLocatorKey(k.getHash());
+	}
 
-        if (key instanceof ContentFullKey) {
-            ContentFullKey k = (ContentFullKey) key;
-            return new ContentLocatorKey(k.getHash());
-        }
+	if (key instanceof ContentFullKey) {
+	    ContentFullKey k = (ContentFullKey) key;
+	    return new ContentLocatorKey(k.getHash());
+	}
 
-        if (key instanceof NameFullKey) {
-            NameFullKey k = (NameFullKey) key;
+	if (key instanceof NameFullKey) {
+	    NameFullKey k = (NameFullKey) key;
 
-			String algorithm = k.getDigest();
-			MessageDigest md;
-			try {
-				md = MessageDigest.getInstance(algorithm);
-			} catch (NoSuchAlgorithmException e) {
-				throw new UnknownAlgorithmException(algorithm, e);
-			}
-            md.update(ByteString.toUtf8(k.getName()));
-            return new NameLocatorKey(md.digest());
-        }
+	    String algorithm = k.getDigest();
+	    MessageDigest md;
+	    try {
+		md = MessageDigest.getInstance(algorithm);
+	    } catch (NoSuchAlgorithmException e) {
+		throw new UnknownAlgorithmException(algorithm, e);
+	    }
+	    md.update(ByteString.toUtf8(k.getName()));
+	    return new NameLocatorKey(md.digest());
+	}
 
-        throw new IllegalArgumentException("can not convert key: " + key);
+	throw new IllegalArgumentException("can not convert key: " + key);
     }
 }

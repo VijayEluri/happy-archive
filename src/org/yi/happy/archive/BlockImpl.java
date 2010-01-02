@@ -20,7 +20,7 @@ public class BlockImpl implements Block {
      * create empty
      */
     public BlockImpl() {
-        meta = new LinkedHashMap<String, String>();
+	meta = new LinkedHashMap<String, String>();
     }
 
     /**
@@ -34,15 +34,15 @@ public class BlockImpl implements Block {
      * @return the created block
      */
     public static BlockImpl create(byte[] body, String... meta) {
-        if (meta.length % 2 != 0) {
-            throw new IllegalArgumentException("meta needs to be pairs");
-        }
-        BlockImpl out = new BlockImpl();
-        out.setBody(body);
-        for (int i = 0; i < meta.length; i += 2) {
-            out.addMeta(meta[i], meta[i + 1]);
-        }
-        return out;
+	if (meta.length % 2 != 0) {
+	    throw new IllegalArgumentException("meta needs to be pairs");
+	}
+	BlockImpl out = new BlockImpl();
+	out.setBody(body);
+	for (int i = 0; i < meta.length; i += 2) {
+	    out.addMeta(meta[i], meta[i + 1]);
+	}
+	return out;
     }
 
     /**
@@ -52,7 +52,7 @@ public class BlockImpl implements Block {
      *            the data block
      */
     public void setBody(byte[] body) {
-        this.body = body;
+	this.body = body;
     }
 
     private static final byte ENDL[] = { 0x0d, 0x0a };
@@ -63,15 +63,15 @@ public class BlockImpl implements Block {
      * @return the binary representation
      */
     public byte[] asBytes() {
-        ByteArrayOutputStream s = new ByteArrayOutputStream();
+	ByteArrayOutputStream s = new ByteArrayOutputStream();
 
-        try {
-            writeTo(s);
-        } catch (IOException e) {
-            throw new Error(e);
-        }
+	try {
+	    writeTo(s);
+	} catch (IOException e) {
+	    throw new Error(e);
+	}
 
-        return s.toByteArray();
+	return s.toByteArray();
     }
 
     /**
@@ -83,17 +83,17 @@ public class BlockImpl implements Block {
      *             on IO errors
      */
     public void writeTo(OutputStream s) throws IOException {
-        for (Map.Entry<String, String> i : meta.entrySet()) {
-            String out = i.getKey() + ": " + i.getValue();
-            s.write(ByteString.toUtf8(out));
-            s.write(ENDL);
-        }
+	for (Map.Entry<String, String> i : meta.entrySet()) {
+	    String out = i.getKey() + ": " + i.getValue();
+	    s.write(ByteString.toUtf8(out));
+	    s.write(ENDL);
+	}
 
-        s.write(ENDL);
+	s.write(ENDL);
 
-        if (body != null) {
-            s.write(body);
-        }
+	if (body != null) {
+	    s.write(body);
+	}
     }
 
     /**
@@ -111,28 +111,28 @@ public class BlockImpl implements Block {
      *             if a header by this name was already added.
      */
     public void addMeta(String name, String value) {
-        if (name.contains(": ")) {
-            throw new IllegalArgumentException("name may not contain ': '");
-        }
-        for (int i = 0; i < name.length(); i++) {
-            char c = name.charAt(i);
-            if (c > 0x7f || c < 1 || c == 0x0d || c == 0x0a) {
-                throw new IllegalArgumentException("bad character in name: "
-                        + (int) c);
-            }
-        }
-        for (int i = 0; i < value.length(); i++) {
-            char c = value.charAt(i);
-            if (c > 0x7f || c < 1 || c == 0x0d || c == 0x0a) {
-                throw new IllegalArgumentException("bad character in value: "
-                        + (int) c);
-            }
-        }
+	if (name.contains(": ")) {
+	    throw new IllegalArgumentException("name may not contain ': '");
+	}
+	for (int i = 0; i < name.length(); i++) {
+	    char c = name.charAt(i);
+	    if (c > 0x7f || c < 1 || c == 0x0d || c == 0x0a) {
+		throw new IllegalArgumentException("bad character in name: "
+			+ (int) c);
+	    }
+	}
+	for (int i = 0; i < value.length(); i++) {
+	    char c = value.charAt(i);
+	    if (c > 0x7f || c < 1 || c == 0x0d || c == 0x0a) {
+		throw new IllegalArgumentException("bad character in value: "
+			+ (int) c);
+	    }
+	}
 
-        if (meta.containsKey(name)) {
-            throw new IllegalArgumentException("already have header: " + name);
-        }
-        meta.put(name, value);
+	if (meta.containsKey(name)) {
+	    throw new IllegalArgumentException("already have header: " + name);
+	}
+	meta.put(name, value);
     }
 
     /**
@@ -143,7 +143,7 @@ public class BlockImpl implements Block {
      * @return the first value found, or null if none found
      */
     public String getMeta(String name) {
-        return meta.get(name);
+	return meta.get(name);
     }
 
     /**
@@ -152,46 +152,46 @@ public class BlockImpl implements Block {
      * @return the internal data block
      */
     public byte[] getBody() {
-        return body;
+	return body;
     }
 
     @Override
     public int hashCode() {
-        final int PRIME = 31;
-        int result = 1;
-        result = PRIME * result + Arrays.hashCode(body);
-        result = PRIME * result + meta.hashCode();
-        return result;
+	final int PRIME = 31;
+	int result = 1;
+	result = PRIME * result + Arrays.hashCode(body);
+	result = PRIME * result + meta.hashCode();
+	return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final BlockImpl other = (BlockImpl) obj;
-        if (!Arrays.equals(body, other.body)) {
-            return false;
-        }
-        if (!meta.equals(other.meta)) {
-            return false;
-        }
-        return true;
+	if (this == obj) {
+	    return true;
+	}
+	if (obj == null) {
+	    return false;
+	}
+	if (getClass() != obj.getClass()) {
+	    return false;
+	}
+	final BlockImpl other = (BlockImpl) obj;
+	if (!Arrays.equals(body, other.body)) {
+	    return false;
+	}
+	if (!meta.equals(other.meta)) {
+	    return false;
+	}
+	return true;
     }
 
     public static void checkValue(String value) {
-        for (int i = 0; i < value.length(); i++) {
-            char c = value.charAt(i);
-            if (c > 0x7f || c < 1 || c == 0x0d || c == 0x0a) {
-                throw new VerifyException("bad character in value: " + (int) c);
-            }
-        }
+	for (int i = 0; i < value.length(); i++) {
+	    char c = value.charAt(i);
+	    if (c > 0x7f || c < 1 || c == 0x0d || c == 0x0a) {
+		throw new VerifyException("bad character in value: " + (int) c);
+	    }
+	}
     }
 
 }

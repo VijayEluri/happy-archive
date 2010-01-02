@@ -13,12 +13,12 @@ public class KeyParseTest {
 
     @Before
     public void before() {
-        parse = new KeyParse();
+	parse = new KeyParse();
     }
 
     @After
     public void after() {
-        parse = null;
+	parse = null;
     }
 
     /**
@@ -26,15 +26,15 @@ public class KeyParseTest {
      */
     @Test
     public void testParseFullName() {
-        FullKey k = parse.parseFullKey("name-hash:sha-256:test");
+	FullKey k = parse.parseFullKey("name-hash:sha-256:test");
 
-        assertEquals("name-hash", k.getType());
-        assertTrue(k instanceof NameFullKey);
+	assertEquals("name-hash", k.getType());
+	assertTrue(k instanceof NameFullKey);
 
-        NameFullKey n = (NameFullKey) k;
+	NameFullKey n = (NameFullKey) k;
 
-        assertEquals("sha-256", n.getDigest());
-        assertEquals("test", n.getName());
+	assertEquals("sha-256", n.getDigest());
+	assertEquals("test", n.getName());
     }
 
     /**
@@ -42,14 +42,14 @@ public class KeyParseTest {
      */
     @Test
     public void testParseNameLocator() {
-        Key k = parse.parseKey("name-hash:001122");
+	Key k = parse.parseKey("name-hash:001122");
 
-        assertEquals("name-hash", k.getType());
-        assertTrue(k instanceof LocatorKey);
+	assertEquals("name-hash", k.getType());
+	assertTrue(k instanceof LocatorKey);
 
-        LocatorKey n = (LocatorKey) k;
+	LocatorKey n = (LocatorKey) k;
 
-        assertArrayEquals(new byte[] { 0x00, 0x11, 0x22 }, n.getHash());
+	assertArrayEquals(new byte[] { 0x00, 0x11, 0x22 }, n.getHash());
     }
 
     /**
@@ -57,14 +57,14 @@ public class KeyParseTest {
      */
     @Test
     public void testParseContentLocator() {
-        Key k = parse.parseKey("content-hash:001122");
+	Key k = parse.parseKey("content-hash:001122");
 
-        assertEquals("content-hash", k.getType());
-        assertTrue(k instanceof LocatorKey);
+	assertEquals("content-hash", k.getType());
+	assertTrue(k instanceof LocatorKey);
 
-        LocatorKey n = (LocatorKey) k;
+	LocatorKey n = (LocatorKey) k;
 
-        assertArrayEquals(new byte[] { 0x00, 0x11, 0x22 }, n.getHash());
+	assertArrayEquals(new byte[] { 0x00, 0x11, 0x22 }, n.getHash());
     }
 
     /**
@@ -72,16 +72,16 @@ public class KeyParseTest {
      */
     @Test
     public void testParseFullContent() {
-        Key k = parse.parseKey("content-hash:001122:334455");
+	Key k = parse.parseKey("content-hash:001122:334455");
 
-        assertEquals("content-hash", k.getType());
+	assertEquals("content-hash", k.getType());
 
-        assertTrue(k instanceof ContentFullKey);
+	assertTrue(k instanceof ContentFullKey);
 
-        ContentFullKey n = (ContentFullKey) k;
+	ContentFullKey n = (ContentFullKey) k;
 
-        assertArrayEquals(new byte[] { 0x00, 0x11, 0x22 }, n.getHash());
-        assertArrayEquals(new byte[] { 0x33, 0x44, 0x55 }, n.getPass());
+	assertArrayEquals(new byte[] { 0x00, 0x11, 0x22 }, n.getHash());
+	assertArrayEquals(new byte[] { 0x33, 0x44, 0x55 }, n.getPass());
     }
 
     /**
@@ -89,16 +89,16 @@ public class KeyParseTest {
      */
     @Test
     public void testParseFullContent2() {
-        Key k = parse.parseKey("content-hash:001122:");
+	Key k = parse.parseKey("content-hash:001122:");
 
-        assertEquals("content-hash", k.getType());
+	assertEquals("content-hash", k.getType());
 
-        assertTrue(k instanceof ContentFullKey);
+	assertTrue(k instanceof ContentFullKey);
 
-        ContentFullKey n = (ContentFullKey) k;
+	ContentFullKey n = (ContentFullKey) k;
 
-        assertArrayEquals(new byte[] { 0x00, 0x11, 0x22 }, n.getHash());
-        assertArrayEquals(new byte[] {}, n.getPass());
+	assertArrayEquals(new byte[] { 0x00, 0x11, 0x22 }, n.getHash());
+	assertArrayEquals(new byte[] {}, n.getPass());
     }
 
     /**
@@ -106,14 +106,14 @@ public class KeyParseTest {
      */
     @Test
     public void testParseBlobLocator() {
-        Key k = parse.parseKey("blob:001122");
+	Key k = parse.parseKey("blob:001122");
 
-        assertEquals("blob", k.getType());
-        assertTrue(k instanceof LocatorKey);
+	assertEquals("blob", k.getType());
+	assertTrue(k instanceof LocatorKey);
 
-        LocatorKey n = (LocatorKey) k;
+	LocatorKey n = (LocatorKey) k;
 
-        assertArrayEquals(new byte[] { 0x00, 0x11, 0x22 }, n.getHash());
+	assertArrayEquals(new byte[] { 0x00, 0x11, 0x22 }, n.getHash());
     }
 
     /**
@@ -121,16 +121,16 @@ public class KeyParseTest {
      */
     @Test
     public void testParseFullBlob() {
-        Key k = parse.parseKey("blob:001122:334455");
+	Key k = parse.parseKey("blob:001122:334455");
 
-        assertEquals("blob", k.getType());
+	assertEquals("blob", k.getType());
 
-        assertTrue(k instanceof BlobFullKey);
+	assertTrue(k instanceof BlobFullKey);
 
-        BlobFullKey n = (BlobFullKey) k;
+	BlobFullKey n = (BlobFullKey) k;
 
-        assertArrayEquals(new byte[] { 0x00, 0x11, 0x22 }, n.getHash());
-        assertArrayEquals(new byte[] { 0x33, 0x44, 0x55 }, n.getPass());
+	assertArrayEquals(new byte[] { 0x00, 0x11, 0x22 }, n.getHash());
+	assertArrayEquals(new byte[] { 0x33, 0x44, 0x55 }, n.getPass());
     }
 
     /**
@@ -138,16 +138,16 @@ public class KeyParseTest {
      */
     @Test
     public void testParseFullBlob2() {
-        Key k = parse.parseKey("blob:001122:");
+	Key k = parse.parseKey("blob:001122:");
 
-        assertEquals("blob", k.getType());
+	assertEquals("blob", k.getType());
 
-        assertTrue(k instanceof BlobFullKey);
+	assertTrue(k instanceof BlobFullKey);
 
-        BlobFullKey n = (BlobFullKey) k;
+	BlobFullKey n = (BlobFullKey) k;
 
-        assertArrayEquals(new byte[] { 0x00, 0x11, 0x22 }, n.getHash());
-        assertArrayEquals(new byte[] {}, n.getPass());
+	assertArrayEquals(new byte[] { 0x00, 0x11, 0x22 }, n.getHash());
+	assertArrayEquals(new byte[] {}, n.getPass());
     }
 
     /**
@@ -155,7 +155,7 @@ public class KeyParseTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testBad() {
-        parse.parseKey("content-hash");
+	parse.parseKey("content-hash");
     }
 
     /**
@@ -163,7 +163,7 @@ public class KeyParseTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testBadContentKey() {
-        parse.parseKey("content-hash:0:0");
+	parse.parseKey("content-hash:0:0");
     }
 
     /**
@@ -171,7 +171,7 @@ public class KeyParseTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testBadContentLocator() {
-        parse.parseKey("content-hash:0");
+	parse.parseKey("content-hash:0");
     }
 
     /**
@@ -179,7 +179,7 @@ public class KeyParseTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testBadNameLocator() {
-        parse.parseKey("name-hash:0");
+	parse.parseKey("name-hash:0");
     }
 
     /**
@@ -187,7 +187,7 @@ public class KeyParseTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testBadType() {
-        parse.parseKey("bad:00");
+	parse.parseKey("bad:00");
     }
 
 }

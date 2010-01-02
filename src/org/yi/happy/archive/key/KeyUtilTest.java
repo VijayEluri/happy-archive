@@ -15,13 +15,13 @@ public class KeyUtilTest {
      */
     @Test
     public void testToLocatorKey1() {
-        Key in = new ContentFullKey(new byte[] { 0x00, 0x11, 0x22 },
-                new byte[] { 0x33, 0x44, 0x55 });
+	Key in = new ContentFullKey(new byte[] { 0x00, 0x11, 0x22 },
+		new byte[] { 0x33, 0x44, 0x55 });
 
-        Key have = KeyUtil.toLocatorKey(in);
+	Key have = KeyUtil.toLocatorKey(in);
 
-        Key want = new ContentLocatorKey(new byte[] { 0x00, 0x11, 0x22 });
-        assertEquals(want, have);
+	Key want = new ContentLocatorKey(new byte[] { 0x00, 0x11, 0x22 });
+	assertEquals(want, have);
     }
 
     /**
@@ -29,12 +29,12 @@ public class KeyUtilTest {
      */
     @Test
     public void testToLocatorKey2() {
-		Key key = TestData.KEY_NAME.getFullKey();
-        assertTrue(key instanceof NameFullKey);
+	Key key = TestData.KEY_NAME.getFullKey();
+	assertTrue(key instanceof NameFullKey);
 
-        LocatorKey have = KeyUtil.toLocatorKey(key);
-		LocatorKey want = TestData.KEY_NAME.getLocatorKey();
-        assertEquals(want, have);
+	LocatorKey have = KeyUtil.toLocatorKey(key);
+	LocatorKey want = TestData.KEY_NAME.getLocatorKey();
+	assertEquals(want, have);
     }
 
     /**
@@ -42,12 +42,12 @@ public class KeyUtilTest {
      */
     @Test
     public void testToLocatorKey3() {
-		Key key = TestData.KEY_NAME.getLocatorKey();
-        assertTrue(key instanceof NameLocatorKey);
+	Key key = TestData.KEY_NAME.getLocatorKey();
+	assertTrue(key instanceof NameLocatorKey);
 
-        LocatorKey have = KeyUtil.toLocatorKey(key);
-		LocatorKey want = TestData.KEY_NAME.getLocatorKey();
-        assertEquals(want, have);
+	LocatorKey have = KeyUtil.toLocatorKey(key);
+	LocatorKey want = TestData.KEY_NAME.getLocatorKey();
+	assertEquals(want, have);
     }
 
     /**
@@ -55,12 +55,12 @@ public class KeyUtilTest {
      */
     @Test
     public void testToLocatorKey4() {
-		Key key = TestData.KEY_CONTENT.getFullKey();
-        assertTrue(key instanceof ContentFullKey);
+	Key key = TestData.KEY_CONTENT.getFullKey();
+	assertTrue(key instanceof ContentFullKey);
 
-        LocatorKey have = KeyUtil.toLocatorKey(key);
-		LocatorKey want = TestData.KEY_CONTENT.getLocatorKey();
-        assertEquals(want, have);
+	LocatorKey have = KeyUtil.toLocatorKey(key);
+	LocatorKey want = TestData.KEY_CONTENT.getLocatorKey();
+	assertEquals(want, have);
     }
 
     /**
@@ -68,12 +68,12 @@ public class KeyUtilTest {
      */
     @Test
     public void testToLocatorKey5() {
-		Key key = TestData.KEY_CONTENT.getLocatorKey();
-        assertTrue(key instanceof ContentLocatorKey);
+	Key key = TestData.KEY_CONTENT.getLocatorKey();
+	assertTrue(key instanceof ContentLocatorKey);
 
-        LocatorKey have = KeyUtil.toLocatorKey(key);
-		LocatorKey want = TestData.KEY_CONTENT.getLocatorKey();
-        assertEquals(want, have);
+	LocatorKey have = KeyUtil.toLocatorKey(key);
+	LocatorKey want = TestData.KEY_CONTENT.getLocatorKey();
+	assertEquals(want, have);
     }
 
     /**
@@ -81,6 +81,6 @@ public class KeyUtilTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testToLocatorKey6() {
-        KeyUtil.toLocatorKey(null);
+	KeyUtil.toLocatorKey(null);
     }
 }

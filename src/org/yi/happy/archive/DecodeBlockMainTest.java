@@ -10,16 +10,16 @@ import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.test_data.TestData;
 
 public class DecodeBlockMainTest {
-	@Test
-	@SmellsMessy
-	public void test1() throws Exception {
-		FakeFileSystem fs = new FakeFileSystem();
-		fs.save("test.dat", TestData.KEY_BLOB.getBytes());
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
+    @Test
+    @SmellsMessy
+    public void test1() throws Exception {
+	FakeFileSystem fs = new FakeFileSystem();
+	fs.save("test.dat", TestData.KEY_BLOB.getBytes());
+	ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-		new DecodeBlockMain(fs, out).run("test.dat", TestData.KEY_BLOB
-				.getFullKey().toString());
+	new DecodeBlockMain(fs, out).run("test.dat", TestData.KEY_BLOB
+		.getFullKey().toString());
 
-		assertArrayEquals(TestData.CLEAR_CONTENT.getBytes(), out.toByteArray());
-	}
+	assertArrayEquals(TestData.CLEAR_CONTENT.getBytes(), out.toByteArray());
+    }
 }

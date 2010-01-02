@@ -19,10 +19,10 @@ public class DigestFactory {
      *             if the algorithm is unknown
      */
     public static MessageDigest create(String algorithm) {
-        try {
-            return MessageDigest.getInstance(algorithm);
-        } catch (NoSuchAlgorithmException e) {
-            throw new UnknownAlgorithmException(algorithm, e);
-        }
+	try {
+	    return MessageDigest.getInstance(algorithm);
+	} catch (NoSuchAlgorithmException e) {
+	    throw new UnknownAlgorithmException(algorithm, e);
+	}
     }
 }

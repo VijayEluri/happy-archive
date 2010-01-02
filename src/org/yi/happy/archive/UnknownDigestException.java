@@ -1,22 +1,21 @@
 package org.yi.happy.archive;
 
-
 public class UnknownDigestException extends VerifyException {
 
     public UnknownDigestException() {
-        super();
+	super();
     }
 
     public UnknownDigestException(String message, Throwable cause) {
-        super(message, cause);
+	super(message, cause);
     }
 
     public UnknownDigestException(String message) {
-        super(message);
+	super(message);
     }
 
     public UnknownDigestException(Throwable cause) {
-        super(cause);
+	super(cause);
     }
 
     /**

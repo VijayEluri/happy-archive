@@ -1,6 +1,5 @@
 package org.yi.happy.archive;
 
-
 /**
  * an encoder for blocks.
  */

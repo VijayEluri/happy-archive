@@ -10,7 +10,7 @@ public class ByteString {
      * prevent construction
      */
     private ByteString() {
-        // never called
+	// never called
     }
 
     /**
@@ -22,13 +22,13 @@ public class ByteString {
      * @return an 8 bit string
      */
     public static String toString(byte[] data) {
-        char[] out = new char[data.length];
+	char[] out = new char[data.length];
 
-        for (int i = 0; i < data.length; i++) {
-            out[i] = (char) (data[i] & 0xff);
-        }
+	for (int i = 0; i < data.length; i++) {
+	    out[i] = (char) (data[i] & 0xff);
+	}
 
-        return new String(out);
+	return new String(out);
     }
 
     /**
@@ -40,14 +40,14 @@ public class ByteString {
      * @return the low 8 bits of each character
      */
     public static byte[] toBytes(String data) {
-        char[] in = data.toCharArray();
-        byte[] out = new byte[in.length];
+	char[] in = data.toCharArray();
+	byte[] out = new byte[in.length];
 
-        for (int i = 0; i < in.length; i++) {
-            out[i] = (byte) in[i];
-        }
+	for (int i = 0; i < in.length; i++) {
+	    out[i] = (byte) in[i];
+	}
 
-        return out;
+	return out;
     }
 
     /**
@@ -60,11 +60,11 @@ public class ByteString {
      *             if UTF-8 encoding is not supported.
      */
     public static byte[] toUtf8(String string) {
-        try {
-            return string.getBytes("UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new Utf8NotSupportedError(e);
-        }
+	try {
+	    return string.getBytes("UTF-8");
+	} catch (UnsupportedEncodingException e) {
+	    throw new Utf8NotSupportedError(e);
+	}
     }
 
     /**
@@ -77,10 +77,10 @@ public class ByteString {
      *             if UTF-8 encoding is not supported.
      */
     public static String fromUtf8(byte[] data) {
-        try {
-            return new String(data, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new Utf8NotSupportedError(e);
-        }
+	try {
+	    return new String(data, "UTF-8");
+	} catch (UnsupportedEncodingException e) {
+	    throw new Utf8NotSupportedError(e);
+	}
     }
 }

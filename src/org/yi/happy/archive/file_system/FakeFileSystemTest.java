@@ -12,53 +12,53 @@ import org.junit.Test;
 import org.yi.happy.archive.ByteString;
 
 public class FakeFileSystemTest {
-	private FakeFileSystem fake;
-	private FileSystem real;
+    private FakeFileSystem fake;
+    private FileSystem real;
 
-	@Before
-	public void before() {
-		fake = new FakeFileSystem();
-		real = fake;
-	}
+    @Before
+    public void before() {
+	fake = new FakeFileSystem();
+	real = fake;
+    }
 
-	public void after() {
-		fake = null;
-		real = null;
-	}
+    public void after() {
+	fake = null;
+	real = null;
+    }
 
-	@Test
-	public void testLoad() throws IOException {
-		fake.save("test.dat", new byte[0]);
+    @Test
+    public void testLoad() throws IOException {
+	fake.save("test.dat", new byte[0]);
 
-		byte[] data = real.load("test.dat");
+	byte[] data = real.load("test.dat");
 
-		assertArrayEquals(new byte[0], data);
-	}
+	assertArrayEquals(new byte[0], data);
+    }
 
-	@Test
-	public void testLoad2() throws IOException {
-		fake.save("test.dat", new byte[5]);
+    @Test
+    public void testLoad2() throws IOException {
+	fake.save("test.dat", new byte[5]);
 
-		byte[] data = real.load("test.dat");
+	byte[] data = real.load("test.dat");
 
-		assertArrayEquals(new byte[5], data);
-	}
+	assertArrayEquals(new byte[5], data);
+    }
 
-	@Test(expected = IOException.class)
-	public void testLoadLimit() throws IOException {
-		fake.save("test.dat", ByteString.toUtf8("Hello\n"));
+    @Test(expected = IOException.class)
+    public void testLoadLimit() throws IOException {
+	fake.save("test.dat", ByteString.toUtf8("Hello\n"));
 
-		real.load("test.dat", 5);
-	}
+	real.load("test.dat", 5);
+    }
 
-	@Test
-	public void testOpenInput() throws Exception {
-		fake.save("test.dat", ByteString.toUtf8("Hello\n"));
+    @Test
+    public void testOpenInput() throws Exception {
+	fake.save("test.dat", ByteString.toUtf8("Hello\n"));
 
-		InputStream in = real.openInputStream("test.dat");
+	InputStream in = real.openInputStream("test.dat");
 
-		assertNotNull(in);
-		byte[] data = new byte[10];
-		assertEquals(6, in.read(data));
-	}
+	assertNotNull(in);
+	byte[] data = new byte[10];
+	assertEquals(6, in.read(data));
+    }
 }

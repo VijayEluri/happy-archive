@@ -18,7 +18,7 @@ public class UnknownAlgorithmException extends IllegalArgumentException {
      *            the cause
      */
     public UnknownAlgorithmException(String algorithm, Throwable cause) {
-        super(algorithm, cause);
+	super(algorithm, cause);
     }
 
     /**
@@ -28,7 +28,7 @@ public class UnknownAlgorithmException extends IllegalArgumentException {
      *            the algorithm
      */
     public UnknownAlgorithmException(String algorithm) {
-        super(algorithm);
+	super(algorithm);
     }
 
 }

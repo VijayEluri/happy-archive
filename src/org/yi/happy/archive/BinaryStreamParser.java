@@ -28,45 +28,45 @@ public class BinaryStreamParser {
      * @throws IOException
      */
     public byte[] readTo(InputStream in, byte[]... terms) throws IOException {
-        atEnd = false;
-        found = null;
-        term = null;
-        if (buff == null) {
-            buff = new byte[1024];
-        }
-        int used = 0;
+	atEnd = false;
+	found = null;
+	term = null;
+	if (buff == null) {
+	    buff = new byte[1024];
+	}
+	int used = 0;
 
-        outer: while (true) {
-            int r = in.read(buff, used, 1);
-            if (r < 1) {
-                atEnd = true;
-                break outer;
-            }
+	outer: while (true) {
+	    int r = in.read(buff, used, 1);
+	    if (r < 1) {
+		atEnd = true;
+		break outer;
+	    }
 
-            used++;
-            term: for (byte[] term : terms) {
-                if (used < term.length) {
-                    continue term;
-                }
-                for (int i = 0; i < term.length; i++) {
-                    if (buff[used - term.length + i] != term[i]) {
-                        continue term;
-                    }
-                }
-                this.term = term.clone();
-                used -= term.length;
-                break outer;
-            }
-            if (used == buff.length) {
-                byte[] tmp = new byte[used + 1024];
-                System.arraycopy(buff, 0, tmp, 0, used);
-                buff = tmp;
-            }
-        }
-        byte[] out = new byte[used];
-        System.arraycopy(buff, 0, out, 0, used);
-        found = out;
-        return out;
+	    used++;
+	    term: for (byte[] term : terms) {
+		if (used < term.length) {
+		    continue term;
+		}
+		for (int i = 0; i < term.length; i++) {
+		    if (buff[used - term.length + i] != term[i]) {
+			continue term;
+		    }
+		}
+		this.term = term.clone();
+		used -= term.length;
+		break outer;
+	    }
+	    if (used == buff.length) {
+		byte[] tmp = new byte[used + 1024];
+		System.arraycopy(buff, 0, tmp, 0, used);
+		buff = tmp;
+	    }
+	}
+	byte[] out = new byte[used];
+	System.arraycopy(buff, 0, out, 0, used);
+	found = out;
+	return out;
     }
 
     /**
@@ -75,7 +75,7 @@ public class BinaryStreamParser {
      * @return the terminal
      */
     public byte[] getTerminal() {
-        return term;
+	return term;
     }
 
     /**
@@ -84,7 +84,7 @@ public class BinaryStreamParser {
      * @return true if the end of the stream was hit
      */
     public boolean atEnd() {
-        return atEnd;
+	return atEnd;
     }
 
     /**
@@ -93,6 +93,6 @@ public class BinaryStreamParser {
      * @return the bytes found before the terminal in the last call to readTo
      */
     public byte[] getFound() {
-        return found;
+	return found;
     }
 }

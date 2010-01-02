@@ -2,13 +2,12 @@ package org.yi.happy.archive.key;
 
 import org.yi.happy.annotate.ExternalName;
 
-
 /**
  * the key types.
  */
 public class KeyType {
     private KeyType() {
-        // nothing
+	// nothing
     }
 
     /**

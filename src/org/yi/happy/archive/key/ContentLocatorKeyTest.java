@@ -14,11 +14,11 @@ public class ContentLocatorKeyTest {
      */
     @Test
     public void testGood1() {
-        byte[] hash = { 0 };
-        LocatorKey key = new ContentLocatorKey(hash);
-        assertEquals("content-hash", key.getType());
-        assertArrayEquals(hash, key.getHash());
-        assertEquals("content-hash:00", key.toString());
+	byte[] hash = { 0 };
+	LocatorKey key = new ContentLocatorKey(hash);
+	assertEquals("content-hash", key.getType());
+	assertArrayEquals(hash, key.getHash());
+	assertEquals("content-hash:00", key.toString());
     }
 
 }

@@ -17,11 +17,11 @@ public class BlockImplTest {
      */
     @Test
     public void testBlockHeader() {
-        BlockImpl block = new BlockImpl();
-        block.addMeta("aA", "b");
+	BlockImpl block = new BlockImpl();
+	block.addMeta("aA", "b");
 
-        assertEquals("b", block.getMeta("aA"));
-        assertEquals(null, block.getMeta("Aa"));
+	assertEquals("b", block.getMeta("aA"));
+	assertEquals(null, block.getMeta("Aa"));
     }
 
     /**
@@ -29,12 +29,12 @@ public class BlockImplTest {
      */
     @Test
     public void testAsBytes() {
-        BlockImpl block = createSampleBlock();
+	BlockImpl block = createSampleBlock();
 
-        byte[] have = block.asBytes();
+	byte[] have = block.asBytes();
 
-        byte[] want = createSampleBytes();
-        assertArrayEquals(want, have);
+	byte[] want = createSampleBytes();
+	assertArrayEquals(want, have);
     }
 
     /**
@@ -43,14 +43,14 @@ public class BlockImplTest {
      * @return the sample block
      */
     public static BlockImpl createSampleBlock() {
-        BlockImpl block = new BlockImpl();
+	BlockImpl block = new BlockImpl();
 
-        block.addMeta("a", "c");
-        block.addMeta("b", "d");
-        block.addMeta("c", "e");
-        block.setBody(ByteString.toBytes("body\ndata\n"));
+	block.addMeta("a", "c");
+	block.addMeta("b", "d");
+	block.addMeta("c", "e");
+	block.setBody(ByteString.toBytes("body\ndata\n"));
 
-        return block;
+	return block;
     }
 
     /**
@@ -59,7 +59,7 @@ public class BlockImplTest {
      * @return the bytes for the sample block
      */
     public static byte[] createSampleBytes() {
-        return ByteString.toBytes("a: c\r\nb: d\r\nc: e\r\n\r\nbody\ndata\n");
+	return ByteString.toBytes("a: c\r\nb: d\r\nc: e\r\n\r\nbody\ndata\n");
     }
 
     /**
@@ -69,14 +69,14 @@ public class BlockImplTest {
      */
     @Test
     public void testWriteTo() throws IOException {
-        ByteArrayOutputStream s = new ByteArrayOutputStream();
-        BlockImpl block = createSampleBlock();
+	ByteArrayOutputStream s = new ByteArrayOutputStream();
+	BlockImpl block = createSampleBlock();
 
-        block.writeTo(s);
-        s.close();
+	block.writeTo(s);
+	s.close();
 
-        byte[] have = s.toByteArray();
-        byte[] want = createSampleBytes();
-        assertArrayEquals(want, have);
+	byte[] have = s.toByteArray();
+	byte[] want = createSampleBytes();
+	assertArrayEquals(want, have);
     }
 }

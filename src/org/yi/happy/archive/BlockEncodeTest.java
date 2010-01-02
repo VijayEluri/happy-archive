@@ -16,17 +16,17 @@ public class BlockEncodeTest {
      */
     @Test
     public void testContentEncode() {
-        Block in = TestUtil.loadClear();
+	Block in = TestUtil.loadClear();
 
-        BlockEncoderImpl e = new BlockEncoderImpl();
-        e.setDigestName("sha-256");
-        e.setCipherName("rijndael256-256-cbc");
-        BlockEncoderResult r = e.encode(in);
-        Block out = r.getBlock();
+	BlockEncoderImpl e = new BlockEncoderImpl();
+	e.setDigestName("sha-256");
+	e.setCipherName("rijndael256-256-cbc");
+	BlockEncoderResult r = e.encode(in);
+	Block out = r.getBlock();
 
-		Block want = TestUtil.loadBlock(TestData.KEY_BLOB);
-        Assert.assertArrayEquals(want.asBytes(), out.asBytes());
-		Assert.assertEquals(TestData.KEY_BLOB.getFullKey(), r.getKey());
+	Block want = TestUtil.loadBlock(TestData.KEY_BLOB);
+	Assert.assertArrayEquals(want.asBytes(), out.asBytes());
+	Assert.assertEquals(TestData.KEY_BLOB.getFullKey(), r.getKey());
     }
 
     /**
@@ -34,8 +34,8 @@ public class BlockEncodeTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testBadCipher() {
-        BlockEncoderImpl e = new BlockEncoderImpl();
-        e.setCipherName("bad");
+	BlockEncoderImpl e = new BlockEncoderImpl();
+	e.setCipherName("bad");
     }
 
     /**
@@ -43,8 +43,8 @@ public class BlockEncodeTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testBadDigest() {
-        BlockEncoderImpl e = new BlockEncoderImpl();
-        e.setDigestName("bad");
+	BlockEncoderImpl e = new BlockEncoderImpl();
+	e.setDigestName("bad");
     }
 
     /**
@@ -52,18 +52,18 @@ public class BlockEncodeTest {
      */
     @Test
     public void testKeepDigest() {
-        BlockEncoderImpl be = new BlockEncoderImpl();
-        be.setDigestName("sha-1");
-        Assert.assertEquals("sha-1", be.getDigestName());
+	BlockEncoderImpl be = new BlockEncoderImpl();
+	be.setDigestName("sha-1");
+	Assert.assertEquals("sha-1", be.getDigestName());
 
-        try {
-            be.setDigestName("bad");
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-            // swallow
-        }
+	try {
+	    be.setDigestName("bad");
+	    Assert.fail();
+	} catch (IllegalArgumentException e) {
+	    // swallow
+	}
 
-        Assert.assertEquals("sha-1", be.getDigestName());
+	Assert.assertEquals("sha-1", be.getDigestName());
     }
 
     /**
@@ -71,18 +71,18 @@ public class BlockEncodeTest {
      */
     @Test
     public void testKeepCipher() {
-        BlockEncoderImpl be = new BlockEncoderImpl();
-        be.setCipherName("aes-192-cbc");
-        Assert.assertEquals("aes-192-cbc", be.getCipherName());
+	BlockEncoderImpl be = new BlockEncoderImpl();
+	be.setCipherName("aes-192-cbc");
+	Assert.assertEquals("aes-192-cbc", be.getCipherName());
 
-        try {
-            be.setDigestName("bad");
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-            // swallow
-        }
+	try {
+	    be.setDigestName("bad");
+	    Assert.fail();
+	} catch (IllegalArgumentException e) {
+	    // swallow
+	}
 
-        Assert.assertEquals("aes-192-cbc", be.getCipherName());
+	Assert.assertEquals("aes-192-cbc", be.getCipherName());
     }
 
     /**
@@ -90,18 +90,18 @@ public class BlockEncodeTest {
      */
     @Test
     public void testEncodeNonDefault() {
-		Block in = TestUtil.loadClear();
+	Block in = TestUtil.loadClear();
 
-        BlockEncoderImpl be = new BlockEncoderImpl();
-        be.setCipherName("aes-192-cbc");
-        be.setDigestName("sha-1");
-        BlockEncoderResult r = be.encode(in);
-        Block have = r.getBlock();
+	BlockEncoderImpl be = new BlockEncoderImpl();
+	be.setCipherName("aes-192-cbc");
+	be.setDigestName("sha-1");
+	BlockEncoderResult r = be.encode(in);
+	Block have = r.getBlock();
 
-		TestData d = TestData.KEY_BLOB_SHA1_AES192;
-		Block want = TestUtil.loadBlock(d);
-        assertEquals(d.getFullKey(), r.getKey());
-        assertArrayEquals(want.asBytes(), have.asBytes());
+	TestData d = TestData.KEY_BLOB_SHA1_AES192;
+	Block want = TestUtil.loadBlock(d);
+	assertEquals(d.getFullKey(), r.getKey());
+	assertArrayEquals(want.asBytes(), have.asBytes());
     }
 
     /**
@@ -109,15 +109,15 @@ public class BlockEncodeTest {
      */
     @Test
     public void testEncodeDefault() {
-		Block in = TestUtil.loadClear();
+	Block in = TestUtil.loadClear();
 
-        BlockEncoderImpl be = new BlockEncoderImpl();
-        BlockEncoderResult r = be.encode(in);
-        Block have = r.getBlock();
+	BlockEncoderImpl be = new BlockEncoderImpl();
+	BlockEncoderResult r = be.encode(in);
+	Block have = r.getBlock();
 
-		TestData d = TestData.KEY_BLOB_AES128;
-		Block want = TestUtil.loadBlock(d);
-        assertEquals(d.getFullKey(), r.getKey());
-        assertArrayEquals(want.asBytes(), have.asBytes());
+	TestData d = TestData.KEY_BLOB_AES128;
+	Block want = TestUtil.loadBlock(d);
+	assertEquals(d.getFullKey(), r.getKey());
+	assertArrayEquals(want.asBytes(), have.asBytes());
     }
 }

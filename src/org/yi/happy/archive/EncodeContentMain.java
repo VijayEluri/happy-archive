@@ -16,33 +16,33 @@ import org.yi.happy.archive.file_system.RealFileSystem;
  * standard output.
  */
 public class EncodeContentMain {
-	private final FileSystem fs;
-	private final Writer out;
+    private final FileSystem fs;
+    private final Writer out;
 
-	public static void main(String[] args) throws Exception {
-		FileSystem fs = new RealFileSystem();
-		Writer out = new OutputStreamWriter(System.out);
+    public static void main(String[] args) throws Exception {
+	FileSystem fs = new RealFileSystem();
+	Writer out = new OutputStreamWriter(System.out);
 
-		new EncodeContentMain(fs, out).run(args);
+	new EncodeContentMain(fs, out).run(args);
 
-		out.flush();
-	}
+	out.flush();
+    }
 
-	public EncodeContentMain(FileSystem fs, Writer out) {
-		this.fs = fs;
-		this.out = out;
-	}
+    public EncodeContentMain(FileSystem fs, Writer out) {
+	this.fs = fs;
+	this.out = out;
+    }
 
-	public void run(String... args) throws IOException,
-			NoSuchAlgorithmException {
-		MessageDigest digest = MessageDigest.getInstance("sha-256");
-		NamedCipher cipher = CipherFactory.createNamed("rijndael256-256-cbc");
-		BlockEncoderContent encoder = new BlockEncoderContent(digest, cipher);
-		Block block = BlockParse.load(fs.load(args[0], Blocks.MAX_SIZE));
-		BlockEncoderResult e = encoder.encode(block);
+    public void run(String... args) throws IOException,
+	    NoSuchAlgorithmException {
+	MessageDigest digest = MessageDigest.getInstance("sha-256");
+	NamedCipher cipher = CipherFactory.createNamed("rijndael256-256-cbc");
+	BlockEncoderContent encoder = new BlockEncoderContent(digest, cipher);
+	Block block = BlockParse.load(fs.load(args[0], Blocks.MAX_SIZE));
+	BlockEncoderResult e = encoder.encode(block);
 
-		fs.save(args[1], e.getBlock().asBytes());
+	fs.save(args[1], e.getBlock().asBytes());
 
-		out.write(e.getKey() + "\n");
-	}
+	out.write(e.getKey() + "\n");
+    }
 }

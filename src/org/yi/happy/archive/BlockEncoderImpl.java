@@ -30,8 +30,8 @@ public class BlockEncoderImpl implements BlockEncoder {
      * create with defaults
      */
     public BlockEncoderImpl() {
-        digest = null;
-        cipher = null;
+	digest = null;
+	cipher = null;
     }
 
     /**
@@ -41,7 +41,7 @@ public class BlockEncoderImpl implements BlockEncoder {
      *            the digest to be used
      */
     public void setDigestName(String digest) {
-        this.digest = DigestFactory.create(digest);
+	this.digest = DigestFactory.create(digest);
     }
 
     /**
@@ -51,7 +51,7 @@ public class BlockEncoderImpl implements BlockEncoder {
      *            the cipher to be used
      */
     public void setCipherName(String cipher) {
-        this.cipher = CipherFactory.createNamed(cipher);
+	this.cipher = CipherFactory.createNamed(cipher);
     }
 
     /**
@@ -60,10 +60,10 @@ public class BlockEncoderImpl implements BlockEncoder {
      * @return the cipher to use
      */
     private NamedCipher getCipher() {
-        if (cipher == null) {
-            cipher = CipherFactory.createNamed(DEFAULT_CIPHER);
-        }
-        return cipher;
+	if (cipher == null) {
+	    cipher = CipherFactory.createNamed(DEFAULT_CIPHER);
+	}
+	return cipher;
     }
 
     /**
@@ -72,10 +72,10 @@ public class BlockEncoderImpl implements BlockEncoder {
      * @return the digest to use
      */
     private MessageDigest getDigest() {
-        if (digest == null) {
-            digest = DigestFactory.create(DEFAULT_DIGEST);
-        }
-        return digest;
+	if (digest == null) {
+	    digest = DigestFactory.create(DEFAULT_DIGEST);
+	}
+	return digest;
     }
 
     /**
@@ -84,7 +84,7 @@ public class BlockEncoderImpl implements BlockEncoder {
      * @return the digest algorithm
      */
     public String getDigestName() {
-        return getDigest().getAlgorithm();
+	return getDigest().getAlgorithm();
     }
 
     /**
@@ -93,7 +93,7 @@ public class BlockEncoderImpl implements BlockEncoder {
      * @return the cipher algorithm
      */
     public String getCipherName() {
-        return getCipher().getAlgorithm();
+	return getCipher().getAlgorithm();
     }
 
     /**
@@ -104,6 +104,6 @@ public class BlockEncoderImpl implements BlockEncoder {
      * @return the encoded block
      */
     public BlockEncoderResult encode(Block block) {
-        return new BlockEncoderBlob(getDigest(), getCipher()).encode(block);
+	return new BlockEncoderBlob(getDigest(), getCipher()).encode(block);
     }
 }

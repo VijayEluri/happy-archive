@@ -14,8 +14,8 @@ public final class BlockEncoderResult {
      *            the encoded block.
      */
     public BlockEncoderResult(FullKey key, EncodedBlock block) {
-        this.key = key;
-        this.block = block;
+	this.key = key;
+	this.block = block;
     }
 
     private final FullKey key;
@@ -26,7 +26,7 @@ public final class BlockEncoderResult {
      * @return the full key of the encoded block.
      */
     public FullKey getKey() {
-        return key;
+	return key;
     }
 
     /**
@@ -34,37 +34,37 @@ public final class BlockEncoderResult {
      * @return the encoded block.
      */
     public EncodedBlock getBlock() {
-        return block;
+	return block;
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((block == null) ? 0 : block.hashCode());
-        result = prime * result + ((key == null) ? 0 : key.hashCode());
-        return result;
+	final int prime = 31;
+	int result = 1;
+	result = prime * result + ((block == null) ? 0 : block.hashCode());
+	result = prime * result + ((key == null) ? 0 : key.hashCode());
+	return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        BlockEncoderResult other = (BlockEncoderResult) obj;
-        if (block == null) {
-            if (other.block != null)
-                return false;
-        } else if (!block.equals(other.block))
-            return false;
-        if (key == null) {
-            if (other.key != null)
-                return false;
-        } else if (!key.equals(other.key))
-            return false;
-        return true;
+	if (this == obj)
+	    return true;
+	if (obj == null)
+	    return false;
+	if (getClass() != obj.getClass())
+	    return false;
+	BlockEncoderResult other = (BlockEncoderResult) obj;
+	if (block == null) {
+	    if (other.block != null)
+		return false;
+	} else if (!block.equals(other.block))
+	    return false;
+	if (key == null) {
+	    if (other.key != null)
+		return false;
+	} else if (!key.equals(other.key))
+	    return false;
+	return true;
     }
 }

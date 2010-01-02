@@ -8,8 +8,8 @@ import org.yi.happy.archive.key.BlobFullKey;
 
 public class BlockEncoderBlob implements BlockEncoder {
     public BlockEncoderBlob(MessageDigest digest, NamedCipher cipher) {
-        this.digest = digest;
-        this.cipher = cipher;
+	this.digest = digest;
+	this.cipher = cipher;
     }
 
     private final MessageDigest digest;
@@ -23,22 +23,22 @@ public class BlockEncoderBlob implements BlockEncoder {
      * @return the resulting block
      */
     public BlockEncoderResult encode(Block block) {
-        byte[] body = block.asBytes();
+	byte[] body = block.asBytes();
 
-        byte[] ph = digestData(body, digest);
+	byte[] ph = digestData(body, digest);
 
-        byte[] key = BlockUtil.expandKey(digest, ph, cipher.getKeySize());
-        cipher.setPass(key);
+	byte[] key = BlockUtil.expandKey(digest, ph, cipher.getKeySize());
+	cipher.setPass(key);
 
-        body = pad(body, cipher.getBlockSize());
-        cipher.encrypt(body);
+	body = pad(body, cipher.getBlockSize());
+	cipher.encrypt(body);
 
-        EncodedBlock out = EncodedBlockFactory.create(digest.getAlgorithm(),
-                cipher.getAlgorithm(), body);
+	EncodedBlock out = EncodedBlockFactory.create(digest.getAlgorithm(),
+		cipher.getAlgorithm(), body);
 
-        BlobFullKey fullKey = new BlobFullKey(out.getKey().getHash(), key);
+	BlobFullKey fullKey = new BlobFullKey(out.getKey().getHash(), key);
 
-        return new BlockEncoderResult(fullKey, out);
+	return new BlockEncoderResult(fullKey, out);
     }
 
     /**
@@ -52,13 +52,13 @@ public class BlockEncoderBlob implements BlockEncoder {
      *         with zeros to blockSize
      */
     private static byte[] pad(byte[] block, int blockSize) {
-        int slack = block.length % blockSize;
-        if (slack == 0) {
-            return block;
-        }
+	int slack = block.length % blockSize;
+	if (slack == 0) {
+	    return block;
+	}
 
-        byte[] out = new byte[block.length + blockSize - slack];
-        System.arraycopy(block, 0, out, 0, block.length);
-        return out;
+	byte[] out = new byte[block.length + blockSize - slack];
+	System.arraycopy(block, 0, out, 0, block.length);
+	return out;
     }
 }
