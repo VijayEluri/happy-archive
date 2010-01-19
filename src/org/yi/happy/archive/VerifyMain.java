@@ -3,6 +3,7 @@ package org.yi.happy.archive;
 import java.io.PrintWriter;
 import java.io.Writer;
 
+import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
 
@@ -51,6 +52,7 @@ public class VerifyMain {
 	}
     }
 
+    @EntryPoint
     public static void main(String[] args) throws Exception {
 	FileSystem fs = new RealFileSystem();
 	Writer out = new PrintWriter(System.out, true);

@@ -3,6 +3,7 @@ package org.yi.happy.archive;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
@@ -23,6 +24,7 @@ public class DecodeBlockMain {
 	this.out = out;
     }
 
+    @EntryPoint
     public static void main(String[] args) throws Exception {
 	FileSystem fs = new RealFileSystem();
 	OutputStream out = System.out;
@@ -34,6 +36,10 @@ public class DecodeBlockMain {
 
     @SmellsMessy
     public void run(String... args) throws IOException {
+	/*
+	 * TODO check arguments and display help if needed
+	 */
+
 	EncodedBlock b = new EncodedBlockParse().parse(fs.load(args[0],
 		Blocks.MAX_SIZE));
 	FullKey k = new KeyParse().parseFullKey(args[1]);

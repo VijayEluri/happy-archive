@@ -6,6 +6,7 @@ import java.io.Writer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
 
@@ -33,6 +34,7 @@ public class EncodeContentMain {
 	this.out = out;
     }
 
+    @EntryPoint
     public void run(String... args) throws IOException,
 	    NoSuchAlgorithmException {
 	MessageDigest digest = MessageDigest.getInstance("sha-256");
