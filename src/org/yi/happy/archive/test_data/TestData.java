@@ -6,6 +6,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.net.URL;
 
+import org.yi.happy.archive.EncodedBlock;
+import org.yi.happy.archive.EncodedBlockParse;
 import org.yi.happy.archive.Streams;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.KeyParse;
@@ -225,5 +227,9 @@ public enum TestData {
 	    throw new UnsupportedOperationException(e);
 	}
 	throw new UnsupportedOperationException("not found");
+    }
+
+    public EncodedBlock getEncodedBlock() throws IOException {
+	return new EncodedBlockParse().load(getUrl());
     }
 }

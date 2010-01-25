@@ -13,4 +13,5 @@ public interface FileSystem {
 
     void save(String name, byte[] bytes) throws IOException;
 
+    String join(String base, String name);
 }

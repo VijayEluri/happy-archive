@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.yi.happy.annotate.TypeSwitch;
 import org.yi.happy.archive.key.BlobLocatorKey;
 import org.yi.happy.archive.key.ContentLocatorKey;
 import org.yi.happy.archive.key.HexDecode;
@@ -35,6 +36,7 @@ public class EncodedBlockFactory {
 	return cipher;
     }
 
+    @TypeSwitch
     public static EncodedBlock parse(Block block) throws VerifyException {
 	if (block instanceof EncodedBlock) {
 	    return (EncodedBlock) block;

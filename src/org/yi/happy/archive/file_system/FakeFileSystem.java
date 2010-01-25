@@ -47,4 +47,9 @@ public class FakeFileSystem implements FileSystem {
 	return new ByteArrayInputStream(files.get(name));
     }
 
+    @Override
+    public String join(String base, String name) {
+	return base + "/" + name;
+    }
+
 }

@@ -1,5 +1,6 @@
 package org.yi.happy.archive.file_system;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -42,5 +43,10 @@ public class RealFileSystem implements FileSystem {
 	} finally {
 	    out.close();
 	}
+    }
+
+    @Override
+    public String join(String base, String name) {
+	return new File(base, name).getPath();
     }
 }
