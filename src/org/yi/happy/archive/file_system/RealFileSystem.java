@@ -49,4 +49,19 @@ public class RealFileSystem implements FileSystem {
     public String join(String base, String name) {
 	return new File(base, name).getPath();
     }
+
+    @Override
+    public boolean mkdir(String path) throws IOException {
+	File f = new File(path);
+
+	if (f.mkdir()) {
+	    return true;
+	}
+
+	if (f.isDirectory()) {
+	    return false;
+	}
+
+	throw new IOException();
+    }
 }

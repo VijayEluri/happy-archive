@@ -14,4 +14,16 @@ public interface FileSystem {
     void save(String name, byte[] bytes) throws IOException;
 
     String join(String base, String name);
+
+    /**
+     * ensure that a directory exists.
+     * 
+     * @param path
+     *            the directory to create.
+     * @return true if the directory was created, false if the directory already
+     *         exists.
+     * @throws IOException
+     *             if the directory can not be created.
+     */
+    boolean mkdir(String path) throws IOException;
 }

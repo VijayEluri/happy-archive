@@ -11,8 +11,20 @@ public class FakeFileSystem implements FileSystem {
 
     private Map<String, byte[]> files = new HashMap<String, byte[]>();
 
+    private final byte[] DIR = new byte[0];
+
     @Override
     public void save(String name, byte[] bytes) throws IOException {
+	if (name.contains("/")
+		&& files.get(name.replaceAll("/[^/]*$", "")) != DIR) {
+	    throw new FileNotFoundException("parent does not exist or is"
+		    + " not a folder");
+	}
+
+	if (files.get(name) == DIR) {
+	    throw new IOException();
+	}
+
 	files.put(name, bytes.clone());
     }
 
@@ -52,4 +64,23 @@ public class FakeFileSystem implements FileSystem {
 	return base + "/" + name;
     }
 
+    @Override
+    public boolean mkdir(String path) throws IOException {
+	if (path.contains("/")
+		&& files.get(path.replaceAll("/[^/]*$", "")) != DIR) {
+	    throw new FileNotFoundException("parent does is not a folder");
+	}
+
+	byte[] cur = files.get(path);
+	if (cur == DIR) {
+	    return false;
+	}
+
+	if (cur != null) {
+	    throw new IOException();
+	}
+
+	files.put(path, DIR);
+	return true;
+    }
 }
