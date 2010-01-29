@@ -1,0 +1,50 @@
+===== data block
+
+"size: " size_of_body \r\n
+\r\n
+body
+
+this is the basic data storage unit
+
+===== map block
+
+"type: map" \r\n
+"size: " size_of_body \r\n
+\r\n
+( full_key \t offset \n )*
+
+all the listed keys are places at the given offsets, any gaps are filled with zero bytes, the offsets are measured from the start of the data represented by this block (zero and increasing)
+
+this is the most recent method for splitting data streams, it also allows for random access into the data stream.
+
+for an idea of upper limits and efficiency of scale, using 1MiB blocks, a typical content-hash key results in a 142 bytes, and assuming the offsets are all ~10 bytes long, a single level map may refer to 6808 blocks or 6.6 GiB, and a two level map may refer to 46348864 blocks or 44.2 TiB. There may be any number of levels of maps.
+
+===== list block
+
+"type: list" \r\n
+"size: " size_of_body \r\n
+\r\n
+( full_key \n )*
+
+all the listed keys are retrieved in order and appended together
+
+this is a recent way that data streams were split, an improvement on split blocks, also much more effiecient for number of files and restore times
+
+===== split block
+
+"type: split" \r\n
+"split-count: " split_count \r\n
+\r\n
+
+retrieve all the blocks with full keys formed from the full key of the split block followed by a '/' and numbers starting at 0 and going to split_count - 1
+
+this is the original way that data streams that were too large for a single block were stored
+
+===== indirect block
+
+"type: indirect" \r\n
+"size: " full_key_size \r\n
+\r\n
+full_key
+
+instead of loading this block, load the block with the full key in the body of this block

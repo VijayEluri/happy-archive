@@ -1,0 +1,46 @@
+===== content-hash
+
+( "version: 2" \r\n )?
+"key-type: content-hash" \r\n
+"key: " hash_of_body \r\n
+"digest: " digest_used \r\n
+"cipher: " cipher_used \r\n
+"size: " size_of_body \r\n
+\r\n
+body
+
+body := encrypt(clear_body, make_key(digest(clear_body)));
+
+hash_of_body is in hex.
+
+if the version header is missing use the translation table to fix the cipher
+name.
+
+this is the most common of the final storage blocks at the moment.
+
+There is a problem with this format where the cipher can be changed and the
+block will not fail to verify, making it possible to easily corrupt a block
+cache by inserting blocks that do not decode.
+
+===== name-hash
+
+( "version: 2" \r\n )?
+"key-type: name-hash" \r\n
+"key: " hash_of_name \r\n
+"hash: " hash_of_body \r\n
+"digest: " digest_used \r\n
+"cipher: " cipher_used \r\n
+"size: " size_of_body \r\n
+\r\n
+body
+
+body := encrypt(clear_body, make_key(name));
+
+make_key(name) can not be found from hash(name)
+
+this is the other final storage block type, it is not secure because names can
+be easily made to collide causing confusion, so its use has been phased out, but
+it continues to exist in legacy data.
+
+if the version header is missing use the translation table to fix the cipher
+name.
