@@ -6,7 +6,7 @@ import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.key.HexEncode;
 import org.yi.happy.archive.key.LocatorKey;
 
-public class FileBlockStore {
+public class FileBlockStore implements BlockStore {
 
     private final FileSystem fs;
     private final String base;

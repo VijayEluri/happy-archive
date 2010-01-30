@@ -135,7 +135,42 @@ public enum TestData {
     @Full("name-hash:md5:blah")
     @Locator("name-hash:6f1ed002ab5595859014ebf0951522d9")
     @Clear(CLEAR_CONTENT)
-    KEY_NAME_MD5_AES192;
+    KEY_NAME_MD5_AES192,
+
+    CLEAR_CONTENT_MAP_2048A,
+
+    /**
+     * the base key for a map of "a" x 2048 in 512 byte chunks
+     */
+    @Full("content-hash:9d059a2c0445ced47d5e8766e613c2156e4ed683b861"
+	    + "6a3459bc54d2d0c9fbfd:c09c1708ab42a4550674610870c44d121c7"
+	    + "0a823172ad3c47221ab71dd597df9")
+    @Locator("content-hash:9d059a2c0445ced47d5e8766e613c2156e4ed683b861"
+	    + "6a3459bc54d2d0c9fbfd")
+    @Clear(CLEAR_CONTENT_MAP_2048A)
+    KEY_CONTENT_MAP_2048A,
+
+    CLEAR_CONTENT_512A,
+
+    @Full("content-hash:61a0ef49ca8d2e54454bfb1a55d34570666ef71820fa1a33ba19ce"
+	    + "d94fdea2fb:d7004f5a0efeab8bafc9df8a4dbf1573bb07d846d8fa788e51ce"
+	    + "86ee44750f58")
+    @Locator("content-hash:61a0ef49ca8d2e54454bfb1a55d34570666ef71820fa1a33ba1"
+	    + "9ced94fdea2fb")
+    @Clear(CLEAR_CONTENT_512A)
+    KEY_CONTENT_512A,
+
+    /**
+     * the block that is created by writing "01234" x 8
+     */
+    @Full("content-hash:7bd236857bc1af3cc3c65e1d0695175ceee65238b250"
+	    + "0c0d20237d3b7312afbf:c4e8a7d6e546c0e57489732a9c0c4e1743d"
+	    + "ac7dc0799bdcd1cda968e0f716b2b")
+    @Locator("content-hash:7bd236857bc1af3cc3c65e1d0695175ceee65238b250"
+	    + "0c0d20237d3b7312afbf")
+    KEY_CONTENT_40,
+
+    ;
 
     /**
      * get the file name for this enumeration constant, relative to the
