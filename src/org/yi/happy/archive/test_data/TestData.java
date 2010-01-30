@@ -6,6 +6,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.net.URL;
 
+import org.yi.happy.annotate.ShouldThrowChecked;
+import org.yi.happy.archive.Block;
+import org.yi.happy.archive.BlockParse;
 import org.yi.happy.archive.EncodedBlock;
 import org.yi.happy.archive.EncodedBlockParse;
 import org.yi.happy.archive.Streams;
@@ -231,5 +234,10 @@ public enum TestData {
 
     public EncodedBlock getEncodedBlock() throws IOException {
 	return new EncodedBlockParse().load(getUrl());
+    }
+
+    @ShouldThrowChecked
+    public Block getBlock() {
+	return BlockParse.load(getUrl());
     }
 }

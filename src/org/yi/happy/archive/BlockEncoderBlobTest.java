@@ -16,7 +16,7 @@ public class BlockEncoderBlobTest {
      */
     @Test
     public void testContentEncode() {
-	Block in = TestUtil.loadClear();
+	Block in = TestData.CLEAR_CONTENT.getBlock();
 
 	BlockEncoder e = new BlockEncoderBlob(DigestFactory.create("sha-256"),
 		CipherFactory.createNamed("rijndael256-256-cbc"));

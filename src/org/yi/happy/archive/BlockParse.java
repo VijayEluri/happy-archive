@@ -10,6 +10,8 @@ import java.net.URL;
 import java.text.ParseException;
 import java.util.Arrays;
 
+import org.yi.happy.annotate.ShouldThrowChecked;
+
 public class BlockParse {
 
     /**
@@ -141,6 +143,7 @@ public class BlockParse {
      * @return the loaded block
      * @throws LoadException
      */
+    @ShouldThrowChecked
     public static Block load(URL resource) throws LoadException {
 	try {
 	    InputStream in = resource.openStream();
