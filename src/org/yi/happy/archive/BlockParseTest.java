@@ -12,4 +12,9 @@ public class BlockParseTest {
 
 	assertEquals("content-hash", block.getMeta("key-type"));
     }
+
+    @Test(expected = LoadException.class)
+    public void test2() {
+	BlockParse.load(TestData.BAD_EMPTY.getUrl());
+    }
 }

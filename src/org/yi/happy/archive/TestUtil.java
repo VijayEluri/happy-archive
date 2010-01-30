@@ -4,7 +4,10 @@ import org.yi.happy.archive.test_data.TestData;
 
 /**
  * utility methods for the test cases
+ * 
+ * @deprecated use the methods on the test data instead.
  */
+@Deprecated
 public class TestUtil {
     /**
      * load a block resource.
@@ -15,8 +18,9 @@ public class TestUtil {
      * @throws LoadException
      *             on loading errors
      */
+    @Deprecated
     public static Block loadBlock(TestData name) throws LoadException {
-	return BlockParse.load(name.getUrl());
+	return name.getBlock();
     }
 
     /**
@@ -24,7 +28,8 @@ public class TestUtil {
      * 
      * @return the clear content block
      */
+    @Deprecated
     public static Block loadClear() {
-	return loadBlock(TestData.CLEAR_CONTENT);
+	return TestData.CLEAR_CONTENT.getBlock();
     }
 }
