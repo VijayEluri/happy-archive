@@ -23,7 +23,7 @@ public class BlockEncoderBlobTest {
 	BlockEncoderResult r = e.encode(in);
 	Block out = r.getBlock();
 
-	Block want = TestUtil.loadBlock(TestData.KEY_BLOB);
+	Block want = TestData.KEY_BLOB.getBlock();
 	Assert.assertArrayEquals(want.asBytes(), out.asBytes());
 	Assert.assertEquals(TestData.KEY_BLOB.getFullKey(), r.getKey());
     }
@@ -33,7 +33,7 @@ public class BlockEncoderBlobTest {
      */
     @Test
     public void testEncodeNonDefault() {
-	Block in = TestUtil.loadClear();
+	Block in = TestData.CLEAR_CONTENT.getBlock();
 
 	BlockEncoder be = new BlockEncoderBlob(DigestFactory.create("sha-1"),
 		CipherFactory.createNamed("aes-192-cbc"));
@@ -41,7 +41,7 @@ public class BlockEncoderBlobTest {
 	Block have = r.getBlock();
 
 	TestData d = TestData.KEY_BLOB_SHA1_AES192;
-	Block want = TestUtil.loadBlock(d);
+	Block want = d.getBlock();
 	assertEquals(d.getFullKey(), r.getKey());
 	assertArrayEquals(want.asBytes(), have.asBytes());
     }
@@ -51,7 +51,7 @@ public class BlockEncoderBlobTest {
      */
     @Test
     public void testEncodeDefault() {
-	Block in = TestUtil.loadClear();
+	Block in = TestData.CLEAR_CONTENT.getBlock();
 
 	BlockEncoder be = new BlockEncoderBlob(DigestFactory.create("sha-256"),
 		CipherFactory.createNamed("aes-128-cbc"));
@@ -59,7 +59,7 @@ public class BlockEncoderBlobTest {
 	Block have = r.getBlock();
 
 	TestData d = TestData.KEY_BLOB_AES128;
-	Block want = TestUtil.loadBlock(d);
+	Block want = d.getBlock();
 	assertEquals(d.getFullKey(), r.getKey());
 	assertArrayEquals(want.asBytes(), have.asBytes());
     }
