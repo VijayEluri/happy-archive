@@ -6,4 +6,8 @@ public class Blocks {
      * existing block.
      */
     public static int MAX_SIZE = 4 * 1024 * 1024;
+
+    public static byte[] getEndl() {
+	return new byte[] { 0x0d, 0x0a };
+    }
 }

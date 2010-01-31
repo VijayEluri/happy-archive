@@ -1,14 +1,11 @@
 package org.yi.happy.archive.block;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.yi.happy.archive.BlockParse;
-import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.Cipher;
 import org.yi.happy.archive.CipherFactory;
 import org.yi.happy.archive.DigestFactory;
@@ -19,7 +16,8 @@ import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.HexEncode;
 import org.yi.happy.archive.key.UnknownAlgorithmException;
 
-public final class ContentEncodedBlock implements EncodedBlock {
+public final class ContentEncodedBlock extends AbstractBlock implements
+	EncodedBlock {
     private final ContentLocatorKey key;
     private final String digest;
     private final String cipher;
@@ -85,33 +83,6 @@ public final class ContentEncodedBlock implements EncodedBlock {
 	out.put("cipher", cipher);
 	out.put("size", Integer.toString(body.length));
 	return out;
-    }
-
-    public byte[] asBytes() {
-	try {
-	    ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-	    out.write(ByteString.toUtf8("version: 2\r\nkey-type: "));
-	    out.write(ByteString.toUtf8(key.getType()));
-	    out.write(ByteString.toUtf8("\r\nkey: "));
-	    out.write(ByteString.toUtf8(HexEncode.encode(key.getHash())));
-	    out.write(ByteString.toUtf8("\r\ndigest: "));
-	    out.write(ByteString.toUtf8(digest));
-	    out.write(ByteString.toUtf8("\r\ncipher: "));
-	    out.write(ByteString.toUtf8(cipher));
-	    out.write(ByteString.toUtf8("\r\nsize: "));
-	    out.write(ByteString.toUtf8(Integer.toString(body.length)));
-	    out.write(ByteString.toUtf8("\r\n\r\n"));
-	    out.write(body);
-
-	    return out.toByteArray();
-	} catch (IOException e) {
-	    throw new Error(e);
-	}
-    }
-
-    public int getRawSize() {
-	return asBytes().length;
     }
 
     /**

@@ -59,9 +59,4 @@ public interface EncodedBlock extends Block {
      * @return the decoded block.
      */
     public Block decode(FullKey fullKey);
-
-    /**
-     * @return the total size of this block in bytes.
-     */
-    public int getRawSize();
 }
