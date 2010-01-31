@@ -17,9 +17,7 @@ public class KeyOutputStreamTest {
      */
     @Test
     public void testWrite() throws IOException {
-	BlockEncoder e = new BlockEncoderContent(DigestFactory
-		.create("sha-256"), CipherFactory
-		.createNamed("rijndael256-256-cbc"));
+	BlockEncoder e = BlockEncoderFactory.getContentDefault();
 	StorageMemory s = new StorageMemory();
 	KeyOutputStream out = new KeyOutputStream(new StoreBlockStorage(e, s));
 
@@ -44,9 +42,7 @@ public class KeyOutputStreamTest {
      */
     @Test
     public void testWrite2() throws IOException {
-	BlockEncoder e = new BlockEncoderContent(DigestFactory
-		.create("sha-256"), CipherFactory
-		.createNamed("rijndael256-256-cbc"));
+	BlockEncoder e = BlockEncoderFactory.getContentDefault();
 	StorageMemory s = new StorageMemory();
 	KeyOutputStream out = new KeyOutputStream(new StoreBlockStorage(e, s));
 
@@ -65,14 +61,32 @@ public class KeyOutputStreamTest {
      */
     @Test(expected = IOException.class)
     public void testWriteAfterClose() throws IOException {
-	BlockEncoder e = new BlockEncoderContent(DigestFactory
-		.create("sha-256"), CipherFactory
-		.createNamed("rijndael256-256-cbc"));
+	BlockEncoder e = BlockEncoderFactory.getContentDefault();
 	StorageMemory s = new StorageMemory();
 	KeyOutputStream out = new KeyOutputStream(new StoreBlockStorage(e, s));
 
 	out.close();
 	out.write("hi".getBytes());
+    }
+
+    /**
+     * check that calling close again does not change the full key.
+     * 
+     * @throws IOException
+     *             on error
+     */
+    @Test
+    public void testCloseAgain() throws IOException {
+	BlockEncoder e = BlockEncoderFactory.getContentDefault();
+	StorageMemory s = new StorageMemory();
+	KeyOutputStream out = new KeyOutputStream(new StoreBlockStorage(e, s));
+
+	out.write("hello\n".getBytes());
+	out.close();
+
+	out.close();
+
+	assertEquals(TestData.KEY_CONTENT.getFullKey(), out.getFullKey());
     }
 
     /**
@@ -82,9 +96,7 @@ public class KeyOutputStreamTest {
      */
     @Test
     public void testSetSplitSize() throws IOException {
-	BlockEncoder e = new BlockEncoderContent(DigestFactory
-		.create("sha-256"), CipherFactory
-		.createNamed("rijndael256-256-cbc"));
+	BlockEncoder e = BlockEncoderFactory.getContentDefault();
 	StorageMemory s = new StorageMemory();
 	KeyOutputStream out = new KeyOutputStream(new StoreBlockStorage(e, s));
 

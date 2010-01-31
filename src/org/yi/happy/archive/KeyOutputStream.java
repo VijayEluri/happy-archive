@@ -3,53 +3,20 @@ package org.yi.happy.archive;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
 
+import org.yi.happy.archive.block.DataBlock;
 import org.yi.happy.archive.block.GenericBlock;
 import org.yi.happy.archive.key.FullKey;
 
 /**
  * An output stream that stores blocks using the map strategy.
- * 
- * @author sarah dot a dot happy at gmail dot com
- * 
  */
 public class KeyOutputStream extends OutputStream {
-    /**
-     * a layer in the output map, this is a list of keys and the offset from the
-     * start of the layer of the map that they apply.
-     * 
-     * @author sarah dot a dot happy at gmail dot com
-     */
-    private static class Layer {
-        /**
-         * the offset in the stream of the first byte of the next key that will
-         * be added to this layer.
-         */
-        public long offset = 0;
-
-        /**
-         * the data for this layer so far
-         */
-        public final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-
-        /**
-         * the only key in the layer (null if there are multiple)
-         */
-        public FullKey onlyKey;
-    }
-
     private int splitSize = 1024 * 1024;
 
     /**
-     * the layers of maps in the output, the higher the index the lower the
-     * layer, the layers fill up lowest index first.
-     */
-    private List<Layer> layers = new ArrayList<Layer>();
-
-    /**
-     * the accumulating block in the stream.
+     * the accumulating block in the stream. This will only be empty before data
+     * starts being written, and after a close.
      */
     private ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
@@ -59,6 +26,9 @@ public class KeyOutputStream extends OutputStream {
      */
     private FullKey fullKey;
 
+    /**
+     * where to send blocks for encoding and storage.
+     */
     private final StoreBlock store;
 
     /**
@@ -68,7 +38,7 @@ public class KeyOutputStream extends OutputStream {
      *            where blocks are to be stored
      */
     public KeyOutputStream(StoreBlock store) {
-        this.store = store;
+	this.store = store;
     }
 
     /**
@@ -76,15 +46,15 @@ public class KeyOutputStream extends OutputStream {
      */
     @Override
     public void write(int b) throws IOException {
-        if (fullKey != null) {
-            throw new ClosedException();
-        }
+	if (fullKey != null) {
+	    throw new ClosedException();
+	}
 
-        if (buffer.size() == splitSize) {
-            flushBlock();
-        }
+	if (buffer.size() == splitSize) {
+	    flushBlock();
+	}
 
-        buffer.write(b);
+	buffer.write(b);
     }
 
     /**
@@ -92,22 +62,22 @@ public class KeyOutputStream extends OutputStream {
      */
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
-        if (fullKey != null) {
-            throw new ClosedException();
-        }
+	if (fullKey != null) {
+	    throw new ClosedException();
+	}
 
-        int left = splitSize - buffer.size();
+	int left = splitSize - buffer.size();
 
-        while (len > left) {
-            buffer.write(b, off, left);
-            flushBlock();
+	while (len > left) {
+	    buffer.write(b, off, left);
+	    flushBlock();
 
-            off += left;
-            len -= left;
-            left = splitSize;
-        }
+	    off += left;
+	    len -= left;
+	    left = splitSize;
+	}
 
-        buffer.write(b, off, len);
+	buffer.write(b, off, len);
     }
 
     /**
@@ -116,17 +86,17 @@ public class KeyOutputStream extends OutputStream {
      * @throws IOException
      */
     private void flushBlock() throws IOException {
-        byte[] data = buffer.toByteArray();
+	byte[] data = buffer.toByteArray();
 
-        FullKey fullKey = storeBlock(data, false);
+	FullKey fullKey = storeDataBlock(data);
 
-        putMap(0, fullKey, data.length);
+	putMap(fullKey, data.length);
 
-        buffer.reset();
+	buffer.reset();
     }
 
     /**
-     * store a block in the store.
+     * store a map block in the store.
      * 
      * @param data
      *            the data
@@ -134,90 +104,49 @@ public class KeyOutputStream extends OutputStream {
      *            true if this is a map block
      * @return the full key of the stored block
      * @throws IOException
+     *             on error.
      */
-    private FullKey storeBlock(byte[] data, boolean isMap) throws IOException {
-        GenericBlock b = new GenericBlock();
-        if (isMap) {
-            b.addMeta("type", "map");
-        }
-        b.addMeta("size", "" + data.length);
-        b.setBody(data);
+    private FullKey storeMapBlock(byte[] data) throws IOException {
+	/*
+	 * XXX there should be a map block type that I could just store.
+	 */
+	GenericBlock b = new GenericBlock();
+	b.addMeta("type", "map");
+	b.addMeta("size", "" + data.length);
+	b.setBody(data);
 
-        return store.storeBlock(b);
+	return store.storeBlock(b);
     }
 
     /**
-     * put a key into the map
+     * Store a data block in the store.
      * 
-     * @param index
-     *            the layer of the map to put it in
+     * @param data
+     *            the bytes for the data block.
+     * @return the full key of the stored block.
+     * @throws IOException
+     *             on error.
+     */
+    private FullKey storeDataBlock(byte[] data) throws IOException {
+	return store.storeBlock(new DataBlock(data));
+    }
+
+    /**
+     * put a key into the map blocks.
+     * 
      * @param fullKey
-     *            the key to add
+     *            the key to add to the maps.
      * @param size
-     *            how much data is represented by this key
+     *            the size of the data the key represents.
      * @throws IOException
+     *             on error.
      */
-    private void putMap(int index, FullKey fullKey, long size)
-            throws IOException {
-        /*
-         * XXX this looks like it belongs to the layer. It also appears that the
-         * layer should be a single link list that defines overflows, which
-         * would make these algorithms recursive and cleaner.
-         */
+    private void putMap(FullKey fullKey, long size) throws IOException {
+	if (maps == null) {
+	    maps = new Layer();
+	}
 
-        if (index == layers.size()) {
-            layers.add(new Layer());
-        }
-
-        Layer layer = layers.get(index);
-
-        byte[] add = ByteString.toUtf8(fullKey + "\t" + layer.offset + "\n");
-
-        if (layer.buffer.size() + add.length > splitSize) {
-            flushMap(index);
-        }
-
-        if (layer.offset == 0) {
-            layer.onlyKey = fullKey;
-        } else {
-            layer.onlyKey = null;
-        }
-
-        layer.buffer.write(add);
-        layer.offset += size;
-    }
-
-    /**
-     * flush a map layer.
-     * 
-     * @param index
-     *            the layer to flush
-     * @throws IOException
-     */
-    private void flushMap(int index) throws IOException {
-        /*
-         * XXX this looks like it belongs to Layer.
-         */
-
-        Layer layer = layers.get(index);
-        if (layer.buffer.size() == 0) {
-            throw new IllegalStateException("flusing empty map block");
-        }
-
-        if (layer.onlyKey == null) {
-            byte[] data = layer.buffer.toByteArray();
-            FullKey fullKey = storeBlock(data, true);
-            putMap(index + 1, fullKey, layer.offset);
-        } else {
-            /*
-             * if there is only one key in the map push it up as is
-             */
-            putMap(index + 1, layer.onlyKey, layer.offset);
-        }
-
-        layer.offset = 0;
-        layer.onlyKey = null;
-        layer.buffer.reset();
+	maps.put(fullKey, size);
     }
 
     /**
@@ -228,20 +157,29 @@ public class KeyOutputStream extends OutputStream {
      *             if the stream is not closed.
      */
     public FullKey getFullKey() {
-        if (fullKey == null) {
-            throw new IllegalStateException("stream not closed");
-        }
-        return fullKey;
+	if (fullKey == null) {
+	    throw new IllegalStateException("stream not closed");
+	}
+	return fullKey;
     }
 
     /**
-     * change the target size of the data area of the blocks.
+     * change the target size of the data area of the blocks. This can only be
+     * done before data is written to this stream.
      * 
      * @param size
      *            the size to split at
      */
     public void setSplitSize(int size) {
-        splitSize = size;
+	if (fullKey != null) {
+	    throw new IllegalStateException();
+	}
+
+	if (buffer.size() != 0) {
+	    throw new IllegalStateException();
+	}
+
+	splitSize = size;
     }
 
     /**
@@ -249,20 +187,126 @@ public class KeyOutputStream extends OutputStream {
      */
     @Override
     public void close() throws IOException {
-        if (layers.size() == 0) {
-            fullKey = storeBlock(buffer.toByteArray(), false);
-            buffer.reset();
-            return;
-        }
+	if (fullKey != null) {
+	    return;
+	}
 
-        flushBlock();
+	if (maps == null) {
+	    fullKey = storeDataBlock(buffer.toByteArray());
+	    buffer = null;
+	    return;
+	}
 
-        for (int i = 0; i < layers.size() - 1; i++) {
-            flushMap(i);
-        }
+	/*
+	 * there will always be data in the buffer here
+	 */
 
-        Layer layer = layers.get(layers.size() - 1);
-        fullKey = storeBlock(layer.buffer.toByteArray(), true);
-        layer.buffer.reset();
+	flushBlock();
+
+	while (maps.parent != null) {
+	    maps.flush();
+	    maps = maps.parent;
+	}
+
+	fullKey = storeMapBlock(maps.buffer.toByteArray());
+	maps = null;
+    }
+
+    /**
+     * the map block tree that is being built, it is a single link list from the
+     * leaf up to the root for the currently open path.
+     */
+    private Layer maps = null;
+
+    /**
+     * a layer in the output map, this is a list of keys and the offset from the
+     * start of the layer of the map that they apply.
+     * 
+     * In the final output of a large data stream there will be a tree of
+     * layers, the tree of layers is built from the bottom up, as the top layer
+     * gets full a new parent layer is added.
+     */
+    private class Layer {
+	/**
+	 * the total size of all the keys in this layer.
+	 */
+	public long totalSize = 0;
+
+	/**
+	 * the data for this layer so far
+	 */
+	public final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+	/**
+	 * the only key in the layer (null if there are multiple)
+	 */
+	public FullKey onlyKey;
+
+	public Layer parent;
+
+	/**
+	 * put a key into the map
+	 * 
+	 * @param index
+	 *            the layer of the map to put it in
+	 * @param fullKey
+	 *            the key to add
+	 * @param size
+	 *            how much data is represented by this key
+	 * @throws IOException
+	 */
+	public void put(FullKey fullKey, long size) throws IOException {
+	    byte[] add = ByteString.toUtf8(fullKey + "\t" + totalSize + "\n");
+
+	    if (buffer.size() + add.length > splitSize) {
+		flush();
+	    }
+
+	    if (totalSize == 0) {
+		onlyKey = fullKey;
+	    } else {
+		onlyKey = null;
+	    }
+
+	    buffer.write(add);
+	    totalSize += size;
+	}
+
+	/**
+	 * flush a map layer.
+	 * 
+	 * @param index
+	 *            the layer to flush
+	 * @throws IOException
+	 */
+	public void flush() throws IOException {
+	    if (buffer.size() == 0) {
+		throw new IllegalStateException("flusing empty map block");
+	    }
+
+	    if (onlyKey != null) {
+		/*
+		 * if there is only one key in the map push it up as is, this is
+		 * a special case for close.
+		 */
+		if (parent == null) {
+		    throw new IllegalStateException();
+		}
+		parent.put(onlyKey, totalSize);
+	    } else {
+		FullKey fullKey = storeMapBlock(buffer.toByteArray());
+		if (parent == null) {
+		    parent = new Layer();
+		}
+		parent.put(fullKey, totalSize);
+	    }
+
+	    /*
+	     * prepare for the next key to be stored.
+	     */
+	    totalSize = 0;
+	    onlyKey = null;
+	    buffer.reset();
+	}
     }
 }

@@ -28,6 +28,7 @@ public class BlockParse {
      * @throws LoadException
      *             on load errors
      */
+    @ShouldThrowChecked
     public static Block load(InputStream in) throws LoadException {
 	try {
 	    if (!(in instanceof BufferedInputStream)) {
@@ -162,6 +163,7 @@ public class BlockParse {
 	}
     }
 
+    @ShouldThrowChecked
     public static Block load(File file) {
 	try {
 	    FileInputStream in = new FileInputStream(file);
