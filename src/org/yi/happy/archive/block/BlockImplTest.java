@@ -3,9 +3,6 @@ package org.yi.happy.archive.block;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
 import org.junit.Test;
 import org.yi.happy.archive.ByteString;
 
@@ -18,7 +15,7 @@ public class BlockImplTest {
      */
     @Test
     public void testBlockHeader() {
-	BlockImpl block = new BlockImpl();
+	GenericBlock block = new GenericBlock();
 	block.addMeta("aA", "b");
 
 	assertEquals("b", block.getMeta().get("aA"));
@@ -30,7 +27,7 @@ public class BlockImplTest {
      */
     @Test
     public void testAsBytes() {
-	BlockImpl block = createSampleBlock();
+	GenericBlock block = createSampleBlock();
 
 	byte[] have = block.asBytes();
 
@@ -43,8 +40,8 @@ public class BlockImplTest {
      * 
      * @return the sample block
      */
-    public static BlockImpl createSampleBlock() {
-	BlockImpl block = new BlockImpl();
+    public static GenericBlock createSampleBlock() {
+	GenericBlock block = new GenericBlock();
 
 	block.addMeta("a", "c");
 	block.addMeta("b", "d");
@@ -61,23 +58,5 @@ public class BlockImplTest {
      */
     public static byte[] createSampleBytes() {
 	return ByteString.toBytes("a: c\r\nb: d\r\nc: e\r\n\r\nbody\ndata\n");
-    }
-
-    /**
-     * check that the block can write out to a stream
-     * 
-     * @throws IOException
-     */
-    @Test
-    public void testWriteTo() throws IOException {
-	ByteArrayOutputStream s = new ByteArrayOutputStream();
-	BlockImpl block = createSampleBlock();
-
-	block.writeTo(s);
-	s.close();
-
-	byte[] have = s.toByteArray();
-	byte[] want = createSampleBytes();
-	assertArrayEquals(want, have);
     }
 }

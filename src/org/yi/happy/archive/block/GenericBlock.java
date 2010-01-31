@@ -1,28 +1,24 @@
 package org.yi.happy.archive.block;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.VerifyException;
 
 /**
  * A data object for a data block.
  */
-public class BlockImpl implements Block {
+public class GenericBlock extends AbstractBlock implements Block {
 
-    private byte[] body;
+    private byte[] body = new byte[0];
 
     private final Map<String, String> meta;
 
     /**
      * create empty
      */
-    public BlockImpl() {
+    public GenericBlock() {
 	meta = new LinkedHashMap<String, String>();
     }
 
@@ -36,11 +32,11 @@ public class BlockImpl implements Block {
      *            even number of elements
      * @return the created block
      */
-    public static BlockImpl create(byte[] body, String... meta) {
+    public static GenericBlock create(byte[] body, String... meta) {
 	if (meta.length % 2 != 0) {
 	    throw new IllegalArgumentException("meta needs to be pairs");
 	}
-	BlockImpl out = new BlockImpl();
+	GenericBlock out = new GenericBlock();
 	out.setBody(body);
 	for (int i = 0; i < meta.length; i += 2) {
 	    out.addMeta(meta[i], meta[i + 1]);
@@ -55,48 +51,11 @@ public class BlockImpl implements Block {
      *            the data block
      */
     public void setBody(byte[] body) {
+	if (body == null) {
+	    body = new byte[0];
+	}
+
 	this.body = body;
-    }
-
-    private static final byte ENDL[] = { 0x0d, 0x0a };
-
-    /**
-     * convert to a block of bytes.
-     * 
-     * @return the binary representation
-     */
-    public byte[] asBytes() {
-	ByteArrayOutputStream s = new ByteArrayOutputStream();
-
-	try {
-	    writeTo(s);
-	} catch (IOException e) {
-	    throw new Error(e);
-	}
-
-	return s.toByteArray();
-    }
-
-    /**
-     * write the block to an output stream.
-     * 
-     * @param s
-     *            the stream to write to
-     * @throws IOException
-     *             on IO errors
-     */
-    public void writeTo(OutputStream s) throws IOException {
-	for (Map.Entry<String, String> i : meta.entrySet()) {
-	    String out = i.getKey() + ": " + i.getValue();
-	    s.write(ByteString.toUtf8(out));
-	    s.write(ENDL);
-	}
-
-	s.write(ENDL);
-
-	if (body != null) {
-	    s.write(body);
-	}
     }
 
     /**
@@ -139,11 +98,9 @@ public class BlockImpl implements Block {
     }
 
     /**
-     * get the first meta value with a given name
+     * get the block meta data
      * 
-     * @param name
-     *            the name to look for
-     * @return the first value found, or null if none found
+     * @return the map of meta data fields.
      */
     @Override
     public Map<String, String> getMeta() {
@@ -153,7 +110,7 @@ public class BlockImpl implements Block {
     /**
      * get the data block
      * 
-     * @return the internal data block
+     * @return the internal data block, never null.
      */
     public byte[] getBody() {
 	return body;
@@ -179,7 +136,7 @@ public class BlockImpl implements Block {
 	if (getClass() != obj.getClass()) {
 	    return false;
 	}
-	final BlockImpl other = (BlockImpl) obj;
+	final GenericBlock other = (GenericBlock) obj;
 	if (!Arrays.equals(body, other.body)) {
 	    return false;
 	}

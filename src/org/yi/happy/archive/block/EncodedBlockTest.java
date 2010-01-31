@@ -116,7 +116,7 @@ public class EncodedBlockTest {
      */
     @Test(expected = VerifyException.class)
     public void testVerifyFresh() {
-	Block block = new BlockImpl();
+	Block block = new GenericBlock();
 
 	EncodedBlockFactory.parse(block);
     }

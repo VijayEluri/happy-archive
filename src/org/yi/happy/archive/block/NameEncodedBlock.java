@@ -1,6 +1,5 @@
 package org.yi.happy.archive.block;
 
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -8,6 +7,7 @@ import java.util.Map;
 
 import org.yi.happy.archive.BlockParse;
 import org.yi.happy.archive.BlockUtil;
+import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.Cipher;
 import org.yi.happy.archive.CipherFactory;
 import org.yi.happy.archive.DigestFactory;
@@ -28,8 +28,8 @@ public final class NameEncodedBlock extends AbstractBlock implements
 
     public NameEncodedBlock(NameLocatorKey key, byte[] hash, String digest,
 	    String cipher, byte[] body) {
-	BlockImpl.checkValue(digest);
-	BlockImpl.checkValue(cipher);
+	GenericBlock.checkValue(digest);
+	GenericBlock.checkValue(cipher);
 
 	byte[] hash0 = ContentEncodedBlock.getHash(digest, body);
 	if (!Arrays.equals(hash0, hash)) {
@@ -45,8 +45,8 @@ public final class NameEncodedBlock extends AbstractBlock implements
 
     public NameEncodedBlock(NameLocatorKey key, String digest, String cipher,
 	    byte[] body) {
-	BlockImpl.checkValue(digest);
-	BlockImpl.checkValue(cipher);
+	GenericBlock.checkValue(digest);
+	GenericBlock.checkValue(cipher);
 
 	byte[] hash = ContentEncodedBlock.getHash(digest, body);
 
@@ -108,15 +108,11 @@ public final class NameEncodedBlock extends AbstractBlock implements
 	/*
 	 * get the key from the name
 	 */
-	try {
-	    String algo = k.getDigest();
-	    byte[] part = k.getName().getBytes("UTF-8");
-	    MessageDigest md = DigestFactory.create(algo);
+	String algo = k.getDigest();
+	byte[] part = ByteString.toUtf8(k.getName());
+	MessageDigest md = DigestFactory.create(algo);
 
-	    c.setPass(BlockUtil.expandKey(md, part, c.getKeySize()));
-	} catch (UnsupportedEncodingException e) {
-	    throw new RuntimeException(e);
-	}
+	c.setPass(BlockUtil.expandKey(md, part, c.getKeySize()));
 
 	/*
 	 * decrypt the body

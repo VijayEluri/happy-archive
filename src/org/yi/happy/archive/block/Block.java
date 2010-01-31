@@ -2,8 +2,6 @@ package org.yi.happy.archive.block;
 
 import java.util.Map;
 
-import org.yi.happy.annotate.Simplify;
-
 /**
  * a data block is a set of simple headers and a body. The upper size of a block
  * is just over 1 MiB.
@@ -28,7 +26,5 @@ public interface Block {
      * 
      * @return the block as bytes.
      */
-    @Simplify("all the implementations do this the same way, delegate to a "
-	    + "shared method, or implement it here")
     public byte[] asBytes();
 }

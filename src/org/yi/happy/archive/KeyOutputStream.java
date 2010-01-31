@@ -6,7 +6,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.yi.happy.archive.block.BlockImpl;
+import org.yi.happy.archive.block.GenericBlock;
 import org.yi.happy.archive.key.FullKey;
 
 /**
@@ -136,7 +136,7 @@ public class KeyOutputStream extends OutputStream {
      * @throws IOException
      */
     private FullKey storeBlock(byte[] data, boolean isMap) throws IOException {
-        BlockImpl b = new BlockImpl();
+        GenericBlock b = new GenericBlock();
         if (isMap) {
             b.addMeta("type", "map");
         }

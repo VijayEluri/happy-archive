@@ -29,8 +29,8 @@ public final class BlobEncodedBlock extends AbstractBlock implements
 
     public BlobEncodedBlock(BlobLocatorKey key, String digest, String cipher,
 	    byte[] body) {
-	BlockImpl.checkValue(digest);
-	BlockImpl.checkValue(cipher);
+	GenericBlock.checkValue(digest);
+	GenericBlock.checkValue(cipher);
 
 	byte[] hash = getHash(digest, cipher, body);
 	if (!Arrays.equals(key.getHash(), hash)) {
@@ -44,8 +44,8 @@ public final class BlobEncodedBlock extends AbstractBlock implements
     }
 
     public BlobEncodedBlock(String digest, String cipher, byte[] body) {
-	BlockImpl.checkValue(digest);
-	BlockImpl.checkValue(cipher);
+	GenericBlock.checkValue(digest);
+	GenericBlock.checkValue(cipher);
 
 	byte[] hash = getHash(digest, cipher, body);
 

@@ -26,8 +26,8 @@ public final class ContentEncodedBlock extends AbstractBlock implements
     public ContentEncodedBlock(ContentLocatorKey key, String digest,
 	    String cipher, byte[] body) {
 
-	BlockImpl.checkValue(digest);
-	BlockImpl.checkValue(cipher);
+	GenericBlock.checkValue(digest);
+	GenericBlock.checkValue(cipher);
 
 	byte[] hash = getHash(digest, body);
 	if (!Arrays.equals(key.getHash(), hash)) {
@@ -42,8 +42,8 @@ public final class ContentEncodedBlock extends AbstractBlock implements
 
     public ContentEncodedBlock(String digest, String cipher, byte[] body) {
 
-	BlockImpl.checkValue(digest);
-	BlockImpl.checkValue(cipher);
+	GenericBlock.checkValue(digest);
+	GenericBlock.checkValue(cipher);
 
 	byte[] hash = getHash(digest, body);
 

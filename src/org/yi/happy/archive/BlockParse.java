@@ -13,7 +13,7 @@ import java.util.Arrays;
 import org.yi.happy.annotate.ShouldThrowChecked;
 import org.yi.happy.annotate.Simplify;
 import org.yi.happy.archive.block.Block;
-import org.yi.happy.archive.block.BlockImpl;
+import org.yi.happy.archive.block.GenericBlock;
 
 @Simplify("loading all the data and parsing in memory is easier and faster, "
 	+ "since stream parsing is not saving memory here")
@@ -34,7 +34,7 @@ public class BlockParse {
 		in = new BufferedInputStream(in);
 	    }
 
-	    BlockImpl block = new BlockImpl();
+	    GenericBlock block = new GenericBlock();
 
 	    BinaryStreamParser p = new BinaryStreamParser();
 
