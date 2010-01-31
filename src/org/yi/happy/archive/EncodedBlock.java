@@ -1,5 +1,7 @@
 package org.yi.happy.archive;
 
+import java.util.Map;
+
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.LocatorKey;
 
@@ -29,13 +31,24 @@ public interface EncodedBlock extends Block {
      * 
      * @return the size of the body of this block in bytes.
      */
-    public int getSize();
+    public int getBodySize();
+
+    /**
+     * @return all the headers for the block.
+     */
+    @Override
+    public Map<String, String> getMeta();
 
     /**
      * @return a copy the body of the block. This array is safe to modify.
      */
+    @Override
     public byte[] getBody();
 
+    /**
+     * @return the whole block encoded as bytes.
+     */
+    @Override
     public byte[] asBytes();
 
     /**

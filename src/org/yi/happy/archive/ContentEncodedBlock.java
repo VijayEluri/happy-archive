@@ -61,7 +61,7 @@ public final class ContentEncodedBlock implements EncodedBlock {
 	return cipher;
     }
 
-    public int getSize() {
+    public int getBodySize() {
 	return body.length;
     }
 

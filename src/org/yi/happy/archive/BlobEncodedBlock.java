@@ -62,7 +62,7 @@ public final class BlobEncodedBlock implements EncodedBlock {
 	return cipher;
     }
 
-    public int getSize() {
+    public int getBodySize() {
 	return body.length;
     }
 
