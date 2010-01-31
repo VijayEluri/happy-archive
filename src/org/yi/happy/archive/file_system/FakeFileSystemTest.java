@@ -2,6 +2,7 @@ package org.yi.happy.archive.file_system;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.FileNotFoundException;
@@ -108,5 +109,60 @@ public class FakeFileSystemTest {
 	fake.mkdir("a");
 
 	fake.save("a", new byte[0]);
+    }
+
+    @Test
+    public void testRename() throws IOException {
+	fake.save("a", new byte[0]);
+
+	fake.rename("a", "b");
+
+	assertArrayEquals(new byte[0], fake.load("b"));
+	assertFalse(fake.exists("a"));
+    }
+
+    @Test(expected = IOException.class)
+    public void testRename2() throws IOException {
+	fake.save("a", new byte[0]);
+	fake.mkdir("b");
+
+	fake.rename("a", "b");
+    }
+
+    @Test(expected = IOException.class)
+    public void testRename3() throws IOException {
+	fake.save("b", new byte[0]);
+	fake.mkdir("a");
+
+	fake.rename("a", "b");
+    }
+
+    @Test
+    public void testRename4() throws IOException {
+	fake.save("a", new byte[] { 1 });
+	fake.save("b", new byte[] { 2 });
+	
+	fake.rename("a", "b");
+
+	assertArrayEquals(new byte[] { 1 }, fake.load("b"));
+	assertFalse(fake.exists("a"));
+    }
+
+    @Test(expected = IOException.class)
+    public void testRename5() throws IOException {
+	fake.save("a", new byte[0]);
+
+	fake.rename("a", "b/a");
+    }
+
+    @Test
+    public void testRename6() throws IOException {
+	fake.save("a", new byte[0]);
+	fake.mkdir("b");
+
+	fake.rename("a", "b/a");
+
+	assertArrayEquals(new byte[] {}, fake.load("b/a"));
+	assertFalse(fake.exists("a"));
     }
 }

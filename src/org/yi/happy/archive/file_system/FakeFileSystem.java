@@ -83,4 +83,47 @@ public class FakeFileSystem implements FileSystem {
 	files.put(path, DIR);
 	return true;
     }
+
+    public void rename(String from, String to) throws IOException {
+	/*
+	 * if the source does not exist, throw
+	 */
+	if (!files.containsKey(from)) {
+	    throw new FileNotFoundException();
+	}
+
+	/*
+	 * if the parent of the destination does not exist, throw
+	 */
+	/*
+	 * TODO extract parent check to a method
+	 */
+	if (to.contains("/") && files.get(to.replaceAll("/[^/]*$", "")) != DIR) {
+	    throw new FileNotFoundException("parent is not a folder");
+	}
+
+	/*
+	 * if the destination is a directory, throw
+	 */
+	if (files.get(to) == DIR) {
+	    throw new IOException();
+	}
+
+	/*
+	 * if the source is a directory and the target exists, throw
+	 */
+	if (files.get(from) == DIR && files.containsKey(to)) {
+	    throw new IOException();
+	}
+
+	/*
+	 * actually do the rename
+	 */
+
+	files.put(to, files.remove(from));
+    }
+
+    public boolean exists(String path) {
+	return files.containsKey(path);
+    }
 }

@@ -26,4 +26,6 @@ public interface FileSystem {
      *             if the directory can not be created.
      */
     boolean mkdir(String path) throws IOException;
+
+    public void rename(String from, String to) throws IOException;
 }

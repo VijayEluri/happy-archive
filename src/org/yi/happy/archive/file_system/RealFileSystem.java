@@ -64,4 +64,12 @@ public class RealFileSystem implements FileSystem {
 
 	throw new IOException();
     }
+
+    public void rename(String from, String to) throws IOException {
+	boolean success = new File(from).renameTo(new File(to));
+
+	if (!success) {
+	    throw new IOException();
+	}
+    }
 }
