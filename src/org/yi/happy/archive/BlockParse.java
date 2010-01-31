@@ -11,7 +11,10 @@ import java.text.ParseException;
 import java.util.Arrays;
 
 import org.yi.happy.annotate.ShouldThrowChecked;
+import org.yi.happy.annotate.Simplify;
 
+@Simplify("loading all the data and parsing in memory is easier and faster, "
+	+ "since stream parsing is not saving memory here")
 public class BlockParse {
 
     /**
