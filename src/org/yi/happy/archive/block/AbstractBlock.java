@@ -17,6 +17,10 @@ public abstract class AbstractBlock implements Block {
      */
     @Override
     public byte[] asBytes() {
+	/*
+	 * This can probably be done more efficiently, and maybe even more
+	 * simply, without the stream.
+	 */
 	try {
 	    ByteArrayOutputStream out = new ByteArrayOutputStream();
 

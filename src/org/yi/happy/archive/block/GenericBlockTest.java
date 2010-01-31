@@ -9,7 +9,7 @@ import org.yi.happy.archive.ByteString;
 /**
  * tests for Block
  */
-public class BlockImplTest {
+public class GenericBlockTest {
     /**
      * check that headers are case sensitive
      */

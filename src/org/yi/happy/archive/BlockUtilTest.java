@@ -6,7 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.yi.happy.archive.block.Block;
-import org.yi.happy.archive.block.BlockImplTest;
+import org.yi.happy.archive.block.GenericBlockTest;
 import org.yi.happy.archive.key.HexDecode;
 import org.yi.happy.archive.test_data.TestData;
 
@@ -93,7 +93,7 @@ public class BlockUtilTest {
     public void testLoad() {
 	Block have = BlockParse.load(TestData.OK_SMALL.getUrl());
 
-	Block want = BlockImplTest.createSampleBlock();
+	Block want = GenericBlockTest.createSampleBlock();
 	Assert.assertEquals(want, have);
     }
 }

@@ -27,6 +27,20 @@ public final class BlobEncodedBlock extends AbstractBlock implements
     private final String cipher;
     private final byte[] body;
 
+    /**
+     * create with all details available, they are checked.
+     * 
+     * @param key
+     *            the locator key for the block.
+     * @param digest
+     *            the digest being used.
+     * @param cipher
+     *            the cipher being used.
+     * @param body
+     *            the bytes of the body.
+     * @throws IllegalArgumentException
+     *             if the details do not check out.
+     */
     public BlobEncodedBlock(BlobLocatorKey key, String digest, String cipher,
 	    byte[] body) {
 	GenericBlock.checkValue(digest);
@@ -43,6 +57,18 @@ public final class BlobEncodedBlock extends AbstractBlock implements
 	this.body = body.clone();
     }
 
+    /**
+     * create with minimal details, the rest are calculated.
+     * 
+     * @param digest
+     *            the digest being used.
+     * @param cipher
+     *            the cipher being used.
+     * @param body
+     *            the bytes of the body.
+     * @throws IllegalArgumentException
+     *             if the details are invalid.
+     */
     public BlobEncodedBlock(String digest, String cipher, byte[] body) {
 	GenericBlock.checkValue(digest);
 	GenericBlock.checkValue(cipher);
