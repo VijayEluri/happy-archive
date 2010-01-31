@@ -5,6 +5,8 @@ import java.security.NoSuchAlgorithmException;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.yi.happy.archive.block.Block;
+import org.yi.happy.archive.block.BlockImplTest;
 import org.yi.happy.archive.key.HexDecode;
 import org.yi.happy.archive.test_data.TestData;
 

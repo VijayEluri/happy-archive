@@ -5,6 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.yi.happy.annotate.TypeSwitch;
+import org.yi.happy.archive.block.BlobEncodedBlock;
+import org.yi.happy.archive.block.Block;
+import org.yi.happy.archive.block.ContentEncodedBlock;
+import org.yi.happy.archive.block.EncodedBlock;
+import org.yi.happy.archive.block.NameEncodedBlock;
 import org.yi.happy.archive.key.BlobLocatorKey;
 import org.yi.happy.archive.key.ContentLocatorKey;
 import org.yi.happy.archive.key.HexDecode;

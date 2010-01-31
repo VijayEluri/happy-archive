@@ -1,4 +1,4 @@
-package org.yi.happy.archive;
+package org.yi.happy.archive.block;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -7,6 +7,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import org.junit.Test;
+import org.yi.happy.archive.ByteString;
 
 /**
  * tests for Block

@@ -1,5 +1,7 @@
 package org.yi.happy.archive;
 
+import org.yi.happy.archive.block.Block;
+
 /**
  * an encoder for blocks.
  */

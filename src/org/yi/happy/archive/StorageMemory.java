@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.key.LocatorKey;
 
 /**

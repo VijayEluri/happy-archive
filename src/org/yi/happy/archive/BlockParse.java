@@ -12,6 +12,8 @@ import java.util.Arrays;
 
 import org.yi.happy.annotate.ShouldThrowChecked;
 import org.yi.happy.annotate.Simplify;
+import org.yi.happy.archive.block.Block;
+import org.yi.happy.archive.block.BlockImpl;
 
 @Simplify("loading all the data and parsing in memory is easier and faster, "
 	+ "since stream parsing is not saving memory here")

@@ -1,4 +1,4 @@
-package org.yi.happy.archive;
+package org.yi.happy.archive.block;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -6,6 +6,9 @@ import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import org.yi.happy.archive.ByteString;
+import org.yi.happy.archive.VerifyException;
 
 /**
  * A data object for a data block.

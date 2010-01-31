@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.net.URL;
 
 import org.yi.happy.annotate.SmellsProcedural;
+import org.yi.happy.archive.block.Block;
+import org.yi.happy.archive.block.EncodedBlock;
 
 /**
  * parser for encoded blocks.

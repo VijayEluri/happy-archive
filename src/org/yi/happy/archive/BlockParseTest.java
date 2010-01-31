@@ -3,6 +3,7 @@ package org.yi.happy.archive;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.test_data.TestData;
 
 public class BlockParseTest {

@@ -2,6 +2,7 @@ package org.yi.happy.archive;
 
 import java.io.IOException;
 
+import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.key.HexEncode;
 import org.yi.happy.archive.key.LocatorKey;

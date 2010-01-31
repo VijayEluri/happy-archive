@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.test_data.TestData;
 
 /**

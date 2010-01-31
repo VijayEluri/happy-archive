@@ -1,63 +1,63 @@
-package org.yi.happy.archive;
+package org.yi.happy.archive.block;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.yi.happy.archive.BlockParse;
+import org.yi.happy.archive.ByteString;
+import org.yi.happy.archive.Cipher;
+import org.yi.happy.archive.CipherFactory;
+import org.yi.happy.archive.DigestFactory;
+import org.yi.happy.archive.UnknownDigestException;
+import org.yi.happy.archive.key.BlobFullKey;
+import org.yi.happy.archive.key.BlobLocatorKey;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.HexEncode;
-import org.yi.happy.archive.key.NameFullKey;
-import org.yi.happy.archive.key.NameLocatorKey;
+import org.yi.happy.archive.key.UnknownAlgorithmException;
 
-public final class NameEncodedBlock implements EncodedBlock {
-
-    private final NameLocatorKey key;
-    private final byte[] hash;
+/**
+ * A valid blob encoded block.
+ */
+public final class BlobEncodedBlock implements EncodedBlock {
+    private final BlobLocatorKey key;
     private final String digest;
     private final String cipher;
     private final byte[] body;
 
-    public NameEncodedBlock(NameLocatorKey key, byte[] hash, String digest,
-	    String cipher, byte[] body) {
-	BlockImpl.checkValue(digest);
-	BlockImpl.checkValue(cipher);
-
-	byte[] hash0 = ContentEncodedBlock.getHash(digest, body);
-	if (!Arrays.equals(hash0, hash)) {
-	    throw new VerifyException();
-	}
-
-	this.key = key;
-	this.hash = hash.clone();
-	this.digest = digest;
-	this.cipher = cipher;
-	this.body = body.clone();
-    }
-
-    public NameEncodedBlock(NameLocatorKey key, String digest, String cipher,
+    public BlobEncodedBlock(BlobLocatorKey key, String digest, String cipher,
 	    byte[] body) {
 	BlockImpl.checkValue(digest);
 	BlockImpl.checkValue(cipher);
 
-	byte[] hash = ContentEncodedBlock.getHash(digest, body);
+	byte[] hash = getHash(digest, cipher, body);
+	if (!Arrays.equals(key.getHash(), hash)) {
+	    throw new IllegalArgumentException();
+	}
 
 	this.key = key;
-	this.hash = hash.clone();
 	this.digest = digest;
 	this.cipher = cipher;
 	this.body = body.clone();
     }
 
-    public NameLocatorKey getKey() {
-	return key;
+    public BlobEncodedBlock(String digest, String cipher, byte[] body) {
+	BlockImpl.checkValue(digest);
+	BlockImpl.checkValue(cipher);
+
+	byte[] hash = getHash(digest, cipher, body);
+
+	this.key = new BlobLocatorKey(hash);
+	this.digest = digest;
+	this.cipher = cipher;
+	this.body = body.clone();
     }
 
-    public byte[] getHash() {
-	return hash.clone();
+    public BlobLocatorKey getKey() {
+	return key;
     }
 
     public String getDigest() {
@@ -79,10 +79,8 @@ public final class NameEncodedBlock implements EncodedBlock {
     @Override
     public Map<String, String> getMeta() {
 	Map<String, String> out = new LinkedHashMap<String, String>();
-	out.put("version", "2");
 	out.put("key-type", key.getType());
 	out.put("key", HexEncode.encode(key.getHash()));
-	out.put("hash", HexEncode.encode(hash));
 	out.put("digest", digest);
 	out.put("cipher", cipher);
 	out.put("size", Integer.toString(body.length));
@@ -93,12 +91,10 @@ public final class NameEncodedBlock implements EncodedBlock {
 	try {
 	    ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-	    out.write(ByteString.toUtf8("version: 2\r\nkey-type: "));
+	    out.write(ByteString.toUtf8("key-type: "));
 	    out.write(ByteString.toUtf8(key.getType()));
 	    out.write(ByteString.toUtf8("\r\nkey: "));
 	    out.write(ByteString.toUtf8(HexEncode.encode(key.getHash())));
-	    out.write(ByteString.toUtf8("\r\nhash: "));
-	    out.write(ByteString.toUtf8(HexEncode.encode(hash)));
 	    out.write(ByteString.toUtf8("\r\ndigest: "));
 	    out.write(ByteString.toUtf8(digest));
 	    out.write(ByteString.toUtf8("\r\ncipher: "));
@@ -118,37 +114,48 @@ public final class NameEncodedBlock implements EncodedBlock {
 	return asBytes().length;
     }
 
+    /**
+     * get the blob hash for a block.
+     * 
+     * @param digest
+     *            the normalized digest name.
+     * @param cipher
+     *            the normalized cipher name.
+     * @param body
+     *            the body.
+     * @return the hash value.
+     */
+    public static byte[] getHash(String digest, String cipher, byte[] body) {
+	try {
+	    MessageDigest d = DigestFactory.create(digest);
+	    d.update(ByteString.toUtf8("digest: "));
+	    d.update(ByteString.toUtf8(digest));
+	    d.update(ByteString.toUtf8("\r\ncipher: "));
+	    d.update(ByteString.toUtf8(cipher));
+	    d.update(ByteString.toUtf8("\r\nsize: "));
+	    d.update(ByteString.toUtf8(Integer.toString(body.length)));
+	    d.update(ByteString.toUtf8("\r\n\r\n"));
+	    d.update(body);
+	    return d.digest();
+	} catch (UnknownAlgorithmException e) {
+	    throw new UnknownDigestException(digest, e);
+	}
+    }
+
     public Block decode(FullKey fullKey) {
-	if (!(fullKey instanceof NameFullKey)) {
+	if (!(fullKey instanceof BlobFullKey)) {
 	    throw new IllegalArgumentException();
 	}
-	NameFullKey k = (NameFullKey) fullKey;
+	BlobFullKey k = (BlobFullKey) fullKey;
 
-	/*
-	 * get the cipher
-	 */
 	Cipher c = CipherFactory.create(this.cipher);
+	c.setPass(k.getPass());
 
-	/*
-	 * get the key from the name
-	 */
-	try {
-	    String algo = k.getDigest();
-	    byte[] part = k.getName().getBytes("UTF-8");
-	    MessageDigest md = DigestFactory.create(algo);
-
-	    c.setPass(BlockUtil.expandKey(md, part, c.getKeySize()));
-	} catch (UnsupportedEncodingException e) {
-	    throw new RuntimeException(e);
-	}
-
-	/*
-	 * decrypt the body
-	 */
 	if (body.length % c.getBlockSize() != 0) {
 	    throw new IllegalArgumentException(
 		    "size is not a multiple of the cipher block size");
 	}
+
 	byte[] out = body.clone();
 	c.decrypt(out);
 
@@ -162,7 +169,6 @@ public final class NameEncodedBlock implements EncodedBlock {
 	result = prime * result + Arrays.hashCode(body);
 	result = prime * result + ((cipher == null) ? 0 : cipher.hashCode());
 	result = prime * result + ((digest == null) ? 0 : digest.hashCode());
-	result = prime * result + Arrays.hashCode(hash);
 	result = prime * result + ((key == null) ? 0 : key.hashCode());
 	return result;
     }
@@ -175,7 +181,7 @@ public final class NameEncodedBlock implements EncodedBlock {
 	    return false;
 	if (getClass() != obj.getClass())
 	    return false;
-	NameEncodedBlock other = (NameEncodedBlock) obj;
+	BlobEncodedBlock other = (BlobEncodedBlock) obj;
 	if (!Arrays.equals(body, other.body))
 	    return false;
 	if (cipher == null) {
@@ -187,8 +193,6 @@ public final class NameEncodedBlock implements EncodedBlock {
 	    if (other.digest != null)
 		return false;
 	} else if (!digest.equals(other.digest))
-	    return false;
-	if (!Arrays.equals(hash, other.hash))
 	    return false;
 	if (key == null) {
 	    if (other.key != null)

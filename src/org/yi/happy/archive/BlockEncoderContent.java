@@ -2,6 +2,8 @@ package org.yi.happy.archive;
 
 import java.security.MessageDigest;
 
+import org.yi.happy.archive.block.Block;
+import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.key.ContentFullKey;
 
 /**

@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.yi.happy.archive.block.BlockImpl;
 import org.yi.happy.archive.key.FullKey;
 
 /**

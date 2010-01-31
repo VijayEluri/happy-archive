@@ -1,4 +1,4 @@
-package org.yi.happy.archive;
+package org.yi.happy.archive.block;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -7,6 +7,10 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 
 import org.junit.Test;
+import org.yi.happy.archive.EncodedBlockFactory;
+import org.yi.happy.archive.LoadException;
+import org.yi.happy.archive.ShortBodyException;
+import org.yi.happy.archive.VerifyException;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.HexDecode;
 import org.yi.happy.archive.key.KeyParse;

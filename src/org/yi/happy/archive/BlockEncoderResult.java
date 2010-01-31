@@ -1,5 +1,6 @@
 package org.yi.happy.archive;
 
+import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.key.FullKey;
 
 /**
