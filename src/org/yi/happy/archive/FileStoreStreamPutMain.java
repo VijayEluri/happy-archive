@@ -26,9 +26,7 @@ public class FileStoreStreamPutMain {
 
     public void run(String... args) throws IOException {
 	BlockStore store = new FileBlockStore(fs, args[0]);
-	BlockEncoder encoder = new BlockEncoderContent(DigestFactory
-		.create("sha-256"), CipherFactory
-		.createNamed("rijndael256-256-cbc"));
+	BlockEncoder encoder = BlockEncoderFactory.getContentDefault();
 
 	KeyOutputStream s = new KeyOutputStream(new StoreBlockStorage(encoder,
 		store));

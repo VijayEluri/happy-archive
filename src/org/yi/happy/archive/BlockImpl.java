@@ -185,6 +185,10 @@ public class BlockImpl implements Block {
 	return true;
     }
 
+    /*
+     * XXX this is a bad name, something like validation of being allowed in the
+     * value part of a meta-field is what it should read as.
+     */
     public static void checkValue(String value) {
 	for (int i = 0; i < value.length(); i++) {
 	    char c = value.charAt(i);

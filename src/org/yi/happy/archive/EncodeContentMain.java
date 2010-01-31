@@ -3,7 +3,6 @@ package org.yi.happy.archive;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import org.yi.happy.annotate.EntryPoint;
@@ -37,12 +36,10 @@ public class EncodeContentMain {
     @EntryPoint
     public void run(String... args) throws IOException,
 	    NoSuchAlgorithmException {
-	MessageDigest digest = MessageDigest.getInstance("sha-256");
-	NamedCipher cipher = CipherFactory.createNamed("rijndael256-256-cbc");
-	BlockEncoderContent encoder = new BlockEncoderContent(digest, cipher);
+	BlockEncoder encoder = BlockEncoderFactory.getContentDefault();
+
 	Block block = BlockParse.load(fs.load(args[0], Blocks.MAX_SIZE));
 	BlockEncoderResult e = encoder.encode(block);
-
 	fs.save(args[1], e.getBlock().asBytes());
 
 	out.write(e.getKey() + "\n");
