@@ -142,8 +142,9 @@ public class BlockImpl implements Block {
      *            the name to look for
      * @return the first value found, or null if none found
      */
-    public String getMeta(String name) {
-	return meta.get(name);
+    @Override
+    public Map<String, String> getMeta() {
+	return new LinkedHashMap<String, String>(meta);
     }
 
     /**

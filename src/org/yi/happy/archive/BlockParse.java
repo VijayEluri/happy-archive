@@ -71,8 +71,8 @@ public class BlockParse {
 	    int limit = MAX_DATA_SIZE;
 
 	    // if there is a size header limit the data size to that
-	    if (block.getMeta(SIZE) != null) {
-		int size = Integer.parseInt(block.getMeta(SIZE));
+	    if (block.getMeta().get(SIZE) != null) {
+		int size = Integer.parseInt(block.getMeta().get(SIZE));
 		if (limit > size) {
 		    limit = size;
 		}

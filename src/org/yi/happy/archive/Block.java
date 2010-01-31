@@ -1,5 +1,7 @@
 package org.yi.happy.archive;
 
+import java.util.Map;
+
 import org.yi.happy.annotate.Simplify;
 
 /**
@@ -8,14 +10,11 @@ import org.yi.happy.annotate.Simplify;
  */
 public interface Block {
     /**
-     * get a meta data header.
+     * get the meta data (headers).
      * 
-     * @param name
-     *            the meta data header to get.
-     * @return the value of the header, or null if it does not exist.
+     * @return a possibly ordered map of the meta data fields.
      */
-    @Simplify("a map of all the headers is less work and more power")
-    public String getMeta(String name);
+    public Map<String, String> getMeta();
 
     /**
      * get the body of the block.
@@ -29,5 +28,7 @@ public interface Block {
      * 
      * @return the block as bytes.
      */
+    @Simplify("all the implementations do this the same way, delegate to a "
+	    + "shared method, or implement it here")
     public byte[] asBytes();
 }

@@ -3,6 +3,9 @@ package org.yi.happy.archive;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Test;
 import org.yi.happy.archive.key.BlobLocatorKey;
 import org.yi.happy.archive.key.HexDecode;
@@ -13,13 +16,13 @@ public class BlobEncodedBlockTest {
 	Block block = new BlobEncodedBlock("sha-256", "null", ByteString
 		.toUtf8("test"));
 
-	assertEquals("blob", block.getMeta("key-type"));
-	assertEquals(
-		"321f47896a9ae31c24d307120f2736686d3258d55a4c3890a35ec594049bd49d",
-		block.getMeta("key"));
-	assertEquals("null", block.getMeta("cipher"));
-	assertEquals("sha-256", block.getMeta("digest"));
-	assertEquals("4", block.getMeta("size"));
+	Map<String, String> want = new HashMap<String, String>();
+	want.put("key-type", "blob");
+	want.put("key", "321f47896a9ae31c24d307120f2736686d3258d55a4c3890a35ec594049bd49d");
+	want.put("cipher", "null");
+	want.put("digest", "sha-256");
+	want.put("size", "4");
+	assertEquals(want, block.getMeta());
     }
 
     @Test
@@ -29,13 +32,13 @@ public class BlobEncodedBlockTest {
 			+ "58d55a4c3890a35ec594049bd49d")), "sha-256", "null",
 		ByteString.toUtf8("test"));
 
-	assertEquals("blob", block.getMeta("key-type"));
+	assertEquals("blob", block.getMeta().get("key-type"));
 	assertEquals(
 		"321f47896a9ae31c24d307120f2736686d3258d55a4c3890a35ec594049bd49d",
-		block.getMeta("key"));
-	assertEquals("null", block.getMeta("cipher"));
-	assertEquals("sha-256", block.getMeta("digest"));
-	assertEquals("4", block.getMeta("size"));
+		block.getMeta().get("key"));
+	assertEquals("null", block.getMeta().get("cipher"));
+	assertEquals("sha-256", block.getMeta().get("digest"));
+	assertEquals("4", block.getMeta().get("size"));
     }
 
     @Test

@@ -10,7 +10,7 @@ public class BlockParseTest {
     public void test1() {
 	Block block = BlockParse.load(TestData.KEY_CONTENT.getUrl());
 
-	assertEquals("content-hash", block.getMeta("key-type"));
+	assertEquals("content-hash", block.getMeta().get("key-type"));
     }
 
     @Test(expected = LoadException.class)

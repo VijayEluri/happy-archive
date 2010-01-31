@@ -20,8 +20,8 @@ public class BlockImplTest {
 	BlockImpl block = new BlockImpl();
 	block.addMeta("aA", "b");
 
-	assertEquals("b", block.getMeta("aA"));
-	assertEquals(null, block.getMeta("Aa"));
+	assertEquals("b", block.getMeta().get("aA"));
+	assertEquals(null, block.getMeta().get("Aa"));
     }
 
     /**

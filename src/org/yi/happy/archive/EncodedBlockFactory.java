@@ -119,7 +119,7 @@ public class EncodedBlockFactory {
     }
 
     private static int getVersion(Block block) throws VerifyException {
-	String version = block.getMeta("version");
+	String version = block.getMeta().get("version");
 
 	if (version == null) {
 	    return 1;
@@ -194,7 +194,7 @@ public class EncodedBlockFactory {
 
     private static String getRequiredMeta(Block block, String name)
 	    throws VerifyException {
-	String value = block.getMeta(name);
+	String value = block.getMeta().get(name);
 	if (value == null) {
 	    throw new MissingMetaException();
 	}

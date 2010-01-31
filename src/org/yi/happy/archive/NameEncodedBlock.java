@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.HexEncode;
@@ -74,36 +76,17 @@ public final class NameEncodedBlock implements EncodedBlock {
 	return body.clone();
     }
 
-    public String getMeta(String name) {
-	if (name.equals("version")) {
-	    return "2";
-	}
-
-	if (name.equals("key-type")) {
-	    return key.getType();
-	}
-
-	if (name.equals("key")) {
-	    return HexEncode.encode(key.getHash());
-	}
-
-	if (name.equals("hash")) {
-	    return HexEncode.encode(hash);
-	}
-
-	if (name.equals("digest")) {
-	    return digest;
-	}
-
-	if (name.equals("cipher")) {
-	    return cipher;
-	}
-
-	if (name.equals("size")) {
-	    return Integer.toString(body.length);
-	}
-
-	return null;
+    @Override
+    public Map<String, String> getMeta() {
+	Map<String, String> out = new LinkedHashMap<String, String>();
+	out.put("version", "2");
+	out.put("key-type", key.getType());
+	out.put("key", HexEncode.encode(key.getHash()));
+	out.put("hash", HexEncode.encode(hash));
+	out.put("digest", digest);
+	out.put("cipher", cipher);
+	out.put("size", Integer.toString(body.length));
+	return out;
     }
 
     public byte[] asBytes() {
