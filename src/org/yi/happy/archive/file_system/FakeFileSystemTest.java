@@ -30,7 +30,7 @@ public class FakeFileSystemTest {
 
     @Test
     public void testLoad() throws IOException {
-	fake.save("test.dat", new byte[0]);
+	real.save("test.dat", new byte[0]);
 
 	byte[] data = real.load("test.dat");
 
@@ -39,7 +39,7 @@ public class FakeFileSystemTest {
 
     @Test
     public void testLoad2() throws IOException {
-	fake.save("test.dat", new byte[5]);
+	real.save("test.dat", new byte[5]);
 
 	byte[] data = real.load("test.dat");
 
@@ -48,14 +48,14 @@ public class FakeFileSystemTest {
 
     @Test(expected = IOException.class)
     public void testLoadLimit() throws IOException {
-	fake.save("test.dat", ByteString.toUtf8("Hello\n"));
+	real.save("test.dat", ByteString.toUtf8("Hello\n"));
 
 	real.load("test.dat", 5);
     }
 
     @Test
     public void testOpenInput() throws Exception {
-	fake.save("test.dat", ByteString.toUtf8("Hello\n"));
+	real.save("test.dat", ByteString.toUtf8("Hello\n"));
 
 	InputStream in = real.openInputStream("test.dat");
 
@@ -66,103 +66,103 @@ public class FakeFileSystemTest {
 
     @Test(expected = FileNotFoundException.class)
     public void testNeedParentBeforeChildren() throws IOException {
-	fake.save("a/b", new byte[0]);
+	real.save("a/b", new byte[0]);
     }
 
     @Test(expected = IOException.class)
     public void testNeedParentBeforeChildren2() throws IOException {
-	fake.mkdir("a/b");
+	real.mkdir("a/b");
     }
 
     @Test
     public void testMkdir() throws IOException {
-	boolean out = fake.mkdir("a");
+	boolean out = real.mkdir("a");
 
 	assertEquals(true, out);
     }
 
     @Test
     public void testMkdir2() throws IOException {
-	fake.mkdir("a");
+	real.mkdir("a");
 
-	boolean out = fake.mkdir("a");
+	boolean out = real.mkdir("a");
 
 	assertEquals(false, out);
     }
 
     @Test(expected = IOException.class)
     public void testMkdir3() throws IOException {
-	fake.save("a", new byte[0]);
+	real.save("a", new byte[0]);
 
-	fake.mkdir("a");
+	real.mkdir("a");
     }
 
     @Test(expected = IOException.class)
     public void testMkdir4() throws IOException {
-	fake.save("a", new byte[0]);
+	real.save("a", new byte[0]);
 
-	fake.mkdir("a/b");
+	real.mkdir("a/b");
     }
 
     @Test(expected = IOException.class)
     public void testMkdir5() throws IOException {
-	fake.mkdir("a");
+	real.mkdir("a");
 
-	fake.save("a", new byte[0]);
+	real.save("a", new byte[0]);
     }
 
     @Test
     public void testRename() throws IOException {
-	fake.save("a", new byte[0]);
+	real.save("a", new byte[0]);
 
-	fake.rename("a", "b");
+	real.rename("a", "b");
 
-	assertArrayEquals(new byte[0], fake.load("b"));
+	assertArrayEquals(new byte[0], real.load("b"));
 	assertFalse(fake.exists("a"));
     }
 
     @Test(expected = IOException.class)
     public void testRename2() throws IOException {
-	fake.save("a", new byte[0]);
-	fake.mkdir("b");
+	real.save("a", new byte[0]);
+	real.mkdir("b");
 
-	fake.rename("a", "b");
+	real.rename("a", "b");
     }
 
     @Test(expected = IOException.class)
     public void testRename3() throws IOException {
-	fake.save("b", new byte[0]);
-	fake.mkdir("a");
+	real.save("b", new byte[0]);
+	real.mkdir("a");
 
-	fake.rename("a", "b");
+	real.rename("a", "b");
     }
 
     @Test
     public void testRename4() throws IOException {
-	fake.save("a", new byte[] { 1 });
-	fake.save("b", new byte[] { 2 });
+	real.save("a", new byte[] { 1 });
+	real.save("b", new byte[] { 2 });
 	
-	fake.rename("a", "b");
+	real.rename("a", "b");
 
-	assertArrayEquals(new byte[] { 1 }, fake.load("b"));
+	assertArrayEquals(new byte[] { 1 }, real.load("b"));
 	assertFalse(fake.exists("a"));
     }
 
     @Test(expected = IOException.class)
     public void testRename5() throws IOException {
-	fake.save("a", new byte[0]);
+	real.save("a", new byte[0]);
 
-	fake.rename("a", "b/a");
+	real.rename("a", "b/a");
     }
 
     @Test
     public void testRename6() throws IOException {
-	fake.save("a", new byte[0]);
-	fake.mkdir("b");
+	real.save("a", new byte[0]);
+	real.mkdir("b");
 
-	fake.rename("a", "b/a");
+	real.rename("a", "b/a");
 
-	assertArrayEquals(new byte[] {}, fake.load("b/a"));
+	assertArrayEquals(new byte[] {}, real.load("b/a"));
 	assertFalse(fake.exists("a"));
     }
 }
