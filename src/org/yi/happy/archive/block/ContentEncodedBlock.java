@@ -65,10 +65,6 @@ public final class ContentEncodedBlock extends AbstractBlock implements
 	return cipher;
     }
 
-    public int getBodySize() {
-	return body.length;
-    }
-
     public byte[] getBody() {
 	return body.clone();
     }

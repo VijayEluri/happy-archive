@@ -28,12 +28,6 @@ public interface EncodedBlock extends Block {
     public String getDigest();
 
     /**
-     * 
-     * @return the size of the body of this block in bytes.
-     */
-    public int getBodySize();
-
-    /**
      * @return all the headers for the block.
      */
     @Override
