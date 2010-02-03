@@ -32,7 +32,7 @@ public class KeyOutputStreamTest {
 
 	TestData d = TestData.KEY_CONTENT_40;
 	assertEquals(d.getFullKey(), out.getFullKey());
-	assertTrue(s.blockHave(d.getLocatorKey()));
+	assertTrue(s.contains(d.getLocatorKey()));
     }
 
     /**
@@ -51,7 +51,7 @@ public class KeyOutputStreamTest {
 
 	TestData d = TestData.KEY_CONTENT;
 	assertEquals(d.getFullKey(), out.getFullKey());
-	assertTrue(s.blockHave(d.getLocatorKey()));
+	assertTrue(s.contains(d.getLocatorKey()));
     }
 
     /**
@@ -108,9 +108,9 @@ public class KeyOutputStreamTest {
 
 	TestData d = TestData.KEY_CONTENT_MAP_2048A;
 	assertEquals(d.getFullKey(), out.getFullKey());
-	assertTrue(s.blockHave(d.getLocatorKey()));
+	assertTrue(s.contains(d.getLocatorKey()));
 
-	assertTrue(s.blockHave(TestData.KEY_CONTENT_512A.getLocatorKey()));
+	assertTrue(s.contains(TestData.KEY_CONTENT_512A.getLocatorKey()));
     }
 
 }

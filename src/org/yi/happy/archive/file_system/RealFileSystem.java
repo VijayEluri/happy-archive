@@ -72,4 +72,9 @@ public class RealFileSystem implements FileSystem {
 	    throw new IOException();
 	}
     }
+
+    @Override
+    public boolean exists(String path) throws IOException {
+	return new File(path).exists();
+    }
 }
