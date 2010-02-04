@@ -3,7 +3,6 @@ package org.yi.happy.archive;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.yi.happy.archive.SplitReader.GetResult;
 import org.yi.happy.archive.key.FullKey;
 
 /**
@@ -25,14 +24,9 @@ public class KeyInputStream extends InputStream {
     private long offset;
 
     /**
-     * the current data buffer
+     * the current data fragment
      */
-    private byte[] buff;
-
-    /**
-     * where in the stream the buffer starts
-     */
-    private long buffStart;
+    private Fragment buff;
 
     /**
      * notified when there is no block ready to read, to defer the decision of
@@ -67,16 +61,16 @@ public class KeyInputStream extends InputStream {
             /*
              * if the buffer is before the current offset, drop it
              */
-            if (buff != null && buffStart + buff.length <= offset) {
+	    if (buff != null && buff.getOffset() + buff.getSize() <= offset) {
                 buff = null;
             }
 
             if (buff != null) {
-                if (buffStart > offset) {
+		if (buff.getOffset() > offset) {
                     return 0;
                 }
 
-                int out = buff[(int) (offset - buffStart)] & 0xff;
+		int out = buff.getAbsolute(offset) & 0xff;
                 offset++;
 
                 return out;
@@ -91,16 +85,12 @@ public class KeyInputStream extends InputStream {
                 return 0;
             }
 
-	    GetResult got;
 	    try {
-		got = reader.getFirst();
+		buff = reader.getFirst();
 	    } catch (IOException e) {
-		got = null;
+		buff = null;
 	    }
-            if (got != null) {
-		buffStart = got.getOffset();
-		buff = got.getData();
-            } else {
+	    if (buff == null) {
                 notReadyHandler.notReady(reader);
             }
         }

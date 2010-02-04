@@ -32,36 +32,16 @@ public class SplitReader {
 	this.storage = storage;
     }
 
-    public static class GetResult {
-	private final long offset;
-	private final byte[] data;
-
-	public GetResult(long offset, byte[] data) {
-	    super();
-	    this.offset = offset;
-	    this.data = data;
-	}
-
-	public long getOffset() {
-	    return offset;
-	}
-
-	public byte[] getData() {
-	    return data;
-	}
-
-    }
-
     /**
      * fetch any data block that is ready.
      * 
      * @return the offset to the data and the clear data, or null if none is
      *         ready.
      */
-    public GetResult getAny() {
+    public Fragment getAny() {
 	for (int i = 0; i < pending.size(); i++) {
 	    try {
-		GetResult out = get(i);
+		Fragment out = get(i);
 		if (out != null) {
 		    return out;
 		}
@@ -78,7 +58,7 @@ public class SplitReader {
      * @return the offset and the clear data, or null if none is ready.
      * @throws IOException
      */
-    public GetResult getFirst() throws IOException {
+    public Fragment getFirst() throws IOException {
 	return get(0);
     }
 
@@ -93,7 +73,7 @@ public class SplitReader {
      * @return the loaded data for the given entry, or null
      * @throws IOException
      */
-    private GetResult get(int index) throws IOException {
+    private Fragment get(int index) throws IOException {
 	while (true) {
 	    if (index >= pending.size()) {
 		return null;
@@ -125,7 +105,7 @@ public class SplitReader {
 
 		pending.remove(index);
 		fixOffset(index, item.offset + data.length);
-		return new GetResult(item.offset, data);
+		return new Fragment(item.offset, data);
 	    }
 
 	    if (type.equals("map")) {

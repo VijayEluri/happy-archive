@@ -1,6 +1,5 @@
 package org.yi.happy.archive;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -97,16 +96,14 @@ public class SplitReaderTest {
         loadBlock(C2);
         SplitReader r = createMapReader();
 
-	SplitReader.GetResult got = r.getAny();
-	assertEquals(5, (long) got.getOffset());
-	assertArrayEquals("56789".getBytes(), got.getData());
+	Fragment got = r.getAny();
+	assertEquals(new Fragment(5, "56789".getBytes()), got);
 
         assertNull(r.getAny());
 
         loadBlock(C1);
         got = r.getAny();
-	assertEquals(0, (long) got.getOffset());
-	assertArrayEquals("01234".getBytes(), got.getData());
+	assertEquals(new Fragment(0, "01234".getBytes()), got);
     }
 
     /**
@@ -135,9 +132,8 @@ public class SplitReaderTest {
         loadBlock(C1);
         SplitReader r = createMapReader();
 
-	SplitReader.GetResult got = r.getFirst();
-	assertEquals(0, (long) got.getOffset());
-	assertArrayEquals("01234".getBytes(), got.getData());
+	Fragment got = r.getFirst();
+	assertEquals(new Fragment(0, "01234".getBytes()), got);
     }
 
     /**
@@ -180,7 +176,13 @@ public class SplitReaderTest {
 
     private static final TestData C1 = TestData.KEY_CONTENT_1;
 
+    private static final Bytes B1 = new Bytes(new byte[] { '0', '1', '2', '3',
+	    '4' });
+
     private static final TestData C2 = TestData.KEY_CONTENT_2;
+
+    private static final Bytes B2 = new Bytes(new byte[] { '5', '6', '7', '8',
+	    '9' });
 
     /**
      * check that the completed state is right.
@@ -219,15 +221,13 @@ public class SplitReaderTest {
 
         SplitReader r = createReader(d);
 
-	SplitReader.GetResult got = r.getFirst();
-	assertEquals(0, got.getOffset());
-	assertArrayEquals("01234".getBytes(), got.getData());
+	Fragment got = r.getFirst();
+	assertEquals(new Fragment(0, B1), got);
 
         assertEquals(10, (long) r.getOffset());
 
         got = r.getFirst();
-	assertEquals(10, (long) got.getOffset());
-	assertArrayEquals("56789".getBytes(), got.getData());
+	assertEquals(new Fragment(10, B2), got);
 
         assertNull(r.getOffset());
     }
@@ -246,13 +246,11 @@ public class SplitReaderTest {
 
         SplitReader r = createReader(d);
 
-	SplitReader.GetResult got = r.getFirst();
-	assertEquals(0, (long) got.getOffset());
-	assertArrayEquals("01234".getBytes(), got.getData());
+	Fragment got = r.getFirst();
+	assertEquals(new Fragment(0, B1), got);
 
         got = r.getFirst();
-	assertEquals(3, (long) got.getOffset());
-	assertArrayEquals("56789".getBytes(), got.getData());
+	assertEquals(new Fragment(3, B2), got);
     }
 
     /**
@@ -268,14 +266,15 @@ public class SplitReaderTest {
         loadBlock(C2);
 
         SplitReader r = createReader(d);
+	Fragment got;
 
-	SplitReader.GetResult got = r.getFirst();
-	assertEquals(0, (long) got.getOffset());
-	assertArrayEquals("01234".getBytes(), got.getData());
+	got = r.getFirst();
+
+	assertEquals(new Fragment(0, B1), got);
 
         got = r.getFirst();
-	assertEquals(5, (long) got.getOffset());
-	assertArrayEquals("56789".getBytes(), got.getData());
+
+	assertEquals(new Fragment(5, B2), got);
     }
 
     private SplitReader createReader(TestData d) {
@@ -295,16 +294,16 @@ public class SplitReaderTest {
         loadBlock(C1);
 	loadBlock(TestData.KEY_NAME_SPLIT_2);
         loadBlock(C2);
-
         SplitReader r = createReader(d);
+	Fragment got;
 
-	SplitReader.GetResult got = r.getFirst();
-	assertEquals(0, (long) got.getOffset());
-	assertArrayEquals("01234".getBytes(), got.getData());
+	got = r.getFirst();
+
+	assertEquals(new Fragment(0, "01234".getBytes()), got);
 
         got = r.getFirst();
-	assertEquals(5, (long) got.getOffset());
-	assertArrayEquals("56789".getBytes(), got.getData());
+
+	assertEquals(new Fragment(5, "56789".getBytes()), got);
     }
 
 }
