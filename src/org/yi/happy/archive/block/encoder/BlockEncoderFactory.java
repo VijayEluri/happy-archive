@@ -1,4 +1,7 @@
-package org.yi.happy.archive;
+package org.yi.happy.archive.block.encoder;
+
+import org.yi.happy.archive.CipherFactory;
+import org.yi.happy.archive.DigestFactory;
 
 /**
  * A factory for common configurations of the block encoder.

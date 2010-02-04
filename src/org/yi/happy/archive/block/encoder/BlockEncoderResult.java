@@ -1,4 +1,4 @@
-package org.yi.happy.archive;
+package org.yi.happy.archive.block.encoder;
 
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.key.FullKey;

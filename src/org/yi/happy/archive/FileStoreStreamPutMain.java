@@ -6,6 +6,8 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import org.yi.happy.annotate.EntryPoint;
+import org.yi.happy.archive.block.encoder.BlockEncoder;
+import org.yi.happy.archive.block.encoder.BlockEncoderFactory;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
 

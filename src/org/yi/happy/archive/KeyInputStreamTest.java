@@ -11,6 +11,7 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.yi.happy.archive.block.encoder.BlockEncoderFactory;
 import org.yi.happy.archive.test_data.TestData;
 
 /**

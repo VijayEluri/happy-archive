@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import org.junit.Test;
+import org.yi.happy.archive.block.encoder.BlockEncoder;
+import org.yi.happy.archive.block.encoder.BlockEncoderFactory;
 import org.yi.happy.archive.test_data.TestData;
 
 public class KeyOutputStreamTest {

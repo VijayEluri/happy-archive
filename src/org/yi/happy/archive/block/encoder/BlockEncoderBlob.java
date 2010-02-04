@@ -1,9 +1,12 @@
-package org.yi.happy.archive;
+package org.yi.happy.archive.block.encoder;
 
 import static org.yi.happy.archive.DigestUtil.digestData;
 
 import java.security.MessageDigest;
 
+import org.yi.happy.archive.BlockUtil;
+import org.yi.happy.archive.EncodedBlockFactory;
+import org.yi.happy.archive.NamedCipher;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.key.BlobFullKey;
