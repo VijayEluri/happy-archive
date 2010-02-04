@@ -33,4 +33,28 @@ public class FileBlockStore implements BlockStore {
 	fs.save(fileName, b.asBytes());
     }
 
+    @Override
+    public boolean contains(LocatorKey key) throws IOException {
+	String name = HexEncode.encode(key.getHash()) + "-" + key.getType();
+
+	String fileName = fs.join(base, name.substring(0, 1));
+	fileName = fs.join(fileName, name.substring(0, 2));
+	fileName = fs.join(fileName, name.substring(0, 3));
+	fileName = fs.join(fileName, name);
+
+	return fs.exists(fileName);
+    }
+
+    @Override
+    public EncodedBlock get(LocatorKey key) throws IOException {
+	String name = HexEncode.encode(key.getHash()) + "-" + key.getType();
+
+	String fileName = fs.join(base, name.substring(0, 1));
+	fileName = fs.join(fileName, name.substring(0, 2));
+	fileName = fs.join(fileName, name.substring(0, 3));
+	fileName = fs.join(fileName, name);
+
+	return new EncodedBlockParse().parse(fs.load(fileName));
+    }
+
 }

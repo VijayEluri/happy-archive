@@ -28,4 +28,6 @@ public interface FileSystem {
     boolean mkdir(String path) throws IOException;
 
     public void rename(String from, String to) throws IOException;
+
+    boolean exists(String path) throws IOException;
 }

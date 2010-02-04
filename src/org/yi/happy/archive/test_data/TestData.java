@@ -170,6 +170,102 @@ public enum TestData {
 	    + "0c0d20237d3b7312afbf")
     KEY_CONTENT_40,
 
+    /**
+     * a data block containing "01234"
+     */
+    @Full("content-hash:cf5d4bb60ae7992a5569ce577f40fa66e8909ead5ba1"
+	    + "70ff1b9d136ca69bc8f1:a8e78f3de5a65a673628b01ea18bf80c91d"
+	    + "3e160e8c47274224c71552534bc63")
+    @Locator("content-hash:cf5d4bb60ae7992a5569ce577f40fa66e8909ead5ba1"
+	    + "70ff1b9d136ca69bc8f1")
+    KEY_CONTENT_1,
+
+    /**
+     * a data block containing "56789"
+     */
+    @Full("content-hash:b4f02ef9f3c7dec4cd7604627ffc901fd2030c869779"
+	    + "301a3e8b39af7e6151cb:66674c78cfdeff1e86d1b72010b616b2015"
+	    + "5b01586027de6a0d19bf292af5615")
+    @Locator("content-hash:b4f02ef9f3c7dec4cd7604627ffc901fd2030c869779"
+	    + "301a3e8b39af7e6151cb")
+    KEY_CONTENT_2,
+
+    /**
+     * a two part map for "01234" + "56789".
+     */
+    @Full("content-hash:87bed19266dc934236c132b9538cd8ec833aa85856b04be7b90f52"
+	    + "03f51aebf2:e43a2194e64835a3a90562c7497d1f70390"
+	    + "d406322c5d3c773e2d2f6c883d26d")
+    @Locator("content-hash:87bed19266dc934236c132b9538cd8ec833aa85856b0"
+	    + "4be7b90f5203f51aebf2")
+    KEY_CONTENT_MAP,
+
+    /**
+     * clear text version of KEY_CONTENT_MAP_OVERLAP
+     */
+    CLEAR_CONTENT_MAP_OVERLAP,
+
+    /**
+     * a map with an overlap
+     */
+    @Full("content-hash:f6319daaac6b24331301ab8315e946395d250fabe39c"
+	    + "b1ef7577c42df284ab3b:fcc7229ac6b6913b31179efa2e4612c61f7"
+	    + "94c0cc8189edf1662df1d51f1b498")
+    @Locator("content-hash:f6319daaac6b24331301ab8315e946395d250fabe39c"
+	    + "b1ef7577c42df284ab3b")
+    @Clear(CLEAR_CONTENT_MAP_OVERLAP)
+    KEY_CONTENT_MAP_OVERLAP,
+
+    /**
+     * clear text version of KEY_CONTENT_MAP_PAD
+     */
+    CLEAR_CONTENT_MAP_PAD,
+
+    /**
+     * a map with a gap
+     */
+    @Full("content-hash:467955babd84179b7ca3b9ac0462eb68592251677cc1"
+	    + "846a60fb579219e074e8:0491cc799e2b3dbae6c7475c4dab3cc3e49"
+	    + "96045374a1b66ccb36d956fab872e")
+    @Locator("content-hash:467955babd84179b7ca3b9ac0462eb68592251677cc1"
+	    + "846a60fb579219e074e8")
+    @Clear(CLEAR_CONTENT_MAP_PAD)
+    KEY_CONTENT_MAP_PAD,
+
+    /**
+     * clear version of key-name-split
+     */
+    CLEAR_NAME_SPLIT,
+
+    /**
+     * a classic split block
+     */
+    @Full("name-hash:sha-256:split")
+    @Clear(CLEAR_NAME_SPLIT)
+    KEY_NAME_SPLIT,
+
+    /**
+     * an indirect block in the split for part 1
+     */
+    @Full("name-hash:sha-256:split/0")
+    KEY_NAME_SPLIT_1,
+
+    /**
+     * an indirect block in the split for part 2
+     */
+    @Full("name-hash:sha-256:split/1")
+    KEY_NAME_SPLIT_2,
+
+    /**
+     * a block list, precursor to map
+     */
+    @Full("content-hash:430a7bc21e3f95c443ec2151fc9e727119b21cc5878a"
+	    + "af1361971445bf8b1d0c:a879203e66ad42df67797f6639908d8d9fa"
+	    + "85ed8af32d6d304fd61a50b12c5fd")
+    @Locator("content-hash:430a7bc21e3f95c443ec2151fc9e727119b21cc5878a"
+	    + "af1361971445bf8b1d0c")
+    KEY_CONTENT_LIST,
+
     ;
 
     /**
