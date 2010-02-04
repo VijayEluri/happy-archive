@@ -331,7 +331,7 @@ public class SplitReader {
     /**
      * get the progress counter. At this time the return value of this is
      * different if any progress was made reading blocks since the last time
-     * this was called.
+     * this was called. The initial value is zero.
      * 
      * @return the progress counter, which at the moment is the number of blocks
      *         successfully retrieved from storage.

@@ -54,7 +54,7 @@ public class FileBlockStore implements BlockStore {
 	fileName = fs.join(fileName, name.substring(0, 3));
 	fileName = fs.join(fileName, name);
 
-	return new EncodedBlockParse().parse(fs.load(name));
+	return new EncodedBlockParse().parse(fs.load(fileName));
     }
 
 }
