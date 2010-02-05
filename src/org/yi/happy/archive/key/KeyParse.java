@@ -3,6 +3,8 @@ package org.yi.happy.archive.key;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.yi.happy.archive.DigestFactory;
+
 public class KeyParse {
     private KeyParse() {
 
@@ -82,7 +84,8 @@ public class KeyParse {
 
 	m = NAME_KEY.matcher(key);
 	if (m.matches()) {
-	    return new NameFullKey(m.group(1), m.group(2));
+	    return new NameFullKey(DigestFactory.getProvider(m.group(1)), m
+		    .group(2));
 	}
 
 	throw new IllegalArgumentException("can not parse key");

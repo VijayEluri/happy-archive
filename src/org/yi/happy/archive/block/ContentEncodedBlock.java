@@ -8,7 +8,7 @@ import java.util.Map;
 import org.yi.happy.archive.BlockParse;
 import org.yi.happy.archive.Cipher;
 import org.yi.happy.archive.CipherFactory;
-import org.yi.happy.archive.DigestFactory;
+import org.yi.happy.archive.DigestProvider;
 import org.yi.happy.archive.UnknownDigestException;
 import org.yi.happy.archive.key.ContentFullKey;
 import org.yi.happy.archive.key.ContentLocatorKey;
@@ -19,14 +19,14 @@ import org.yi.happy.archive.key.UnknownAlgorithmException;
 public final class ContentEncodedBlock extends AbstractBlock implements
 	EncodedBlock {
     private final ContentLocatorKey key;
-    private final String digest;
+    private final DigestProvider digest;
     private final String cipher;
     private final byte[] body;
 
-    public ContentEncodedBlock(ContentLocatorKey key, String digest,
+    public ContentEncodedBlock(ContentLocatorKey key, DigestProvider digest,
 	    String cipher, byte[] body) {
 
-	GenericBlock.checkValue(digest);
+	GenericBlock.checkValue(digest.getAlgorithm());
 	GenericBlock.checkValue(cipher);
 
 	byte[] hash = getHash(digest, body);
@@ -40,9 +40,9 @@ public final class ContentEncodedBlock extends AbstractBlock implements
 	this.body = body.clone();
     }
 
-    public ContentEncodedBlock(String digest, String cipher, byte[] body) {
+    public ContentEncodedBlock(DigestProvider digest, String cipher, byte[] body) {
 
-	GenericBlock.checkValue(digest);
+	GenericBlock.checkValue(digest.getAlgorithm());
 	GenericBlock.checkValue(cipher);
 
 	byte[] hash = getHash(digest, body);
@@ -58,7 +58,7 @@ public final class ContentEncodedBlock extends AbstractBlock implements
     }
 
     public String getDigest() {
-	return digest;
+	return digest.getAlgorithm();
     }
 
     public String getCipher() {
@@ -75,7 +75,7 @@ public final class ContentEncodedBlock extends AbstractBlock implements
 	out.put("version", "2");
 	out.put("key-type", key.getType());
 	out.put("key", HexEncode.encode(key.getHash()));
-	out.put("digest", digest);
+	out.put("digest", digest.getAlgorithm());
 	out.put("cipher", cipher);
 	out.put("size", Integer.toString(body.length));
 	return out;
@@ -92,13 +92,13 @@ public final class ContentEncodedBlock extends AbstractBlock implements
      *            the body.
      * @return the hash value.
      */
-    public static byte[] getHash(String digest, byte[] body) {
+    public static byte[] getHash(DigestProvider digest, byte[] body) {
 	try {
-	    MessageDigest d = DigestFactory.create(digest);
+	    MessageDigest d = digest.get();
 	    d.update(body);
 	    return d.digest();
 	} catch (UnknownAlgorithmException e) {
-	    throw new UnknownDigestException(digest, e);
+	    throw new UnknownDigestException(digest.getAlgorithm(), e);
 	}
     }
 

@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 
 import org.junit.Test;
+import org.yi.happy.archive.DigestFactory;
 import org.yi.happy.archive.EncodedBlockFactory;
 import org.yi.happy.archive.LoadException;
 import org.yi.happy.archive.ShortBodyException;
@@ -197,7 +198,8 @@ public class EncodedBlockTest {
     public void testNameDecodeBad() throws IOException {
 	EncodedBlock b = TestData.KEY_NAME.getEncodedBlock();
 
-	NameFullKey k = new NameFullKey("sha-256", "test2");
+	NameFullKey k = new NameFullKey(DigestFactory.getProvider("sha-256"),
+		"test2");
 	b.decode(k);
     }
 

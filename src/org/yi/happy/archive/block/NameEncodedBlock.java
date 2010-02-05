@@ -11,6 +11,7 @@ import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.Cipher;
 import org.yi.happy.archive.CipherFactory;
 import org.yi.happy.archive.DigestFactory;
+import org.yi.happy.archive.DigestProvider;
 import org.yi.happy.archive.VerifyException;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.HexEncode;
@@ -22,13 +23,14 @@ public final class NameEncodedBlock extends AbstractBlock implements
 
     private final NameLocatorKey key;
     private final byte[] hash;
-    private final String digest;
+    private final DigestProvider digest;
     private final String cipher;
     private final byte[] body;
 
-    public NameEncodedBlock(NameLocatorKey key, byte[] hash, String digest,
+    public NameEncodedBlock(NameLocatorKey key, byte[] hash,
+	    DigestProvider digest,
 	    String cipher, byte[] body) {
-	GenericBlock.checkValue(digest);
+	GenericBlock.checkValue(digest.getAlgorithm());
 	GenericBlock.checkValue(cipher);
 
 	byte[] hash0 = ContentEncodedBlock.getHash(digest, body);
@@ -43,9 +45,10 @@ public final class NameEncodedBlock extends AbstractBlock implements
 	this.body = body.clone();
     }
 
-    public NameEncodedBlock(NameLocatorKey key, String digest, String cipher,
+    public NameEncodedBlock(NameLocatorKey key, DigestProvider digest,
+	    String cipher,
 	    byte[] body) {
-	GenericBlock.checkValue(digest);
+	GenericBlock.checkValue(digest.getAlgorithm());
 	GenericBlock.checkValue(cipher);
 
 	byte[] hash = ContentEncodedBlock.getHash(digest, body);
@@ -66,7 +69,7 @@ public final class NameEncodedBlock extends AbstractBlock implements
     }
 
     public String getDigest() {
-	return digest;
+	return digest.getAlgorithm();
     }
 
     public String getCipher() {
@@ -84,7 +87,7 @@ public final class NameEncodedBlock extends AbstractBlock implements
 	out.put("key-type", key.getType());
 	out.put("key", HexEncode.encode(key.getHash()));
 	out.put("hash", HexEncode.encode(hash));
-	out.put("digest", digest);
+	out.put("digest", digest.getAlgorithm());
 	out.put("cipher", cipher);
 	out.put("size", Integer.toString(body.length));
 	return out;

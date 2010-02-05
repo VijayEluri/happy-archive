@@ -9,7 +9,7 @@ import org.yi.happy.archive.BlockParse;
 import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.Cipher;
 import org.yi.happy.archive.CipherFactory;
-import org.yi.happy.archive.DigestFactory;
+import org.yi.happy.archive.DigestProvider;
 import org.yi.happy.archive.UnknownDigestException;
 import org.yi.happy.archive.key.BlobFullKey;
 import org.yi.happy.archive.key.BlobLocatorKey;
@@ -23,7 +23,7 @@ import org.yi.happy.archive.key.UnknownAlgorithmException;
 public final class BlobEncodedBlock extends AbstractBlock implements
 	EncodedBlock {
     private final BlobLocatorKey key;
-    private final String digest;
+    private final DigestProvider digest;
     private final String cipher;
     private final byte[] body;
 
@@ -41,9 +41,10 @@ public final class BlobEncodedBlock extends AbstractBlock implements
      * @throws IllegalArgumentException
      *             if the details do not check out.
      */
-    public BlobEncodedBlock(BlobLocatorKey key, String digest, String cipher,
+    public BlobEncodedBlock(BlobLocatorKey key, DigestProvider digest,
+	    String cipher,
 	    byte[] body) {
-	GenericBlock.checkValue(digest);
+	GenericBlock.checkValue(digest.getAlgorithm());
 	GenericBlock.checkValue(cipher);
 
 	byte[] hash = getHash(digest, cipher, body);
@@ -69,8 +70,8 @@ public final class BlobEncodedBlock extends AbstractBlock implements
      * @throws IllegalArgumentException
      *             if the details are invalid.
      */
-    public BlobEncodedBlock(String digest, String cipher, byte[] body) {
-	GenericBlock.checkValue(digest);
+    public BlobEncodedBlock(DigestProvider digest, String cipher, byte[] body) {
+	GenericBlock.checkValue(digest.getAlgorithm());
 	GenericBlock.checkValue(cipher);
 
 	byte[] hash = getHash(digest, cipher, body);
@@ -86,7 +87,7 @@ public final class BlobEncodedBlock extends AbstractBlock implements
     }
 
     public String getDigest() {
-	return digest;
+	return digest.getAlgorithm();
     }
 
     public String getCipher() {
@@ -102,7 +103,7 @@ public final class BlobEncodedBlock extends AbstractBlock implements
 	Map<String, String> out = new LinkedHashMap<String, String>();
 	out.put("key-type", key.getType());
 	out.put("key", HexEncode.encode(key.getHash()));
-	out.put("digest", digest);
+	out.put("digest", digest.getAlgorithm());
 	out.put("cipher", cipher);
 	out.put("size", Integer.toString(body.length));
 	return out;
@@ -119,11 +120,11 @@ public final class BlobEncodedBlock extends AbstractBlock implements
      *            the body.
      * @return the hash value.
      */
-    public static byte[] getHash(String digest, String cipher, byte[] body) {
+    public byte[] getHash(DigestProvider digest, String cipher, byte[] body) {
 	try {
-	    MessageDigest d = DigestFactory.create(digest);
+	    MessageDigest d = digest.get();
 	    d.update(ByteString.toUtf8("digest: "));
-	    d.update(ByteString.toUtf8(digest));
+	    d.update(ByteString.toUtf8(digest.getAlgorithm()));
 	    d.update(ByteString.toUtf8("\r\ncipher: "));
 	    d.update(ByteString.toUtf8(cipher));
 	    d.update(ByteString.toUtf8("\r\nsize: "));
@@ -132,7 +133,7 @@ public final class BlobEncodedBlock extends AbstractBlock implements
 	    d.update(body);
 	    return d.digest();
 	} catch (UnknownAlgorithmException e) {
-	    throw new UnknownDigestException(digest, e);
+	    throw new UnknownDigestException(digest.getAlgorithm(), e);
 	}
     }
 

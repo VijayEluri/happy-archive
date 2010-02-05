@@ -22,14 +22,16 @@ public class EncodedBlockFactory {
 	    byte[] body) {
 	cipher = normalizeCipherName(cipher);
 
-	return new BlobEncodedBlock(digest, cipher, body);
+	return new BlobEncodedBlock(DigestFactory.getProvider(digest), cipher,
+		body);
     }
 
     public static NameEncodedBlock createName(NameLocatorKey key,
 	    String digest, String cipher, byte[] body) {
 	cipher = normalizeCipherName(cipher);
 
-	return new NameEncodedBlock(key, digest, cipher, body);
+	return new NameEncodedBlock(key, DigestFactory.getProvider(digest),
+		cipher, body);
     }
 
     private static String normalizeCipherName(String cipher) {
@@ -83,7 +85,8 @@ public class EncodedBlockFactory {
 
 	byte[] hash = getHash(block);
 
-	return new NameEncodedBlock(key, hash, digest, cipher, body);
+	return new NameEncodedBlock(key, hash, DigestFactory
+		.getProvider(digest), cipher, body);
     }
 
     private static byte[] getHash(Block block) throws VerifyException {
@@ -111,7 +114,8 @@ public class EncodedBlockFactory {
 	    cipher = fixCipher(cipher);
 	}
 
-	return new ContentEncodedBlock(key, digest, cipher, body);
+	return new ContentEncodedBlock(key, DigestFactory.getProvider(digest),
+		cipher, body);
     }
 
     private static String fixCipher(String cipher) {
@@ -155,7 +159,8 @@ public class EncodedBlockFactory {
 
 	String cipher = getCipherName(block);
 
-	return new BlobEncodedBlock(key, digest, cipher, body);
+	return new BlobEncodedBlock(key, DigestFactory.getProvider(digest),
+		cipher, body);
     }
 
     private static byte[] getBody(Block block) throws VerifyException {
@@ -210,7 +215,8 @@ public class EncodedBlockFactory {
 	    String cipher, byte[] body) {
 	cipher = normalizeCipherName(cipher);
 
-	return new ContentEncodedBlock(digest, cipher, body);
+	return new ContentEncodedBlock(DigestFactory.getProvider(digest),
+		cipher, body);
     }
 
     /**

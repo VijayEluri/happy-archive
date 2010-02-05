@@ -26,14 +26,8 @@ public class DigestFactory {
 	}
     }
 
-    public static DigestProvider getProvider(final String algorithm) {
-	return new DigestProvider() {
-
-	    @Override
-	    public String getAlgorithm() {
-		return algorithm;
-	    }
-
+    public static DigestProvider getProvider(String algorithm) {
+	return new DigestProvider(algorithm) {
 	    @Override
 	    public MessageDigest get() throws UnknownAlgorithmException {
 		return create(algorithm);

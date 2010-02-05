@@ -1,5 +1,7 @@
 package org.yi.happy.archive.key;
 
+import org.yi.happy.archive.DigestProvider;
+
 /**
  * a name full key
  */
@@ -9,7 +11,7 @@ public final class NameFullKey implements FullKey {
 	return KeyType.NAME_HASH;
     }
 
-    private final String digest;
+    private final DigestProvider digest;
 
     private final String name;
 
@@ -17,12 +19,13 @@ public final class NameFullKey implements FullKey {
      * @param digest
      * @param name
      */
-    public NameFullKey(String digest, String name) {
+    public NameFullKey(DigestProvider digest, String name) {
 	if (digest == null) {
 	    throw new NullPointerException("digest");
 	}
 
-	if (digest.contains(":") || digest.length() < 1) {
+	if (digest.getAlgorithm().contains(":")
+		|| digest.getAlgorithm().length() < 1) {
 	    throw new IllegalArgumentException("digest not valid");
 	}
 
@@ -38,7 +41,7 @@ public final class NameFullKey implements FullKey {
      * @return the digest to use
      */
     public String getDigest() {
-	return digest;
+	return digest.getAlgorithm();
     }
 
     /**
