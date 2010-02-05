@@ -9,6 +9,6 @@ public class CipherFactoryTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testBadCipher() {
-	CipherFactory.createNamed("bad");
+	CipherFactory.create("bad");
     }
 }

@@ -22,7 +22,7 @@ public class BlockEncoderBlobTest {
 	Block in = TestData.CLEAR_CONTENT.getBlock();
 
 	BlockEncoder e = new BlockEncoderBlob(DigestFactory.create("sha-256"),
-		CipherFactory.createNamed("rijndael256-256-cbc"));
+		CipherFactory.create("rijndael256-256-cbc"));
 	BlockEncoderResult r = e.encode(in);
 	Block out = r.getBlock();
 
@@ -39,7 +39,7 @@ public class BlockEncoderBlobTest {
 	Block in = TestData.CLEAR_CONTENT.getBlock();
 
 	BlockEncoder be = new BlockEncoderBlob(DigestFactory.create("sha-1"),
-		CipherFactory.createNamed("aes-192-cbc"));
+		CipherFactory.create("aes-192-cbc"));
 	BlockEncoderResult r = be.encode(in);
 	Block have = r.getBlock();
 
@@ -57,7 +57,7 @@ public class BlockEncoderBlobTest {
 	Block in = TestData.CLEAR_CONTENT.getBlock();
 
 	BlockEncoder be = new BlockEncoderBlob(DigestFactory.create("sha-256"),
-		CipherFactory.createNamed("aes-128-cbc"));
+		CipherFactory.create("aes-128-cbc"));
 	BlockEncoderResult r = be.encode(in);
 	Block have = r.getBlock();
 

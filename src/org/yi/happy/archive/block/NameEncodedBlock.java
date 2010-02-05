@@ -108,7 +108,7 @@ public final class NameEncodedBlock extends AbstractBlock implements
 	byte[] part = ByteString.toUtf8(k.getName());
 	MessageDigest md = DigestFactory.create(algo);
 
-	c.setPass(BlockUtil.expandKey(md, part, c.getKeySize()));
+	c.setKey(BlockUtil.expandKey(md, part, c.getKeySize()));
 
 	/*
 	 * decrypt the body

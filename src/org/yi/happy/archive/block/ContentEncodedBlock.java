@@ -109,7 +109,7 @@ public final class ContentEncodedBlock extends AbstractBlock implements
 	ContentFullKey k = (ContentFullKey) fullKey;
 
 	Cipher c = CipherFactory.create(this.cipher);
-	c.setPass(k.getPass());
+	c.setKey(k.getPass());
 
 	if (body.length % c.getBlockSize() != 0) {
 	    throw new IllegalArgumentException(

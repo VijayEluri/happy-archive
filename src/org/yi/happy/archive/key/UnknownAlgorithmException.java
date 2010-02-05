@@ -22,7 +22,7 @@ public class UnknownAlgorithmException extends IllegalArgumentException {
     }
 
     /**
-     * build with just an algorithm
+     * build with just an algorithm name
      * 
      * @param algorithm
      *            the algorithm

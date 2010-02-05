@@ -3,9 +3,9 @@ package org.yi.happy.archive.block.encoder;
 import java.security.MessageDigest;
 
 import org.yi.happy.archive.BlockUtil;
+import org.yi.happy.archive.Cipher;
 import org.yi.happy.archive.DigestUtil;
 import org.yi.happy.archive.EncodedBlockFactory;
-import org.yi.happy.archive.NamedCipher;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.key.ContentFullKey;
@@ -14,7 +14,7 @@ import org.yi.happy.archive.key.ContentFullKey;
  * A block encoder for content hash blocks.
  */
 public class BlockEncoderContent implements BlockEncoder {
-    public BlockEncoderContent(MessageDigest digest, NamedCipher cipher) {
+    public BlockEncoderContent(MessageDigest digest, Cipher cipher) {
 	this.digest = digest;
 	this.cipher = cipher;
     }
@@ -27,7 +27,7 @@ public class BlockEncoderContent implements BlockEncoder {
     /**
      * the cipher to use
      */
-    private final NamedCipher cipher;
+    private final Cipher cipher;
 
     /**
      * encode a content hash block
@@ -42,7 +42,7 @@ public class BlockEncoderContent implements BlockEncoder {
 	byte[] ph = DigestUtil.digestData(body, digest);
 
 	byte[] key = BlockUtil.expandKey(digest, ph, cipher.getKeySize());
-	cipher.setPass(key);
+	cipher.setKey(key);
 
 	body = pad(body, cipher.getBlockSize());
 	cipher.encrypt(body);

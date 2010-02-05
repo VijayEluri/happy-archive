@@ -24,7 +24,7 @@ public class CipherFactory {
 		.matcher(name);
 	if (m.matches()) {
 	    int ks = Integer.parseInt(m.group(2)) / 8;
-	    return new CipherRijndael(16, ks);
+	    return new CipherRijndael(name, 16, ks);
 	}
 
 	m = Pattern.compile("rijndael(192|256)-(128|192|256)-cbc")
@@ -32,24 +32,9 @@ public class CipherFactory {
 	if (m.matches()) {
 	    int bs = Integer.parseInt(m.group(1)) / 8;
 	    int ks = Integer.parseInt(m.group(2)) / 8;
-	    return new CipherRijndael(bs, ks);
+	    return new CipherRijndael(name, bs, ks);
 	}
 
 	throw new UnknownAlgorithmException(name);
-    }
-
-    /**
-     * create an instance, give back a named cipher.
-     * 
-     * @param algorithm
-     *            the name of the cipher in the form "algo-keySize-mode", for
-     *            example "aes-128-cbc".
-     * @return a NamedCipher wrapping an object implementing the Cipher
-     *         interface.
-     * @throws UnknownAlgorithmException
-     *             if the name is not known
-     */
-    public static NamedCipher createNamed(String algorithm) {
-	return new NamedCipher(algorithm, create(algorithm));
     }
 }

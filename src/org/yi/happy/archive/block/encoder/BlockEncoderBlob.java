@@ -5,20 +5,20 @@ import static org.yi.happy.archive.DigestUtil.digestData;
 import java.security.MessageDigest;
 
 import org.yi.happy.archive.BlockUtil;
+import org.yi.happy.archive.Cipher;
 import org.yi.happy.archive.EncodedBlockFactory;
-import org.yi.happy.archive.NamedCipher;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.key.BlobFullKey;
 
 public class BlockEncoderBlob implements BlockEncoder {
-    public BlockEncoderBlob(MessageDigest digest, NamedCipher cipher) {
+    public BlockEncoderBlob(MessageDigest digest, Cipher cipher) {
 	this.digest = digest;
 	this.cipher = cipher;
     }
 
     private final MessageDigest digest;
-    private final NamedCipher cipher;
+    private final Cipher cipher;
 
     /**
      * encode a content hash block
@@ -33,7 +33,7 @@ public class BlockEncoderBlob implements BlockEncoder {
 	byte[] ph = digestData(body, digest);
 
 	byte[] key = BlockUtil.expandKey(digest, ph, cipher.getKeySize());
-	cipher.setPass(key);
+	cipher.setKey(key);
 
 	body = pad(body, cipher.getBlockSize());
 	cipher.encrypt(body);

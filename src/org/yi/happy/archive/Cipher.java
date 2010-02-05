@@ -9,7 +9,7 @@ public interface Cipher {
      * 
      * @param pass
      */
-    void setPass(byte[] pass);
+    void setKey(byte[] pass);
 
     /**
      * get the block size
@@ -41,4 +41,10 @@ public interface Cipher {
      */
     void encrypt(byte[] data);
 
+    /**
+     * get the name of the algorithm.
+     * 
+     * @return the name of the algorithm.
+     */
+    String getAlgorithm();
 }
