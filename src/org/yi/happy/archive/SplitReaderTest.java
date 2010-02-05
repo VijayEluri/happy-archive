@@ -97,13 +97,13 @@ public class SplitReaderTest {
         SplitReader r = createMapReader();
 
 	Fragment got = r.getAny();
-	assertEquals(new Fragment(5, "56789".getBytes()), got);
+	assertEquals(new Fragment(5, B2), got);
 
         assertNull(r.getAny());
 
         loadBlock(C1);
         got = r.getAny();
-	assertEquals(new Fragment(0, "01234".getBytes()), got);
+	assertEquals(new Fragment(0, B1), got);
     }
 
     /**
@@ -299,11 +299,11 @@ public class SplitReaderTest {
 
 	got = r.getFirst();
 
-	assertEquals(new Fragment(0, "01234".getBytes()), got);
+	assertEquals(new Fragment(0, B1), got);
 
         got = r.getFirst();
 
-	assertEquals(new Fragment(5, "56789".getBytes()), got);
+	assertEquals(new Fragment(5, B2), got);
     }
 
 }

@@ -3,6 +3,7 @@ package org.yi.happy.archive;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.key.FullKey;
 
 /**
@@ -56,6 +57,7 @@ public class KeyInputStream extends InputStream {
      * is skipped.
      */
     @Override
+    @SmellsMessy
     public int read() throws IOException {
         while (true) {
             /*
