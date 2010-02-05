@@ -166,7 +166,7 @@ public class EncodedBlockTest {
     public void testContentDecodeBadKey() throws IOException {
 	EncodedBlock b = TestData.KEY_CONTENT.getEncodedBlock();
 
-	FullKey key = new KeyParse().parseFullKey("content-hash:87c5f6fe"
+	FullKey key = KeyParse.parseFullKey("content-hash:87c5f6fe"
 		+ "4ea801c8eb227b8b218a0659c18ece76b7c200c645ab4364becf"
 		+ "68d5:f6bd9f3b01b4ee40f60df2dc622f9d6f3aa38a5673a87e8"
 		+ "20b40164e930edead");
@@ -183,7 +183,7 @@ public class EncodedBlockTest {
     public void testContentDecodeBadLocator() throws IOException {
 	EncodedBlock b = TestData.KEY_CONTENT.getEncodedBlock();
 
-	FullKey key = new KeyParse().parseFullKey("content-hash:87c5f6fe"
+	FullKey key = KeyParse.parseFullKey("content-hash:87c5f6fe"
 		+ "4ea801c8eb227b8b218a0659c18ece76b7c200c645ab4364becf"
 		+ "68df:f6bd9f3b01b4ee40f60df2dc622f9d6f3aa38a5673a87e8"
 		+ "20b40164e930edeac");

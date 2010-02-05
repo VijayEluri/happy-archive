@@ -75,7 +75,7 @@ public class FileStoreStreamGetMain {
 	FileBlockStore store = new FileBlockStore(fs, args[0]);
 	pendingFile = args[1];
 	
-	KeyInputStream in = new KeyInputStream(new KeyParse()
+	KeyInputStream in = new KeyInputStream(KeyParse
 		.parseFullKey(args[2]), new RetrieveBlockStorage(store),
 		notReadyHandler);
 

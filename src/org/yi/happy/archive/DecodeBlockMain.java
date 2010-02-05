@@ -42,9 +42,9 @@ public class DecodeBlockMain {
 	 * TODO check arguments and display help if needed
 	 */
 
-	EncodedBlock b = new EncodedBlockParse().parse(fs.load(args[0],
+	EncodedBlock b = EncodedBlockParse.parse(fs.load(args[0],
 		Blocks.MAX_SIZE));
-	FullKey k = new KeyParse().parseFullKey(args[1]);
+	FullKey k = KeyParse.parseFullKey(args[1]);
 	Block d = b.decode(k);
 	out.write(d.asBytes());
     }

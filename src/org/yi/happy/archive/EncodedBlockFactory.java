@@ -50,7 +50,7 @@ public class EncodedBlockFactory {
 	String keyType = getKeyType(block);
 	byte[] keyHash = getKeyHash(block);
 
-	LocatorKey key = new KeyParse().parseLocatorKey(keyType, keyHash);
+	LocatorKey key = KeyParse.parseLocatorKey(keyType, keyHash);
 
 	if (key instanceof BlobLocatorKey) {
 	    return parseBlob(block, (BlobLocatorKey) key);

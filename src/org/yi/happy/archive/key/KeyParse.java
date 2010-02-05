@@ -3,10 +3,11 @@ package org.yi.happy.archive.key;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.yi.happy.annotate.SmellsProcedural;
-
-@SmellsProcedural
 public class KeyParse {
+    private KeyParse() {
+
+    }
+
     /**
      * the pattern for blob locators
      */
@@ -50,7 +51,7 @@ public class KeyParse {
      *            the string
      * @return the key (ContentKey, NameKey, LocatorKey)
      */
-    public Key parseKey(String key) {
+    public static Key parseKey(String key) {
 	try {
 	    return parseFullKey(key);
 	} catch (IllegalArgumentException e) {
@@ -66,7 +67,7 @@ public class KeyParse {
 	throw new IllegalArgumentException("can not parse key");
     }
 
-    public FullKey parseFullKey(String key) {
+    public static FullKey parseFullKey(String key) {
 	Matcher m = BLOB_KEY.matcher(key);
 	if (m.matches()) {
 	    return new BlobFullKey(HexDecode.decode(m.group(1)), HexDecode
@@ -87,7 +88,7 @@ public class KeyParse {
 	throw new IllegalArgumentException("can not parse key");
     }
 
-    public LocatorKey parseLocatorKey(String key) {
+    public static LocatorKey parseLocatorKey(String key) {
 	Matcher m;
 	m = BLOB_LOCATOR.matcher(key);
 	if (m.matches()) {
@@ -116,7 +117,7 @@ public class KeyParse {
      *            the hash of the key
      * @return the locator key
      */
-    public LocatorKey parseLocatorKey(String type, String hash) {
+    public static LocatorKey parseLocatorKey(String type, String hash) {
 	return parseLocatorKey(type, HexDecode.decode(hash));
     }
 
@@ -129,7 +130,7 @@ public class KeyParse {
      *            the hash of the key
      * @return the locator key
      */
-    public LocatorKey parseLocatorKey(String type, byte[] hash) {
+    public static LocatorKey parseLocatorKey(String type, byte[] hash) {
 	if (type.equals(KeyType.BLOB)) {
 	    return new BlobLocatorKey(hash);
 	}
@@ -145,7 +146,7 @@ public class KeyParse {
 	throw new IllegalArgumentException("unknown type: " + type);
     }
 
-    public BlobLocatorKey parseBlobLocatorKey(String hash) {
+    public static BlobLocatorKey parseBlobLocatorKey(String hash) {
 	return new BlobLocatorKey(HexDecode.decode(hash));
     }
 

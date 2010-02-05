@@ -5,15 +5,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-import org.yi.happy.annotate.SmellsProcedural;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.EncodedBlock;
 
 /**
  * parser for encoded blocks.
  */
-@SmellsProcedural
 public class EncodedBlockParse {
+    private EncodedBlockParse() {
+
+    }
+
     /**
      * parse an encoded block from an input stream.
      * 
@@ -21,7 +23,7 @@ public class EncodedBlockParse {
      *            the input stream.
      * @return the encoded block.
      */
-    public EncodedBlock load(InputStream in) {
+    public static EncodedBlock load(InputStream in) {
 	Block block = BlockParse.load(in);
 	return EncodedBlockFactory.parse(block);
     }
@@ -33,17 +35,17 @@ public class EncodedBlockParse {
      *            the file to parse.
      * @return the encoded block.
      */
-    public EncodedBlock load(File file) {
+    public static EncodedBlock load(File file) {
 	Block block = BlockParse.load(file);
 	return EncodedBlockFactory.parse(block);
     }
 
-    public EncodedBlock parse(byte[] data) {
+    public static EncodedBlock parse(byte[] data) {
 	Block block = BlockParse.load(data);
 	return EncodedBlockFactory.parse(block);
     }
 
-    public EncodedBlock load(URL url) throws IOException {
+    public static EncodedBlock load(URL url) throws IOException {
 	InputStream in = url.openStream();
 	try {
 	    return load(in);

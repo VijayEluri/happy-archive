@@ -313,7 +313,7 @@ public enum TestData {
     public FullKey getFullKey() throws UnsupportedOperationException {
 	try {
 	    String raw = getAnnotation(Full.class).value();
-	    return new KeyParse().parseFullKey(raw);
+	    return KeyParse.parseFullKey(raw);
 	} catch (IllegalArgumentException e) {
 	    throw new UnsupportedOperationException(e);
 	}
@@ -329,7 +329,7 @@ public enum TestData {
     public LocatorKey getLocatorKey() throws UnsupportedOperationException {
 	try {
 	    String raw = getAnnotation(Locator.class).value();
-	    return new KeyParse().parseLocatorKey(raw);
+	    return KeyParse.parseLocatorKey(raw);
 	} catch (IllegalArgumentException e) {
 	    throw new UnsupportedOperationException(e);
 	}
@@ -364,7 +364,7 @@ public enum TestData {
     }
 
     public EncodedBlock getEncodedBlock() throws IOException {
-	return new EncodedBlockParse().load(getUrl());
+	return EncodedBlockParse.load(getUrl());
     }
 
     @ShouldThrowChecked

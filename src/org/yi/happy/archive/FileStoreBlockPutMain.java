@@ -27,7 +27,7 @@ public class FileStoreBlockPutMain {
     public void run(String... args) throws IOException {
 	FileBlockStore store = new FileBlockStore(fs, args[0]);
 
-	EncodedBlock b = new EncodedBlockParse().parse(fs.load(args[1],
+	EncodedBlock b = EncodedBlockParse.parse(fs.load(args[1],
 		Blocks.MAX_SIZE));
 
 	store.put(b);
