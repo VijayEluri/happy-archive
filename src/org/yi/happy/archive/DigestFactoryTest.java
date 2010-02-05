@@ -1,5 +1,8 @@
 package org.yi.happy.archive;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.security.MessageDigest;
 
 import org.junit.Assert;
@@ -68,4 +71,36 @@ public class DigestFactoryTest {
 	DigestFactory.create("bad");
     }
 
+    /**
+     * provide bad
+     */
+    @Test
+    public void testProvideBad1() {
+	DigestProvider got = DigestFactory.getProvider("bad");
+
+	assertNotNull(got);
+    }
+
+    /**
+     * provide bad
+     */
+    @Test(expected = UnknownAlgorithmException.class)
+    public void testProvideBad2() {
+	DigestProvider got = DigestFactory.getProvider("bad");
+
+	got.get();
+    }
+
+    /**
+     * provide bad
+     */
+    @Test
+    public void testProvideGood() {
+	DigestProvider got = DigestFactory.getProvider("sha1");
+
+	assertNotNull(got);
+	assertEquals("sha1", got.getAlgorithm());
+
+	assertNotNull(got.get());
+    }
 }

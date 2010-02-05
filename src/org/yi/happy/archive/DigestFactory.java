@@ -25,4 +25,19 @@ public class DigestFactory {
 	    throw new UnknownAlgorithmException(algorithm, e);
 	}
     }
+
+    public static DigestProvider getProvider(final String algorithm) {
+	return new DigestProvider() {
+
+	    @Override
+	    public String getAlgorithm() {
+		return algorithm;
+	    }
+
+	    @Override
+	    public MessageDigest get() throws UnknownAlgorithmException {
+		return create(algorithm);
+	    }
+	};
+    }
 }
