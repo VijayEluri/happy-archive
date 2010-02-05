@@ -39,25 +39,29 @@ public class FileStoreStreamGetMain {
     @EntryPoint
     public static void main(String[] args) throws IOException {
 	WaitHandler waitHandler = new WaitHandler() {
-	    int delay = 1;
-	    int lastDelay = 0;
+	    private int delay = 1;
+	    private int lastDelay = 0;
 
 	    @Override
 	    public void doWait(boolean progress) throws IOException {
 		try {
-		if (progress) {
-		    delay = 1;
-		    lastDelay = 0;
+		    if (progress) {
+			delay = 1;
+			lastDelay = 0;
+
+			Thread.sleep(delay * 1000);
+			return;
+		    }
 
 		    Thread.sleep(delay * 1000);
-		    return;
-		}
 
-		Thread.sleep(delay * 1000);
+		    int nextDelay = delay + lastDelay;
+		    lastDelay = delay;
+		    delay = nextDelay;
 
-		int nextDelay = delay + lastDelay;
-		lastDelay = delay;
-		delay = nextDelay;
+		    if (delay > 60) {
+			delay = 60;
+		    }
 		} catch (InterruptedException e) {
 		    throw new InterruptedIOException();
 		}
@@ -85,7 +89,7 @@ public class FileStoreStreamGetMain {
     private String pendingFile;
 
     private NotReadyHandler notReadyHandler = new NotReadyHandler() {
-	int progress;
+	private int progress;
 
 	@Override
 	public void notReady(SplitReader reader) throws IOException {
