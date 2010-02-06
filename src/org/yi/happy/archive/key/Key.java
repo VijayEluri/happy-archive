@@ -14,6 +14,13 @@ public interface Key {
      */
     public String toString();
 
+    /**
+     * Get the locator key for this key.
+     * 
+     * @return A locator key.
+     */
+    public LocatorKey toLocatorKey();
+
     public int hashCode();
 
     public boolean equals(Object obj);

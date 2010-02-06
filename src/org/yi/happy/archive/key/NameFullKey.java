@@ -1,6 +1,8 @@
 package org.yi.happy.archive.key;
 
+import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.crypto.DigestProvider;
+import org.yi.happy.archive.crypto.Digests;
 
 /**
  * a name full key
@@ -77,5 +79,12 @@ public final class NameFullKey implements FullKey {
 
     public String toString() {
 	return getType() + ":" + getDigest() + ":" + getName();
+    }
+
+    @Override
+    public NameLocatorKey toLocatorKey() {
+	byte[] hash = Digests.digestData(getDigest(), ByteString
+		.toUtf8(getName()));
+	return new NameLocatorKey(hash);
     }
 }

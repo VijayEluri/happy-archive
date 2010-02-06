@@ -22,4 +22,9 @@ public final class ContentFullKey extends AbstractContentFullKey implements
     public ContentFullKey(byte[] hash, byte[] pass) {
 	super(hash, pass);
     }
+
+    @Override
+    public ContentLocatorKey toLocatorKey() {
+	return new ContentLocatorKey(getHash());
+    }
 }

@@ -10,4 +10,8 @@ public class BlobFullKey extends AbstractContentFullKey implements FullKey {
 	return KeyType.BLOB;
     }
 
+    @Override
+    public BlobLocatorKey toLocatorKey() {
+	return new BlobLocatorKey(getHash());
+    }
 }
