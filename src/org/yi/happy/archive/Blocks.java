@@ -5,10 +5,10 @@ package org.yi.happy.archive;
  */
 public class Blocks {
     /**
-     * The maximum size of a block in bytes. This is much larger than any
-     * existing block.
+     * The maximum size of an entire block (including meta-data) in bytes. This
+     * is larger than any existing block.
      */
-    public static int MAX_SIZE = 4 * 1024 * 1024;
+    public static int MAX_SIZE = 1024 * 1024 + 8 * 1024;
 
     /**
      * The end of line byte string used in a block.

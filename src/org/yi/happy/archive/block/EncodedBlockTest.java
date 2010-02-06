@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.yi.happy.archive.ShortBodyException;
 import org.yi.happy.archive.VerifyException;
 import org.yi.happy.archive.block.parser.EncodedBlockFactory;
-import org.yi.happy.archive.block.parser.LoadException;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.HexDecode;
@@ -20,7 +19,7 @@ import org.yi.happy.archive.test_data.TestData;
 
 public class EncodedBlockTest {
     @Test
-    public void testContent1() {
+    public void testContent1() throws IOException {
 	TestData d = TestData.KEY_OLD_CONTENT;
 	Block b = d.getBlock();
 
@@ -33,7 +32,7 @@ public class EncodedBlockTest {
     }
 
     @Test
-    public void testContent2() {
+    public void testContent2() throws IOException {
 	TestData d = TestData.KEY_CONTENT;
 	Block b = d.getBlock();
 
@@ -46,7 +45,7 @@ public class EncodedBlockTest {
     }
 
     @Test
-    public void testContent2Aes() {
+    public void testContent2Aes() throws IOException {
 	TestData d = TestData.KEY_CONTENT_AES128;
 	Block b = d.getBlock();
 
@@ -59,7 +58,7 @@ public class EncodedBlockTest {
     }
 
     @Test
-    public void testContent2Rijndael() {
+    public void testContent2Rijndael() throws IOException {
 	TestData d = TestData.KEY_CONTENT_RIJNDAEL;
 	Block b = d.getBlock();
 
@@ -72,7 +71,7 @@ public class EncodedBlockTest {
     }
 
     @Test
-    public void testName2() {
+    public void testName2() throws IOException {
 	TestData d = TestData.KEY_NAME;
 	Block b = d.getBlock();
 
@@ -87,21 +86,21 @@ public class EncodedBlockTest {
     }
 
     @Test(expected = ShortBodyException.class)
-    public void testInvalid() {
+    public void testInvalid() throws IOException {
 	TestData d = TestData.BAD_KEY_SHORT_CONTENT;
 	Block b = d.getBlock();
 	EncodedBlockFactory.parse(b);
     }
 
     @Test(expected = VerifyException.class)
-    public void testInvalid2() {
+    public void testInvalid2() throws IOException {
 	Block b = TestData.OK_SMALL.getBlock();
 
 	EncodedBlockFactory.parse(b);
     }
 
     @Test(expected = ShortBodyException.class)
-    public void testInvalid3() {
+    public void testInvalid3() throws IOException {
 	TestData d = TestData.BAD_KEY_SHORT_NAME;
 	Block b = d.getBlock();
 	EncodedBlockFactory.parse(b);
@@ -158,7 +157,7 @@ public class EncodedBlockTest {
      * 
      * @throws IOException
      */
-    @Test(expected = LoadException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testContentDecodeBadKey() throws IOException {
 	EncodedBlock b = TestData.KEY_CONTENT.getEncodedBlock();
 
@@ -189,7 +188,7 @@ public class EncodedBlockTest {
 	assertEquals(want, have);
     }
 
-    @Test(expected = LoadException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testNameDecodeBad() throws IOException {
 	EncodedBlock b = TestData.KEY_NAME.getEncodedBlock();
 

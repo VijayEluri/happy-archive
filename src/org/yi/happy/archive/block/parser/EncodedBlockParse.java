@@ -22,8 +22,9 @@ public class EncodedBlockParse {
      * @param in
      *            the input stream.
      * @return the encoded block.
+     * @throws IOException
      */
-    public static EncodedBlock load(InputStream in) {
+    public static EncodedBlock load(InputStream in) throws IOException {
 	Block block = BlockParse.load(in);
 	return EncodedBlockFactory.parse(block);
     }
@@ -34,14 +35,15 @@ public class EncodedBlockParse {
      * @param file
      *            the file to parse.
      * @return the encoded block.
+     * @throws IOException
      */
-    public static EncodedBlock load(File file) {
+    public static EncodedBlock load(File file) throws IOException {
 	Block block = BlockParse.load(file);
 	return EncodedBlockFactory.parse(block);
     }
 
     public static EncodedBlock parse(byte[] data) {
-	Block block = BlockParse.load(data);
+	Block block = BlockParse.parse(data);
 	return EncodedBlockFactory.parse(block);
     }
 

@@ -1,8 +1,10 @@
 package org.yi.happy.archive.block.parser;
 
+import org.yi.happy.annotate.SmellsProcedural;
 import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.block.GenericBlock;
 
+@SmellsProcedural
 public class GenericBlockParse {
 
     /**

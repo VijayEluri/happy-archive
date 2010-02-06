@@ -43,7 +43,7 @@ public class EncodeContentMain {
 	    NoSuchAlgorithmException {
 	BlockEncoder encoder = BlockEncoderFactory.getContentDefault();
 
-	Block block = BlockParse.load(fs.load(args[0], Blocks.MAX_SIZE));
+	Block block = BlockParse.parse(fs.load(args[0], Blocks.MAX_SIZE));
 	BlockEncoderResult e = encoder.encode(block);
 	fs.save(args[1], e.getBlock().asBytes());
 

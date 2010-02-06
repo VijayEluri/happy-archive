@@ -1,7 +1,6 @@
 package org.yi.happy.archive;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -80,7 +79,7 @@ public class Streams {
      * @throws IOException
      *             on error, including exceeding the limit.
      */
-    public static byte[] load(FileInputStream in, int limit) throws IOException {
+    public static byte[] load(InputStream in, int limit) throws IOException {
 	return load(new InputStreamLimit(in, limit));
     }
 }

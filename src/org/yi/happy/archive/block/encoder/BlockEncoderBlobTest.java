@@ -3,6 +3,8 @@ package org.yi.happy.archive.block.encoder;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.yi.happy.archive.block.Block;
@@ -16,9 +18,11 @@ import org.yi.happy.archive.test_data.TestData;
 public class BlockEncoderBlobTest {
     /**
      * encode a block using default block encoding
+     * 
+     * @throws IOException
      */
     @Test
-    public void testContentEncode() {
+    public void testContentEncode() throws IOException {
 	Block in = TestData.CLEAR_CONTENT.getBlock();
 
 	BlockEncoder e = new BlockEncoderBlob(DigestFactory
@@ -34,9 +38,11 @@ public class BlockEncoderBlobTest {
 
     /**
      * encode a block with non-default settings
+     * 
+     * @throws IOException
      */
     @Test
-    public void testEncodeNonDefault() {
+    public void testEncodeNonDefault() throws IOException {
 	Block in = TestData.CLEAR_CONTENT.getBlock();
 
 	BlockEncoder be = new BlockEncoderBlob(DigestFactory
@@ -52,9 +58,11 @@ public class BlockEncoderBlobTest {
 
     /**
      * encode with all default settings
+     * 
+     * @throws IOException
      */
     @Test
-    public void testEncodeDefault() {
+    public void testEncodeDefault() throws IOException {
 	Block in = TestData.CLEAR_CONTENT.getBlock();
 
 	BlockEncoder be = new BlockEncoderBlob(DigestFactory

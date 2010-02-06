@@ -34,7 +34,7 @@ public class VerifyMain {
 		/*
 		 * parse into a block
 		 */
-		Block block = BlockParse.load(data);
+		Block block = BlockParse.parse(data);
 
 		/*
 		 * try to parse into an encoded block

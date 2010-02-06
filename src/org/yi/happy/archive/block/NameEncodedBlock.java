@@ -118,7 +118,7 @@ public final class NameEncodedBlock extends AbstractBlock implements
 	byte[] out = body.clone();
 	c.decrypt(out);
 
-	return BlockParse.load(out);
+	return BlockParse.parse(out);
     }
 
     @Override
