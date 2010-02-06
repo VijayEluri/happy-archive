@@ -2,8 +2,10 @@ package org.yi.happy.archive;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.yi.happy.archive.block.Block;
+import org.yi.happy.archive.block.GenericBlockTest;
 import org.yi.happy.archive.test_data.TestData;
 
 public class BlockParseTest {
@@ -18,4 +20,16 @@ public class BlockParseTest {
     public void test2() {
 	BlockParse.load(TestData.BAD_EMPTY.getUrl());
     }
+
+    /**
+     * check that loading is working properly
+     */
+    @Test
+    public void testLoad() {
+	Block have = BlockParse.load(TestData.OK_SMALL.getUrl());
+
+	Block want = GenericBlockTest.createSampleBlock();
+	Assert.assertEquals(want, have);
+    }
+
 }

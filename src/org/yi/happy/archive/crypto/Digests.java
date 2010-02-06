@@ -3,6 +3,10 @@ package org.yi.happy.archive.crypto;
 import java.security.MessageDigest;
 
 public class Digests {
+    private Digests() {
+
+    }
+
     /**
      * get the hash of some data using a message digest.
      * 
