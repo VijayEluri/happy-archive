@@ -37,4 +37,13 @@ public class CipherFactory {
 
 	throw new UnknownAlgorithmException(name);
     }
+
+    public static CipherProvider getProvider(String algorithm) {
+	return new CipherProvider(algorithm) {
+	    @Override
+	    public Cipher get() {
+		return create(algorithm);
+	    }
+	};
+    }
 }
