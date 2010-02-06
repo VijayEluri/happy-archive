@@ -9,23 +9,14 @@ import java.security.NoSuchAlgorithmException;
  */
 public class DigestFactory {
     /**
-     * create a digest for the given algorithm
+     * Get a digest provider for the given algorithm.
      * 
      * @param algorithm
-     *            the type of digest to create
+     *            the type of digest to create a provider for
      * @return the digest
      * @throws UnknownAlgorithmException
      *             if the algorithm is unknown
      */
-    @Deprecated
-    public static MessageDigest create(String algorithm) {
-	try {
-	    return MessageDigest.getInstance(algorithm);
-	} catch (NoSuchAlgorithmException e) {
-	    throw new UnknownAlgorithmException(algorithm, e);
-	}
-    }
-
     public static DigestProvider getProvider(String algorithm) {
 	return new DigestProvider(algorithm) {
 	    @Override

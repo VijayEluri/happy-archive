@@ -3,8 +3,6 @@ package org.yi.happy.archive.crypto;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.security.MessageDigest;
-
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -17,9 +15,9 @@ public class DigestFactoryTest {
      */
     @Test
     public void testSha256() {
-	MessageDigest d = DigestFactory.create("sha-256");
+	DigestProvider d = DigestFactory.getProvider("sha-256");
 	Assert.assertEquals("sha-256", d.getAlgorithm());
-	Assert.assertEquals(32, d.getDigestLength());
+	Assert.assertEquals(32, d.get().getDigestLength());
     }
 
     /**
@@ -27,9 +25,9 @@ public class DigestFactoryTest {
      */
     @Test
     public void testSha512() {
-	MessageDigest d = DigestFactory.create("sha-512");
+	DigestProvider d = DigestFactory.getProvider("sha-512");
 	Assert.assertEquals("sha-512", d.getAlgorithm());
-	Assert.assertEquals(64, d.getDigestLength());
+	Assert.assertEquals(64, d.get().getDigestLength());
     }
 
     /**
@@ -37,9 +35,9 @@ public class DigestFactoryTest {
      */
     @Test
     public void testMd5() {
-	MessageDigest d = DigestFactory.create("md5");
+	DigestProvider d = DigestFactory.getProvider("md5");
 	Assert.assertEquals("md5", d.getAlgorithm());
-	Assert.assertEquals(16, d.getDigestLength());
+	Assert.assertEquals(16, d.get().getDigestLength());
     }
 
     /**
@@ -47,9 +45,9 @@ public class DigestFactoryTest {
      */
     @Test
     public void testSha1() {
-	MessageDigest d = DigestFactory.create("sha1");
+	DigestProvider d = DigestFactory.getProvider("sha1");
 	Assert.assertEquals("sha1", d.getAlgorithm());
-	Assert.assertEquals(20, d.getDigestLength());
+	Assert.assertEquals(20, d.get().getDigestLength());
     }
 
     /**
@@ -57,17 +55,9 @@ public class DigestFactoryTest {
      */
     @Test
     public void testSha1a() {
-	MessageDigest d = DigestFactory.create("Sha1");
+	DigestProvider d = DigestFactory.getProvider("Sha1");
 	Assert.assertEquals("Sha1", d.getAlgorithm());
-	Assert.assertEquals(20, d.getDigestLength());
-    }
-
-    /**
-     * get bad
-     */
-    @Test(expected = UnknownAlgorithmException.class)
-    public void testBad() {
-	DigestFactory.create("bad");
+	Assert.assertEquals(20, d.get().getDigestLength());
     }
 
     /**
