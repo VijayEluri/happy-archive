@@ -42,4 +42,18 @@ public class ContentFullKeyTest {
 
 	new ContentFullKey(hash, pass);
     }
+
+    /**
+     * convert a content key to a locator key
+     */
+    @Test
+    public void testToLocatorKey1() {
+	ContentFullKey in = new ContentFullKey(new byte[] { 0x00, 0x11, 0x22 },
+		new byte[] { 0x33, 0x44, 0x55 });
+
+	Key have = in.toLocatorKey();
+
+	Key want = new ContentLocatorKey(new byte[] { 0x00, 0x11, 0x22 });
+	assertEquals(want, have);
+    }
 }

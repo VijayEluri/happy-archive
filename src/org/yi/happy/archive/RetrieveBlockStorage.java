@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.key.FullKey;
-import org.yi.happy.archive.key.KeyUtil;
 
 /**
  * allow for retrieval by full key and the automatic decoding of the resulting
@@ -43,7 +42,7 @@ public class RetrieveBlockStorage implements RetrieveBlock {
      */
     public Block retrieveBlock(FullKey key) throws BlockNotFoundException,
 	    IOException {
-	EncodedBlock block = storage.get(KeyUtil.toLocatorKey(key));
+	EncodedBlock block = storage.get(key.toLocatorKey());
         return block.decode(key);
     }
 
@@ -56,7 +55,7 @@ public class RetrieveBlockStorage implements RetrieveBlock {
      * @throws IOException
      */
     public boolean blockHave(FullKey key) throws IOException {
-	return storage.contains(KeyUtil.toLocatorKey(key));
+	return storage.contains(key.toLocatorKey());
     }
 
 }

@@ -10,7 +10,6 @@ import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.KeyParse;
-import org.yi.happy.archive.key.KeyUtil;
 
 /**
  * Fetch a stream, the blocks may not all available in the file store, so the
@@ -95,7 +94,7 @@ public class FileStoreStreamGetMain {
 	public void notReady(SplitReader reader) throws IOException {
 	    StringBuilder p = new StringBuilder();
 	    for (FullKey k : reader.getPending()) {
-		p.append(KeyUtil.toLocatorKey(k) + "\n");
+		p.append(k.toLocatorKey() + "\n");
 	    }
 	    fs.save(pendingFile + ".tmp", ByteString.toUtf8(p.toString()));
 	    fs.rename(pendingFile + ".tmp", pendingFile);
