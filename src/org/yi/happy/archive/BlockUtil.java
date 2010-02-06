@@ -2,8 +2,6 @@ package org.yi.happy.archive;
 
 import java.security.MessageDigest;
 
-import org.yi.happy.archive.key.UnknownAlgorithmException;
-
 /**
  * Utility methods for blocks of data
  */
@@ -37,16 +35,5 @@ public class BlockUtil {
 	    n++;
 	}
 	return out;
-    }
-
-    public static byte[] hashBytes(String digest, byte[] bytes)
-	    throws UnknownDigestException {
-	try {
-	    MessageDigest d = DigestFactory.create(digest);
-	    d.update(bytes);
-	    return d.digest();
-	} catch (UnknownAlgorithmException e) {
-	    throw new UnknownDigestException(digest, e);
-	}
     }
 }
