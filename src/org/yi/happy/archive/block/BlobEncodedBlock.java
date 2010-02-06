@@ -8,7 +8,7 @@ import java.util.Map;
 import org.yi.happy.archive.BlockParse;
 import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.Cipher;
-import org.yi.happy.archive.CipherFactory;
+import org.yi.happy.archive.CipherProvider;
 import org.yi.happy.archive.DigestProvider;
 import org.yi.happy.archive.UnknownDigestException;
 import org.yi.happy.archive.key.BlobFullKey;
@@ -24,7 +24,7 @@ public final class BlobEncodedBlock extends AbstractBlock implements
 	EncodedBlock {
     private final BlobLocatorKey key;
     private final DigestProvider digest;
-    private final String cipher;
+    private final CipherProvider cipher;
     private final byte[] body;
 
     /**
@@ -42,10 +42,10 @@ public final class BlobEncodedBlock extends AbstractBlock implements
      *             if the details do not check out.
      */
     public BlobEncodedBlock(BlobLocatorKey key, DigestProvider digest,
-	    String cipher,
+	    CipherProvider cipher,
 	    byte[] body) {
 	GenericBlock.checkValue(digest.getAlgorithm());
-	GenericBlock.checkValue(cipher);
+	GenericBlock.checkValue(cipher.getAlgorithm());
 
 	byte[] hash = getHash(digest, cipher, body);
 	if (!Arrays.equals(key.getHash(), hash)) {
@@ -70,9 +70,10 @@ public final class BlobEncodedBlock extends AbstractBlock implements
      * @throws IllegalArgumentException
      *             if the details are invalid.
      */
-    public BlobEncodedBlock(DigestProvider digest, String cipher, byte[] body) {
+    public BlobEncodedBlock(DigestProvider digest, CipherProvider cipher,
+	    byte[] body) {
 	GenericBlock.checkValue(digest.getAlgorithm());
-	GenericBlock.checkValue(cipher);
+	GenericBlock.checkValue(cipher.getAlgorithm());
 
 	byte[] hash = getHash(digest, cipher, body);
 
@@ -90,7 +91,7 @@ public final class BlobEncodedBlock extends AbstractBlock implements
 	return digest;
     }
 
-    public String getCipher() {
+    public CipherProvider getCipher() {
 	return cipher;
     }
 
@@ -104,7 +105,7 @@ public final class BlobEncodedBlock extends AbstractBlock implements
 	out.put("key-type", key.getType());
 	out.put("key", HexEncode.encode(key.getHash()));
 	out.put("digest", digest.getAlgorithm());
-	out.put("cipher", cipher);
+	out.put("cipher", cipher.getAlgorithm());
 	out.put("size", Integer.toString(body.length));
 	return out;
     }
@@ -120,13 +121,14 @@ public final class BlobEncodedBlock extends AbstractBlock implements
      *            the body.
      * @return the hash value.
      */
-    public byte[] getHash(DigestProvider digest, String cipher, byte[] body) {
+    public byte[] getHash(DigestProvider digest, CipherProvider cipher,
+	    byte[] body) {
 	try {
 	    MessageDigest d = digest.get();
 	    d.update(ByteString.toUtf8("digest: "));
 	    d.update(ByteString.toUtf8(digest.getAlgorithm()));
 	    d.update(ByteString.toUtf8("\r\ncipher: "));
-	    d.update(ByteString.toUtf8(cipher));
+	    d.update(ByteString.toUtf8(cipher.getAlgorithm()));
 	    d.update(ByteString.toUtf8("\r\nsize: "));
 	    d.update(ByteString.toUtf8(Integer.toString(body.length)));
 	    d.update(ByteString.toUtf8("\r\n\r\n"));
@@ -143,7 +145,7 @@ public final class BlobEncodedBlock extends AbstractBlock implements
 	}
 	BlobFullKey k = (BlobFullKey) fullKey;
 
-	Cipher c = CipherFactory.create(this.cipher);
+	Cipher c = cipher.get();
 	c.setKey(k.getPass());
 
 	if (body.length % c.getBlockSize() != 0) {

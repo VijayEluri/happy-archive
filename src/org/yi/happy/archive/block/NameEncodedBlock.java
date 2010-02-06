@@ -9,7 +9,7 @@ import org.yi.happy.archive.BlockParse;
 import org.yi.happy.archive.BlockUtil;
 import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.Cipher;
-import org.yi.happy.archive.CipherFactory;
+import org.yi.happy.archive.CipherProvider;
 import org.yi.happy.archive.DigestProvider;
 import org.yi.happy.archive.VerifyException;
 import org.yi.happy.archive.key.FullKey;
@@ -23,14 +23,13 @@ public final class NameEncodedBlock extends AbstractBlock implements
     private final NameLocatorKey key;
     private final byte[] hash;
     private final DigestProvider digest;
-    private final String cipher;
+    private final CipherProvider cipher;
     private final byte[] body;
 
     public NameEncodedBlock(NameLocatorKey key, byte[] hash,
-	    DigestProvider digest,
-	    String cipher, byte[] body) {
+	    DigestProvider digest, CipherProvider cipher, byte[] body) {
 	GenericBlock.checkValue(digest.getAlgorithm());
-	GenericBlock.checkValue(cipher);
+	GenericBlock.checkValue(cipher.getAlgorithm());
 
 	byte[] hash0 = ContentEncodedBlock.getHash(digest, body);
 	if (!Arrays.equals(hash0, hash)) {
@@ -45,10 +44,9 @@ public final class NameEncodedBlock extends AbstractBlock implements
     }
 
     public NameEncodedBlock(NameLocatorKey key, DigestProvider digest,
-	    String cipher,
-	    byte[] body) {
+	    CipherProvider cipher, byte[] body) {
 	GenericBlock.checkValue(digest.getAlgorithm());
-	GenericBlock.checkValue(cipher);
+	GenericBlock.checkValue(cipher.getAlgorithm());
 
 	byte[] hash = ContentEncodedBlock.getHash(digest, body);
 
@@ -71,7 +69,7 @@ public final class NameEncodedBlock extends AbstractBlock implements
 	return digest;
     }
 
-    public String getCipher() {
+    public CipherProvider getCipher() {
 	return cipher;
     }
 
@@ -87,7 +85,7 @@ public final class NameEncodedBlock extends AbstractBlock implements
 	out.put("key", HexEncode.encode(key.getHash()));
 	out.put("hash", HexEncode.encode(hash));
 	out.put("digest", digest.getAlgorithm());
-	out.put("cipher", cipher);
+	out.put("cipher", cipher.getAlgorithm());
 	out.put("size", Integer.toString(body.length));
 	return out;
     }
@@ -101,7 +99,7 @@ public final class NameEncodedBlock extends AbstractBlock implements
 	/*
 	 * get the cipher
 	 */
-	Cipher c = CipherFactory.create(this.cipher);
+	Cipher c = cipher.get();
 
 	/*
 	 * get the key from the name

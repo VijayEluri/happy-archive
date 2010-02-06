@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.yi.happy.archive.BlockParse;
 import org.yi.happy.archive.Cipher;
-import org.yi.happy.archive.CipherFactory;
+import org.yi.happy.archive.CipherProvider;
 import org.yi.happy.archive.DigestProvider;
 import org.yi.happy.archive.UnknownDigestException;
 import org.yi.happy.archive.key.ContentFullKey;
@@ -20,14 +20,14 @@ public final class ContentEncodedBlock extends AbstractBlock implements
 	EncodedBlock {
     private final ContentLocatorKey key;
     private final DigestProvider digest;
-    private final String cipher;
+    private final CipherProvider cipher;
     private final byte[] body;
 
     public ContentEncodedBlock(ContentLocatorKey key, DigestProvider digest,
-	    String cipher, byte[] body) {
+	    CipherProvider cipher, byte[] body) {
 
 	GenericBlock.checkValue(digest.getAlgorithm());
-	GenericBlock.checkValue(cipher);
+	GenericBlock.checkValue(cipher.getAlgorithm());
 
 	byte[] hash = getHash(digest, body);
 	if (!Arrays.equals(key.getHash(), hash)) {
@@ -40,10 +40,11 @@ public final class ContentEncodedBlock extends AbstractBlock implements
 	this.body = body.clone();
     }
 
-    public ContentEncodedBlock(DigestProvider digest, String cipher, byte[] body) {
+    public ContentEncodedBlock(DigestProvider digest, CipherProvider cipher,
+	    byte[] body) {
 
 	GenericBlock.checkValue(digest.getAlgorithm());
-	GenericBlock.checkValue(cipher);
+	GenericBlock.checkValue(cipher.getAlgorithm());
 
 	byte[] hash = getHash(digest, body);
 
@@ -61,7 +62,7 @@ public final class ContentEncodedBlock extends AbstractBlock implements
 	return digest;
     }
 
-    public String getCipher() {
+    public CipherProvider getCipher() {
 	return cipher;
     }
 
@@ -76,7 +77,7 @@ public final class ContentEncodedBlock extends AbstractBlock implements
 	out.put("key-type", key.getType());
 	out.put("key", HexEncode.encode(key.getHash()));
 	out.put("digest", digest.getAlgorithm());
-	out.put("cipher", cipher);
+	out.put("cipher", cipher.getAlgorithm());
 	out.put("size", Integer.toString(body.length));
 	return out;
     }
@@ -108,7 +109,7 @@ public final class ContentEncodedBlock extends AbstractBlock implements
 	}
 	ContentFullKey k = (ContentFullKey) fullKey;
 
-	Cipher c = CipherFactory.create(this.cipher);
+	Cipher c = cipher.get();
 	c.setKey(k.getPass());
 
 	if (body.length % c.getBlockSize() != 0) {

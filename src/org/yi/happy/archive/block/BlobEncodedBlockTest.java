@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.junit.Test;
 import org.yi.happy.archive.ByteString;
+import org.yi.happy.archive.CipherFactory;
 import org.yi.happy.archive.DigestFactory;
 import org.yi.happy.archive.key.BlobLocatorKey;
 import org.yi.happy.archive.key.HexDecode;
@@ -16,7 +17,8 @@ public class BlobEncodedBlockTest {
     @Test
     public void test1() {
 	Block block = new BlobEncodedBlock(
-		DigestFactory.getProvider("sha-256"), "null", ByteString
+		DigestFactory.getProvider("sha-256"), CipherFactory
+			.getProvider("null"), ByteString
 		.toUtf8("test"));
 
 	Map<String, String> want = new HashMap<String, String>();
@@ -33,7 +35,7 @@ public class BlobEncodedBlockTest {
 	Block block = new BlobEncodedBlock(new BlobLocatorKey(HexDecode
 		.decode("321f47896a9ae31c24d307120f2736686d32"
 			+ "58d55a4c3890a35ec594049bd49d")), DigestFactory
-		.getProvider("sha-256"), "null",
+		.getProvider("sha-256"), CipherFactory.getProvider("null"),
 		ByteString.toUtf8("test"));
 
 	assertEquals("blob", block.getMeta().get("key-type"));
@@ -48,7 +50,8 @@ public class BlobEncodedBlockTest {
     @Test
     public void testAsBytes() {
 	Block block = new BlobEncodedBlock(
-		DigestFactory.getProvider("sha-256"), "null", ByteString
+		DigestFactory.getProvider("sha-256"), CipherFactory
+			.getProvider("null"), ByteString
 		.toUtf8("test"));
 
 	byte[] expect = ByteString.toUtf8("key-type: blob\r\n"
@@ -63,7 +66,8 @@ public class BlobEncodedBlockTest {
     public void test3() {
 	new BlobEncodedBlock(new BlobLocatorKey(HexDecode.decode("912c1323"
 		+ "a2d91e557db3ceade00289b8a4350ed0b336ae25a92dcf75167fe163")),
-		DigestFactory.getProvider("sha-256"), "null",
+		DigestFactory.getProvider("sha-256"), CipherFactory
+			.getProvider("null"),
 		new byte[] { 0x01 });
     }
 }
