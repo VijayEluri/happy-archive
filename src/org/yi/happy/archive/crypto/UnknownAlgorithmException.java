@@ -1,4 +1,4 @@
-package org.yi.happy.archive.key;
+package org.yi.happy.archive.crypto;
 
 /**
  * thrown if an algorithm name is unknown

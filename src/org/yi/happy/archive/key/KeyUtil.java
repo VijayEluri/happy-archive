@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 
 import org.yi.happy.annotate.TypeSwitch;
 import org.yi.happy.archive.ByteString;
+import org.yi.happy.archive.crypto.UnknownAlgorithmException;
 
 /**
  * utility for parsing keys

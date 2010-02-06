@@ -8,8 +8,8 @@ import java.util.Map;
 
 import org.junit.Test;
 import org.yi.happy.archive.ByteString;
-import org.yi.happy.archive.CipherFactory;
-import org.yi.happy.archive.DigestFactory;
+import org.yi.happy.archive.crypto.CipherFactory;
+import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.key.BlobLocatorKey;
 import org.yi.happy.archive.key.HexDecode;
 

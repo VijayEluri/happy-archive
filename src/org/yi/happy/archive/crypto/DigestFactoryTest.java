@@ -1,4 +1,4 @@
-package org.yi.happy.archive;
+package org.yi.happy.archive.crypto;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -7,7 +7,6 @@ import java.security.MessageDigest;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.yi.happy.archive.key.UnknownAlgorithmException;
 
 /**
  * check functioning of {@link DigestFactory}

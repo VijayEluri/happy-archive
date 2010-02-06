@@ -1,4 +1,4 @@
-package org.yi.happy.archive;
+package org.yi.happy.archive.crypto;
 
 /**
  * A pseudo value object representing a cipher algorithm name. If get() is not

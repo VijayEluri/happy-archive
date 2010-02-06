@@ -1,9 +1,8 @@
-package org.yi.happy.archive;
+package org.yi.happy.archive.crypto;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.yi.happy.archive.key.UnknownAlgorithmException;
 
 /**
  * Factory for creating Cypher instances.

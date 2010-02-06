@@ -1,9 +1,8 @@
-package org.yi.happy.archive;
+package org.yi.happy.archive.crypto;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import org.yi.happy.archive.key.UnknownAlgorithmException;
 
 /**
  * simple factory to create message digest objects

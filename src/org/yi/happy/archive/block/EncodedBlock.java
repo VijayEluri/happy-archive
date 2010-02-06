@@ -2,8 +2,8 @@ package org.yi.happy.archive.block;
 
 import java.util.Map;
 
-import org.yi.happy.archive.CipherProvider;
-import org.yi.happy.archive.DigestProvider;
+import org.yi.happy.archive.crypto.CipherProvider;
+import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.LocatorKey;
 

@@ -1,6 +1,6 @@
 package org.yi.happy.archive.key;
 
-import org.yi.happy.archive.DigestProvider;
+import org.yi.happy.archive.crypto.DigestProvider;
 
 /**
  * a name full key

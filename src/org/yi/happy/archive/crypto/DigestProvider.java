@@ -1,8 +1,7 @@
-package org.yi.happy.archive;
+package org.yi.happy.archive.crypto;
 
 import java.security.MessageDigest;
 
-import org.yi.happy.archive.key.UnknownAlgorithmException;
 
 /**
  * A pseudo value object representing a digest algorithm name. If get() is not

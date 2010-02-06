@@ -1,4 +1,4 @@
-package org.yi.happy.archive;
+package org.yi.happy.archive.crypto;
 
 import java.security.MessageDigest;
 

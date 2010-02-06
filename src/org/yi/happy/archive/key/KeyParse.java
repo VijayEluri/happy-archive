@@ -3,7 +3,7 @@ package org.yi.happy.archive.key;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.yi.happy.archive.DigestFactory;
+import org.yi.happy.archive.crypto.DigestFactory;
 
 public class KeyParse {
     private KeyParse() {

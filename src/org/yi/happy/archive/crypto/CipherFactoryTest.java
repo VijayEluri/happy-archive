@@ -1,9 +1,8 @@
-package org.yi.happy.archive;
+package org.yi.happy.archive.crypto;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import org.yi.happy.archive.key.UnknownAlgorithmException;
 
 
 public class CipherFactoryTest {

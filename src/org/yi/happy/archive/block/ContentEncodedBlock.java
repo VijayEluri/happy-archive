@@ -6,15 +6,15 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.yi.happy.archive.BlockParse;
-import org.yi.happy.archive.Cipher;
-import org.yi.happy.archive.CipherProvider;
-import org.yi.happy.archive.DigestProvider;
 import org.yi.happy.archive.UnknownDigestException;
+import org.yi.happy.archive.crypto.Cipher;
+import org.yi.happy.archive.crypto.CipherProvider;
+import org.yi.happy.archive.crypto.DigestProvider;
+import org.yi.happy.archive.crypto.UnknownAlgorithmException;
 import org.yi.happy.archive.key.ContentFullKey;
 import org.yi.happy.archive.key.ContentLocatorKey;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.HexEncode;
-import org.yi.happy.archive.key.UnknownAlgorithmException;
 
 public final class ContentEncodedBlock extends AbstractBlock implements
 	EncodedBlock {

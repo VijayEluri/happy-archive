@@ -5,9 +5,9 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.yi.happy.archive.CipherFactory;
-import org.yi.happy.archive.DigestFactory;
 import org.yi.happy.archive.block.Block;
+import org.yi.happy.archive.crypto.CipherFactory;
+import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.test_data.TestData;
 
 /**

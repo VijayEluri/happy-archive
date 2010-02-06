@@ -1,7 +1,7 @@
 package org.yi.happy.archive.block.encoder;
 
-import org.yi.happy.archive.CipherFactory;
-import org.yi.happy.archive.DigestFactory;
+import org.yi.happy.archive.crypto.CipherFactory;
+import org.yi.happy.archive.crypto.DigestFactory;
 
 /**
  * A factory for common configurations of the block encoder.

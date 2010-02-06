@@ -7,15 +7,15 @@ import java.util.Map;
 
 import org.yi.happy.archive.BlockParse;
 import org.yi.happy.archive.ByteString;
-import org.yi.happy.archive.Cipher;
-import org.yi.happy.archive.CipherProvider;
-import org.yi.happy.archive.DigestProvider;
 import org.yi.happy.archive.UnknownDigestException;
+import org.yi.happy.archive.crypto.Cipher;
+import org.yi.happy.archive.crypto.CipherProvider;
+import org.yi.happy.archive.crypto.DigestProvider;
+import org.yi.happy.archive.crypto.UnknownAlgorithmException;
 import org.yi.happy.archive.key.BlobFullKey;
 import org.yi.happy.archive.key.BlobLocatorKey;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.HexEncode;
-import org.yi.happy.archive.key.UnknownAlgorithmException;
 
 /**
  * A valid blob encoded block.
