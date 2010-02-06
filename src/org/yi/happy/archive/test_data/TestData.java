@@ -7,11 +7,11 @@ import java.lang.reflect.Field;
 import java.net.URL;
 
 import org.yi.happy.annotate.ShouldThrowChecked;
-import org.yi.happy.archive.BlockParse;
-import org.yi.happy.archive.EncodedBlockParse;
 import org.yi.happy.archive.Streams;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.EncodedBlock;
+import org.yi.happy.archive.block.parser.BlockParse;
+import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.KeyParse;
 import org.yi.happy.archive.key.LocatorKey;

@@ -1,4 +1,4 @@
-package org.yi.happy.archive;
+package org.yi.happy.archive.block.parser;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -6,6 +6,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Collections;
 
 import org.junit.Test;
+import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.block.GenericBlock;
 import org.yi.happy.archive.block.GenericBlockTest;
 

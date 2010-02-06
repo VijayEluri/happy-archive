@@ -2,6 +2,8 @@ package org.yi.happy.archive;
 
 import java.io.UnsupportedEncodingException;
 
+import org.yi.happy.archive.block.parser.Range;
+
 /**
  * convert byte arrays to 8 bit strings and back.
  */

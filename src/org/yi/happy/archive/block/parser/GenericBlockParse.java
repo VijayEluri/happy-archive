@@ -1,5 +1,6 @@
-package org.yi.happy.archive;
+package org.yi.happy.archive.block.parser;
 
+import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.block.GenericBlock;
 
 public class GenericBlockParse {

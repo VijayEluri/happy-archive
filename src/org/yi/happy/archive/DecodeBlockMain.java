@@ -7,6 +7,7 @@ import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.EncodedBlock;
+import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
 import org.yi.happy.archive.key.FullKey;

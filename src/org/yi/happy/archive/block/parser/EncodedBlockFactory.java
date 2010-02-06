@@ -1,10 +1,13 @@
-package org.yi.happy.archive;
+package org.yi.happy.archive.block.parser;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.yi.happy.annotate.TypeSwitch;
+import org.yi.happy.archive.ShortBodyException;
+import org.yi.happy.archive.VerifyException;
+import org.yi.happy.archive.VersionNotNumberException;
 import org.yi.happy.archive.block.BlobEncodedBlock;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.ContentEncodedBlock;

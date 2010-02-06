@@ -5,8 +5,8 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.yi.happy.archive.BlockParse;
 import org.yi.happy.archive.UnknownDigestException;
+import org.yi.happy.archive.block.parser.BlockParse;
 import org.yi.happy.archive.crypto.Cipher;
 import org.yi.happy.archive.crypto.CipherProvider;
 import org.yi.happy.archive.crypto.DigestProvider;

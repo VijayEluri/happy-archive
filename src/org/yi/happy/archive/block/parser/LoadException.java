@@ -1,4 +1,4 @@
-package org.yi.happy.archive;
+package org.yi.happy.archive.block.parser;
 
 /**
  * an error loading a block

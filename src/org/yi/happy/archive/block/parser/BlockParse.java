@@ -1,4 +1,4 @@
-package org.yi.happy.archive;
+package org.yi.happy.archive.block.parser;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -12,6 +12,7 @@ import java.util.Arrays;
 
 import org.yi.happy.annotate.ShouldThrowChecked;
 import org.yi.happy.annotate.Simplify;
+import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.GenericBlock;
 

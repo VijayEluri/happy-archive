@@ -1,4 +1,4 @@
-package org.yi.happy.archive;
+package org.yi.happy.archive.block.parser;
 
 public class Range {
     private final int offset;

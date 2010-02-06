@@ -1,8 +1,8 @@
 package org.yi.happy.archive.block.encoder;
 
-import org.yi.happy.archive.EncodedBlockFactory;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.EncodedBlock;
+import org.yi.happy.archive.block.parser.EncodedBlockFactory;
 import org.yi.happy.archive.crypto.Cipher;
 import org.yi.happy.archive.crypto.CipherProvider;
 import org.yi.happy.archive.crypto.DigestProvider;

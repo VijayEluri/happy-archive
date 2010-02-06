@@ -6,6 +6,8 @@ import java.io.Writer;
 import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.EncodedBlock;
+import org.yi.happy.archive.block.parser.BlockParse;
+import org.yi.happy.archive.block.parser.EncodedBlockFactory;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
 
