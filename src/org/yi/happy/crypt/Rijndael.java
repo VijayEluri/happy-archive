@@ -1,7 +1,11 @@
 package org.yi.happy.crypt;
 
 /**
- * an independent implementation from information at
+ * an independent implementation of the Rijndael cipher. This is a highly
+ * optimized for speed version, for all block sizes. This class uses about 11kb
+ * of lookup tables and compiles to a class file about 26kb in size.
+ * 
+ * This implementation was based on information at
  * 
  * http://csrc.nist.gov/CryptoToolkit/aes/rijndael/Rijndael-ammended.pdf
  */
