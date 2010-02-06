@@ -10,7 +10,6 @@ import org.yi.happy.annotate.Simplify;
 import org.yi.happy.archive.Blocks;
 import org.yi.happy.archive.Streams;
 import org.yi.happy.archive.block.Block;
-import org.yi.happy.archive.block.GenericBlock;
 
 @Simplify("loading all the data and parsing in memory is easier and faster, "
 	+ "since stream parsing is not saving memory here")
@@ -38,19 +37,7 @@ public class BlockParse {
      * @return the block
      */
     public static Block parse(byte[] bytes) {
-	GenericBlock block = new GenericBlockParse().parse(bytes);
-	trim: try {
-	    int size = Integer.parseInt(block.getMeta().get("size"));
-	    if (size >= block.getBody().length) {
-		break trim;
-	    }
-	    byte[] body = new byte[size];
-	    System.arraycopy(block.getBody(), 0, body, 0, size);
-	    block.setBody(body);
-	} catch (IllegalArgumentException e) {
-	    // keep what we already had
-	}
-	return block;
+	return new GenericBlockParse().parse(bytes);
     }
 
     /**

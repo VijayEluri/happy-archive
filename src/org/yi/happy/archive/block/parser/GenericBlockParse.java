@@ -8,7 +8,9 @@ import org.yi.happy.archive.block.GenericBlock;
 public class GenericBlockParse {
 
     /**
-     * A very tolerant generic block parser.
+     * A very tolerant generic block parser. If the size header is a
+     * non-negative number less than the size of the data remaining after the
+     * headers are parsed, then the body is trimmed to that size.
      * 
      * @param bytes
      *            the bytes for the block.
@@ -37,6 +39,22 @@ public class GenericBlockParse {
 	    String name = ByteString.fromUtf8(bytes, line.before(divider));
 	    String value = ByteString.fromUtf8(bytes, line.after(divider));
 	    out.addMeta(name, value);
+	}
+
+	trim: try {
+	    String s = out.getMeta().get("size");
+	    if (s == null) {
+		break trim;
+	    }
+
+	    int i = Integer.parseInt(s);
+	    if (i < 0 || i >= rest.getLength()) {
+		break trim;
+	    }
+
+	    rest = new Range(rest.getOffset(), i);
+	} catch (NumberFormatException e) {
+	    break trim;
 	}
 
 	byte[] body = new byte[rest.getLength()];
