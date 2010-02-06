@@ -1,16 +1,15 @@
 package org.yi.happy.archive.block;
 
-import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.yi.happy.archive.BlockParse;
-import org.yi.happy.archive.BlockUtil;
 import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.Cipher;
 import org.yi.happy.archive.CipherProvider;
 import org.yi.happy.archive.DigestProvider;
+import org.yi.happy.archive.Digests;
 import org.yi.happy.archive.VerifyException;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.HexEncode;
@@ -106,9 +105,8 @@ public final class NameEncodedBlock extends AbstractBlock implements
 	 */
 	DigestProvider algo = k.getDigest();
 	byte[] part = ByteString.toUtf8(k.getName());
-	MessageDigest md = algo.get();
 
-	c.setKey(BlockUtil.expandKey(md, part, c.getKeySize()));
+	c.setKey(Digests.expandKey(algo, part, c.getKeySize()));
 
 	/*
 	 * decrypt the body

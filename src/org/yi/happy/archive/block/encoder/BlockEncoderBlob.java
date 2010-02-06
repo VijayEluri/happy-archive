@@ -1,13 +1,9 @@
 package org.yi.happy.archive.block.encoder;
 
-import static org.yi.happy.archive.DigestUtil.digestData;
-
-import java.security.MessageDigest;
-
-import org.yi.happy.archive.BlockUtil;
 import org.yi.happy.archive.Cipher;
 import org.yi.happy.archive.CipherProvider;
 import org.yi.happy.archive.DigestProvider;
+import org.yi.happy.archive.Digests;
 import org.yi.happy.archive.EncodedBlockFactory;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.EncodedBlock;
@@ -31,12 +27,11 @@ public class BlockEncoderBlob implements BlockEncoder {
      */
     public BlockEncoderResult encode(Block block) {
 	byte[] body = block.asBytes();
-	MessageDigest d = digest.get();
 
-	byte[] ph = digestData(body, d);
+	byte[] ph = Digests.digestData(digest, body);
 
 	Cipher c = cipher.get();
-	byte[] key = BlockUtil.expandKey(d, ph, c.getKeySize());
+	byte[] key = Digests.expandKey(digest, ph, c.getKeySize());
 	c.setKey(key);
 
 	body = pad(body, c.getBlockSize());
