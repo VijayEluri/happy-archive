@@ -14,8 +14,6 @@ public class CipherRijndael implements Cipher {
 
     private final int ks;
 
-    private final String algorithm;
-
     /**
      * create with the given block size and key size
      * 
@@ -24,8 +22,7 @@ public class CipherRijndael implements Cipher {
      * @param ks
      *            the key size
      */
-    public CipherRijndael(String algorithm, int bs, int ks) {
-	this.algorithm = algorithm;
+    public CipherRijndael(int bs, int ks) {
 	this.bs = bs;
 	this.ks = ks;
 	instance = new Rijndael(bs, ks);
@@ -50,10 +47,5 @@ public class CipherRijndael implements Cipher {
 
     public void encrypt(byte[] data) {
 	instance.encryptCbc(data, iv);
-    }
-
-    @Override
-    public String getAlgorithm() {
-	return algorithm;
     }
 }

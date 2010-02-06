@@ -18,7 +18,8 @@ public class BlockEncoderContentTest {
 	Block in = TestData.CLEAR_CONTENT.getBlock();
 
 	BlockEncoder e = new BlockEncoderContent(DigestFactory
-		.create("sha-256"), CipherFactory.create("rijndael256-256-cbc"));
+		.getProvider("sha-256"), CipherFactory
+		.getProvider("rijndael256-256-cbc"));
 
 	BlockEncoderResult out = e.encode(in);
 

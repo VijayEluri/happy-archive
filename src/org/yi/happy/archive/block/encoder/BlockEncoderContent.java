@@ -4,6 +4,8 @@ import java.security.MessageDigest;
 
 import org.yi.happy.archive.BlockUtil;
 import org.yi.happy.archive.Cipher;
+import org.yi.happy.archive.CipherProvider;
+import org.yi.happy.archive.DigestProvider;
 import org.yi.happy.archive.DigestUtil;
 import org.yi.happy.archive.EncodedBlockFactory;
 import org.yi.happy.archive.block.Block;
@@ -14,7 +16,7 @@ import org.yi.happy.archive.key.ContentFullKey;
  * A block encoder for content hash blocks.
  */
 public class BlockEncoderContent implements BlockEncoder {
-    public BlockEncoderContent(MessageDigest digest, Cipher cipher) {
+    public BlockEncoderContent(DigestProvider digest, CipherProvider cipher) {
 	this.digest = digest;
 	this.cipher = cipher;
     }
@@ -22,12 +24,12 @@ public class BlockEncoderContent implements BlockEncoder {
     /**
      * the digest to use
      */
-    private final MessageDigest digest;
+    private final DigestProvider digest;
 
     /**
      * the cipher to use
      */
-    private final Cipher cipher;
+    private final CipherProvider cipher;
 
     /**
      * encode a content hash block
@@ -39,16 +41,18 @@ public class BlockEncoderContent implements BlockEncoder {
     public BlockEncoderResult encode(Block block) {
 	byte[] body = block.asBytes();
 
-	byte[] ph = DigestUtil.digestData(body, digest);
+	MessageDigest d = digest.get();
+	byte[] ph = DigestUtil.digestData(body, d);
 
-	byte[] key = BlockUtil.expandKey(digest, ph, cipher.getKeySize());
-	cipher.setKey(key);
+	Cipher c = cipher.get();
+	byte[] key = BlockUtil.expandKey(d, ph, c.getKeySize());
+	c.setKey(key);
 
-	body = pad(body, cipher.getBlockSize());
-	cipher.encrypt(body);
+	body = pad(body, c.getBlockSize());
+	c.encrypt(body);
 
-	EncodedBlock out = EncodedBlockFactory.createContent(digest
-		.getAlgorithm(), cipher.getAlgorithm(), body);
+	EncodedBlock out = EncodedBlockFactory.createContent(digest, cipher,
+		body);
 
 	ContentFullKey fullKey = new ContentFullKey(out.getKey().getHash(), key);
 

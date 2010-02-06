@@ -21,8 +21,9 @@ public class BlockEncoderBlobTest {
     public void testContentEncode() {
 	Block in = TestData.CLEAR_CONTENT.getBlock();
 
-	BlockEncoder e = new BlockEncoderBlob(DigestFactory.create("sha-256"),
-		CipherFactory.create("rijndael256-256-cbc"));
+	BlockEncoder e = new BlockEncoderBlob(DigestFactory
+		.getProvider("sha-256"), CipherFactory
+		.getProvider("rijndael256-256-cbc"));
 	BlockEncoderResult r = e.encode(in);
 	Block out = r.getBlock();
 
@@ -38,8 +39,8 @@ public class BlockEncoderBlobTest {
     public void testEncodeNonDefault() {
 	Block in = TestData.CLEAR_CONTENT.getBlock();
 
-	BlockEncoder be = new BlockEncoderBlob(DigestFactory.create("sha-1"),
-		CipherFactory.create("aes-192-cbc"));
+	BlockEncoder be = new BlockEncoderBlob(DigestFactory
+		.getProvider("sha-1"), CipherFactory.getProvider("aes-192-cbc"));
 	BlockEncoderResult r = be.encode(in);
 	Block have = r.getBlock();
 
@@ -56,8 +57,9 @@ public class BlockEncoderBlobTest {
     public void testEncodeDefault() {
 	Block in = TestData.CLEAR_CONTENT.getBlock();
 
-	BlockEncoder be = new BlockEncoderBlob(DigestFactory.create("sha-256"),
-		CipherFactory.create("aes-128-cbc"));
+	BlockEncoder be = new BlockEncoderBlob(DigestFactory
+		.getProvider("sha-256"), CipherFactory
+		.getProvider("aes-128-cbc"));
 	BlockEncoderResult r = be.encode(in);
 	Block have = r.getBlock();
 

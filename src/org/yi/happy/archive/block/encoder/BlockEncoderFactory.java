@@ -14,7 +14,7 @@ public class BlockEncoderFactory {
      *         rijndael256-256-cbc.
      */
     public static BlockEncoder getContentDefault() {
-	return new BlockEncoderContent(DigestFactory.create("sha-256"),
-		CipherFactory.create("rijndael256-256-cbc"));
+	return new BlockEncoderContent(DigestFactory.getProvider("sha-256"),
+		CipherFactory.getProvider("rijndael256-256-cbc"));
     }
 }

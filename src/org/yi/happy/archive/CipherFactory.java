@@ -24,7 +24,7 @@ public class CipherFactory {
 		.matcher(name);
 	if (m.matches()) {
 	    int ks = Integer.parseInt(m.group(2)) / 8;
-	    return new CipherRijndael(name, 16, ks);
+	    return new CipherRijndael(16, ks);
 	}
 
 	m = Pattern.compile("rijndael(192|256)-(128|192|256)-cbc")
@@ -32,7 +32,7 @@ public class CipherFactory {
 	if (m.matches()) {
 	    int bs = Integer.parseInt(m.group(1)) / 8;
 	    int ks = Integer.parseInt(m.group(2)) / 8;
-	    return new CipherRijndael(name, bs, ks);
+	    return new CipherRijndael(bs, ks);
 	}
 
 	throw new UnknownAlgorithmException(name);

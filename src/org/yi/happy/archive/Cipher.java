@@ -40,11 +40,4 @@ public interface Cipher {
      *            the blocks to encrypt
      */
     void encrypt(byte[] data);
-
-    /**
-     * get the name of the algorithm.
-     * 
-     * @return the name of the algorithm.
-     */
-    String getAlgorithm();
 }

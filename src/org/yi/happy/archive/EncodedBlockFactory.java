@@ -18,21 +18,18 @@ import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.key.NameLocatorKey;
 
 public class EncodedBlockFactory {
-    public static BlobEncodedBlock create(String digest, String cipher,
-	    byte[] body) {
+    public static BlobEncodedBlock create(DigestProvider digest,
+	    CipherProvider cipher, byte[] body) {
 	cipher = normalizeCipherName(cipher);
 
-	return new BlobEncodedBlock(DigestFactory.getProvider(digest),
-		CipherFactory.getProvider(cipher),
-		body);
+	return new BlobEncodedBlock(digest, cipher, body);
     }
 
     public static NameEncodedBlock createName(NameLocatorKey key,
-	    String digest, String cipher, byte[] body) {
+	    DigestProvider digest, CipherProvider cipher, byte[] body) {
 	cipher = normalizeCipherName(cipher);
 
-	return new NameEncodedBlock(key, DigestFactory.getProvider(digest),
-		CipherFactory.getProvider(cipher), body);
+	return new NameEncodedBlock(key, digest, cipher, body);
     }
 
     private static String normalizeCipherName(String cipher) {
@@ -42,6 +39,20 @@ public class EncodedBlockFactory {
 	}
 
 	return cipher;
+    }
+
+    private static CipherProvider normalizeCipherName(
+	    final CipherProvider cipher) {
+	String c = normalizeCipherName(cipher.getAlgorithm());
+	if (c.equals(cipher.getAlgorithm())) {
+	    return cipher;
+	}
+	return new CipherProvider(c) {
+	    @Override
+	    public Cipher get() {
+		return cipher.get();
+	    }
+	};
     }
 
     @TypeSwitch
@@ -212,12 +223,11 @@ public class EncodedBlockFactory {
 	return value;
     }
 
-    public static ContentEncodedBlock createContent(String digest,
-	    String cipher, byte[] body) {
+    public static ContentEncodedBlock createContent(DigestProvider digest,
+	    CipherProvider cipher, byte[] body) {
 	cipher = normalizeCipherName(cipher);
 
-	return new ContentEncodedBlock(DigestFactory.getProvider(digest),
-		CipherFactory.getProvider(cipher), body);
+	return new ContentEncodedBlock(digest, cipher, body);
     }
 
     /**
