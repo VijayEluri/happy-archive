@@ -38,7 +38,7 @@ public abstract class CipherProvider {
 	    return true;
 	if (obj == null)
 	    return false;
-	if (getClass() != obj.getClass())
+	if (!(obj instanceof CipherProvider))
 	    return false;
 	CipherProvider other = (CipherProvider) obj;
 	if (algorithm == null) {

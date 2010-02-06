@@ -46,7 +46,7 @@ public abstract class DigestProvider {
 	    return true;
 	if (obj == null)
 	    return false;
-	if (getClass() != obj.getClass())
+	if (!(obj instanceof DigestProvider))
 	    return false;
 	DigestProvider other = (DigestProvider) obj;
 	if (algorithm == null) {
