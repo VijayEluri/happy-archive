@@ -1,5 +1,10 @@
 package org.yi.happy.archive;
 
+/**
+ * A pseudo value object representing a cipher algorithm name. If get() is not
+ * called then this is a value object, and implementations should honor this
+ * property.
+ */
 public abstract class CipherProvider {
     /**
      * get the implementation of this cipher.

@@ -18,6 +18,7 @@ public class DigestFactory {
      * @throws UnknownAlgorithmException
      *             if the algorithm is unknown
      */
+    @Deprecated
     public static MessageDigest create(String algorithm) {
 	try {
 	    return MessageDigest.getInstance(algorithm);
@@ -30,7 +31,11 @@ public class DigestFactory {
 	return new DigestProvider(algorithm) {
 	    @Override
 	    public MessageDigest get() throws UnknownAlgorithmException {
-		return create(algorithm);
+		try {
+		    return MessageDigest.getInstance(algorithm);
+		} catch (NoSuchAlgorithmException e) {
+		    throw new UnknownAlgorithmException(algorithm, e);
+		}
 	    }
 	};
     }

@@ -4,6 +4,11 @@ import java.security.MessageDigest;
 
 import org.yi.happy.archive.key.UnknownAlgorithmException;
 
+/**
+ * A pseudo value object representing a digest algorithm name. If get() is not
+ * called then this is a value object, and implementations should honor this
+ * property.
+ */
 public abstract class DigestProvider {
     protected final String algorithm;
 
