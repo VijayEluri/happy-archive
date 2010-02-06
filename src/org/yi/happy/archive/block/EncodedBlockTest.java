@@ -2,6 +2,7 @@ package org.yi.happy.archive.block;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -153,11 +154,12 @@ public class EncodedBlockTest {
     }
 
     /**
-     * decode a new content block with the wrong pass
+     * decode a new content block with the wrong pass, the resulting block will
+     * be able to be parsed but will be nonsense.
      * 
      * @throws IOException
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testContentDecodeBadKey() throws IOException {
 	EncodedBlock b = TestData.KEY_CONTENT.getEncodedBlock();
 
@@ -165,7 +167,9 @@ public class EncodedBlockTest {
 		+ "4ea801c8eb227b8b218a0659c18ece76b7c200c645ab4364becf"
 		+ "68d5:f6bd9f3b01b4ee40f60df2dc622f9d6f3aa38a5673a87e8"
 		+ "20b40164e930edead");
-	b.decode(key);
+	Block c = b.decode(key);
+
+	assertFalse(TestData.CLEAR_CONTENT.getBlock().equals(c));
     }
 
     /**
@@ -188,13 +192,21 @@ public class EncodedBlockTest {
 	assertEquals(want, have);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    /**
+     * Decode a name encoded block using the wrong key, with the new tolerant
+     * parser the resulting block will parse but will be nonsense.
+     * 
+     * @throws IOException
+     */
+    @Test
     public void testNameDecodeBad() throws IOException {
 	EncodedBlock b = TestData.KEY_NAME.getEncodedBlock();
 
 	NameFullKey k = new NameFullKey(DigestFactory.getProvider("sha-256"),
 		"test2");
-	b.decode(k);
+	Block c = b.decode(k);
+
+	assertFalse(TestData.CLEAR_CONTENT.getBlock().equals(c));
     }
 
     @Test

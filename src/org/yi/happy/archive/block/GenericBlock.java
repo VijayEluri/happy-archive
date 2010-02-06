@@ -73,23 +73,14 @@ public class GenericBlock extends AbstractBlock implements Block {
      *             if a header by this name was already added.
      */
     public void addMeta(String name, String value) {
-	if (name.contains(": ")) {
-	    throw new IllegalArgumentException("name may not contain ': '");
-	}
 	for (int i = 0; i < name.length(); i++) {
 	    char c = name.charAt(i);
-	    if (c > 0x7f || c < 1 || c == 0x0d || c == 0x0a) {
-		throw new IllegalArgumentException("bad character in name: "
-			+ (int) c);
+	    if (c == ':' || c == '\r' || c == '\n') {
+		throw new IllegalArgumentException(
+			"name can not have ':' or newline");
 	    }
 	}
-	for (int i = 0; i < value.length(); i++) {
-	    char c = value.charAt(i);
-	    if (c > 0x7f || c < 1 || c == 0x0d || c == 0x0a) {
-		throw new IllegalArgumentException("bad character in value: "
-			+ (int) c);
-	    }
-	}
+	checkValue(value);
 
 	if (meta.containsKey(name)) {
 	    throw new IllegalArgumentException("already have header: " + name);
@@ -153,8 +144,8 @@ public class GenericBlock extends AbstractBlock implements Block {
     public static void checkValue(String value) {
 	for (int i = 0; i < value.length(); i++) {
 	    char c = value.charAt(i);
-	    if (c > 0x7f || c < 1 || c == 0x0d || c == 0x0a) {
-		throw new VerifyException("bad character in value: " + (int) c);
+	    if (c == '\r' || c == '\n') {
+		throw new VerifyException("value can not have newline");
 	    }
 	}
     }
