@@ -77,8 +77,29 @@ public class ByteString {
      *             if UTF-8 encoding is not supported.
      */
     public static String fromUtf8(byte[] data) {
+	return fromUtf8(data, 0, data.length);
+    }
+
+    public static String fromUtf8(byte[] data, Range range) {
+	return fromUtf8(data, range.getOffset(), range.getLength());
+    }
+
+    /**
+     * convert UTF-8 to a string.
+     * 
+     * @param data
+     *            the UTF-8 encoded string.
+     * @param offset
+     *            where in the data array the string starts.
+     * @param length
+     *            how long the string is in the data array.
+     * @return the string.
+     * @throws Utf8NotSupportedError
+     *             if UTF-8 encoding is not supported.
+     */
+    public static String fromUtf8(byte[] data, int offset, int length) {
 	try {
-	    return new String(data, "UTF-8");
+	    return new String(data, offset, length, "UTF-8");
 	} catch (UnsupportedEncodingException e) {
 	    throw new Utf8NotSupportedError(e);
 	}
