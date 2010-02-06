@@ -4,13 +4,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Map;
 
-import org.yi.happy.archive.Blocks;
 import org.yi.happy.archive.ByteString;
 
 /**
  * The part that is common for all the block types.
  */
 public abstract class AbstractBlock implements Block {
+    private byte[] ENDL = new byte[] { '\r', '\n' };
+    private byte[] SEPARATOR = new byte[] { ':', ' ' };
+
     /**
      * get the block representation as bytes, assuming all the meta entries are
      * valid and the body is not null.
@@ -24,15 +26,14 @@ public abstract class AbstractBlock implements Block {
 	try {
 	    ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-	    byte[] endl = Blocks.getEndl();
-
 	    for (Map.Entry<String, String> i : getMeta().entrySet()) {
-		String l = i.getKey() + ": " + i.getValue();
-		out.write(ByteString.toUtf8(l));
-		out.write(endl);
+		out.write(ByteString.toUtf8(i.getKey()));
+		out.write(SEPARATOR);
+		out.write(ByteString.toUtf8(i.getValue()));
+		out.write(ENDL);
 	    }
 
-	    out.write(endl);
+	    out.write(ENDL);
 
 	    out.write(getBody());
 
