@@ -72,11 +72,6 @@ public class EncodedBlockTest {
     }
 
     @Test
-    public void testBlob() {
-	// TODO blob key
-    }
-
-    @Test
     public void testName2() {
 	TestData d = TestData.KEY_NAME;
 	Block b = d.getBlock();
