@@ -21,6 +21,9 @@ public class GenericBlockParse {
 
 	Range rest = new Range(0, bytes.length);
 
+	/*
+	 * parse the headers
+	 */
 	while (true) {
 	    Range endOfLine = findEndOfLine(bytes, rest);
 	    Range line = rest.before(endOfLine);
@@ -41,6 +44,9 @@ public class GenericBlockParse {
 	    out.addMeta(name, value);
 	}
 
+	/*
+	 * trim the body if the size header is valid.
+	 */
 	trim: try {
 	    String s = out.getMeta().get("size");
 	    if (s == null) {
@@ -57,6 +63,9 @@ public class GenericBlockParse {
 	    break trim;
 	}
 
+	/*
+	 * copy the body out of the buffer.
+	 */
 	byte[] body = new byte[rest.getLength()];
 	System.arraycopy(bytes, rest.getOffset(), body, 0, rest.getLength());
 	out.setBody(body);
