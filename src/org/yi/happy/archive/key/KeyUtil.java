@@ -1,7 +1,6 @@
 package org.yi.happy.archive.key;
 
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 import org.yi.happy.annotate.TypeSwitch;
 import org.yi.happy.archive.ByteString;
@@ -18,7 +17,9 @@ public class KeyUtil {
      * @return a locator key
      */
     @TypeSwitch
-    public static LocatorKey toLocatorKey(Key key) {
+    // TODO move into key types
+    public static LocatorKey toLocatorKey(Key key)
+	    throws UnknownAlgorithmException {
 	if (key instanceof LocatorKey) {
 	    return (LocatorKey) key;
 	}
@@ -36,13 +37,7 @@ public class KeyUtil {
 	if (key instanceof NameFullKey) {
 	    NameFullKey k = (NameFullKey) key;
 
-	    String algorithm = k.getDigest();
-	    MessageDigest md;
-	    try {
-		md = MessageDigest.getInstance(algorithm);
-	    } catch (NoSuchAlgorithmException e) {
-		throw new UnknownAlgorithmException(algorithm, e);
-	    }
+	    MessageDigest md = k.getDigest().get();
 	    md.update(ByteString.toUtf8(k.getName()));
 	    return new NameLocatorKey(md.digest());
 	}

@@ -10,7 +10,6 @@ import org.yi.happy.archive.BlockUtil;
 import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.Cipher;
 import org.yi.happy.archive.CipherFactory;
-import org.yi.happy.archive.DigestFactory;
 import org.yi.happy.archive.DigestProvider;
 import org.yi.happy.archive.VerifyException;
 import org.yi.happy.archive.key.FullKey;
@@ -68,8 +67,8 @@ public final class NameEncodedBlock extends AbstractBlock implements
 	return hash.clone();
     }
 
-    public String getDigest() {
-	return digest.getAlgorithm();
+    public DigestProvider getDigest() {
+	return digest;
     }
 
     public String getCipher() {
@@ -107,9 +106,9 @@ public final class NameEncodedBlock extends AbstractBlock implements
 	/*
 	 * get the key from the name
 	 */
-	String algo = k.getDigest();
+	DigestProvider algo = k.getDigest();
 	byte[] part = ByteString.toUtf8(k.getName());
-	MessageDigest md = DigestFactory.create(algo);
+	MessageDigest md = algo.get();
 
 	c.setKey(BlockUtil.expandKey(md, part, c.getKeySize()));
 

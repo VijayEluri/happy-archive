@@ -57,8 +57,8 @@ public final class ContentEncodedBlock extends AbstractBlock implements
 	return key;
     }
 
-    public String getDigest() {
-	return digest.getAlgorithm();
+    public DigestProvider getDigest() {
+	return digest;
     }
 
     public String getCipher() {

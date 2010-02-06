@@ -40,8 +40,8 @@ public final class NameFullKey implements FullKey {
     /**
      * @return the digest to use
      */
-    public String getDigest() {
-	return digest.getAlgorithm();
+    public DigestProvider getDigest() {
+	return digest;
     }
 
     /**

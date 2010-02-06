@@ -28,7 +28,7 @@ public class EncodedBlockTest {
 
 	assertEquals(d.getLocatorKey(), e.getKey());
 	assertEquals("rijndael256-256-cbc", e.getCipher());
-	assertEquals("sha-256", e.getDigest());
+	assertEquals("sha-256", e.getDigest().getAlgorithm());
 	assertArrayEquals(b.getBody(), e.getBody());
     }
 
@@ -41,7 +41,7 @@ public class EncodedBlockTest {
 
 	assertEquals(d.getLocatorKey(), e.getKey());
 	assertEquals("rijndael256-256-cbc", e.getCipher());
-	assertEquals("sha-256", e.getDigest());
+	assertEquals("sha-256", e.getDigest().getAlgorithm());
 	assertArrayEquals(b.getBody(), e.getBody());
     }
 
@@ -54,7 +54,7 @@ public class EncodedBlockTest {
 
 	assertEquals(d.getLocatorKey(), e.getKey());
 	assertEquals("aes-128-cbc", e.getCipher());
-	assertEquals("sha-256", e.getDigest());
+	assertEquals("sha-256", e.getDigest().getAlgorithm());
 	assertArrayEquals(b.getBody(), e.getBody());
     }
 
@@ -67,7 +67,7 @@ public class EncodedBlockTest {
 
 	assertEquals(d.getLocatorKey(), e.getKey());
 	assertEquals("rijndael-128-cbc", e.getCipher());
-	assertEquals("sha-256", e.getDigest());
+	assertEquals("sha-256", e.getDigest().getAlgorithm());
 	assertArrayEquals(b.getBody(), e.getBody());
     }
 

@@ -19,7 +19,7 @@ public class KeyParseTest {
 
 	NameFullKey n = (NameFullKey) k;
 
-	assertEquals("sha-256", n.getDigest());
+	assertEquals("sha-256", n.getDigest().getAlgorithm());
 	assertEquals("test", n.getName());
     }
 
