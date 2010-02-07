@@ -176,13 +176,11 @@ public class SplitReaderTest {
 
     private static final TestData C1 = TestData.KEY_CONTENT_1;
 
-    private static final Bytes B1 = new Bytes(new byte[] { '0', '1', '2', '3',
-	    '4' });
+    private static final Bytes B1 = new Bytes('0', '1', '2', '3', '4');
 
     private static final TestData C2 = TestData.KEY_CONTENT_2;
 
-    private static final Bytes B2 = new Bytes(new byte[] { '5', '6', '7', '8',
-	    '9' });
+    private static final Bytes B2 = new Bytes('5', '6', '7', '8', '9');
 
     /**
      * check that the completed state is right.

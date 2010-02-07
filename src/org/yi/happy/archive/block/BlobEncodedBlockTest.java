@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
+import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.Base16;
 import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.Bytes;
@@ -16,7 +17,6 @@ import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.key.BlobLocatorKey;
 
-
 public class BlobEncodedBlockTest {
     private static final DigestProvider SHA256 = DigestFactory
 	    .getProvider("sha-256");
@@ -24,8 +24,7 @@ public class BlobEncodedBlockTest {
     private static final CipherProvider NULL = CipherFactory
 	    .getProvider("null");
 
-    private static final Bytes TEST = new Bytes(
-	    new byte[] { 't', 'e', 's', 't' });
+    private static final Bytes TEST = new Bytes('t', 'e', 's', 't');
 
     private static final String HASH = "321f47896a9ae31c24d307120f273668"
 	    + "6d3258d55a4c3890a35ec594049bd49d";
@@ -53,6 +52,7 @@ public class BlobEncodedBlockTest {
      * Create with full detail.
      */
     @Test
+    @SmellsMessy
     public void test2() {
 	Block block = new BlobEncodedBlock(new BlobLocatorKey(new Bytes(Base16
 		.decode(HASH))), SHA256, NULL, TEST);
@@ -83,9 +83,9 @@ public class BlobEncodedBlockTest {
      * Create with inconsistant details.
      */
     @Test(expected = IllegalArgumentException.class)
+    @SmellsMessy
     public void test3() {
 	new BlobEncodedBlock(new BlobLocatorKey(new Bytes(Base16
-		.decode(BAD_HASH))),
-		SHA256, NULL, TEST);
+		.decode(BAD_HASH))), SHA256, NULL, TEST);
     }
 }
