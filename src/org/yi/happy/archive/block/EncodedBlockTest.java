@@ -12,8 +12,8 @@ import org.yi.happy.archive.ShortBodyException;
 import org.yi.happy.archive.VerifyException;
 import org.yi.happy.archive.block.parser.EncodedBlockFactory;
 import org.yi.happy.archive.crypto.DigestFactory;
+import org.yi.happy.archive.key.Base16;
 import org.yi.happy.archive.key.FullKey;
-import org.yi.happy.archive.key.HexDecode;
 import org.yi.happy.archive.key.KeyParse;
 import org.yi.happy.archive.key.NameFullKey;
 import org.yi.happy.archive.test_data.TestData;
@@ -81,8 +81,8 @@ public class EncodedBlockTest {
 	assertEquals(d.getLocatorKey(), e.getKey());
 	assertEquals("rijndael256-256-cbc", e.getCipher().getAlgorithm());
 	assertEquals(b.getBody(), e.getBody());
-	byte[] hash = HexDecode.decode("b73aaf8748cfe48edd270d01517ef5556d0"
-		+ "3242af41ca58208c840c82e78651a");
+	byte[] hash = Base16.decode(("b73aaf8748cfe48edd270d01517ef5556d0"
+	+ "3242af41ca58208c840c82e78651a"));
 	assertArrayEquals(hash, e.getHash());
     }
 

@@ -2,7 +2,7 @@ package org.yi.happy.crypt;
 
 import java.io.PrintStream;
 
-import org.yi.happy.archive.key.HexEncode;
+import org.yi.happy.archive.key.Base16;
 
 public class EcbEncryptMonteCarlo {
     private static PrintStream out;
@@ -60,7 +60,7 @@ public class EcbEncryptMonteCarlo {
     }
 
     private static void record(String string, byte[] bytes) {
-	out.println(string + "=" + HexEncode.encode(bytes).toUpperCase());
+	out.println(string + "=" + Base16.encode(bytes).toUpperCase());
     }
 
     private static void record(String string, int i) {

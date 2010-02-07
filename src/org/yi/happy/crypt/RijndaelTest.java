@@ -2,7 +2,7 @@ package org.yi.happy.crypt;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.yi.happy.archive.key.HexDecode;
+import org.yi.happy.archive.key.Base16;
 
 /**
  * test encryption and decryption of Rijndael, this test data comes from the old
@@ -24,9 +24,9 @@ public class RijndaelTest extends Assert {
     public void testEncrypt128() {
 	Rijndael r = new Rijndael(16, 16);
 
-	byte[] key = HexDecode.decode(KEY128);
-	byte[] have = HexDecode.decode(CLEAR128X2);
-	byte[] want = HexDecode.decode(ECB128X2);
+	byte[] key = Base16.decode(KEY128);
+	byte[] have = Base16.decode(CLEAR128X2);
+	byte[] want = Base16.decode(ECB128X2);
 
 	r.setKey(key);
 	r.encryptEcb(have);
@@ -41,9 +41,9 @@ public class RijndaelTest extends Assert {
     public void testDecrypt128() {
 	Rijndael r = new Rijndael(16, 16);
 
-	byte[] key = HexDecode.decode(KEY128);
-	byte[] want = HexDecode.decode(CLEAR128X2);
-	byte[] have = HexDecode.decode(ECB128X2);
+	byte[] key = Base16.decode(KEY128);
+	byte[] want = Base16.decode(CLEAR128X2);
+	byte[] have = Base16.decode(ECB128X2);
 
 	r.setKey(key);
 	r.decryptEcb(have);
@@ -65,9 +65,9 @@ public class RijndaelTest extends Assert {
      */
     @Test
     public void testEncrypt192() {
-	byte[] key = HexDecode.decode(KEY192);
-	byte[] have = HexDecode.decode(CLEAR192X2);
-	byte[] want = HexDecode.decode(ECB192X2);
+	byte[] key = Base16.decode(KEY192);
+	byte[] have = Base16.decode(CLEAR192X2);
+	byte[] want = Base16.decode(ECB192X2);
 
 	Rijndael r = new Rijndael(24, 24);
 	r.setKey(key);
@@ -81,9 +81,9 @@ public class RijndaelTest extends Assert {
      */
     @Test
     public void testDecrypt192() {
-	byte[] key = HexDecode.decode(KEY192);
-	byte[] have = HexDecode.decode(ECB192X2);
-	byte[] want = HexDecode.decode(CLEAR192X2);
+	byte[] key = Base16.decode(KEY192);
+	byte[] have = Base16.decode(ECB192X2);
+	byte[] want = Base16.decode(CLEAR192X2);
 
 	Rijndael r = new Rijndael(24, 24);
 	r.setKey(key);
@@ -107,9 +107,9 @@ public class RijndaelTest extends Assert {
      */
     @Test
     public void testEncrypt256() {
-	byte[] key = HexDecode.decode(KEY256);
-	byte[] have = HexDecode.decode(CLEAR256X2);
-	byte[] want = HexDecode.decode(ECB256X2);
+	byte[] key = Base16.decode(KEY256);
+	byte[] have = Base16.decode(CLEAR256X2);
+	byte[] want = Base16.decode(ECB256X2);
 
 	Rijndael r = new Rijndael(32, 32);
 	r.setKey(key);
@@ -123,9 +123,9 @@ public class RijndaelTest extends Assert {
      */
     @Test
     public void testDecrypt256() {
-	byte[] key = HexDecode.decode(KEY256);
-	byte[] have = HexDecode.decode(ECB256X2);
-	byte[] want = HexDecode.decode(CLEAR256X2);
+	byte[] key = Base16.decode(KEY256);
+	byte[] have = Base16.decode(ECB256X2);
+	byte[] want = Base16.decode(CLEAR256X2);
 
 	Rijndael r = new Rijndael(32, 32);
 	r.setKey(key);
@@ -142,9 +142,9 @@ public class RijndaelTest extends Assert {
      */
     @Test
     public void testEncrypt128Cbc() {
-	byte[] key = HexDecode.decode(KEY128);
-	byte[] have = HexDecode.decode(CLEAR128X2);
-	byte[] want = HexDecode.decode(CBC128X2);
+	byte[] key = Base16.decode(KEY128);
+	byte[] have = Base16.decode(CLEAR128X2);
+	byte[] want = Base16.decode(CBC128X2);
 	byte[] iv = new byte[16];
 
 	Rijndael r = new Rijndael(16, 16);
@@ -159,9 +159,9 @@ public class RijndaelTest extends Assert {
      */
     @Test
     public void testDecrypt128Cbc() {
-	byte[] key = HexDecode.decode(KEY128);
-	byte[] have = HexDecode.decode(CBC128X2);
-	byte[] want = HexDecode.decode(CLEAR128X2);
+	byte[] key = Base16.decode(KEY128);
+	byte[] have = Base16.decode(CBC128X2);
+	byte[] want = Base16.decode(CLEAR128X2);
 	byte[] iv = new byte[16];
 
 	Rijndael r = new Rijndael(16, 16);
@@ -180,9 +180,9 @@ public class RijndaelTest extends Assert {
      */
     @Test
     public void testEncrypt192Cbc() {
-	byte[] key = HexDecode.decode(KEY192);
-	byte[] have = HexDecode.decode(CLEAR192X2);
-	byte[] want = HexDecode.decode(CBC192X2);
+	byte[] key = Base16.decode(KEY192);
+	byte[] have = Base16.decode(CLEAR192X2);
+	byte[] want = Base16.decode(CBC192X2);
 	byte[] iv = new byte[24];
 
 	Rijndael r = new Rijndael(24, 24);
@@ -197,9 +197,9 @@ public class RijndaelTest extends Assert {
      */
     @Test
     public void testDecrypt192Cbc() {
-	byte[] key = HexDecode.decode(KEY192);
-	byte[] have = HexDecode.decode(CBC192X2);
-	byte[] want = HexDecode.decode(CLEAR192X2);
+	byte[] key = Base16.decode(KEY192);
+	byte[] have = Base16.decode(CBC192X2);
+	byte[] want = Base16.decode(CLEAR192X2);
 	byte[] iv = new byte[24];
 
 	Rijndael r = new Rijndael(24, 24);
@@ -219,9 +219,9 @@ public class RijndaelTest extends Assert {
      */
     @Test
     public void testEncrypt256Cbc() {
-	byte[] key = HexDecode.decode(KEY256);
-	byte[] have = HexDecode.decode(CLEAR256X2);
-	byte[] want = HexDecode.decode(CBC256X2);
+	byte[] key = Base16.decode(KEY256);
+	byte[] have = Base16.decode(CLEAR256X2);
+	byte[] want = Base16.decode(CBC256X2);
 	byte[] iv = new byte[32];
 
 	Rijndael r = new Rijndael(32, 32);
@@ -236,9 +236,9 @@ public class RijndaelTest extends Assert {
      */
     @Test
     public void testDecrypt256Cbc() {
-	byte[] key = HexDecode.decode(KEY256);
-	byte[] have = HexDecode.decode(CBC256X2);
-	byte[] want = HexDecode.decode(CLEAR256X2);
+	byte[] key = Base16.decode(KEY256);
+	byte[] have = Base16.decode(CBC256X2);
+	byte[] want = Base16.decode(CLEAR256X2);
 	byte[] iv = new byte[32];
 
 	Rijndael r = new Rijndael(32, 32);

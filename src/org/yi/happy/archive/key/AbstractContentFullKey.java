@@ -58,8 +58,8 @@ public abstract class AbstractContentFullKey {
     }
 
     public String toString() {
-	return getType() + ":" + HexEncode.encode(hash) + ":"
-		+ HexEncode.encode(pass);
+	return getType() + ":" + Base16.encode(hash) + ":"
+		+ Base16.encode(pass);
     }
 
 }

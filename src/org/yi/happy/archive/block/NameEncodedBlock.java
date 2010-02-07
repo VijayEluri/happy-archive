@@ -12,8 +12,8 @@ import org.yi.happy.archive.crypto.Cipher;
 import org.yi.happy.archive.crypto.CipherProvider;
 import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.crypto.Digests;
+import org.yi.happy.archive.key.Base16;
 import org.yi.happy.archive.key.FullKey;
-import org.yi.happy.archive.key.HexEncode;
 import org.yi.happy.archive.key.NameFullKey;
 import org.yi.happy.archive.key.NameLocatorKey;
 
@@ -82,8 +82,8 @@ public final class NameEncodedBlock extends AbstractBlock implements
 	Map<String, String> out = new LinkedHashMap<String, String>();
 	out.put("version", "2");
 	out.put("key-type", key.getType());
-	out.put("key", HexEncode.encode(key.getHash()));
-	out.put("hash", HexEncode.encode(hash));
+	out.put("key", Base16.encode(key.getHash()));
+	out.put("hash", Base16.encode(hash));
 	out.put("digest", digest.getAlgorithm());
 	out.put("cipher", cipher.getAlgorithm());
 	out.put("size", Integer.toString(body.getSize()));

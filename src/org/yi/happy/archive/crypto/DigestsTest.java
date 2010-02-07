@@ -2,7 +2,7 @@ package org.yi.happy.archive.crypto;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.yi.happy.archive.key.HexDecode;
+import org.yi.happy.archive.key.Base16;
 
 
 public class DigestsTest {
@@ -18,8 +18,8 @@ public class DigestsTest {
 
 	byte[] got = Digests.expandKey(digest, data, size);
 
-	byte[] want = HexDecode.decode("e6908025cd50ce380feecfeaedb70ba2c2f"
-		+ "701cc5e314b7b70ef5e1c04b0ec5838543551");
+	byte[] want = Base16.decode(("e6908025cd50ce380feecfeaedb70ba2c2f"
+	+ "701cc5e314b7b70ef5e1c04b0ec5838543551"));
 	Assert.assertArrayEquals(want, got);
     }
 
@@ -34,7 +34,7 @@ public class DigestsTest {
 
 	byte[] got = Digests.expandKey(digest, data, size);
 
-	byte[] want = HexDecode.decode("6e340b9cffb37a989ca544e6bb780a2c");
+	byte[] want = Base16.decode("6e340b9cffb37a989ca544e6bb780a2c");
 	Assert.assertArrayEquals(want, got);
     }
 
@@ -49,8 +49,8 @@ public class DigestsTest {
 
 	byte[] got = Digests.expandKey(digest, data, size);
 
-	byte[] want = HexDecode.decode("fe9682fa0c996d8e0a9b24cd5990ffb"
-		+ "ea3476d5d14847826e6af0a481b83cd75");
+	byte[] want = Base16.decode(("fe9682fa0c996d8e0a9b24cd5990ffb"
+	+ "ea3476d5d14847826e6af0a481b83cd75"));
 	Assert.assertArrayEquals(want, got);
     }
 
@@ -65,8 +65,8 @@ public class DigestsTest {
 
 	byte[] got = Digests.expandKey(digest, data, size);
 
-	byte[] want = HexDecode.decode("e6908025cd50ce380feecfeaedb70ba2c2f"
-		+ "701cc5e314b7b70ef5e1c04b0ec58");
+	byte[] want = Base16.decode(("e6908025cd50ce380feecfeaedb70ba2c2f"
+	+ "701cc5e314b7b70ef5e1c04b0ec58"));
 	Assert.assertArrayEquals(want, got);
     }
 

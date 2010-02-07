@@ -6,7 +6,7 @@ import org.junit.Test;
 /**
  * exercise HexDecode and HexEncode
  */
-public class HexDecodeTest extends Assert {
+public class Base16Test extends Assert {
     private static final byte[] dataByte = { (byte) 0xff, (byte) 0xfe, 0x00 };
 
     private static final String dataHex = "fffe00";
@@ -21,7 +21,7 @@ public class HexDecodeTest extends Assert {
     public void testHexToByte() {
 	byte[] e = dataByte;
 
-	byte[] h = HexDecode.decode(dataHex);
+	byte[] h = Base16.decode(dataHex);
 
 	assertArrayEquals(e, h);
     }
@@ -34,7 +34,7 @@ public class HexDecodeTest extends Assert {
     public void testHexToByte2() {
 	byte[] e = dataByte;
 
-	byte[] h = HexDecode.decode(dataHex2);
+	byte[] h = Base16.decode(dataHex2);
 
 	assertArrayEquals(e, h);
     }
@@ -47,7 +47,7 @@ public class HexDecodeTest extends Assert {
     public void testByteToHex() {
 	String e = dataHex;
 
-	String h = HexEncode.encode(dataByte);
+	String h = Base16.encode(dataByte);
 
 	assertEquals(e, h);
     }

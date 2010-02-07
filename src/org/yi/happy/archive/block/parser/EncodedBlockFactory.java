@@ -20,9 +20,9 @@ import org.yi.happy.archive.crypto.CipherFactory;
 import org.yi.happy.archive.crypto.CipherProvider;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.crypto.DigestProvider;
+import org.yi.happy.archive.key.Base16;
 import org.yi.happy.archive.key.BlobLocatorKey;
 import org.yi.happy.archive.key.ContentLocatorKey;
-import org.yi.happy.archive.key.HexDecode;
 import org.yi.happy.archive.key.KeyParse;
 import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.key.NameLocatorKey;
@@ -114,7 +114,7 @@ public class EncodedBlockFactory {
 
     private static byte[] getHash(Block block) throws VerifyException {
 	try {
-	    return HexDecode.decode(getRequiredMeta(block, "hash"));
+	    return Base16.decode(getRequiredMeta(block, "hash"));
 	} catch (VerifyException e) {
 	    throw e;
 	} catch (IllegalArgumentException e) {
@@ -166,7 +166,7 @@ public class EncodedBlockFactory {
 
     private static byte[] getKeyHash(Block block) throws VerifyException {
 	try {
-	    return HexDecode.decode(getRequiredMeta(block, "key"));
+	    return Base16.decode(getRequiredMeta(block, "key"));
 	} catch (VerifyException e) {
 	    throw e;
 	} catch (IllegalArgumentException e) {

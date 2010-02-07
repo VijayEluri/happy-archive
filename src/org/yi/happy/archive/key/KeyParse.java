@@ -72,14 +72,12 @@ public class KeyParse {
     public static FullKey parseFullKey(String key) {
 	Matcher m = BLOB_KEY.matcher(key);
 	if (m.matches()) {
-	    return new BlobFullKey(HexDecode.decode(m.group(1)), HexDecode
-		    .decode(m.group(2)));
+	    return new BlobFullKey(Base16.decode(m.group(1)), Base16.decode(m.group(2)));
 	}
 
 	m = CONTENT_KEY.matcher(key);
 	if (m.matches()) {
-	    return new ContentFullKey(HexDecode.decode(m.group(1)), HexDecode
-		    .decode(m.group(2)));
+	    return new ContentFullKey(Base16.decode(m.group(1)), Base16.decode(m.group(2)));
 	}
 
 	m = NAME_KEY.matcher(key);
@@ -95,17 +93,17 @@ public class KeyParse {
 	Matcher m;
 	m = BLOB_LOCATOR.matcher(key);
 	if (m.matches()) {
-	    return new BlobLocatorKey(HexDecode.decode(m.group(1)));
+	    return new BlobLocatorKey(Base16.decode(m.group(1)));
 	}
 
 	m = CONTENT_LOCATOR.matcher(key);
 	if (m.matches()) {
-	    return new ContentLocatorKey(HexDecode.decode(m.group(1)));
+	    return new ContentLocatorKey(Base16.decode(m.group(1)));
 	}
 
 	m = NAME_LOCATOR.matcher(key);
 	if (m.matches()) {
-	    return new NameLocatorKey(HexDecode.decode(m.group(1)));
+	    return new NameLocatorKey(Base16.decode(m.group(1)));
 	}
 
 	throw new IllegalArgumentException("can not parse key");
@@ -121,7 +119,7 @@ public class KeyParse {
      * @return the locator key
      */
     public static LocatorKey parseLocatorKey(String type, String hash) {
-	return parseLocatorKey(type, HexDecode.decode(hash));
+	return parseLocatorKey(type, Base16.decode(hash));
     }
 
     /**
@@ -150,7 +148,7 @@ public class KeyParse {
     }
 
     public static BlobLocatorKey parseBlobLocatorKey(String hash) {
-	return new BlobLocatorKey(HexDecode.decode(hash));
+	return new BlobLocatorKey(Base16.decode(hash));
     }
 
 }

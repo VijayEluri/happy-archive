@@ -31,7 +31,7 @@ public abstract class AbstractLocatorKey {
     }
 
     public String toString() {
-	return getType() + ":" + HexEncode.encode(hash);
+	return getType() + ":" + Base16.encode(hash);
     }
 
     /**
