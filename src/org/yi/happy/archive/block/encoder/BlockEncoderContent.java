@@ -51,7 +51,8 @@ public class BlockEncoderContent implements BlockEncoder {
 	EncodedBlock out = EncodedBlockFactory.createContent(digest, cipher,
 		new Bytes(body));
 
-	ContentFullKey fullKey = new ContentFullKey(out.getKey().getHash(), key);
+	ContentFullKey fullKey = new ContentFullKey(out.getKey().getHash(),
+		new Bytes(key));
 
 	return new BlockEncoderResult(fullKey, out);
     }

@@ -3,6 +3,7 @@ package org.yi.happy.archive.key;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+import org.yi.happy.archive.Bytes;
 
 /**
  * tests for ContentFullKey
@@ -13,8 +14,8 @@ public class ContentFullKeyTest {
      */
     @Test
     public void testGood() {
-	byte[] hash = { 0x00 };
-	byte[] pass = { 0x11 };
+	Bytes hash = new Bytes(0x00);
+	Bytes pass = new Bytes(0x11);
 
 	ContentFullKey key = new ContentFullKey(hash, pass);
 
@@ -26,8 +27,8 @@ public class ContentFullKeyTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testBad1() {
-	byte[] hash = {};
-	byte[] pass = { 0x11 };
+	Bytes hash = new Bytes();
+	Bytes pass = new Bytes(0x11);
 
 	new ContentFullKey(hash, pass);
     }
@@ -37,8 +38,8 @@ public class ContentFullKeyTest {
      */
     @Test
     public void testGood2() {
-	byte[] hash = { 0x00 };
-	byte[] pass = {};
+	Bytes hash = new Bytes(0x00);
+	Bytes pass = new Bytes();
 
 	new ContentFullKey(hash, pass);
     }
@@ -48,12 +49,12 @@ public class ContentFullKeyTest {
      */
     @Test
     public void testToLocatorKey1() {
-	ContentFullKey in = new ContentFullKey(new byte[] { 0x00, 0x11, 0x22 },
-		new byte[] { 0x33, 0x44, 0x55 });
+	ContentFullKey in = new ContentFullKey(new Bytes(0x00, 0x11, 0x22),
+		new Bytes(0x33, 0x44, 0x55));
 
 	Key have = in.toLocatorKey();
 
-	Key want = new ContentLocatorKey(new byte[] { 0x00, 0x11, 0x22 });
+	Key want = new ContentLocatorKey(new Bytes(0x00, 0x11, 0x22));
 	assertEquals(want, have);
     }
 }

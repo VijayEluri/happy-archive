@@ -1,5 +1,7 @@
 package org.yi.happy.archive.key;
 
+import org.yi.happy.archive.Bytes;
+
 /**
  * a content full key. what is required to decode a content block.
  */
@@ -19,7 +21,7 @@ public final class ContentFullKey extends AbstractContentFullKey implements
      * @param pass
      *            the cipher key
      */
-    public ContentFullKey(byte[] hash, byte[] pass) {
+    public ContentFullKey(Bytes hash, Bytes pass) {
 	super(hash, pass);
     }
 

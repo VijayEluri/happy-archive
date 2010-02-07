@@ -54,7 +54,8 @@ public class BlobEncodedBlockTest {
      */
     @Test
     public void test2() {
-	Block block = new BlobEncodedBlock(new BlobLocatorKey(Base16.decode(HASH)), SHA256, NULL, TEST);
+	Block block = new BlobEncodedBlock(new BlobLocatorKey(new Bytes(Base16
+		.decode(HASH))), SHA256, NULL, TEST);
 
 	Map<String, String> want = new HashMap<String, String>();
 	want.put("key-type", "blob");
@@ -83,7 +84,8 @@ public class BlobEncodedBlockTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void test3() {
-	new BlobEncodedBlock(new BlobLocatorKey(Base16.decode(BAD_HASH)),
+	new BlobEncodedBlock(new BlobLocatorKey(new Bytes(Base16
+		.decode(BAD_HASH))),
 		SHA256, NULL, TEST);
     }
 }

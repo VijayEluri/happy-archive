@@ -1,10 +1,10 @@
 package org.yi.happy.archive.key;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
@@ -16,10 +16,10 @@ public class NameLocatorKeyTest {
      */
     @Test
     public void testGood2() {
-	byte[] hash = { 0 };
+	Bytes hash = new Bytes(0x00);
 	LocatorKey key = new NameLocatorKey(hash);
 	assertEquals("name-hash", key.getType());
-	assertArrayEquals(hash, key.getHash());
+	assertEquals(hash, key.getHash());
     }
 
     /**
@@ -27,7 +27,7 @@ public class NameLocatorKeyTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testBad1() {
-	byte[] hash = {};
+	Bytes hash = new Bytes();
 	new NameLocatorKey(hash);
     }
 

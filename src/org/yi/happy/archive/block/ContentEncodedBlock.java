@@ -1,6 +1,5 @@
 package org.yi.happy.archive.block;
 
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -31,7 +30,7 @@ public final class ContentEncodedBlock extends AbstractBlock implements
 	GenericBlock.checkValue(cipher.getAlgorithm());
 
 	byte[] hash = getHash(digest, body);
-	if (!Arrays.equals(key.getHash(), hash)) {
+	if (!key.getHash().equalBytes(hash)) {
 	    throw new IllegalArgumentException();
 	}
 
@@ -49,7 +48,7 @@ public final class ContentEncodedBlock extends AbstractBlock implements
 
 	byte[] hash = getHash(digest, body);
 
-	this.key = new ContentLocatorKey(hash);
+	this.key = new ContentLocatorKey(new Bytes(hash));
 	this.digest = digest;
 	this.cipher = cipher;
 	this.body = body;
@@ -109,7 +108,7 @@ public final class ContentEncodedBlock extends AbstractBlock implements
 	ContentFullKey k = (ContentFullKey) fullKey;
 
 	Cipher c = cipher.get();
-	c.setKey(k.getPass());
+	c.setKey(k.getPass().toByteArray());
 
 	if (body.getSize() % c.getBlockSize() != 0) {
 	    throw new IllegalArgumentException(

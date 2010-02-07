@@ -1,10 +1,10 @@
 package org.yi.happy.archive.key;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+import org.yi.happy.archive.Bytes;
 
 public class KeyParseTest {
     /**
@@ -35,7 +35,7 @@ public class KeyParseTest {
 
 	LocatorKey n = (LocatorKey) k;
 
-	assertArrayEquals(new byte[] { 0x00, 0x11, 0x22 }, n.getHash());
+	assertEquals(new Bytes(0x00, 0x11, 0x22), n.getHash());
     }
 
     /**
@@ -50,7 +50,7 @@ public class KeyParseTest {
 
 	LocatorKey n = (LocatorKey) k;
 
-	assertArrayEquals(new byte[] { 0x00, 0x11, 0x22 }, n.getHash());
+	assertEquals(new Bytes(0x00, 0x11, 0x22), n.getHash());
     }
 
     /**
@@ -66,8 +66,8 @@ public class KeyParseTest {
 
 	ContentFullKey n = (ContentFullKey) k;
 
-	assertArrayEquals(new byte[] { 0x00, 0x11, 0x22 }, n.getHash());
-	assertArrayEquals(new byte[] { 0x33, 0x44, 0x55 }, n.getPass());
+	assertEquals(new Bytes(0x00, 0x11, 0x22), n.getHash());
+	assertEquals(new Bytes(0x33, 0x44, 0x55), n.getPass());
     }
 
     /**
@@ -83,8 +83,8 @@ public class KeyParseTest {
 
 	ContentFullKey n = (ContentFullKey) k;
 
-	assertArrayEquals(new byte[] { 0x00, 0x11, 0x22 }, n.getHash());
-	assertArrayEquals(new byte[] {}, n.getPass());
+	assertEquals(new Bytes(0x00, 0x11, 0x22), n.getHash());
+	assertEquals(new Bytes(), n.getPass());
     }
 
     /**
@@ -99,7 +99,7 @@ public class KeyParseTest {
 
 	LocatorKey n = (LocatorKey) k;
 
-	assertArrayEquals(new byte[] { 0x00, 0x11, 0x22 }, n.getHash());
+	assertEquals(new Bytes(0x00, 0x11, 0x22), n.getHash());
     }
 
     /**
@@ -115,8 +115,8 @@ public class KeyParseTest {
 
 	BlobFullKey n = (BlobFullKey) k;
 
-	assertArrayEquals(new byte[] { 0x00, 0x11, 0x22 }, n.getHash());
-	assertArrayEquals(new byte[] { 0x33, 0x44, 0x55 }, n.getPass());
+	assertEquals(new Bytes(0x00, 0x11, 0x22), n.getHash());
+	assertEquals(new Bytes(0x33, 0x44, 0x55), n.getPass());
     }
 
     /**
@@ -132,8 +132,8 @@ public class KeyParseTest {
 
 	BlobFullKey n = (BlobFullKey) k;
 
-	assertArrayEquals(new byte[] { 0x00, 0x11, 0x22 }, n.getHash());
-	assertArrayEquals(new byte[] {}, n.getPass());
+	assertEquals(new Bytes(0x00, 0x11, 0x22), n.getHash());
+	assertEquals(new Bytes(), n.getPass());
     }
 
     /**

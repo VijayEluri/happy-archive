@@ -1,15 +1,14 @@
 package org.yi.happy.archive.key;
 
-import java.util.Arrays;
-
 import org.yi.happy.archive.Base16;
+import org.yi.happy.archive.Bytes;
 
 /**
  * common function of locator keys
  */
 public abstract class AbstractLocatorKey {
 
-    private final byte[] hash;
+    private final Bytes hash;
 
     /**
      * create
@@ -17,19 +16,19 @@ public abstract class AbstractLocatorKey {
      * @param hash
      *            the hash
      */
-    public AbstractLocatorKey(byte[] hash) {
-	if (hash.length < 1) {
+    public AbstractLocatorKey(Bytes hash) {
+	if (hash.getSize() < 1) {
 	    throw new IllegalArgumentException("hash too short");
 	}
-	this.hash = hash.clone();
+	this.hash = hash;
     }
 
     /**
      * 
      * @return the hash
      */
-    public byte[] getHash() {
-	return hash.clone();
+    public Bytes getHash() {
+	return hash;
     }
 
     public String toString() {
@@ -45,7 +44,7 @@ public abstract class AbstractLocatorKey {
 	final int prime = 31;
 	int result = 1;
 	result = prime * result + getType().hashCode();
-	result = prime * result + Arrays.hashCode(hash);
+	result = prime * result + hash.hashCode();
 	return result;
     }
 
@@ -57,7 +56,7 @@ public abstract class AbstractLocatorKey {
 	if (getClass() != obj.getClass())
 	    return false;
 	final AbstractLocatorKey other = (AbstractLocatorKey) obj;
-	if (!Arrays.equals(hash, other.hash))
+	if (!hash.equals(other.hash))
 	    return false;
 	return true;
     }

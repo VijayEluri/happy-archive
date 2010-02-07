@@ -3,7 +3,9 @@ package org.yi.happy.archive.key;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.Base16;
+import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.crypto.DigestFactory;
 
 public class KeyParse {
@@ -70,15 +72,18 @@ public class KeyParse {
 	throw new IllegalArgumentException("can not parse key");
     }
 
+    @SmellsMessy
     public static FullKey parseFullKey(String key) {
 	Matcher m = BLOB_KEY.matcher(key);
 	if (m.matches()) {
-	    return new BlobFullKey(Base16.decode(m.group(1)), Base16.decode(m.group(2)));
+	    return new BlobFullKey(new Bytes(Base16.decode(m.group(1))),
+		    new Bytes(Base16.decode(m.group(2))));
 	}
 
 	m = CONTENT_KEY.matcher(key);
 	if (m.matches()) {
-	    return new ContentFullKey(Base16.decode(m.group(1)), Base16.decode(m.group(2)));
+	    return new ContentFullKey(new Bytes(Base16.decode(m.group(1))),
+		    new Bytes(Base16.decode(m.group(2))));
 	}
 
 	m = NAME_KEY.matcher(key);
@@ -94,17 +99,17 @@ public class KeyParse {
 	Matcher m;
 	m = BLOB_LOCATOR.matcher(key);
 	if (m.matches()) {
-	    return new BlobLocatorKey(Base16.decode(m.group(1)));
+	    return new BlobLocatorKey(new Bytes(Base16.decode(m.group(1))));
 	}
 
 	m = CONTENT_LOCATOR.matcher(key);
 	if (m.matches()) {
-	    return new ContentLocatorKey(Base16.decode(m.group(1)));
+	    return new ContentLocatorKey(new Bytes(Base16.decode(m.group(1))));
 	}
 
 	m = NAME_LOCATOR.matcher(key);
 	if (m.matches()) {
-	    return new NameLocatorKey(Base16.decode(m.group(1)));
+	    return new NameLocatorKey(new Bytes(Base16.decode(m.group(1))));
 	}
 
 	throw new IllegalArgumentException("can not parse key");
@@ -120,7 +125,7 @@ public class KeyParse {
      * @return the locator key
      */
     public static LocatorKey parseLocatorKey(String type, String hash) {
-	return parseLocatorKey(type, Base16.decode(hash));
+	return parseLocatorKey(type, new Bytes(Base16.decode(hash)));
     }
 
     /**
@@ -132,7 +137,7 @@ public class KeyParse {
      *            the hash of the key
      * @return the locator key
      */
-    public static LocatorKey parseLocatorKey(String type, byte[] hash) {
+    public static LocatorKey parseLocatorKey(String type, Bytes hash) {
 	if (type.equals(KeyType.BLOB)) {
 	    return new BlobLocatorKey(hash);
 	}
@@ -149,7 +154,7 @@ public class KeyParse {
     }
 
     public static BlobLocatorKey parseBlobLocatorKey(String hash) {
-	return new BlobLocatorKey(Base16.decode(hash));
+	return new BlobLocatorKey(new Bytes(Base16.decode(hash)));
     }
 
 }

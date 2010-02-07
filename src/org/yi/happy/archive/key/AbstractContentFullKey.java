@@ -1,46 +1,49 @@
 package org.yi.happy.archive.key;
 
-import java.util.Arrays;
-
 import org.yi.happy.archive.Base16;
+import org.yi.happy.archive.Bytes;
 
 public abstract class AbstractContentFullKey {
 
     public abstract String getType();
 
-    private final byte[] hash;
-    private final byte[] pass;
+    private final Bytes hash;
+    private final Bytes pass;
 
-    public AbstractContentFullKey(byte[] hash, byte[] pass) {
-	if (hash.length < 1) {
+    public AbstractContentFullKey(Bytes hash, Bytes pass) {
+	if (hash.getSize() < 1) {
 	    throw new IllegalArgumentException("hash too short");
 	}
 
-	this.hash = hash.clone();
-	this.pass = pass.clone();
+	if (pass == null) {
+	    throw new IllegalArgumentException("pass is null");
+	}
+
+	this.hash = hash;
+	this.pass = pass;
     }
 
     /**
      * 
      * @return the hash
      */
-    public byte[] getHash() {
-	return hash.clone();
+    public Bytes getHash() {
+	return hash;
     }
 
     /**
      * 
      * @return the cipher key
      */
-    public byte[] getPass() {
-	return pass.clone();
+    public Bytes getPass() {
+	return pass;
     }
 
     public int hashCode() {
 	final int prime = 31;
 	int result = 1;
-	result = prime * result + Arrays.hashCode(hash);
-	result = prime * result + Arrays.hashCode(pass);
+	result = prime * result + hash.hashCode();
+	result = prime * result + pass.hashCode();
 	return result;
     }
 
@@ -52,9 +55,9 @@ public abstract class AbstractContentFullKey {
 	if (getClass() != obj.getClass())
 	    return false;
 	final AbstractContentFullKey other = (AbstractContentFullKey) obj;
-	if (!Arrays.equals(hash, other.hash))
+	if (!hash.equals(other.hash))
 	    return false;
-	if (!Arrays.equals(pass, other.pass))
+	if (!pass.equals(other.pass))
 	    return false;
 	return true;
     }

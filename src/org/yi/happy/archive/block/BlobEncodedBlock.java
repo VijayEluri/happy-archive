@@ -1,7 +1,6 @@
 package org.yi.happy.archive.block;
 
 import java.security.MessageDigest;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -48,7 +47,7 @@ public final class BlobEncodedBlock extends AbstractBlock implements
 	GenericBlock.checkValue(cipher.getAlgorithm());
 
 	byte[] hash = getHash(digest, cipher, body);
-	if (!Arrays.equals(key.getHash(), hash)) {
+	if (!key.getHash().equalBytes(hash)) {
 	    throw new IllegalArgumentException();
 	}
 
@@ -77,7 +76,7 @@ public final class BlobEncodedBlock extends AbstractBlock implements
 
 	byte[] hash = getHash(digest, cipher, body);
 
-	this.key = new BlobLocatorKey(hash);
+	this.key = new BlobLocatorKey(new Bytes(hash));
 	this.digest = digest;
 	this.cipher = cipher;
 	this.body = body;
@@ -146,7 +145,7 @@ public final class BlobEncodedBlock extends AbstractBlock implements
 	BlobFullKey k = (BlobFullKey) fullKey;
 
 	Cipher c = cipher.get();
-	c.setKey(k.getPass());
+	c.setKey(k.getPass().toByteArray());
 
 	if (body.getSize() % c.getBlockSize() != 0) {
 	    throw new IllegalArgumentException(

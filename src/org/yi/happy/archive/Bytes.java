@@ -17,8 +17,23 @@ public final class Bytes {
      * @param data
      *            the contents.
      */
-    public Bytes(byte[] data) {
+    public Bytes(byte... data) {
 	this.data = data.clone();
+    }
+
+    /**
+     * Create from an integer array. This is to allow for easy creation of
+     * literals.
+     * 
+     * @param data
+     *            the contents, each entry will be chopped to the least
+     *            significant eight bits.
+     */
+    public Bytes(int... data) {
+	this.data = new byte[data.length];
+	for (int i = 0; i < data.length; i++) {
+	    this.data[i] = (byte) data[i];
+	}
     }
 
     /**

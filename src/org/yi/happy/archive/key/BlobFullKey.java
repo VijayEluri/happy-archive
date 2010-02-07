@@ -1,7 +1,9 @@
 package org.yi.happy.archive.key;
 
+import org.yi.happy.archive.Bytes;
+
 public class BlobFullKey extends AbstractContentFullKey implements FullKey {
-    public BlobFullKey(byte[] hash, byte[] pass) {
+    public BlobFullKey(Bytes hash, Bytes pass) {
 	super(hash, pass);
     }
 

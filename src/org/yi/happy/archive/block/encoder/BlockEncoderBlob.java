@@ -41,7 +41,8 @@ public class BlockEncoderBlob implements BlockEncoder {
 	EncodedBlock out = EncodedBlockFactory.create(digest, cipher,
 		new Bytes(body));
 
-	BlobFullKey fullKey = new BlobFullKey(out.getKey().getHash(), key);
+	BlobFullKey fullKey = new BlobFullKey(out.getKey().getHash(),
+		new Bytes(key));
 
 	return new BlockEncoderResult(fullKey, out);
     }

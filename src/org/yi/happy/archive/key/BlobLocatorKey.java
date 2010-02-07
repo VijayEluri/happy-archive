@@ -1,9 +1,11 @@
 package org.yi.happy.archive.key;
 
+import org.yi.happy.archive.Bytes;
+
 public final class BlobLocatorKey extends AbstractLocatorKey implements
 	LocatorKey {
 
-    public BlobLocatorKey(byte[] hash) {
+    public BlobLocatorKey(Bytes hash) {
 	super(hash);
     }
 
