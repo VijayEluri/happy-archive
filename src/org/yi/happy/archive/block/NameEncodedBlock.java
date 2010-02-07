@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.yi.happy.archive.ByteString;
+import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.VerifyException;
 import org.yi.happy.archive.block.parser.BlockParse;
 import org.yi.happy.archive.crypto.Cipher;
@@ -23,10 +24,10 @@ public final class NameEncodedBlock extends AbstractBlock implements
     private final byte[] hash;
     private final DigestProvider digest;
     private final CipherProvider cipher;
-    private final byte[] body;
+    private final Bytes body;
 
     public NameEncodedBlock(NameLocatorKey key, byte[] hash,
-	    DigestProvider digest, CipherProvider cipher, byte[] body) {
+	    DigestProvider digest, CipherProvider cipher, Bytes body) {
 	GenericBlock.checkValue(digest.getAlgorithm());
 	GenericBlock.checkValue(cipher.getAlgorithm());
 
@@ -39,11 +40,11 @@ public final class NameEncodedBlock extends AbstractBlock implements
 	this.hash = hash.clone();
 	this.digest = digest;
 	this.cipher = cipher;
-	this.body = body.clone();
+	this.body = body;
     }
 
     public NameEncodedBlock(NameLocatorKey key, DigestProvider digest,
-	    CipherProvider cipher, byte[] body) {
+	    CipherProvider cipher, Bytes body) {
 	GenericBlock.checkValue(digest.getAlgorithm());
 	GenericBlock.checkValue(cipher.getAlgorithm());
 
@@ -53,7 +54,7 @@ public final class NameEncodedBlock extends AbstractBlock implements
 	this.hash = hash.clone();
 	this.digest = digest;
 	this.cipher = cipher;
-	this.body = body.clone();
+	this.body = body;
     }
 
     public NameLocatorKey getKey() {
@@ -72,8 +73,8 @@ public final class NameEncodedBlock extends AbstractBlock implements
 	return cipher;
     }
 
-    public byte[] getBody() {
-	return body.clone();
+    public Bytes getBody() {
+	return body;
     }
 
     @Override
@@ -85,7 +86,7 @@ public final class NameEncodedBlock extends AbstractBlock implements
 	out.put("hash", HexEncode.encode(hash));
 	out.put("digest", digest.getAlgorithm());
 	out.put("cipher", cipher.getAlgorithm());
-	out.put("size", Integer.toString(body.length));
+	out.put("size", Integer.toString(body.getSize()));
 	return out;
     }
 
@@ -111,11 +112,11 @@ public final class NameEncodedBlock extends AbstractBlock implements
 	/*
 	 * decrypt the body
 	 */
-	if (body.length % c.getBlockSize() != 0) {
+	if (body.getSize() % c.getBlockSize() != 0) {
 	    throw new IllegalArgumentException(
 		    "size is not a multiple of the cipher block size");
 	}
-	byte[] out = body.clone();
+	byte[] out = body.toByteArray();
 	c.decrypt(out);
 
 	return BlockParse.parse(out);
@@ -125,7 +126,7 @@ public final class NameEncodedBlock extends AbstractBlock implements
     public int hashCode() {
 	final int prime = 31;
 	int result = 1;
-	result = prime * result + Arrays.hashCode(body);
+	result = prime * result + body.hashCode();
 	result = prime * result + ((cipher == null) ? 0 : cipher.hashCode());
 	result = prime * result + ((digest == null) ? 0 : digest.hashCode());
 	result = prime * result + Arrays.hashCode(hash);
@@ -142,7 +143,7 @@ public final class NameEncodedBlock extends AbstractBlock implements
 	if (getClass() != obj.getClass())
 	    return false;
 	NameEncodedBlock other = (NameEncodedBlock) obj;
-	if (!Arrays.equals(body, other.body))
+	if (!body.equals(other.body))
 	    return false;
 	if (cipher == null) {
 	    if (other.cipher != null)

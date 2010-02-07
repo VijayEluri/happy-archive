@@ -2,6 +2,7 @@ package org.yi.happy.archive.block;
 
 import java.util.Map;
 
+import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.crypto.CipherProvider;
 import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.key.FullKey;
@@ -39,7 +40,7 @@ public interface EncodedBlock extends Block {
      * @return a copy the body of the block. This array is safe to modify.
      */
     @Override
-    public byte[] getBody();
+    public Bytes getBody();
 
     /**
      * @return the whole block encoded as bytes.

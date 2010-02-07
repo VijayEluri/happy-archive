@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import org.yi.happy.archive.ByteString;
+import org.yi.happy.archive.Bytes;
 
 /**
  * The part that is common for all the block types.
@@ -35,7 +36,7 @@ public abstract class AbstractBlock implements Block {
 
 	    out.write(ENDL);
 
-	    out.write(getBody());
+	    out.write(getBody().toByteArray());
 
 	    return out.toByteArray();
 	} catch (IOException e) {
@@ -47,5 +48,5 @@ public abstract class AbstractBlock implements Block {
     public abstract Map<String, String> getMeta();
 
     @Override
-    public abstract byte[] getBody();
+    public abstract Bytes getBody();
 }

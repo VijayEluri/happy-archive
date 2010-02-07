@@ -101,10 +101,10 @@ public class SplitReader {
 		/*
 		 * data block
 		 */
-		byte[] data = b.getBody();
+		Bytes data = b.getBody();
 
 		pending.remove(index);
-		fixOffset(index, item.offset + data.length);
+		fixOffset(index, item.offset + data.getSize());
 		return new Fragment(item.offset, data);
 	    }
 
@@ -120,7 +120,7 @@ public class SplitReader {
 
 	    if (type.equals("indirect")) {
 		item.key = KeyParse.parseFullKey(ByteString.toString(b
-			.getBody()));
+			.getBody().toByteArray()));
 		continue;
 	    }
 
@@ -181,7 +181,7 @@ public class SplitReader {
      *            a map block
      */
     private void processMap(int index, long base, Block b) {
-	String map = ByteString.toString(b.getBody());
+	String map = ByteString.toString(b.getBody().toByteArray());
 	String[] lines = map.split("\n");
 	List<Pending> add = new ArrayList<Pending>(lines.length);
 	for (String line : lines) {

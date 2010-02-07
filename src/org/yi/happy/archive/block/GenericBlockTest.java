@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.yi.happy.archive.ByteString;
+import org.yi.happy.archive.Bytes;
 
 /**
  * tests for Block
@@ -46,7 +47,7 @@ public class GenericBlockTest {
 	block.addMeta("a", "c");
 	block.addMeta("b", "d");
 	block.addMeta("c", "e");
-	block.setBody(ByteString.toBytes("body\ndata\n"));
+	block.setBody(new Bytes(ByteString.toBytes("body\ndata\n")));
 
 	return block;
     }

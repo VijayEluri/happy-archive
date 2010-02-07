@@ -113,7 +113,7 @@ public class KeyOutputStream extends OutputStream {
 	GenericBlock b = new GenericBlock();
 	b.addMeta("type", "map");
 	b.addMeta("size", "" + data.length);
-	b.setBody(data);
+	b.setBody(new Bytes(data));
 
 	return store.storeBlock(b);
     }
@@ -128,7 +128,7 @@ public class KeyOutputStream extends OutputStream {
      *             on error.
      */
     private FullKey storeDataBlock(byte[] data) throws IOException {
-	return store.storeBlock(new DataBlock(data));
+	return store.storeBlock(new DataBlock(new Bytes(data)));
     }
 
     /**

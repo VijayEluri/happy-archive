@@ -3,14 +3,16 @@ package org.yi.happy.archive.block;
 import java.util.Collections;
 import java.util.Map;
 
+import org.yi.happy.archive.Bytes;
+
 /**
  * A simple data block. This implementation does not make a defensive copy of
  * the body.
  */
 public class DataBlock extends AbstractBlock {
-    private final byte[] body;
+    private final Bytes body;
 
-    public DataBlock(byte[] body) {
+    public DataBlock(Bytes body) {
 	if (body == null) {
 	    throw new NullPointerException();
 	}
@@ -19,12 +21,13 @@ public class DataBlock extends AbstractBlock {
     }
 
     @Override
-    public byte[] getBody() {
+    public Bytes getBody() {
 	return body;
     }
 
     @Override
     public Map<String, String> getMeta() {
-	return Collections.singletonMap("size", Integer.toString(body.length));
+	return Collections.singletonMap("size", Integer
+		.toString(body.getSize()));
     }
 }

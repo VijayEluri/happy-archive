@@ -4,7 +4,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.annotate.TypeSwitch;
+import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.ShortBodyException;
 import org.yi.happy.archive.VerifyException;
 import org.yi.happy.archive.VersionNotNumberException;
@@ -25,16 +27,17 @@ import org.yi.happy.archive.key.KeyParse;
 import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.key.NameLocatorKey;
 
+@SmellsMessy
 public class EncodedBlockFactory {
     public static BlobEncodedBlock create(DigestProvider digest,
-	    CipherProvider cipher, byte[] body) {
+	    CipherProvider cipher, Bytes body) {
 	cipher = normalizeCipherName(cipher);
 
 	return new BlobEncodedBlock(digest, cipher, body);
     }
 
     public static NameEncodedBlock createName(NameLocatorKey key,
-	    DigestProvider digest, CipherProvider cipher, byte[] body) {
+	    DigestProvider digest, CipherProvider cipher, Bytes body) {
 	cipher = normalizeCipherName(cipher);
 
 	return new NameEncodedBlock(key, digest, cipher, body);
@@ -91,7 +94,7 @@ public class EncodedBlockFactory {
 
     private static EncodedBlock parseName(Block block, NameLocatorKey key)
 	    throws VerifyException {
-	byte[] body = getBody(block);
+	Bytes body = getBody(block);
 
 	String digest = getDigestName(block);
 
@@ -122,7 +125,7 @@ public class EncodedBlockFactory {
 
     private static EncodedBlock parseContent(Block block, ContentLocatorKey key)
 	    throws VerifyException {
-	byte[] body = getBody(block);
+	Bytes body = getBody(block);
 
 	String digest = getDigestName(block);
 
@@ -173,7 +176,7 @@ public class EncodedBlockFactory {
 
     private static EncodedBlock parseBlob(Block block, BlobLocatorKey key)
 	    throws VerifyException {
-	byte[] body = getBody(block);
+	Bytes body = getBody(block);
 
 	String digest = getDigestName(block);
 
@@ -183,23 +186,21 @@ public class EncodedBlockFactory {
 		CipherFactory.getProvider(cipher), body);
     }
 
-    private static byte[] getBody(Block block) throws VerifyException {
+    private static Bytes getBody(Block block) throws VerifyException {
 	int size = getSize(block);
 
 	if (size < 0) {
 	    throw new NegativeSizeException();
 	}
 
-	byte[] body = block.getBody();
+	Bytes body = block.getBody();
 
-	if (body.length < size) {
+	if (body.getSize() < size) {
 	    throw new ShortBodyException();
 	}
 
-	if (body.length > size) {
-	    byte[] tmp = new byte[size];
-	    System.arraycopy(body, 0, tmp, 0, size);
-	    body = tmp;
+	if (body.getSize() > size) {
+	    body = new Bytes(body.toByteArray(), 0, size);
 	}
 
 	return body;
@@ -232,7 +233,7 @@ public class EncodedBlockFactory {
     }
 
     public static ContentEncodedBlock createContent(DigestProvider digest,
-	    CipherProvider cipher, byte[] body) {
+	    CipherProvider cipher, Bytes body) {
 	cipher = normalizeCipherName(cipher);
 
 	return new ContentEncodedBlock(digest, cipher, body);

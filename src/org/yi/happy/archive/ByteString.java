@@ -33,6 +33,16 @@ public class ByteString {
 	return new String(out);
     }
 
+    public static String toString(Bytes data) {
+	char[] out = new char[data.getSize()];
+
+	for (int i = 0; i < data.getSize(); i++) {
+	    out[i] = (char) (data.get(i) & 0xff);
+	}
+
+	return new String(out);
+    }
+
     /**
      * convert a string to bytes, only the low 8 bits of the characters in the
      * string are used.

@@ -1,5 +1,6 @@
 package org.yi.happy.archive.block.encoder;
 
+import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.EncodedBlockFactory;
@@ -37,7 +38,8 @@ public class BlockEncoderBlob implements BlockEncoder {
 	body = pad(body, c.getBlockSize());
 	c.encrypt(body);
 
-	EncodedBlock out = EncodedBlockFactory.create(digest, cipher, body);
+	EncodedBlock out = EncodedBlockFactory.create(digest, cipher,
+		new Bytes(body));
 
 	BlobFullKey fullKey = new BlobFullKey(out.getKey().getHash(), key);
 

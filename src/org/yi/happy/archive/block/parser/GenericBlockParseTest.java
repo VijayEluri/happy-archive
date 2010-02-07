@@ -7,6 +7,7 @@ import java.util.Collections;
 
 import org.junit.Test;
 import org.yi.happy.archive.ByteString;
+import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.block.GenericBlock;
 import org.yi.happy.archive.block.GenericBlockTest;
 
@@ -38,6 +39,6 @@ public class GenericBlockParseTest {
 	GenericBlock have = p.parse(new byte[0]);
 
 	assertEquals(Collections.emptyMap(), have.getMeta());
-	assertArrayEquals(new byte[0], have.getBody());
+	assertEquals(new Bytes(), have.getBody());
     }
 }

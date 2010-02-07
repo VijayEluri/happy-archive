@@ -2,6 +2,7 @@ package org.yi.happy.archive.block.parser;
 
 import org.yi.happy.annotate.SmellsProcedural;
 import org.yi.happy.archive.ByteString;
+import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.block.GenericBlock;
 
 @SmellsProcedural
@@ -68,7 +69,7 @@ public class GenericBlockParse {
 	 */
 	byte[] body = new byte[rest.getLength()];
 	System.arraycopy(bytes, rest.getOffset(), body, 0, rest.getLength());
-	out.setBody(body);
+	out.setBody(new Bytes(body));
 
 	return out;
     }

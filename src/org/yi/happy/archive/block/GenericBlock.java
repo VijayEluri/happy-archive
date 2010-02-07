@@ -1,9 +1,9 @@
 package org.yi.happy.archive.block;
 
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.VerifyException;
 
 /**
@@ -11,7 +11,7 @@ import org.yi.happy.archive.VerifyException;
  */
 public class GenericBlock extends AbstractBlock implements Block {
 
-    private byte[] body = new byte[0];
+    private Bytes body = new Bytes();
 
     private final Map<String, String> meta;
 
@@ -32,7 +32,7 @@ public class GenericBlock extends AbstractBlock implements Block {
      *            even number of elements
      * @return the created block
      */
-    public static GenericBlock create(byte[] body, String... meta) {
+    public static GenericBlock create(Bytes body, String... meta) {
 	if (meta.length % 2 != 0) {
 	    throw new IllegalArgumentException("meta needs to be pairs");
 	}
@@ -50,9 +50,9 @@ public class GenericBlock extends AbstractBlock implements Block {
      * @param body
      *            the data block
      */
-    public void setBody(byte[] body) {
+    public void setBody(Bytes body) {
 	if (body == null) {
-	    body = new byte[0];
+	    body = new Bytes();
 	}
 
 	this.body = body;
@@ -103,7 +103,7 @@ public class GenericBlock extends AbstractBlock implements Block {
      * 
      * @return the internal data block, never null.
      */
-    public byte[] getBody() {
+    public Bytes getBody() {
 	return body;
     }
 
@@ -111,7 +111,7 @@ public class GenericBlock extends AbstractBlock implements Block {
     public int hashCode() {
 	final int PRIME = 31;
 	int result = 1;
-	result = PRIME * result + Arrays.hashCode(body);
+	result = PRIME * result + body.hashCode();
 	result = PRIME * result + meta.hashCode();
 	return result;
     }
@@ -128,7 +128,7 @@ public class GenericBlock extends AbstractBlock implements Block {
 	    return false;
 	}
 	final GenericBlock other = (GenericBlock) obj;
-	if (!Arrays.equals(body, other.body)) {
+	if (!body.equals(other.body)) {
 	    return false;
 	}
 	if (!meta.equals(other.meta)) {

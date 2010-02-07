@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.yi.happy.annotate.SmellsMessy;
+import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.UnknownDigestException;
 import org.yi.happy.archive.block.parser.BlockParse;
 import org.yi.happy.archive.crypto.Cipher;
@@ -21,10 +23,10 @@ public final class ContentEncodedBlock extends AbstractBlock implements
     private final ContentLocatorKey key;
     private final DigestProvider digest;
     private final CipherProvider cipher;
-    private final byte[] body;
+    private final Bytes body;
 
     public ContentEncodedBlock(ContentLocatorKey key, DigestProvider digest,
-	    CipherProvider cipher, byte[] body) {
+	    CipherProvider cipher, Bytes body) {
 
 	GenericBlock.checkValue(digest.getAlgorithm());
 	GenericBlock.checkValue(cipher.getAlgorithm());
@@ -37,11 +39,11 @@ public final class ContentEncodedBlock extends AbstractBlock implements
 	this.key = key;
 	this.digest = digest;
 	this.cipher = cipher;
-	this.body = body.clone();
+	this.body = body;
     }
 
     public ContentEncodedBlock(DigestProvider digest, CipherProvider cipher,
-	    byte[] body) {
+	    Bytes body) {
 
 	GenericBlock.checkValue(digest.getAlgorithm());
 	GenericBlock.checkValue(cipher.getAlgorithm());
@@ -51,7 +53,7 @@ public final class ContentEncodedBlock extends AbstractBlock implements
 	this.key = new ContentLocatorKey(hash);
 	this.digest = digest;
 	this.cipher = cipher;
-	this.body = body.clone();
+	this.body = body;
     }
 
     public ContentLocatorKey getKey() {
@@ -66,8 +68,8 @@ public final class ContentEncodedBlock extends AbstractBlock implements
 	return cipher;
     }
 
-    public byte[] getBody() {
-	return body.clone();
+    public Bytes getBody() {
+	return body;
     }
 
     @Override
@@ -78,7 +80,7 @@ public final class ContentEncodedBlock extends AbstractBlock implements
 	out.put("key", HexEncode.encode(key.getHash()));
 	out.put("digest", digest.getAlgorithm());
 	out.put("cipher", cipher.getAlgorithm());
-	out.put("size", Integer.toString(body.length));
+	out.put("size", Integer.toString(body.getSize()));
 	return out;
     }
 
@@ -93,10 +95,11 @@ public final class ContentEncodedBlock extends AbstractBlock implements
      *            the body.
      * @return the hash value.
      */
-    public static byte[] getHash(DigestProvider digest, byte[] body) {
+    @SmellsMessy
+    public static byte[] getHash(DigestProvider digest, Bytes body) {
 	try {
 	    MessageDigest d = digest.get();
-	    d.update(body);
+	    d.update(body.toByteArray());
 	    return d.digest();
 	} catch (UnknownAlgorithmException e) {
 	    throw new UnknownDigestException(digest.getAlgorithm(), e);
@@ -112,12 +115,12 @@ public final class ContentEncodedBlock extends AbstractBlock implements
 	Cipher c = cipher.get();
 	c.setKey(k.getPass());
 
-	if (body.length % c.getBlockSize() != 0) {
+	if (body.getSize() % c.getBlockSize() != 0) {
 	    throw new IllegalArgumentException(
 		    "size is not a multiple of the cipher block size");
 	}
 
-	byte[] out = body.clone();
+	byte[] out = body.toByteArray();
 	c.decrypt(out);
 
 	return BlockParse.parse(out);
@@ -127,7 +130,7 @@ public final class ContentEncodedBlock extends AbstractBlock implements
     public int hashCode() {
 	final int prime = 31;
 	int result = 1;
-	result = prime * result + Arrays.hashCode(body);
+	result = prime * result + body.hashCode();
 	result = prime * result + ((cipher == null) ? 0 : cipher.hashCode());
 	result = prime * result + ((digest == null) ? 0 : digest.hashCode());
 	result = prime * result + ((key == null) ? 0 : key.hashCode());
@@ -143,7 +146,7 @@ public final class ContentEncodedBlock extends AbstractBlock implements
 	if (getClass() != obj.getClass())
 	    return false;
 	ContentEncodedBlock other = (ContentEncodedBlock) obj;
-	if (!Arrays.equals(body, other.body))
+	if (!body.equals(other.body))
 	    return false;
 	if (cipher == null) {
 	    if (other.cipher != null)

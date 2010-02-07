@@ -2,6 +2,8 @@ package org.yi.happy.archive.block;
 
 import java.util.Map;
 
+import org.yi.happy.archive.Bytes;
+
 /**
  * a data block is a set of simple headers and a body. The upper size of a block
  * is just over 1 MiB.
@@ -19,7 +21,7 @@ public interface Block {
      * 
      * @return the body of the block.
      */
-    public byte[] getBody();
+    public Bytes getBody();
 
     /**
      * convert the block to bytes.

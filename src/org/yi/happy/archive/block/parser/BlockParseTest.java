@@ -1,6 +1,5 @@
 package org.yi.happy.archive.block.parser;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
@@ -8,6 +7,7 @@ import java.util.Collections;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.GenericBlockTest;
 import org.yi.happy.archive.test_data.TestData;
@@ -30,7 +30,7 @@ public class BlockParseTest {
 	Block block = BlockParse.load(TestData.BAD_EMPTY.getUrl());
 
 	assertEquals(Collections.emptyMap(), block.getMeta());
-	assertArrayEquals(new byte[0], block.getBody());
+	assertEquals(new Bytes(), block.getBody());
     }
 
     /**
