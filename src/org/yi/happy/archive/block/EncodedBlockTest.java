@@ -81,9 +81,9 @@ public class EncodedBlockTest {
 	assertEquals(d.getLocatorKey(), e.getKey());
 	assertEquals("rijndael256-256-cbc", e.getCipher().getAlgorithm());
 	assertEquals(b.getBody(), e.getBody());
-	byte[] hash = Base16.decode(("b73aaf8748cfe48edd270d01517ef5556d0"
-	+ "3242af41ca58208c840c82e78651a"));
-	assertArrayEquals(hash, e.getHash());
+	byte[] hash = Base16.decode("b73aaf8748cfe48edd270d01517ef5556d0"
+		+ "3242af41ca58208c840c82e78651a");
+	assertArrayEquals(hash, e.getHash().toByteArray());
     }
 
     @Test(expected = ShortBodyException.class)

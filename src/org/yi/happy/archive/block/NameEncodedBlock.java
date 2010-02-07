@@ -1,6 +1,5 @@
 package org.yi.happy.archive.block;
 
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -21,23 +20,23 @@ public final class NameEncodedBlock extends AbstractBlock implements
 	EncodedBlock {
 
     private final NameLocatorKey key;
-    private final byte[] hash;
+    private final Bytes hash;
     private final DigestProvider digest;
     private final CipherProvider cipher;
     private final Bytes body;
 
-    public NameEncodedBlock(NameLocatorKey key, byte[] hash,
+    public NameEncodedBlock(NameLocatorKey key, Bytes hash,
 	    DigestProvider digest, CipherProvider cipher, Bytes body) {
 	GenericBlock.checkValue(digest.getAlgorithm());
 	GenericBlock.checkValue(cipher.getAlgorithm());
 
 	byte[] hash0 = ContentEncodedBlock.getHash(digest, body);
-	if (!Arrays.equals(hash0, hash)) {
+	if (!hash.equalBytes(hash0)) {
 	    throw new VerifyException();
 	}
 
 	this.key = key;
-	this.hash = hash.clone();
+	this.hash = hash;
 	this.digest = digest;
 	this.cipher = cipher;
 	this.body = body;
@@ -51,7 +50,7 @@ public final class NameEncodedBlock extends AbstractBlock implements
 	byte[] hash = ContentEncodedBlock.getHash(digest, body);
 
 	this.key = key;
-	this.hash = hash.clone();
+	this.hash = new Bytes(hash);
 	this.digest = digest;
 	this.cipher = cipher;
 	this.body = body;
@@ -61,8 +60,8 @@ public final class NameEncodedBlock extends AbstractBlock implements
 	return key;
     }
 
-    public byte[] getHash() {
-	return hash.clone();
+    public Bytes getHash() {
+	return hash;
     }
 
     public DigestProvider getDigest() {
@@ -129,7 +128,7 @@ public final class NameEncodedBlock extends AbstractBlock implements
 	result = prime * result + body.hashCode();
 	result = prime * result + ((cipher == null) ? 0 : cipher.hashCode());
 	result = prime * result + ((digest == null) ? 0 : digest.hashCode());
-	result = prime * result + Arrays.hashCode(hash);
+	result = prime * result + hash.hashCode();
 	result = prime * result + ((key == null) ? 0 : key.hashCode());
 	return result;
     }
@@ -155,7 +154,7 @@ public final class NameEncodedBlock extends AbstractBlock implements
 		return false;
 	} else if (!digest.equals(other.digest))
 	    return false;
-	if (!Arrays.equals(hash, other.hash))
+	if (!hash.equals(other.hash))
 	    return false;
 	if (key == null) {
 	    if (other.key != null)

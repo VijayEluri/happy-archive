@@ -108,7 +108,7 @@ public class EncodedBlockFactory {
 
 	byte[] hash = getHash(block);
 
-	return new NameEncodedBlock(key, hash, DigestFactory
+	return new NameEncodedBlock(key, new Bytes(hash), DigestFactory
 		.getProvider(digest), CipherFactory.getProvider(cipher), body);
     }
 

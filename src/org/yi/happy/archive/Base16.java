@@ -23,6 +23,24 @@ public class Base16 {
     }
 
     /**
+     * turn bytes into a base 16 string
+     * 
+     * @param bytes
+     *            the bytes
+     * @return the string
+     */
+    public static String encode(Bytes bytes) {
+	char[] out = new char[bytes.getSize() * 2];
+	int o = 0;
+	for (int i = 0; i < bytes.getSize(); i++) {
+	    byte b  = bytes.get(i);
+	    out[o++] = table[b >> 4 & 0xf];
+	    out[o++] = table[b >> 0 & 0xf];
+	}
+	return new String(out);
+    }
+
+    /**
      * turn a base 16 string into bytes
      * 
      * @param string
