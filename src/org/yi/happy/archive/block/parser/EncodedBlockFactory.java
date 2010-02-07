@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.annotate.TypeSwitch;
+import org.yi.happy.archive.Base16;
 import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.ShortBodyException;
 import org.yi.happy.archive.VerifyException;
@@ -20,7 +21,6 @@ import org.yi.happy.archive.crypto.CipherFactory;
 import org.yi.happy.archive.crypto.CipherProvider;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.crypto.DigestProvider;
-import org.yi.happy.archive.key.Base16;
 import org.yi.happy.archive.key.BlobLocatorKey;
 import org.yi.happy.archive.key.ContentLocatorKey;
 import org.yi.happy.archive.key.KeyParse;

@@ -8,11 +8,11 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 
 import org.junit.Test;
+import org.yi.happy.archive.Base16;
 import org.yi.happy.archive.ShortBodyException;
 import org.yi.happy.archive.VerifyException;
 import org.yi.happy.archive.block.parser.EncodedBlockFactory;
 import org.yi.happy.archive.crypto.DigestFactory;
-import org.yi.happy.archive.key.Base16;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.KeyParse;
 import org.yi.happy.archive.key.NameFullKey;

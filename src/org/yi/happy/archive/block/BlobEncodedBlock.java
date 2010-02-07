@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.yi.happy.archive.Base16;
 import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.UnknownDigestException;
@@ -13,7 +14,6 @@ import org.yi.happy.archive.crypto.Cipher;
 import org.yi.happy.archive.crypto.CipherProvider;
 import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.crypto.UnknownAlgorithmException;
-import org.yi.happy.archive.key.Base16;
 import org.yi.happy.archive.key.BlobFullKey;
 import org.yi.happy.archive.key.BlobLocatorKey;
 import org.yi.happy.archive.key.FullKey;

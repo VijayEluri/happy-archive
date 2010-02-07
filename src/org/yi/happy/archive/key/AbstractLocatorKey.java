@@ -2,6 +2,8 @@ package org.yi.happy.archive.key;
 
 import java.util.Arrays;
 
+import org.yi.happy.archive.Base16;
+
 /**
  * common function of locator keys
  */

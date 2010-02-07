@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.file_system.FileSystem;
-import org.yi.happy.archive.key.Base16;
 import org.yi.happy.archive.key.LocatorKey;
 
 public class FileBlockStore implements BlockStore {

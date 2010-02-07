@@ -2,7 +2,7 @@ package org.yi.happy.crypt;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.yi.happy.archive.key.Base16;
+import org.yi.happy.archive.Base16;
 
 /**
  * test encryption and decryption of Rijndael, this test data comes from the old

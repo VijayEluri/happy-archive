@@ -1,4 +1,4 @@
-package org.yi.happy.archive.key;
+package org.yi.happy.archive;
 
 import org.junit.Assert;
 import org.junit.Test;

@@ -2,7 +2,7 @@ package org.yi.happy.crypt;
 
 import java.io.PrintStream;
 
-import org.yi.happy.archive.key.Base16;
+import org.yi.happy.archive.Base16;
 
 public class EcbEncryptMonteCarlo {
     private static PrintStream out;

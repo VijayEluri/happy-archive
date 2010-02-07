@@ -2,7 +2,7 @@ package org.yi.happy.archive.crypto;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.yi.happy.archive.key.Base16;
+import org.yi.happy.archive.Base16;
 
 
 public class DigestsTest {

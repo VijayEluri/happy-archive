@@ -7,13 +7,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
+import org.yi.happy.archive.Base16;
 import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.crypto.CipherFactory;
 import org.yi.happy.archive.crypto.CipherProvider;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.crypto.DigestProvider;
-import org.yi.happy.archive.key.Base16;
 import org.yi.happy.archive.key.BlobLocatorKey;
 
 
