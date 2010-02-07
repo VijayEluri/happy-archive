@@ -1,17 +1,16 @@
 package org.yi.happy.archive.block;
 
-import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.UnknownDigestException;
 import org.yi.happy.archive.block.parser.BlockParse;
 import org.yi.happy.archive.crypto.Cipher;
 import org.yi.happy.archive.crypto.CipherProvider;
 import org.yi.happy.archive.crypto.DigestProvider;
+import org.yi.happy.archive.crypto.Digests;
 import org.yi.happy.archive.crypto.UnknownAlgorithmException;
 import org.yi.happy.archive.key.ContentFullKey;
 import org.yi.happy.archive.key.ContentLocatorKey;
@@ -95,12 +94,9 @@ public final class ContentEncodedBlock extends AbstractBlock implements
      *            the body.
      * @return the hash value.
      */
-    @SmellsMessy
     public static byte[] getHash(DigestProvider digest, Bytes body) {
 	try {
-	    MessageDigest d = digest.get();
-	    d.update(body.toByteArray());
-	    return d.digest();
+	    return Digests.digestData(digest, body);
 	} catch (UnknownAlgorithmException e) {
 	    throw new UnknownDigestException(digest.getAlgorithm(), e);
 	}
@@ -131,9 +127,9 @@ public final class ContentEncodedBlock extends AbstractBlock implements
 	final int prime = 31;
 	int result = 1;
 	result = prime * result + body.hashCode();
-	result = prime * result + ((cipher == null) ? 0 : cipher.hashCode());
-	result = prime * result + ((digest == null) ? 0 : digest.hashCode());
-	result = prime * result + ((key == null) ? 0 : key.hashCode());
+	result = prime * result + cipher.hashCode();
+	result = prime * result + digest.hashCode();
+	result = prime * result + key.hashCode();
 	return result;
     }
 

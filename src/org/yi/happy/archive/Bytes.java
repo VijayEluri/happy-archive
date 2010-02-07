@@ -43,6 +43,10 @@ public final class Bytes {
         this.data = new byte[0];
     }
 
+    public Bytes(Bytes body, int offset, int size) {
+	this(body.data, offset, size);
+    }
+
     /**
      * Get the contents. The return value is a copy of the internal value and is
      * safe to modify.

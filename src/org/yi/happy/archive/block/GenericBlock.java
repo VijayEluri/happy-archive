@@ -4,7 +4,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.yi.happy.archive.Bytes;
-import org.yi.happy.archive.VerifyException;
 
 /**
  * A data object for a data block.
@@ -73,13 +72,7 @@ public class GenericBlock extends AbstractBlock implements Block {
      *             if a header by this name was already added.
      */
     public void addMeta(String name, String value) {
-	for (int i = 0; i < name.length(); i++) {
-	    char c = name.charAt(i);
-	    if (c == ':' || c == '\r' || c == '\n') {
-		throw new IllegalArgumentException(
-			"name can not have ':' or newline");
-	    }
-	}
+	checkName(name);
 	checkValue(value);
 
 	if (meta.containsKey(name)) {
@@ -139,13 +132,24 @@ public class GenericBlock extends AbstractBlock implements Block {
 
     /*
      * XXX this is a bad name, something like validation of being allowed in the
-     * value part of a meta-field is what it should read as.
+     * value part of a meta-field is what it should read as. A check meta method
+     * would do a better job.
      */
     public static void checkValue(String value) {
 	for (int i = 0; i < value.length(); i++) {
 	    char c = value.charAt(i);
 	    if (c == '\r' || c == '\n') {
-		throw new VerifyException("value can not have newline");
+		throw new IllegalArgumentException("value can not have newline");
+	    }
+	}
+    }
+
+    public static void checkName(String name) {
+	for (int i = 0; i < name.length(); i++) {
+	    char c = name.charAt(i);
+	    if (c == ':' || c == '\r' || c == '\n') {
+		throw new IllegalArgumentException(
+			"name can not have ':' or newline");
 	    }
 	}
     }

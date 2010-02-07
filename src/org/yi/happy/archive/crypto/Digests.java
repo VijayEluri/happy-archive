@@ -2,6 +2,8 @@ package org.yi.happy.archive.crypto;
 
 import java.security.MessageDigest;
 
+import org.yi.happy.archive.Bytes;
+
 public class Digests {
     private Digests() {
 
@@ -20,6 +22,19 @@ public class Digests {
 	MessageDigest d = digest.get();
 	d.update(data);
 	return d.digest();
+    }
+
+    /**
+     * get the hash of some data using a message digest.
+     * 
+     * @param data
+     *            the data to hash
+     * @param digest
+     *            the digest to use
+     * @return the hashed data
+     */
+    public static byte[] digestData(DigestProvider digest, Bytes data) {
+	return digestData(digest, data.toByteArray());
     }
 
     /**

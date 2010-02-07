@@ -37,7 +37,7 @@ public interface EncodedBlock extends Block {
     public Map<String, String> getMeta();
 
     /**
-     * @return a copy the body of the block. This array is safe to modify.
+     * @return the body of the block.
      */
     @Override
     public Bytes getBody();

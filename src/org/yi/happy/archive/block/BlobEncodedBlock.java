@@ -150,7 +150,7 @@ public final class BlobEncodedBlock extends AbstractBlock implements
 
 	if (body.getSize() % c.getBlockSize() != 0) {
 	    throw new IllegalArgumentException(
-		    "size is not a multiple of the cipher block size");
+		    "body size is not a multiple of the cipher block size");
 	}
 
 	byte[] out = body.toByteArray();
@@ -164,9 +164,9 @@ public final class BlobEncodedBlock extends AbstractBlock implements
 	final int prime = 31;
 	int result = 1;
 	result = prime * result + body.hashCode();
-	result = prime * result + ((cipher == null) ? 0 : cipher.hashCode());
-	result = prime * result + ((digest == null) ? 0 : digest.hashCode());
-	result = prime * result + ((key == null) ? 0 : key.hashCode());
+	result = prime * result + cipher.hashCode();
+	result = prime * result + digest.hashCode();
+	result = prime * result + key.hashCode();
 	return result;
     }
 
@@ -181,20 +181,11 @@ public final class BlobEncodedBlock extends AbstractBlock implements
 	BlobEncodedBlock other = (BlobEncodedBlock) obj;
 	if (!body.equals(other.body))
 	    return false;
-	if (cipher == null) {
-	    if (other.cipher != null)
-		return false;
-	} else if (!cipher.equals(other.cipher))
+	if (!cipher.equals(other.cipher))
 	    return false;
-	if (digest == null) {
-	    if (other.digest != null)
-		return false;
-	} else if (!digest.equals(other.digest))
+	if (!digest.equals(other.digest))
 	    return false;
-	if (key == null) {
-	    if (other.key != null)
-		return false;
-	} else if (!key.equals(other.key))
+	if (!key.equals(other.key))
 	    return false;
 	return true;
     }

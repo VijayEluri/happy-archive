@@ -200,7 +200,7 @@ public class EncodedBlockFactory {
 	}
 
 	if (body.getSize() > size) {
-	    body = new Bytes(body.toByteArray(), 0, size);
+	    body = new Bytes(body, 0, size);
 	}
 
 	return body;
