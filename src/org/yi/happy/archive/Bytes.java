@@ -58,8 +58,8 @@ public final class Bytes {
         this.data = new byte[0];
     }
 
-    public Bytes(Bytes body, int offset, int size) {
-	this(body.data, offset, size);
+    public Bytes(Bytes data, int offset, int size) {
+	this(data.data, offset, size);
     }
 
     /**
