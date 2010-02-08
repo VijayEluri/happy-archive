@@ -27,8 +27,8 @@ public final class NameEncodedBlock extends AbstractBlock implements
 
     public NameEncodedBlock(NameLocatorKey key, Bytes hash,
 	    DigestProvider digest, CipherProvider cipher, Bytes body) {
-	GenericBlock.checkValue(digest.getAlgorithm());
-	GenericBlock.checkValue(cipher.getAlgorithm());
+	GenericBlock.checkHeader("digest", digest.getAlgorithm());
+	GenericBlock.checkHeader("cipher", cipher.getAlgorithm());
 
 	byte[] hash0 = ContentEncodedBlock.getHash(digest, body);
 	if (!hash.equalBytes(hash0)) {
@@ -44,8 +44,8 @@ public final class NameEncodedBlock extends AbstractBlock implements
 
     public NameEncodedBlock(NameLocatorKey key, DigestProvider digest,
 	    CipherProvider cipher, Bytes body) {
-	GenericBlock.checkValue(digest.getAlgorithm());
-	GenericBlock.checkValue(cipher.getAlgorithm());
+	GenericBlock.checkHeader("digest", digest.getAlgorithm());
+	GenericBlock.checkHeader("cipher", cipher.getAlgorithm());
 
 	byte[] hash = ContentEncodedBlock.getHash(digest, body);
 

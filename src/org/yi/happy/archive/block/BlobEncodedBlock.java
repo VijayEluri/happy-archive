@@ -43,8 +43,8 @@ public final class BlobEncodedBlock extends AbstractBlock implements
      */
     public BlobEncodedBlock(BlobLocatorKey key, DigestProvider digest,
 	    CipherProvider cipher, Bytes body) {
-	GenericBlock.checkValue(digest.getAlgorithm());
-	GenericBlock.checkValue(cipher.getAlgorithm());
+	GenericBlock.checkHeader("digest", digest.getAlgorithm());
+	GenericBlock.checkHeader("cipher", cipher.getAlgorithm());
 
 	byte[] hash = getHash(digest, cipher, body);
 	if (!key.getHash().equalBytes(hash)) {
@@ -71,8 +71,8 @@ public final class BlobEncodedBlock extends AbstractBlock implements
      */
     public BlobEncodedBlock(DigestProvider digest, CipherProvider cipher,
 	    Bytes body) {
-	GenericBlock.checkValue(digest.getAlgorithm());
-	GenericBlock.checkValue(cipher.getAlgorithm());
+	GenericBlock.checkHeader("digest", digest.getAlgorithm());
+	GenericBlock.checkHeader("cipher", cipher.getAlgorithm());
 
 	byte[] hash = getHash(digest, cipher, body);
 

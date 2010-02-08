@@ -72,8 +72,7 @@ public class GenericBlock extends AbstractBlock implements Block {
      *             if a header by this name was already added.
      */
     public void addMeta(String name, String value) {
-	checkName(name);
-	checkValue(value);
+	checkHeader(name, value);
 
 	if (meta.containsKey(name)) {
 	    throw new IllegalArgumentException("already have header: " + name);
@@ -130,26 +129,28 @@ public class GenericBlock extends AbstractBlock implements Block {
 	return true;
     }
 
-    /*
-     * XXX this is a bad name, something like validation of being allowed in the
-     * value part of a meta-field is what it should read as. A check meta method
-     * would do a better job.
+    /**
+     * Check a meta-data header, throwing an {@link IllegalArgumentException} on
+     * failure.
+     * 
+     * @param name
+     *            the name part of the header.
+     * @param value
+     *            the value part of the header.
      */
-    public static void checkValue(String value) {
-	for (int i = 0; i < value.length(); i++) {
-	    char c = value.charAt(i);
-	    if (c == '\r' || c == '\n') {
-		throw new IllegalArgumentException("value can not have newline");
-	    }
-	}
-    }
-
-    public static void checkName(String name) {
+    public static void checkHeader(String name, String value) {
 	for (int i = 0; i < name.length(); i++) {
 	    char c = name.charAt(i);
 	    if (c == ':' || c == '\r' || c == '\n') {
 		throw new IllegalArgumentException(
 			"name can not have ':' or newline");
+	    }
+	}
+
+	for (int i = 0; i < value.length(); i++) {
+	    char c = value.charAt(i);
+	    if (c == '\r' || c == '\n') {
+		throw new IllegalArgumentException("value can not have newline");
 	    }
 	}
     }
