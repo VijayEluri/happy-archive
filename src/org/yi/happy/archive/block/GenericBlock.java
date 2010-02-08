@@ -7,7 +7,7 @@ import java.util.Map;
 import org.yi.happy.archive.Bytes;
 
 /**
- * A data object for a data block.
+ * A value object for a generic block.
  */
 public final class GenericBlock extends AbstractBlock implements Block {
 
@@ -16,7 +16,12 @@ public final class GenericBlock extends AbstractBlock implements Block {
     private final Map<String, String> meta;
 
     /**
-     * create empty
+     * create, checking that the meta-data headers are valid.
+     * 
+     * @param meta
+     *            the meta-data headers.
+     * @param body
+     *            the bytes of the body.
      */
     public GenericBlock(Map<String, String> meta, Bytes body) {
 	for (Map.Entry<String, String> i : meta.entrySet()) {
@@ -32,13 +37,16 @@ public final class GenericBlock extends AbstractBlock implements Block {
 	this.body = body;
     }
 
+    /**
+     * create blank.
+     */
     public GenericBlock() {
 	this.meta = Collections.emptyMap();
 	this.body = new Bytes();
     }
 
     /**
-     * create a fully defined block
+     * create a fully defined block.
      * 
      * @param body
      *            the data part of the block
@@ -114,13 +122,17 @@ public final class GenericBlock extends AbstractBlock implements Block {
     }
 
     /**
-     * Check a meta-data header, throwing an {@link IllegalArgumentException} on
-     * failure.
+     * Check a meta-data header.
      * 
      * @param name
      *            the name part of the header.
      * @param value
      *            the value part of the header.
+     * @throws IllegalArgumentException
+     *             if the name or value have a newline in them, or if the name
+     *             has a ':' in it.
+     * @throws NullPointerException
+     *             if name or value are null.
      */
     public static void checkHeader(String name, String value) {
 	for (int i = 0; i < name.length(); i++) {
