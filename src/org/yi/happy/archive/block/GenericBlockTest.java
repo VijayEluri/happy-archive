@@ -3,6 +3,9 @@ package org.yi.happy.archive.block;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.junit.Test;
 import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.Bytes;
@@ -16,8 +19,7 @@ public class GenericBlockTest {
      */
     @Test
     public void testBlockHeader() {
-	GenericBlock block = new GenericBlock();
-	block.addMeta("aA", "b");
+	GenericBlock block = GenericBlock.create(new Bytes(), "aA", "b");
 
 	assertEquals("b", block.getMeta().get("aA"));
 	assertEquals(null, block.getMeta().get("Aa"));
@@ -42,14 +44,14 @@ public class GenericBlockTest {
      * @return the sample block
      */
     public static GenericBlock createSampleBlock() {
-	GenericBlock block = new GenericBlock();
+	Map<String, String> meta = new LinkedHashMap<String, String>();
+	meta.put("a", "c");
+	meta.put("b", "d");
+	meta.put("c", "e");
 
-	block.addMeta("a", "c");
-	block.addMeta("b", "d");
-	block.addMeta("c", "e");
-	block.setBody(new Bytes(ByteString.toBytes("body\ndata\n")));
+	Bytes body = new Bytes(ByteString.toBytes("body\ndata\n"));
 
-	return block;
+	return new GenericBlock(meta, body);
     }
 
     /**

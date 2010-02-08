@@ -110,10 +110,8 @@ public class KeyOutputStream extends OutputStream {
 	/*
 	 * XXX there should be a map block type that I could just store.
 	 */
-	GenericBlock b = new GenericBlock();
-	b.addMeta("type", "map");
-	b.addMeta("size", "" + data.length);
-	b.setBody(new Bytes(data));
+	GenericBlock b = GenericBlock.create(new Bytes(data), "type", "map",
+		"size", "" + data.length);
 
 	return store.storeBlock(b);
     }

@@ -1,5 +1,6 @@
 package org.yi.happy.archive.block;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -8,17 +9,32 @@ import org.yi.happy.archive.Bytes;
 /**
  * A data object for a data block.
  */
-public class GenericBlock extends AbstractBlock implements Block {
+public final class GenericBlock extends AbstractBlock implements Block {
 
-    private Bytes body = new Bytes();
+    private final Bytes body;
 
     private final Map<String, String> meta;
 
     /**
      * create empty
      */
+    public GenericBlock(Map<String, String> meta, Bytes body) {
+	for (Map.Entry<String, String> i : meta.entrySet()) {
+	    checkHeader(i.getKey(), i.getValue());
+	}
+
+	if (body == null) {
+	    body = new Bytes();
+	}
+
+	this.meta = Collections
+		.unmodifiableMap(new LinkedHashMap<String, String>(meta));
+	this.body = body;
+    }
+
     public GenericBlock() {
-	meta = new LinkedHashMap<String, String>();
+	this.meta = Collections.emptyMap();
+	this.body = new Bytes();
     }
 
     /**
@@ -35,49 +51,17 @@ public class GenericBlock extends AbstractBlock implements Block {
 	if (meta.length % 2 != 0) {
 	    throw new IllegalArgumentException("meta needs to be pairs");
 	}
-	GenericBlock out = new GenericBlock();
-	out.setBody(body);
+
+	Map<String, String> m = new LinkedHashMap<String, String>();
 	for (int i = 0; i < meta.length; i += 2) {
-	    out.addMeta(meta[i], meta[i + 1]);
-	}
-	return out;
-    }
-
-    /**
-     * set the data part of the block.
-     * 
-     * @param body
-     *            the data block
-     */
-    public void setBody(Bytes body) {
-	if (body == null) {
-	    body = new Bytes();
+	    if (m.containsKey(meta[i])) {
+		throw new IllegalArgumentException("repeated header: "
+			+ meta[i]);
+	    }
+	    m.put(meta[i], meta[i + 1]);
 	}
 
-	this.body = body;
-    }
-
-    /**
-     * add a meta-data header. The name may not be repeated.
-     * 
-     * @param name
-     *            the name of the header, may only contain 7 bit ASCII, no new
-     *            line characters, and no ": ".
-     * @param value
-     *            the value of the header, may only contain 7 bit ASCII, and no
-     *            new line characters.
-     * @throws IllegalArgumentException
-     *             if the name or value are not valid.
-     * @throws IllegalArgumentException
-     *             if a header by this name was already added.
-     */
-    public void addMeta(String name, String value) {
-	checkHeader(name, value);
-
-	if (meta.containsKey(name)) {
-	    throw new IllegalArgumentException("already have header: " + name);
-	}
-	meta.put(name, value);
+	return new GenericBlock(m, body);
     }
 
     /**
@@ -87,7 +71,7 @@ public class GenericBlock extends AbstractBlock implements Block {
      */
     @Override
     public Map<String, String> getMeta() {
-	return new LinkedHashMap<String, String>(meta);
+	return meta;
     }
 
     /**

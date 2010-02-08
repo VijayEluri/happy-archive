@@ -1,5 +1,8 @@
 package org.yi.happy.archive.block.parser;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.yi.happy.annotate.SmellsProcedural;
 import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.Bytes;
@@ -16,9 +19,11 @@ public class GenericBlockParse {
      * @param bytes
      *            the bytes for the block.
      * @return the parsed block.
+     * @throws IllegalArgumentException
+     *             if a header is repeated.
      */
     public GenericBlock parse(byte[] bytes) {
-	GenericBlock out = new GenericBlock();
+	Map<String, String> meta = new LinkedHashMap<String, String>();
 
 	Range rest = new Range(0, bytes.length);
 
@@ -42,14 +47,18 @@ public class GenericBlockParse {
 
 	    String name = ByteString.fromUtf8(bytes, line.before(divider));
 	    String value = ByteString.fromUtf8(bytes, line.after(divider));
-	    out.addMeta(name, value);
+
+	    if (meta.containsKey(name)) {
+		throw new IllegalArgumentException("repeated header: " + name);
+	    }
+	    meta.put(name, value);
 	}
 
 	/*
 	 * trim the body if the size header is valid.
 	 */
 	trim: try {
-	    String s = out.getMeta().get("size");
+	    String s = meta.get("size");
 	    if (s == null) {
 		break trim;
 	    }
@@ -67,11 +76,9 @@ public class GenericBlockParse {
 	/*
 	 * copy the body out of the buffer.
 	 */
-	byte[] body = new byte[rest.getLength()];
-	System.arraycopy(bytes, rest.getOffset(), body, 0, rest.getLength());
-	out.setBody(new Bytes(body));
+	Bytes body = new Bytes(bytes, rest.getOffset(), rest.getLength());
 
-	return out;
+	return new GenericBlock(meta, body);
     }
 
     /**
