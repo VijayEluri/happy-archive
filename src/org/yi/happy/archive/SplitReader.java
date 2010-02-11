@@ -72,6 +72,7 @@ public class SplitReader {
      *            the index in the pending list to try and load
      * @return the loaded data for the given entry, or null
      * @throws IOException
+     *             XXX when does this throw exceptions?
      */
     private Fragment get(int index) throws IOException {
 	while (true) {
