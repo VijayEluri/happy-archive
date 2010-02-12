@@ -1,8 +1,7 @@
 package org.yi.happy.archive.block.parser;
 
-import org.yi.happy.archive.VerifyException;
 
-public class MissingMetaException extends VerifyException {
+public class MissingMetaException extends IllegalArgumentException {
 
     /**
      * 

@@ -1,6 +1,6 @@
 package org.yi.happy.archive;
 
-public class ShortBodyException extends VerifyException {
+public class ShortBodyException extends IllegalArgumentException {
 
     /**
      * 

@@ -6,10 +6,11 @@ import java.util.Map;
 
 import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.annotate.TypeSwitch;
+import org.yi.happy.archive.BadSignatureException;
 import org.yi.happy.archive.Base16;
 import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.ShortBodyException;
-import org.yi.happy.archive.VerifyException;
+import org.yi.happy.archive.UnknownDigestAlgorithmException;
 import org.yi.happy.archive.VersionNotNumberException;
 import org.yi.happy.archive.block.BlobEncodedBlock;
 import org.yi.happy.archive.block.Block;
@@ -67,7 +68,8 @@ public class EncodedBlockFactory {
     }
 
     @TypeSwitch
-    public static EncodedBlock parse(Block block) throws VerifyException {
+    public static EncodedBlock parse(Block block) throws MissingMetaException,
+	    IllegalArgumentException, UnknownKeyTypeException {
 	if (block instanceof EncodedBlock) {
 	    return (EncodedBlock) block;
 	}
@@ -92,8 +94,7 @@ public class EncodedBlockFactory {
 	throw new UnknownKeyTypeException();
     }
 
-    private static EncodedBlock parseName(Block block, NameLocatorKey key)
-	    throws VerifyException {
+    private static EncodedBlock parseName(Block block, NameLocatorKey key) {
 	Bytes body = getBody(block);
 
 	String digest = getDigestName(block);
@@ -112,19 +113,12 @@ public class EncodedBlockFactory {
 		.getProvider(digest), CipherFactory.getProvider(cipher), body);
     }
 
-    private static byte[] getHash(Block block) throws VerifyException {
-	try {
-	    return Base16.decode(getRequiredMeta(block, "hash"));
-	} catch (VerifyException e) {
-	    throw e;
-	} catch (IllegalArgumentException e) {
-	    throw new VerifyException();
-	}
-
+    private static byte[] getHash(Block block) throws IllegalArgumentException,
+	    MissingMetaException {
+	return Base16.decode(getRequiredMeta(block, "hash"));
     }
 
-    private static EncodedBlock parseContent(Block block, ContentLocatorKey key)
-	    throws VerifyException {
+    private static EncodedBlock parseContent(Block block, ContentLocatorKey key) {
 	Bytes body = getBody(block);
 
 	String digest = getDigestName(block);
@@ -150,7 +144,7 @@ public class EncodedBlockFactory {
 	return cipher;
     }
 
-    private static int getVersion(Block block) throws VerifyException {
+    private static int getVersion(Block block) throws VersionNotNumberException {
 	String version = block.getMeta().get("version");
 
 	if (version == null) {
@@ -164,18 +158,14 @@ public class EncodedBlockFactory {
 	}
     }
 
-    private static byte[] getKeyHash(Block block) throws VerifyException {
-	try {
-	    return Base16.decode(getRequiredMeta(block, "key"));
-	} catch (VerifyException e) {
-	    throw e;
-	} catch (IllegalArgumentException e) {
-	    throw new VerifyException(e);
-	}
+    private static byte[] getKeyHash(Block block)
+	    throws IllegalArgumentException, MissingMetaException {
+	return Base16.decode(getRequiredMeta(block, "key"));
     }
 
     private static EncodedBlock parseBlob(Block block, BlobLocatorKey key)
-	    throws VerifyException {
+	    throws MissingMetaException, IllegalArgumentException,
+	    BadSignatureException, UnknownDigestAlgorithmException {
 	Bytes body = getBody(block);
 
 	String digest = getDigestName(block);
@@ -186,7 +176,8 @@ public class EncodedBlockFactory {
 		CipherFactory.getProvider(cipher), body);
     }
 
-    private static Bytes getBody(Block block) throws VerifyException {
+    private static Bytes getBody(Block block) throws NegativeSizeException,
+	    ShortBodyException, MissingMetaException, NumberFormatException {
 	int size = getSize(block);
 
 	if (size < 0) {
@@ -199,6 +190,9 @@ public class EncodedBlockFactory {
 	    throw new ShortBodyException();
 	}
 
+	/*
+	 * the generic parser should have trimmed the body already.
+	 */
 	if (body.getSize() > size) {
 	    body = new Bytes(body, 0, size);
 	}
@@ -206,25 +200,28 @@ public class EncodedBlockFactory {
 	return body;
     }
 
-    private static String getCipherName(Block block) throws VerifyException {
+    private static String getCipherName(Block block)
+	    throws MissingMetaException {
 	return getRequiredMeta(block, "cipher");
     }
 
-    private static String getDigestName(Block block) throws VerifyException {
+    private static String getDigestName(Block block)
+	    throws MissingMetaException {
 	return getRequiredMeta(block, "digest");
     }
 
-    private static int getSize(Block block) throws VerifyException {
+    private static int getSize(Block block) throws MissingMetaException,
+	    NumberFormatException {
 	String size = getRequiredMeta(block, "size");
 	return Integer.parseInt(size);
     }
 
-    private static String getKeyType(Block block) throws VerifyException {
+    private static String getKeyType(Block block) throws MissingMetaException {
 	return getRequiredMeta(block, "key-type");
     }
 
     private static String getRequiredMeta(Block block, String name)
-	    throws VerifyException {
+	    throws MissingMetaException {
 	String value = block.getMeta().get(name);
 	if (value == null) {
 	    throw new MissingMetaException();

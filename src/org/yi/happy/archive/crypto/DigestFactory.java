@@ -3,6 +3,7 @@ package org.yi.happy.archive.crypto;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import org.yi.happy.archive.UnknownDigestAlgorithmException;
 
 /**
  * simple factory to create message digest objects
@@ -24,7 +25,7 @@ public class DigestFactory {
 		try {
 		    return MessageDigest.getInstance(algorithm);
 		} catch (NoSuchAlgorithmException e) {
-		    throw new UnknownAlgorithmException(algorithm, e);
+		    throw new UnknownDigestAlgorithmException(algorithm, e);
 		}
 	    }
 	};

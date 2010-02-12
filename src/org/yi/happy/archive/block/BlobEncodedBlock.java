@@ -4,15 +4,15 @@ import java.security.MessageDigest;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.yi.happy.archive.BadSignatureException;
 import org.yi.happy.archive.Base16;
 import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.Bytes;
-import org.yi.happy.archive.UnknownDigestException;
+import org.yi.happy.archive.UnknownDigestAlgorithmException;
 import org.yi.happy.archive.block.parser.BlockParse;
 import org.yi.happy.archive.crypto.Cipher;
 import org.yi.happy.archive.crypto.CipherProvider;
 import org.yi.happy.archive.crypto.DigestProvider;
-import org.yi.happy.archive.crypto.UnknownAlgorithmException;
 import org.yi.happy.archive.key.BlobFullKey;
 import org.yi.happy.archive.key.BlobLocatorKey;
 import org.yi.happy.archive.key.FullKey;
@@ -42,13 +42,14 @@ public final class BlobEncodedBlock extends AbstractBlock implements
      *             if the details do not check out.
      */
     public BlobEncodedBlock(BlobLocatorKey key, DigestProvider digest,
-	    CipherProvider cipher, Bytes body) {
+	    CipherProvider cipher, Bytes body) throws IllegalArgumentException,
+	    BadSignatureException, UnknownDigestAlgorithmException {
 	GenericBlock.checkHeader("digest", digest.getAlgorithm());
 	GenericBlock.checkHeader("cipher", cipher.getAlgorithm());
 
 	byte[] hash = getHash(digest, cipher, body);
 	if (!key.getHash().equalBytes(hash)) {
-	    throw new IllegalArgumentException();
+	    throw new BadSignatureException();
 	}
 
 	this.key = key;
@@ -122,20 +123,16 @@ public final class BlobEncodedBlock extends AbstractBlock implements
      */
     public byte[] getHash(DigestProvider digest, CipherProvider cipher,
 	    Bytes body) {
-	try {
-	    MessageDigest d = digest.get();
-	    d.update(ByteString.toUtf8("digest: "));
-	    d.update(ByteString.toUtf8(digest.getAlgorithm()));
-	    d.update(ByteString.toUtf8("\r\ncipher: "));
-	    d.update(ByteString.toUtf8(cipher.getAlgorithm()));
-	    d.update(ByteString.toUtf8("\r\nsize: "));
-	    d.update(ByteString.toUtf8(Integer.toString(body.getSize())));
-	    d.update(ByteString.toUtf8("\r\n\r\n"));
-	    d.update(body.toByteArray());
-	    return d.digest();
-	} catch (UnknownAlgorithmException e) {
-	    throw new UnknownDigestException(digest.getAlgorithm(), e);
-	}
+	MessageDigest d = digest.get();
+	d.update(ByteString.toUtf8("digest: "));
+	d.update(ByteString.toUtf8(digest.getAlgorithm()));
+	d.update(ByteString.toUtf8("\r\ncipher: "));
+	d.update(ByteString.toUtf8(cipher.getAlgorithm()));
+	d.update(ByteString.toUtf8("\r\nsize: "));
+	d.update(ByteString.toUtf8(Integer.toString(body.getSize())));
+	d.update(ByteString.toUtf8("\r\n\r\n"));
+	d.update(body.toByteArray());
+	return d.digest();
     }
 
     public Block decode(FullKey fullKey) {

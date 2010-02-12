@@ -1,6 +1,6 @@
 package org.yi.happy.archive;
 
-public class VersionNotNumberException extends VerifyException {
+public class VersionNotNumberException extends IllegalArgumentException {
     /**
 	 * 
 	 */

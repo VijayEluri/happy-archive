@@ -3,15 +3,14 @@ package org.yi.happy.archive.block;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
 import org.junit.Test;
 import org.yi.happy.archive.Base16;
 import org.yi.happy.archive.ShortBodyException;
-import org.yi.happy.archive.VerifyException;
 import org.yi.happy.archive.block.parser.EncodedBlockFactory;
+import org.yi.happy.archive.block.parser.MissingMetaException;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.KeyParse;
@@ -93,7 +92,7 @@ public class EncodedBlockTest {
 	EncodedBlockFactory.parse(b);
     }
 
-    @Test(expected = VerifyException.class)
+    @Test(expected = MissingMetaException.class)
     public void testInvalid2() throws IOException {
 	Block b = TestData.OK_SMALL.getBlock();
 
@@ -110,17 +109,11 @@ public class EncodedBlockTest {
     /**
      * verify an empty block
      */
-    @Test(expected = VerifyException.class)
+    @Test(expected = MissingMetaException.class)
     public void testVerifyFresh() {
 	Block block = new GenericBlock();
 
 	EncodedBlockFactory.parse(block);
-    }
-
-    @Test
-    public void errorIsVerify() {
-	assertTrue(VerifyException.class
-		.isAssignableFrom(ShortBodyException.class));
     }
 
     @Test

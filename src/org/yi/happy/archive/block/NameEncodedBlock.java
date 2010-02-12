@@ -3,10 +3,10 @@ package org.yi.happy.archive.block;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.yi.happy.archive.BadSignatureException;
 import org.yi.happy.archive.Base16;
 import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.Bytes;
-import org.yi.happy.archive.VerifyException;
 import org.yi.happy.archive.block.parser.BlockParse;
 import org.yi.happy.archive.crypto.Cipher;
 import org.yi.happy.archive.crypto.CipherProvider;
@@ -32,7 +32,7 @@ public final class NameEncodedBlock extends AbstractBlock implements
 
 	byte[] hash0 = ContentEncodedBlock.getHash(digest, body);
 	if (!hash.equalBytes(hash0)) {
-	    throw new VerifyException();
+	    throw new BadSignatureException();
 	}
 
 	this.key = key;

@@ -3,6 +3,7 @@ package org.yi.happy.archive.crypto;
 import java.security.MessageDigest;
 
 import org.yi.happy.archive.Bytes;
+import org.yi.happy.archive.UnknownDigestAlgorithmException;
 
 public class Digests {
     private Digests() {
@@ -18,7 +19,8 @@ public class Digests {
      *            the digest to use
      * @return the hashed data
      */
-    public static byte[] digestData(DigestProvider digest, byte[] data) {
+    public static byte[] digestData(DigestProvider digest, byte[] data)
+	    throws UnknownDigestAlgorithmException {
 	MessageDigest d = digest.get();
 	d.update(data);
 	return d.digest();

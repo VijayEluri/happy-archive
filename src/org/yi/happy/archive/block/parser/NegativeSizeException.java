@@ -1,8 +1,7 @@
 package org.yi.happy.archive.block.parser;
 
-import org.yi.happy.archive.VerifyException;
 
-public class NegativeSizeException extends VerifyException {
+public class NegativeSizeException extends IllegalArgumentException {
 
     public NegativeSizeException() {
 	super();

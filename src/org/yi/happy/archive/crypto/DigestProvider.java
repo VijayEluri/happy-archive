@@ -2,6 +2,7 @@ package org.yi.happy.archive.crypto;
 
 import java.security.MessageDigest;
 
+import org.yi.happy.archive.UnknownDigestAlgorithmException;
 
 /**
  * A pseudo value object representing a digest algorithm name. If get() is not
@@ -22,7 +23,7 @@ public abstract class DigestProvider {
      * @throws UnknownAlgorithmException
      *             if the algorithm does not have a known implementation.
      */
-    public abstract MessageDigest get() throws UnknownAlgorithmException;
+    public abstract MessageDigest get() throws UnknownDigestAlgorithmException;
 
     /**
      * @return the digest algorithm that will be provided.

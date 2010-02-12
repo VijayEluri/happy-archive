@@ -5,13 +5,12 @@ import java.util.Map;
 
 import org.yi.happy.archive.Base16;
 import org.yi.happy.archive.Bytes;
-import org.yi.happy.archive.UnknownDigestException;
+import org.yi.happy.archive.UnknownDigestAlgorithmException;
 import org.yi.happy.archive.block.parser.BlockParse;
 import org.yi.happy.archive.crypto.Cipher;
 import org.yi.happy.archive.crypto.CipherProvider;
 import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.crypto.Digests;
-import org.yi.happy.archive.crypto.UnknownAlgorithmException;
 import org.yi.happy.archive.key.ContentFullKey;
 import org.yi.happy.archive.key.ContentLocatorKey;
 import org.yi.happy.archive.key.FullKey;
@@ -72,7 +71,7 @@ public final class ContentEncodedBlock extends AbstractBlock implements
 
     @Override
     public Map<String, String> getMeta() {
-	Map<String,String> out = new LinkedHashMap<String, String>();
+	Map<String, String> out = new LinkedHashMap<String, String>();
 	out.put("version", "2");
 	out.put("key-type", key.getType());
 	out.put("key", Base16.encode(key.getHash()));
@@ -93,12 +92,9 @@ public final class ContentEncodedBlock extends AbstractBlock implements
      *            the body.
      * @return the hash value.
      */
-    public static byte[] getHash(DigestProvider digest, Bytes body) {
-	try {
-	    return Digests.digestData(digest, body);
-	} catch (UnknownAlgorithmException e) {
-	    throw new UnknownDigestException(digest.getAlgorithm(), e);
-	}
+    public static byte[] getHash(DigestProvider digest, Bytes body)
+	    throws UnknownDigestAlgorithmException {
+	return Digests.digestData(digest, body);
     }
 
     public Block decode(FullKey fullKey) {
