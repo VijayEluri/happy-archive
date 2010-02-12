@@ -121,7 +121,7 @@ public class SplitReader {
 
 	    if (type.equals("indirect")) {
 		item.key = KeyParse.parseFullKey(ByteString.toString(b
-			.getBody().toByteArray()));
+			.getBody()));
 		continue;
 	    }
 
