@@ -165,4 +165,24 @@ public class FakeFileSystemTest {
 	assertArrayEquals(new byte[] {}, real.load("b/a"));
 	assertFalse(fake.exists("a"));
     }
+
+    @Test
+    public void randomWrite() throws IOException {
+	RandomOutputFile f = real.openRandomOutputFile("a");
+	f.write(new byte[] { 0, 1 });
+	f.close();
+
+	assertArrayEquals(new byte[] { 0, 1 }, real.load("a"));
+    }
+
+    @Test
+    public void randomWrite2() throws IOException {
+	real.save("a", new byte[] { 1, 2, 3 });
+
+	RandomOutputFile f = real.openRandomOutputFile("a");
+	f.write(new byte[] { 0, 1 });
+	f.close();
+
+	assertArrayEquals(new byte[] { 0, 1, 3 }, real.load("a"));
+    }
 }

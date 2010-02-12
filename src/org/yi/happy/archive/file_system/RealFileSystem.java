@@ -77,4 +77,10 @@ public class RealFileSystem implements FileSystem {
     public boolean exists(String path) throws IOException {
 	return new File(path).exists();
     }
+
+    @Override
+    public RandomOutputFile openRandomOutputFile(String path)
+	    throws IOException {
+	return new RealRandomOutputFile(path);
+    }
 }

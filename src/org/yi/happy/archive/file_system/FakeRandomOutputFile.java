@@ -7,11 +7,25 @@ import org.yi.happy.archive.ClosedException;
 
 public class FakeRandomOutputFile implements RandomOutputFile {
 
+    public interface CloseListener {
+
+	void onClose(byte[] bytes);
+
+    }
+
     private byte[] bytes = new byte[0];
 
     private int position = 0;
 
     private boolean closed = false;
+
+    private CloseListener closeListener = new CloseListener() {
+	@Override
+	public void onClose(byte[] bytes) {
+	    // TODO Auto-generated method stub
+
+	}
+    };
 
     public FakeRandomOutputFile() {
 	// TODO Auto-generated constructor stub
@@ -23,7 +37,13 @@ public class FakeRandomOutputFile implements RandomOutputFile {
 
     @Override
     public void close() throws IOException {
+	if (closed) {
+	    return;
+	}
+
 	closed = true;
+
+	closeListener.onClose(bytes);
     }
 
     @Override
@@ -95,6 +115,10 @@ public class FakeRandomOutputFile implements RandomOutputFile {
 	}
 
 	return position;
+    }
+
+    public void setCloseListener(CloseListener closeListener) {
+	this.closeListener = closeListener;
     }
 
 }

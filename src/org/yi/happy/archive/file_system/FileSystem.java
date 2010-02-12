@@ -30,4 +30,6 @@ public interface FileSystem {
     public void rename(String from, String to) throws IOException;
 
     boolean exists(String path) throws IOException;
+
+    RandomOutputFile openRandomOutputFile(String path) throws IOException;
 }

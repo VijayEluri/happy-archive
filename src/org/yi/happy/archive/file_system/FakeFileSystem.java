@@ -126,4 +126,33 @@ public class FakeFileSystem implements FileSystem {
     public boolean exists(String path) {
 	return files.containsKey(path);
     }
+
+    @Override
+    public RandomOutputFile openRandomOutputFile(final String path)
+	    throws IOException {
+	if (path.contains("/")
+		&& files.get(path.replaceAll("/[^/]*$", "")) != DIR) {
+	    throw new FileNotFoundException("parent does not exist or is"
+		    + " not a folder");
+	}
+
+	if (files.get(path) == DIR) {
+	    throw new IOException();
+	}
+
+	byte[] bytes = files.get(path);
+	if (bytes == null) {
+	    bytes = new byte[0];
+	}
+
+	FakeRandomOutputFile f = new FakeRandomOutputFile(bytes);
+
+	f.setCloseListener(new FakeRandomOutputFile.CloseListener() {
+	    public void onClose(byte[] data) {
+		files.put(path, data);
+	    }
+	});
+
+	return f;
+    }
 }
