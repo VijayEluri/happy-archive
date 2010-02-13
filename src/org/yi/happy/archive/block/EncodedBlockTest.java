@@ -6,6 +6,7 @@ import static org.junit.Assert.assertFalse;
 import java.io.IOException;
 
 import org.junit.Test;
+import org.yi.happy.annotate.MisplacedTest;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.KeyParse;
@@ -14,6 +15,7 @@ import org.yi.happy.archive.test_data.TestData;
 
 public class EncodedBlockTest {
     @Test
+    @MisplacedTest(ContentEncodedBlockTest.class)
     public void testDecodeOldContent() throws IOException {
 	EncodedBlock b = TestData.KEY_OLD_CONTENT.getEncodedBlock();
 
@@ -24,6 +26,7 @@ public class EncodedBlockTest {
     }
 
     @Test
+    @MisplacedTest(ContentEncodedBlockTest.class)
     public void testDecodeContent() throws IOException {
 	EncodedBlock b = TestData.KEY_CONTENT.getEncodedBlock();
 
@@ -34,6 +37,7 @@ public class EncodedBlockTest {
     }
 
     @Test
+    @MisplacedTest
     public void testDecodeName() throws IOException {
 	EncodedBlock b = TestData.KEY_NAME.getEncodedBlock();
 
@@ -50,6 +54,7 @@ public class EncodedBlockTest {
      * @throws IOException
      */
     @Test
+    @MisplacedTest
     public void testContentDecodeBadKey() throws IOException {
 	EncodedBlock b = TestData.KEY_CONTENT.getEncodedBlock();
 
@@ -69,6 +74,7 @@ public class EncodedBlockTest {
      * @throws IOException
      */
     @Test
+    @MisplacedTest
     public void testContentDecodeBadLocator() throws IOException {
 	EncodedBlock b = TestData.KEY_CONTENT.getEncodedBlock();
 
@@ -89,6 +95,7 @@ public class EncodedBlockTest {
      * @throws IOException
      */
     @Test
+    @MisplacedTest
     public void testNameDecodeBad() throws IOException {
 	EncodedBlock b = TestData.KEY_NAME.getEncodedBlock();
 
@@ -100,6 +107,7 @@ public class EncodedBlockTest {
     }
 
     @Test
+    @MisplacedTest
     public void testNameDecode() throws IOException {
 	EncodedBlock b = TestData.KEY_NAME.getEncodedBlock();
 
