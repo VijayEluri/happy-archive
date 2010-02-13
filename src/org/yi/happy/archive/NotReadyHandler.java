@@ -5,8 +5,6 @@ import java.io.IOException;
 /**
  * The handler interface for {@link KeyInputStream} for handing the situation
  * where a block is not found in the store.
- * 
- * @author sarah dot a dot happy at gmail dot com
  */
 public interface NotReadyHandler {
 

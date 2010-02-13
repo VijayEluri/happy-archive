@@ -8,9 +8,6 @@ import org.yi.happy.archive.test_data.TestData;
 /**
  * a not ready handler that loads a block at a time according to a script. if
  * the script contains nulls then no block is loaded in that round.
- * 
- * @author sarah dot a dot happy at gmail dot com
- * 
  */
 public class ScriptNotReadyHandler implements NotReadyHandler {
 

@@ -11,9 +11,6 @@ import org.yi.happy.archive.key.KeyParse;
 
 /**
  * fetches the blocks for a split key of various kinds.
- * 
- * @author sarah dot a dot happy at gmail dot com
- * 
  */
 public class SplitReader {
 

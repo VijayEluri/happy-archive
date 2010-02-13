@@ -4,9 +4,6 @@ import java.io.IOException;
 
 /**
  * a not ready handler that just throws an exception
- * 
- * @author sarah dot a dot happy at gmail dot com
- * 
  */
 public class NotReadyError implements NotReadyHandler {
 
