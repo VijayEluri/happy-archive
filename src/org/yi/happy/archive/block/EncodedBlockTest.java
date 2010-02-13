@@ -1,14 +1,11 @@
 package org.yi.happy.archive.block;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import java.io.IOException;
 
 import org.junit.Test;
-import org.yi.happy.archive.Base16;
-import org.yi.happy.archive.block.parser.EncodedBlockFactory;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.KeyParse;
@@ -16,104 +13,6 @@ import org.yi.happy.archive.key.NameFullKey;
 import org.yi.happy.archive.test_data.TestData;
 
 public class EncodedBlockTest {
-    @Test
-    public void testContent1() throws IOException {
-	TestData d = TestData.KEY_OLD_CONTENT;
-	Block b = d.getBlock();
-
-	EncodedBlock e = EncodedBlockFactory.parse(b);
-
-	assertEquals(d.getLocatorKey(), e.getKey());
-	assertEquals("rijndael256-256-cbc", e.getCipher().getAlgorithm());
-	assertEquals("sha-256", e.getDigest().getAlgorithm());
-	assertEquals(b.getBody(), e.getBody());
-    }
-
-    @Test
-    public void testContent2() throws IOException {
-	TestData d = TestData.KEY_CONTENT;
-	Block b = d.getBlock();
-
-	EncodedBlock e = EncodedBlockFactory.parse(b);
-
-	assertEquals(d.getLocatorKey(), e.getKey());
-	assertEquals("rijndael256-256-cbc", e.getCipher().getAlgorithm());
-	assertEquals("sha-256", e.getDigest().getAlgorithm());
-	assertEquals(b.getBody(), e.getBody());
-    }
-
-    @Test
-    public void testContent2Aes() throws IOException {
-	TestData d = TestData.KEY_CONTENT_AES128;
-	Block b = d.getBlock();
-
-	EncodedBlock e = EncodedBlockFactory.parse(b);
-
-	assertEquals(d.getLocatorKey(), e.getKey());
-	assertEquals("aes-128-cbc", e.getCipher().getAlgorithm());
-	assertEquals("sha-256", e.getDigest().getAlgorithm());
-	assertEquals(b.getBody(), e.getBody());
-    }
-
-    @Test
-    public void testContent2Rijndael() throws IOException {
-	TestData d = TestData.KEY_CONTENT_RIJNDAEL;
-	Block b = d.getBlock();
-
-	EncodedBlock e = EncodedBlockFactory.parse(b);
-
-	assertEquals(d.getLocatorKey(), e.getKey());
-	assertEquals("rijndael-128-cbc", e.getCipher().getAlgorithm());
-	assertEquals("sha-256", e.getDigest().getAlgorithm());
-	assertEquals(b.getBody(), e.getBody());
-    }
-
-    @Test
-    public void testName2() throws IOException {
-	TestData d = TestData.KEY_NAME;
-	Block b = d.getBlock();
-
-	NameEncodedBlock e = (NameEncodedBlock) EncodedBlockFactory.parse(b);
-
-	assertEquals(d.getLocatorKey(), e.getKey());
-	assertEquals("rijndael256-256-cbc", e.getCipher().getAlgorithm());
-	assertEquals(b.getBody(), e.getBody());
-	byte[] hash = Base16.decode("b73aaf8748cfe48edd270d01517ef5556d0"
-		+ "3242af41ca58208c840c82e78651a");
-	assertArrayEquals(hash, e.getHash().toByteArray());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testInvalid() throws IOException {
-	TestData d = TestData.BAD_KEY_SHORT_CONTENT;
-	Block b = d.getBlock();
-	EncodedBlockFactory.parse(b);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testInvalid2() throws IOException {
-	Block b = TestData.OK_SMALL.getBlock();
-
-	EncodedBlockFactory.parse(b);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testInvalid3() throws IOException {
-	TestData d = TestData.BAD_KEY_SHORT_NAME;
-	Block b = d.getBlock();
-	EncodedBlockFactory.parse(b);
-    }
-
-    /**
-     * verify an empty block
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void testVerifyFresh() {
-	Block block = new GenericBlock();
-
-	EncodedBlockFactory.parse(block);
-    }
-
     @Test
     public void testDecodeOldContent() throws IOException {
 	EncodedBlock b = TestData.KEY_OLD_CONTENT.getEncodedBlock();

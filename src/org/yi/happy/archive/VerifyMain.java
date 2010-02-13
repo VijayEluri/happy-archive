@@ -7,7 +7,7 @@ import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.BlockParse;
-import org.yi.happy.archive.block.parser.EncodedBlockFactory;
+import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
 
@@ -39,7 +39,7 @@ public class VerifyMain {
 		/*
 		 * try to parse into an encoded block
 		 */
-		EncodedBlock b = EncodedBlockFactory.parse(block);
+		EncodedBlock b = EncodedBlockParse.parse(block);
 
 		/*
 		 * on success print ok key arg

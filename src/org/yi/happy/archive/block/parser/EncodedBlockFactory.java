@@ -7,9 +7,7 @@ import java.util.Map;
 import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.block.BlobEncodedBlock;
-import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.ContentEncodedBlock;
-import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.NameEncodedBlock;
 import org.yi.happy.archive.crypto.Cipher;
 import org.yi.happy.archive.crypto.CipherProvider;
@@ -53,12 +51,6 @@ public class EncodedBlockFactory {
 		return cipher.get();
 	    }
 	};
-    }
-
-    @Deprecated
-    public static EncodedBlock parse(Block block)
-	    throws IllegalArgumentException {
-	return EncodedBlockParse.parse(block);
     }
 
     public static ContentEncodedBlock createContent(DigestProvider digest,
