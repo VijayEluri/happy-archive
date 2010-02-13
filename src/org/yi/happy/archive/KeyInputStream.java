@@ -88,7 +88,7 @@ public class KeyInputStream extends InputStream {
             }
 
 	    try {
-		buff = reader.getFirst();
+		buff = reader.fetchFirst();
 	    } catch (IOException e) {
 		buff = null;
 	    }

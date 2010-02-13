@@ -71,7 +71,7 @@ public class FileStoreFileGetMain {
 
 	SplitReader r = new SplitReader(key, new RetrieveBlockStorage(store));
 	while (!r.isDone()) {
-	    Fragment f = r.getAny();
+	    Fragment f = r.fetchAny();
 	    if (f == null) {
 		notReady(r);
 		continue;

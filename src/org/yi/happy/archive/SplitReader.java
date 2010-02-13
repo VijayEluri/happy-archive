@@ -1,5 +1,6 @@
 package org.yi.happy.archive;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,12 +36,12 @@ public class SplitReader {
      * 
      * @return the offset to the data and the clear data, or null if none is
      *         ready.
-     * @throws DecodeException
-     *             on decoding errors.
+     * @throws IOException
+     *             if the block is available but fetching or decoding failed.
      */
-    public Fragment getAny() throws DecodeException {
+    public Fragment fetchAny() throws IOException {
 	for (int i = 0; i < pending.size(); i++) {
-	    Fragment out = get(i);
+	    Fragment out = fetch(i);
 	    if (out != null) {
 		return out;
 	    }
@@ -53,28 +54,27 @@ public class SplitReader {
      * 
      * @return the offset and the clear data, or null if none is ready.
      * @throws IOException
+     *             if the block is available but fetching or decoding failed.
      */
-    public Fragment getFirst() throws IOException {
-	// XXX this method should be named to imply consumption of the value
-	return get(0);
+    public Fragment fetchFirst() throws IOException {
+	return fetch(0);
     }
 
     /**
      * try to fetch the given entry in the pending list, if it can be fetched
      * return the details and remove it from the pending list. if the block
      * being fetched is an indirection then the pending list gets updated and
-     * the attempt is repeated.
+     * the attempt is repeated. If the offset of the entry in the pending list
+     * is not known, it can not be fetched and null is returned.
      * 
      * @param index
      *            the index in the pending list to try and load
-     * @return the loaded data for the given entry, or null
+     * @return the loaded data for the given entry, or null if the block is not
+     *         available.
      * @throws IOException
-     *             XXX when does this throw exceptions?
-     * @throws DecodeException
-     *             on block decoding failures.
+     *             if the block is available but fetching or decoding failed.
      */
-    private Fragment get(int index) throws DecodeException {
-	// XXX this method should be named to imply consumption of the value
+    private Fragment fetch(int index) throws IOException {
 	while (true) {
 	    if (index >= pending.size()) {
 		return null;
@@ -88,7 +88,7 @@ public class SplitReader {
 	    Block b;
 	    try {
 		b = storage.retrieveBlock(item.key);
-	    } catch (BlockNotFoundException e) {
+	    } catch (FileNotFoundException e) {
 		return null;
 	    }
 

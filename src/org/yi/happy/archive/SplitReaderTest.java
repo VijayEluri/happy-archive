@@ -71,7 +71,7 @@ public class SplitReaderTest {
         rawStorage.put(MAP.getEncodedBlock());
         SplitReader r = new SplitReader(MAP.getFullKey(), storage);
 
-	Fragment got = r.getAny();
+	Fragment got = r.fetchAny();
 
 	assertEquals(null, got);
     }
@@ -88,16 +88,16 @@ public class SplitReaderTest {
         rawStorage.put(C2.getEncodedBlock());
         SplitReader r = new SplitReader(MAP.getFullKey(), storage);
 
-	Fragment got = r.getAny();
+	Fragment got = r.fetchAny();
 
 	assertEquals(new Fragment(5, D2), got);
 
-	got = r.getAny();
+	got = r.fetchAny();
 
 	assertEquals(null, got);
 
         rawStorage.put(C1.getEncodedBlock());
-        got = r.getAny();
+        got = r.fetchAny();
 
 	assertEquals(new Fragment(0, D1), got);
     }
@@ -114,7 +114,7 @@ public class SplitReaderTest {
         rawStorage.put(C2.getEncodedBlock());
         SplitReader r = new SplitReader(MAP.getFullKey(), storage);
 
-	Fragment got = r.getFirst();
+	Fragment got = r.fetchFirst();
 
 	assertEquals(null, got);
     }
@@ -130,7 +130,7 @@ public class SplitReaderTest {
         rawStorage.put(C1.getEncodedBlock());
         SplitReader r = new SplitReader(MAP.getFullKey(), storage);
 
-	Fragment got = r.getFirst();
+	Fragment got = r.fetchFirst();
 
 	assertEquals(new Fragment(0, D1), got);
     }
@@ -160,7 +160,7 @@ public class SplitReaderTest {
 
 	assertEquals(Arrays.asList(MAP.getFullKey()), r.getPending());
 
-        assertNull(r.getAny());
+        assertNull(r.fetchAny());
 
 	assertEquals(Arrays.asList(C1.getFullKey(), C2.getFullKey()), r
 		.getPending());
@@ -178,15 +178,15 @@ public class SplitReaderTest {
         rawStorage.put(C2.getEncodedBlock());
 
         SplitReader r = new SplitReader(MAP.getFullKey(), storage);
-	Fragment got = r.getAny();
+	Fragment got = r.fetchAny();
 
 	assertNotNull(got);
 
-	got = r.getAny();
+	got = r.fetchAny();
 
 	assertNotNull(got);
 
-	got = r.getAny();
+	got = r.fetchAny();
 
 	assertNull(got);
 
@@ -209,12 +209,12 @@ public class SplitReaderTest {
 
         SplitReader r = new SplitReader(d.getFullKey(), storage);
 
-	Fragment got = r.getFirst();
+	Fragment got = r.fetchFirst();
 	assertEquals(new Fragment(0, D1), got);
 
 	assertEquals((Long) 10L, r.getOffset());
 
-        got = r.getFirst();
+        got = r.fetchFirst();
 	assertEquals(new Fragment(10, D2), got);
 
 	assertEquals(null, r.getOffset());
@@ -234,10 +234,10 @@ public class SplitReaderTest {
 
         SplitReader r = new SplitReader(d.getFullKey(), storage);
 
-	Fragment got = r.getFirst();
+	Fragment got = r.fetchFirst();
 	assertEquals(new Fragment(0, D1), got);
 
-        got = r.getFirst();
+        got = r.fetchFirst();
 	assertEquals(new Fragment(3, D2), got);
     }
 
@@ -256,11 +256,11 @@ public class SplitReaderTest {
         SplitReader r = new SplitReader(d.getFullKey(), storage);
 	Fragment got;
 
-	got = r.getFirst();
+	got = r.fetchFirst();
 
 	assertEquals(new Fragment(0, D1), got);
 
-        got = r.getFirst();
+        got = r.fetchFirst();
 
 	assertEquals(new Fragment(5, D2), got);
     }
@@ -281,11 +281,11 @@ public class SplitReaderTest {
         SplitReader r = new SplitReader(d.getFullKey(), storage);
 	Fragment got;
 
-	got = r.getFirst();
+	got = r.fetchFirst();
 
 	assertEquals(new Fragment(0, D1), got);
 
-        got = r.getFirst();
+        got = r.fetchFirst();
 
 	assertEquals(new Fragment(5, D2), got);
     }
@@ -304,7 +304,7 @@ public class SplitReaderTest {
 
 	SplitReader r = new SplitReader(k, storage);
 
-	r.getAny();
+	r.fetchAny();
     }
 
     /**
@@ -325,6 +325,6 @@ public class SplitReaderTest {
 
 	SplitReader r = new SplitReader(k, storage);
 
-	r.getAny();
+	r.fetchAny();
     }
 }
