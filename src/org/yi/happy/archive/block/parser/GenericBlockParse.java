@@ -60,11 +60,13 @@ public class GenericBlockParse {
 	trim: try {
 	    String s = meta.get("size");
 	    if (s == null) {
+		// no size header
 		break trim;
 	    }
 
 	    int i = Integer.parseInt(s);
 	    if (i < 0 || i >= rest.getLength()) {
+		// invalid size header, or correct size header
 		break trim;
 	    }
 

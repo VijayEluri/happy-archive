@@ -6,13 +6,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-import org.yi.happy.annotate.Simplify;
 import org.yi.happy.archive.Blocks;
 import org.yi.happy.archive.Streams;
 import org.yi.happy.archive.block.Block;
 
-@Simplify("loading all the data and parsing in memory is easier and faster, "
-	+ "since stream parsing is not saving memory here")
 public class BlockParse {
 
     /**

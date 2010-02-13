@@ -8,9 +8,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 import org.yi.happy.archive.Base16;
-import org.yi.happy.archive.ShortBodyException;
 import org.yi.happy.archive.block.parser.EncodedBlockFactory;
-import org.yi.happy.archive.block.parser.MissingMetaException;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.KeyParse;
@@ -92,14 +90,14 @@ public class EncodedBlockTest {
 	EncodedBlockFactory.parse(b);
     }
 
-    @Test(expected = MissingMetaException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testInvalid2() throws IOException {
 	Block b = TestData.OK_SMALL.getBlock();
 
 	EncodedBlockFactory.parse(b);
     }
 
-    @Test(expected = ShortBodyException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testInvalid3() throws IOException {
 	TestData d = TestData.BAD_KEY_SHORT_NAME;
 	Block b = d.getBlock();
@@ -109,7 +107,7 @@ public class EncodedBlockTest {
     /**
      * verify an empty block
      */
-    @Test(expected = MissingMetaException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testVerifyFresh() {
 	Block block = new GenericBlock();
 
