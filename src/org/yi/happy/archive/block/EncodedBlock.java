@@ -54,6 +54,8 @@ public interface EncodedBlock extends Block {
      * @param fullKey
      *            the full key.
      * @return the decoded block.
+     * @throws IllegalArgumentException
+     *             on block decoding failures.
      */
     public Block decode(FullKey fullKey);
 }

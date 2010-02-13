@@ -22,13 +22,11 @@ public class FakeRandomOutputFile implements RandomOutputFile {
     private CloseListener closeListener = new CloseListener() {
 	@Override
 	public void onClose(byte[] bytes) {
-	    // TODO Auto-generated method stub
 
 	}
     };
 
     public FakeRandomOutputFile() {
-	// TODO Auto-generated constructor stub
     }
 
     public FakeRandomOutputFile(byte[] bytes) {

@@ -143,8 +143,8 @@ public final class BlobEncodedBlock extends AbstractBlock implements
     }
 
     public Block decode(FullKey fullKey) {
-	if (!(fullKey instanceof BlobFullKey)) {
-	    throw new IllegalArgumentException();
+	if (!fullKey.toLocatorKey().equals(key)) {
+	    throw new IllegalArgumentException("the key is not for this block");
 	}
 	BlobFullKey k = (BlobFullKey) fullKey;
 

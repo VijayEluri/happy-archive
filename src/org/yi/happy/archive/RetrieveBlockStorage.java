@@ -1,5 +1,6 @@
 package org.yi.happy.archive;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.yi.happy.archive.block.Block;
@@ -22,7 +23,7 @@ public class RetrieveBlockStorage implements RetrieveBlock {
      *            the storage object
      */
     public RetrieveBlockStorage(BlockStore storage) {
-        this.storage = storage;
+	this.storage = storage;
     }
 
     /**
@@ -39,11 +40,24 @@ public class RetrieveBlockStorage implements RetrieveBlock {
      * @throws BlockNotFoundException
      *             if the block is not in the store.
      * @throws IOException
+     *             on decoding failure.
      */
     public Block retrieveBlock(FullKey key) throws BlockNotFoundException,
-	    IOException {
-	EncodedBlock block = storage.get(key.toLocatorKey());
-        return block.decode(key);
+	    DecodeException {
+	EncodedBlock block;
+	try {
+	    block = storage.get(key.toLocatorKey());
+	} catch (FileNotFoundException e) {
+	    throw new BlockNotFoundException(e);
+	} catch (IOException e) {
+	    throw new DecodeException(e);
+	}
+
+	try {
+	    return block.decode(key);
+	} catch (IllegalArgumentException e) {
+	    throw new DecodeException(e);
+	}
     }
 
     /**

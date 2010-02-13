@@ -91,8 +91,8 @@ public final class NameEncodedBlock extends AbstractBlock implements
     }
 
     public Block decode(FullKey fullKey) {
-	if (!(fullKey instanceof NameFullKey)) {
-	    throw new IllegalArgumentException();
+	if (!fullKey.toLocatorKey().equals(key)) {
+	    throw new IllegalArgumentException("the key is not for this block");
 	}
 	NameFullKey k = (NameFullKey) fullKey;
 

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.yi.happy.archive.block.Block;
+import org.yi.happy.archive.block.DataBlock;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.KeyParse;
 
@@ -37,16 +38,14 @@ public class SplitReader {
      * 
      * @return the offset to the data and the clear data, or null if none is
      *         ready.
+     * @throws DecodeException
+     *             on decoding errors.
      */
-    public Fragment getAny() {
+    public Fragment getAny() throws DecodeException {
 	for (int i = 0; i < pending.size(); i++) {
-	    try {
-		Fragment out = get(i);
-		if (out != null) {
-		    return out;
-		}
-	    } catch (IOException e) {
-		// try another
+	    Fragment out = get(i);
+	    if (out != null) {
+		return out;
 	    }
 	}
 	return null;
@@ -59,6 +58,7 @@ public class SplitReader {
      * @throws IOException
      */
     public Fragment getFirst() throws IOException {
+	// XXX this method should be named to imply consumption of the value
 	return get(0);
     }
 
@@ -73,8 +73,11 @@ public class SplitReader {
      * @return the loaded data for the given entry, or null
      * @throws IOException
      *             XXX when does this throw exceptions?
+     * @throws DecodeException
+     *             on block decoding failures.
      */
-    private Fragment get(int index) throws IOException {
+    private Fragment get(int index) throws DecodeException {
+	// XXX this method should be named to imply consumption of the value
 	while (true) {
 	    if (index >= pending.size()) {
 		return null;
@@ -102,7 +105,13 @@ public class SplitReader {
 		/*
 		 * data block
 		 */
-		Bytes data = b.getBody();
+		DataBlock block;
+		try {
+		    block = DataBlockParse.parse(b);
+		} catch (IllegalArgumentException e) {
+		    throw new DecodeException(e);
+		}
+		Bytes data = block.getBody();
 
 		pending.remove(index);
 		fixOffset(index, item.offset + data.getSize());
@@ -130,7 +139,7 @@ public class SplitReader {
 		continue;
 	    }
 
-	    throw new IllegalArgumentException("can not handle type: " + type);
+	    throw new DecodeException("can not handle type: " + type);
 	}
     }
 
