@@ -85,7 +85,7 @@ public class EncodedBlockTest {
 	assertArrayEquals(hash, e.getHash().toByteArray());
     }
 
-    @Test(expected = ShortBodyException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testInvalid() throws IOException {
 	TestData d = TestData.BAD_KEY_SHORT_CONTENT;
 	Block b = d.getBlock();

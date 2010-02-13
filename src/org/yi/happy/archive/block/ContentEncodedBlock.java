@@ -3,6 +3,7 @@ package org.yi.happy.archive.block;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.yi.happy.annotate.MagicLiteral;
 import org.yi.happy.archive.Base16;
 import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.UnknownDigestAlgorithmException;
@@ -22,6 +23,7 @@ public final class ContentEncodedBlock extends AbstractBlock implements
     private final CipherProvider cipher;
     private final Bytes body;
 
+    @MagicLiteral
     public ContentEncodedBlock(ContentLocatorKey key, DigestProvider digest,
 	    CipherProvider cipher, Bytes body) {
 
@@ -39,6 +41,7 @@ public final class ContentEncodedBlock extends AbstractBlock implements
 	this.body = body;
     }
 
+    @MagicLiteral
     public ContentEncodedBlock(DigestProvider digest, CipherProvider cipher,
 	    Bytes body) {
 
@@ -70,6 +73,7 @@ public final class ContentEncodedBlock extends AbstractBlock implements
     }
 
     @Override
+    @MagicLiteral
     public Map<String, String> getMeta() {
 	Map<String, String> out = new LinkedHashMap<String, String>();
 	out.put("version", "2");

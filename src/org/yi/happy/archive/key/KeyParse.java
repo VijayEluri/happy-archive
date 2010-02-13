@@ -157,4 +157,8 @@ public class KeyParse {
 	return new BlobLocatorKey(new Bytes(Base16.decode(hash)));
     }
 
+    public static ContentLocatorKey parseContentLocatorKey(String hash) {
+	return new ContentLocatorKey(new Bytes(Base16.decode(hash)));
+    }
+
 }

@@ -4,13 +4,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.yi.happy.annotate.MagicLiteral;
 import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.annotate.TypeSwitch;
-import org.yi.happy.archive.BadSignatureException;
 import org.yi.happy.archive.Base16;
 import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.ShortBodyException;
-import org.yi.happy.archive.UnknownDigestAlgorithmException;
 import org.yi.happy.archive.VersionNotNumberException;
 import org.yi.happy.archive.block.BlobEncodedBlock;
 import org.yi.happy.archive.block.Block;
@@ -22,8 +21,6 @@ import org.yi.happy.archive.crypto.CipherFactory;
 import org.yi.happy.archive.crypto.CipherProvider;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.crypto.DigestProvider;
-import org.yi.happy.archive.key.BlobLocatorKey;
-import org.yi.happy.archive.key.ContentLocatorKey;
 import org.yi.happy.archive.key.KeyParse;
 import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.key.NameLocatorKey;
@@ -68,24 +65,25 @@ public class EncodedBlockFactory {
     }
 
     @TypeSwitch
-    public static EncodedBlock parse(Block block) throws MissingMetaException,
-	    IllegalArgumentException, UnknownKeyTypeException {
+    @MagicLiteral
+    public static EncodedBlock parse(Block block)
+	    throws IllegalArgumentException {
 	if (block instanceof EncodedBlock) {
 	    return (EncodedBlock) block;
 	}
 
 	String keyType = getKeyType(block);
+	if (keyType.equals("content-hash")) {
+	    return ContentEncodedBlockParse.parse(block);
+	}
+
+	if (keyType.equals("blob")) {
+	    return BlobEncodedBlockParse.parse(block);
+	}
+
 	byte[] keyHash = getKeyHash(block);
 
 	LocatorKey key = KeyParse.parseLocatorKey(keyType, new Bytes(keyHash));
-
-	if (key instanceof BlobLocatorKey) {
-	    return parseBlob(block, (BlobLocatorKey) key);
-	}
-
-	if (key instanceof ContentLocatorKey) {
-	    return parseContent(block, (ContentLocatorKey) key);
-	}
 
 	if (key instanceof NameLocatorKey) {
 	    return parseName(block, (NameLocatorKey) key);
@@ -118,23 +116,6 @@ public class EncodedBlockFactory {
 	return Base16.decode(getRequiredMeta(block, "hash"));
     }
 
-    private static EncodedBlock parseContent(Block block, ContentLocatorKey key) {
-	Bytes body = getBody(block);
-
-	String digest = getDigestName(block);
-
-	String cipher = getCipherName(block);
-
-	int version = getVersion(block);
-
-	if (version < 2) {
-	    cipher = fixCipher(cipher);
-	}
-
-	return new ContentEncodedBlock(key, DigestFactory.getProvider(digest),
-		CipherFactory.getProvider(cipher), body);
-    }
-
     private static String fixCipher(String cipher) {
 	String c = fixMap.get(cipher);
 	if (c != null) {
@@ -161,19 +142,6 @@ public class EncodedBlockFactory {
     private static byte[] getKeyHash(Block block)
 	    throws IllegalArgumentException, MissingMetaException {
 	return Base16.decode(getRequiredMeta(block, "key"));
-    }
-
-    private static EncodedBlock parseBlob(Block block, BlobLocatorKey key)
-	    throws MissingMetaException, IllegalArgumentException,
-	    BadSignatureException, UnknownDigestAlgorithmException {
-	Bytes body = getBody(block);
-
-	String digest = getDigestName(block);
-
-	String cipher = getCipherName(block);
-
-	return new BlobEncodedBlock(key, DigestFactory.getProvider(digest),
-		CipherFactory.getProvider(cipher), body);
     }
 
     private static Bytes getBody(Block block) throws NegativeSizeException,
