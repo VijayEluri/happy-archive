@@ -18,6 +18,8 @@ public class Digests {
      * @param digest
      *            the digest to use
      * @return the hashed data
+     * @throws UnknownDigestAlgorithmException
+     *             if the digest implementation is not available.
      */
     public static byte[] digestData(DigestProvider digest, byte[] data)
 	    throws UnknownDigestAlgorithmException {

@@ -210,6 +210,9 @@ public class Rijndael {
      *            where in data to start
      * @param size
      *            how much of data to process
+     * @param iv
+     *            the optional initial vector, when this is not null CBC mode is
+     *            used.
      */
     private void encrypt4(byte[] state, int offset, int size, byte[] iv) {
 	int o0 = 0;
@@ -341,6 +344,9 @@ public class Rijndael {
      *            where in data to start
      * @param size
      *            how much of data to process
+     * @param iv
+     *            the optional initial vector, when this is not null CBC mode is
+     *            used.
      */
     private void encrypt6(byte[] state, int offset, int size, byte[] iv) {
 	int o0 = 0;
@@ -520,6 +526,9 @@ public class Rijndael {
      *            where in data to start
      * @param size
      *            how much of data to process
+     * @param iv
+     *            the optional initial vector, when this is not null CBC mode is
+     *            used.
      */
     private void encrypt8(byte[] state, int offset, int size, byte[] iv) {
 	int o0 = 0;
@@ -806,6 +815,13 @@ public class Rijndael {
      * 
      * @param state
      *            the block
+     * @param offset
+     *            the offset into state to start at
+     * @param size
+     *            the size of the region in state to process
+     * @param iv
+     *            the optional initial vector, if this is not null CBC mode is
+     *            used.
      */
     private void decrypt4(byte[] state, int offset, int size, byte[] iv) {
 	int iv00 = 0;
@@ -997,6 +1013,13 @@ public class Rijndael {
      * 
      * @param state
      *            the block
+     * @param offset
+     *            the offset within state to start at.
+     * @param size
+     *            the size of the region within state to process.
+     * @param iv
+     *            the optional initial vector, when this is not null CBC mode is
+     *            used.
      */
     private void decrypt6(byte[] state, int offset, int size, byte[] iv) {
 	int iv00 = 0;
@@ -1258,6 +1281,13 @@ public class Rijndael {
      * 
      * @param state
      *            the block
+     * @param offset
+     *            the offset within state to start processing at
+     * @param size
+     *            the amount of state to process
+     * @param iv
+     *            the optional initial vector, when this is not null CBC mode is
+     *            used.
      */
     private void decrypt8(byte[] state, int offset, int size, byte[] iv) {
 	int iv00 = 0;

@@ -88,16 +88,16 @@ public class KeyInputStreamTest {
      * @throws IOException
      */
     private void assertReadMap(InputStream in) throws IOException {
-        assertEquals((int) '0', in.read());
-        assertEquals((int) '1', in.read());
-        assertEquals((int) '2', in.read());
-        assertEquals((int) '3', in.read());
-        assertEquals((int) '4', in.read());
-        assertEquals((int) '5', in.read());
-        assertEquals((int) '6', in.read());
-        assertEquals((int) '7', in.read());
-        assertEquals((int) '8', in.read());
-        assertEquals((int) '9', in.read());
+	assertEquals('0', in.read());
+	assertEquals('1', in.read());
+	assertEquals('2', in.read());
+	assertEquals('3', in.read());
+	assertEquals('4', in.read());
+	assertEquals('5', in.read());
+	assertEquals('6', in.read());
+	assertEquals('7', in.read());
+	assertEquals('8', in.read());
+	assertEquals('9', in.read());
         assertEquals(-1, in.read());
     }
 

@@ -40,6 +40,12 @@ public final class BlobEncodedBlock extends AbstractBlock implements
      *            the bytes of the body.
      * @throws IllegalArgumentException
      *             if the details do not check out.
+     * @throws BadSignatureException
+     *             if the signature of the body does not match the signature
+     *             given in the key.
+     * @throws UnknownDigestAlgorithmException
+     *             if the digest provider can not create the digest
+     *             implementation.
      */
     public BlobEncodedBlock(BlobLocatorKey key, DigestProvider digest,
 	    CipherProvider cipher, Bytes body) throws IllegalArgumentException,
@@ -95,6 +101,7 @@ public final class BlobEncodedBlock extends AbstractBlock implements
 	return cipher;
     }
 
+    @Override
     public Bytes getBody() {
 	return body;
     }

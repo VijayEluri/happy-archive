@@ -20,7 +20,7 @@ public class RealFileSystemPlay {
 	/*
 	 * load the final file
 	 */
-	System.out.println((int) fs.load("a/a")[0]);
+	System.out.println(fs.load("a/a")[0]);
 
 	/*
 	 * save a temporary file
@@ -35,7 +35,7 @@ public class RealFileSystemPlay {
 	/*
 	 * load the final file
 	 */
-	System.out.println((int) fs.load("a/a")[0]);
+	System.out.println(fs.load("a/a")[0]);
 
 	fs.mkdir("a/b");
 

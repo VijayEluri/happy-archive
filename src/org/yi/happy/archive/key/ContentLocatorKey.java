@@ -8,6 +8,7 @@ import org.yi.happy.archive.Bytes;
 public final class ContentLocatorKey extends AbstractLocatorKey implements
 	LocatorKey {
 
+    @Override
     public String getType() {
 	return KeyType.CONTENT_HASH;
     }

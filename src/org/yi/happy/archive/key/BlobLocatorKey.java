@@ -9,6 +9,7 @@ public final class BlobLocatorKey extends AbstractLocatorKey implements
 	super(hash);
     }
 
+    @Override
     public String getType() {
 	return KeyType.BLOB;
     }

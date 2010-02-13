@@ -87,6 +87,7 @@ public final class GenericBlock extends AbstractBlock implements Block {
      * 
      * @return the internal data block, never null.
      */
+    @Override
     public Bytes getBody() {
 	return body;
     }

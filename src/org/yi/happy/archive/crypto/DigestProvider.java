@@ -20,8 +20,8 @@ public abstract class DigestProvider {
      * Provide an instance of the digest.
      * 
      * @return an instance of the digest.
-     * @throws UnknownAlgorithmException
-     *             if the algorithm does not have a known implementation.
+     * @throws UnknownDigestAlgorithmException
+     *             if the digest algorithm does not have a known implementation.
      */
     public abstract MessageDigest get() throws UnknownDigestAlgorithmException;
 

@@ -38,6 +38,7 @@ public class SimpleTimerSummary {
 	/**
 	 * in addition to stopping the clock record the time.
 	 */
+	@Override
 	public void stop() {
 	    super.stop();
 	    registerTime(getTime());
@@ -202,6 +203,7 @@ public class SimpleTimerSummary {
      * 
      * @return a string representation of the summary data.
      */
+    @Override
     public synchronized String toString() {
 	return "[active = " + getActiveCount() + ", count = " + getCount()
 		+ ", high = " + getHighTime() + ", secondHigh = "

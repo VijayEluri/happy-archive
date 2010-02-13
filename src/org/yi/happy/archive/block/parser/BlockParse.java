@@ -11,6 +11,9 @@ import org.yi.happy.archive.Streams;
 import org.yi.happy.archive.block.Block;
 
 public class BlockParse {
+    private BlockParse() {
+
+    }
 
     /**
      * load a block into memory
@@ -18,10 +21,13 @@ public class BlockParse {
      * @param in
      *            the stream to load
      * @return the loaded block
-     * @throws LoadException
-     *             on load errors
+     * @throws IOException
+     *             on IO errors.
+     * @throws IllegalArgumentException
+     *             on parsing errors.
      */
-    public static Block load(InputStream in) throws IOException {
+    public static Block load(InputStream in) throws IOException,
+	    IllegalArgumentException {
 	byte[] bytes = Streams.load(in, Blocks.MAX_SIZE);
 	return parse(bytes);
     }
@@ -43,6 +49,8 @@ public class BlockParse {
      * @param resource
      *            the url to load
      * @return the loaded block
+     * @throws IOException
+     *             on IO errors
      */
     public static Block load(URL resource) throws IOException {
 	InputStream in = resource.openStream();

@@ -68,6 +68,7 @@ public final class ContentEncodedBlock extends AbstractBlock implements
 	return cipher;
     }
 
+    @Override
     public Bytes getBody() {
 	return body;
     }
@@ -95,6 +96,8 @@ public final class ContentEncodedBlock extends AbstractBlock implements
      * @param body
      *            the body.
      * @return the hash value.
+     * @throws UnknownDigestAlgorithmException
+     *             if the implementation for the digest is unknown.
      */
     public static byte[] getHash(DigestProvider digest, Bytes body)
 	    throws UnknownDigestAlgorithmException {

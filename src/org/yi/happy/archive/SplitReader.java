@@ -178,6 +178,9 @@ public class SplitReader {
      * 
      * @param index
      *            the index to replace
+     * @param base
+     *            the base offset of the block, for chainging relative offsets
+     *            into absolute offsets.
      * @param b
      *            a map block
      */

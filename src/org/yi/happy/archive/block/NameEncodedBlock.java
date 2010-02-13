@@ -72,6 +72,7 @@ public final class NameEncodedBlock extends AbstractBlock implements
 	return cipher;
     }
 
+    @Override
     public Bytes getBody() {
 	return body;
     }

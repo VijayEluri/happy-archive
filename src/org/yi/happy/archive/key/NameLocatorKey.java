@@ -19,6 +19,7 @@ public final class NameLocatorKey extends AbstractLocatorKey implements
 	super(hash);
     }
 
+    @Override
     public String getType() {
 	return KeyType.NAME_HASH;
     }

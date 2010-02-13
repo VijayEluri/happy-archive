@@ -36,7 +36,7 @@ public class EncodedBlockParseTest {
 
     @Test
     public void testName() throws IOException {
-	TestData d = TestData.KEY_BLOB;
+	TestData d = TestData.KEY_NAME;
 	Block b = d.getBlock();
 
 	EncodedBlock e = EncodedBlockParse.parse(b);

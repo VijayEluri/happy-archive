@@ -31,6 +31,7 @@ public abstract class AbstractLocatorKey {
 	return hash;
     }
 
+    @Override
     public String toString() {
 	return getType() + ":" + Base16.encode(hash);
     }
@@ -40,6 +41,7 @@ public abstract class AbstractLocatorKey {
      */
     public abstract String getType();
 
+    @Override
     public int hashCode() {
 	final int prime = 31;
 	int result = 1;
@@ -48,6 +50,7 @@ public abstract class AbstractLocatorKey {
 	return result;
     }
 
+    @Override
     public boolean equals(Object obj) {
 	if (this == obj)
 	    return true;
