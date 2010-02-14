@@ -3,6 +3,7 @@ package org.yi.happy.archive.block.parser;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.yi.happy.annotate.MagicLiteral;
 import org.yi.happy.annotate.SmellsProcedural;
 import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.Bytes;
@@ -12,16 +13,16 @@ import org.yi.happy.archive.block.GenericBlock;
 public class GenericBlockParse {
 
     /**
-     * A very tolerant generic block parser. If the size header is a
-     * non-negative number less than the size of the data remaining after the
-     * headers are parsed, then the body is trimmed to that size.
+     * A very tolerant generic block parser. If the size header is present than
+     * it must be valid, and the body is trimmed to the value of it.
      * 
      * @param bytes
      *            the bytes for the block.
      * @return the parsed block.
      * @throws IllegalArgumentException
-     *             if a header is repeated.
+     *             if a header is repeated, or if the size header is not valid.
      */
+    @MagicLiteral
     public GenericBlock parse(byte[] bytes) {
 	Map<String, String> meta = new LinkedHashMap<String, String>();
 
@@ -54,25 +55,42 @@ public class GenericBlockParse {
 	    meta.put(name, value);
 	}
 
-	/*
-	 * trim the body if the size header is valid.
-	 */
-	trim: try {
+	trim: {
+	    /*
+	     * if the size header is present...
+	     */
 	    String s = meta.get("size");
 	    if (s == null) {
-		// no size header
 		break trim;
 	    }
 
-	    int i = Integer.parseInt(s);
-	    if (i < 0 || i >= rest.getLength()) {
-		// invalid size header, or correct size header
+	    /*
+	     * it is required to be valid, it is not valid if it does not parse
+	     * as a number, or it is less than zero, or it is greater than the
+	     * length of the rest of the data.
+	     */
+	    int i;
+	    try {
+		i = Integer.parseInt(s);
+	    } catch (NumberFormatException e) {
+		throw new IllegalArgumentException("bad size header");
+	    }
+	    if (i < 0 || i > rest.getLength()) {
+		throw new IllegalArgumentException("bad size header");
+	    }
+
+	    /*
+	     * if it matches the size of the rest of the data, then it does not
+	     * need trimming.
+	     */
+	    if (i == rest.getLength()) {
 		break trim;
 	    }
 
+	    /*
+	     * otherwise trim it.
+	     */
 	    rest = new Range(rest.getOffset(), i);
-	} catch (NumberFormatException e) {
-	    break trim;
 	}
 
 	/*

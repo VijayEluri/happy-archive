@@ -21,17 +21,17 @@ import org.yi.happy.archive.key.LocatorKey;
  */
 public enum TestData {
     /**
-     * The empty file, it does not parse as a block.
+     * The empty file.
      */
     BAD_EMPTY,
 
     /**
-     * Some basic content, the string "hello\n" in a block.
+     * Some basic content, the string "hello\n" in a plain data block.
      */
     CLEAR_CONTENT,
 
     /**
-     * blob block
+     * a blob block encoded with sha-256 and rijndael256-256-cbc.
      */
     @Full("blob:200cf5031a53e822c3a29726b73a401600faacf2875f420dfe34"
 	    + "bf87db03e5b0:f6bd9f3b01b4ee40f60df2dc622f9d6f3aa"
@@ -42,7 +42,7 @@ public enum TestData {
     KEY_BLOB,
 
     /**
-     * A blob block encoded with different settings.
+     * A blob block encoded with sha-1 and aes-192-cbc.
      */
     @Full("blob:8130021dcf770532dfd0502c5c59475ea4d79e3f:bb3"
 	    + "507d7611785dc392cbcab77af0c3cae14dd8b6f2f5011")
@@ -51,7 +51,7 @@ public enum TestData {
     KEY_BLOB_SHA1_AES192,
 
     /**
-     * a blob block encrypted using a different cipher
+     * a blob block encoded with sha-256 and aes-128-cbc.
      */
     @Full("blob:936401d0ffc5e8fb8bf5de8d9cfa15b1d8a4daa10136bf37290f"
 	    + "b2a8311a681c:f6bd9f3b01b4ee40f60df2dc622f9d6f")
@@ -61,7 +61,7 @@ public enum TestData {
     KEY_BLOB_AES128,
 
     /**
-     * version two content block, encoded with the sha-256 diesst and
+     * version two content block, encoded with the sha-256 digest and
      * rijndael256-256-cbc cipher.
      */
     @Full("content-hash:87c5f6fe4ea801c8eb227b8b218a0659c18ece76b7c2"
@@ -73,7 +73,7 @@ public enum TestData {
     KEY_CONTENT,
 
     /**
-     * version two name block
+     * version two name block, encoded with sha-256 and rijndael256-256-cbc.
      */
     @Full("name-hash:sha-256:blah")
     @Locator("name-hash:8b7df143d91c716ecfa5fc1730022f6b421b05cedee8fd5"
@@ -82,7 +82,7 @@ public enum TestData {
     KEY_NAME,
 
     /**
-     * version one content block
+     * version one content block, encoded with sha-256 and rijndael256-256-cbc.
      */
     @Full("content-hash:87c5f6fe4ea801c8eb227b8b218a0659c18ece76b7c2"
 	    + "00c645ab4364becf68d5:f6bd9f3b01b4ee40f60df2dc622f9d6f3aa"
@@ -93,7 +93,7 @@ public enum TestData {
     KEY_OLD_CONTENT,
 
     /**
-     * a content block encrypted using a different cipher
+     * a content block, encoded with sha-256 and aes-128-cbc.
      */
     @Full("content-hash:d7859e105484ff5af15fc35365043e92531402b23168"
 	    + "246b2cfca4932bf27d14:f6bd9f3b01b4ee40f60df2dc622f9d6f")
@@ -103,7 +103,7 @@ public enum TestData {
     KEY_CONTENT_AES128,
 
     /**
-     * a content block encrypted using a different cipher by another name
+     * a content block, encoded with sha-256 and rijndael-128-cbc.
      */
     @Full("content-hash:d7859e105484ff5af15fc35365043e92531402b23168"
 	    + "246b2cfca4932bf27d14:f6bd9f3b01b4ee40f60df2dc622f9d6f")
@@ -118,12 +118,12 @@ public enum TestData {
     BAD_KEY_SHORT_CONTENT,
 
     /**
-     * small clear block with a repeated header
+     * small clear block. a -> c, b -> d, c -> e, "body\ndata\n".
      */
     OK_SMALL,
 
     /**
-     * a block that will not verify because of a short content section
+     * a block that will not verify because of a short content section.
      */
     BAD_KEY_SHORT_NAME,
 

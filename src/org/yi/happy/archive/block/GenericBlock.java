@@ -32,6 +32,25 @@ public final class GenericBlock extends AbstractBlock implements Block {
 	    body = new Bytes();
 	}
 
+	checkSize: {
+	    String s = meta.get("size");
+
+	    if (s == null) {
+		break checkSize;
+	    }
+
+	    int i;
+	    try {
+		i = Integer.parseInt(s);
+	    } catch (NumberFormatException e) {
+		throw new IllegalArgumentException("invalid size header");
+	    }
+
+	    if (i != body.getSize()) {
+		throw new IllegalArgumentException("invalid size header");
+	    }
+	}
+
 	this.meta = Collections
 		.unmodifiableMap(new LinkedHashMap<String, String>(meta));
 	this.body = body;
