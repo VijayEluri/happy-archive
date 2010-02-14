@@ -88,6 +88,9 @@ public class SplitReader {
 	    Block b;
 	    try {
 		b = storage.retrieveBlock(item.key);
+		if (b == null) {
+		    return null;
+		}
 	    } catch (FileNotFoundException e) {
 		return null;
 	    }

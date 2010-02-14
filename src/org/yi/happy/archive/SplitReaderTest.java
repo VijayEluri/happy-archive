@@ -7,14 +7,19 @@ import static org.junit.Assert.assertNull;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.yi.happy.archive.block.Block;
+import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.key.ContentFullKey;
 import org.yi.happy.archive.key.FullKey;
+import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
@@ -23,23 +28,39 @@ import org.yi.happy.archive.test_data.TestData;
  * of files.
  */
 public class SplitReaderTest {
+    public static class SimpleRetrieveBlock implements RetrieveBlock {
+
+	private Map<LocatorKey, EncodedBlock> map = new HashMap<LocatorKey, EncodedBlock>();
+
+	@Override
+	public Block retrieveBlock(FullKey key) throws IOException {
+	    EncodedBlock block = map.get(key.toLocatorKey());
+	    if (block == null) {
+		return null;
+	    }
+	    try {
+		return block.decode(key);
+	    } catch (IllegalArgumentException e) {
+		throw new DecodeException(e);
+	    }
+	}
+
+	public void put(TestData data) throws IOException {
+	    map.put(data.getLocatorKey(), data.getEncodedBlock());
+	}
+    }
+
     /**
      * the storage engine that SplitReader wants
      */
-    private RetrieveBlockStorage storage;
-
-    /**
-     * the real storage engine
-     */
-    private BlockStore rawStorage;
+    private SimpleRetrieveBlock store;
 
     /**
      * setup the parts
      */
     @Before
     public void before() {
-        rawStorage = new StorageMemory();
-        storage = new RetrieveBlockStorage(rawStorage);
+	store = new SimpleRetrieveBlock();
     }
 
     /**
@@ -47,8 +68,7 @@ public class SplitReaderTest {
      */
     @After
     public void after() {
-        storage = null;
-        rawStorage = null;
+	store = null;
     }
 
     private static final TestData MAP = TestData.KEY_CONTENT_MAP;
@@ -68,8 +88,8 @@ public class SplitReaderTest {
      */
     @Test
     public void testJustBaseOfMap() throws IOException {
-        rawStorage.put(MAP.getEncodedBlock());
-        SplitReader r = new SplitReader(MAP.getFullKey(), storage);
+	store.put(MAP);
+	SplitReader r = new SplitReader(MAP.getFullKey(), store);
 
 	Fragment got = r.fetchAny();
 
@@ -84,9 +104,9 @@ public class SplitReaderTest {
      */
     @Test
     public void testMapSecondThenFirst() throws IOException {
-        rawStorage.put(MAP.getEncodedBlock());
-        rawStorage.put(C2.getEncodedBlock());
-        SplitReader r = new SplitReader(MAP.getFullKey(), storage);
+	store.put(MAP);
+	store.put(C2);
+	SplitReader r = new SplitReader(MAP.getFullKey(), store);
 
 	Fragment got = r.fetchAny();
 
@@ -96,7 +116,7 @@ public class SplitReaderTest {
 
 	assertEquals(null, got);
 
-        rawStorage.put(C1.getEncodedBlock());
+	store.put(C1);
         got = r.fetchAny();
 
 	assertEquals(new Fragment(0, D1), got);
@@ -110,9 +130,9 @@ public class SplitReaderTest {
      */
     @Test
     public void testGetFirst1() throws IOException {
-        rawStorage.put(MAP.getEncodedBlock());
-        rawStorage.put(C2.getEncodedBlock());
-        SplitReader r = new SplitReader(MAP.getFullKey(), storage);
+	store.put(MAP);
+	store.put(C2);
+	SplitReader r = new SplitReader(MAP.getFullKey(), store);
 
 	Fragment got = r.fetchFirst();
 
@@ -126,9 +146,9 @@ public class SplitReaderTest {
      */
     @Test
     public void testGetFirst2() throws IOException {
-        rawStorage.put(MAP.getEncodedBlock());
-        rawStorage.put(C1.getEncodedBlock());
-        SplitReader r = new SplitReader(MAP.getFullKey(), storage);
+	store.put(MAP);
+	store.put(C1);
+	SplitReader r = new SplitReader(MAP.getFullKey(), store);
 
 	Fragment got = r.fetchFirst();
 
@@ -140,7 +160,7 @@ public class SplitReaderTest {
      */
     @Test
     public void testPending1() {
-        SplitReader r = new SplitReader(MAP.getFullKey(), storage);
+	SplitReader r = new SplitReader(MAP.getFullKey(), store);
 
         List<FullKey> got = r.getPending();
 
@@ -155,8 +175,8 @@ public class SplitReaderTest {
      */
     @Test
     public void testPending2() throws IOException {
-        rawStorage.put(MAP.getEncodedBlock());
-        SplitReader r = new SplitReader(MAP.getFullKey(), storage);
+	store.put(MAP);
+	SplitReader r = new SplitReader(MAP.getFullKey(), store);
 
 	assertEquals(Arrays.asList(MAP.getFullKey()), r.getPending());
 
@@ -173,11 +193,11 @@ public class SplitReaderTest {
      */
     @Test
     public void testPendingAfterDone() throws IOException {
-        rawStorage.put(MAP.getEncodedBlock());
-        rawStorage.put(C1.getEncodedBlock());
-        rawStorage.put(C2.getEncodedBlock());
+	store.put(MAP);
+	store.put(C1);
+	store.put(C2);
 
-        SplitReader r = new SplitReader(MAP.getFullKey(), storage);
+	SplitReader r = new SplitReader(MAP.getFullKey(), store);
 	Fragment got = r.fetchAny();
 
 	assertNotNull(got);
@@ -203,11 +223,11 @@ public class SplitReaderTest {
     @Test
     public void testReadMapPad() throws IOException {
 	TestData d = TestData.KEY_CONTENT_MAP_PAD;
-        rawStorage.put(d.getEncodedBlock());
-        rawStorage.put(C1.getEncodedBlock());
-        rawStorage.put(C2.getEncodedBlock());
+	store.put(d);
+	store.put(C1);
+	store.put(C2);
 
-        SplitReader r = new SplitReader(d.getFullKey(), storage);
+	SplitReader r = new SplitReader(d.getFullKey(), store);
 
 	Fragment got = r.fetchFirst();
 	assertEquals(new Fragment(0, D1), got);
@@ -228,11 +248,11 @@ public class SplitReaderTest {
     @Test
     public void testReadMapOverlap() throws IOException {
 	TestData d = TestData.KEY_CONTENT_MAP_OVERLAP;
-        rawStorage.put(d.getEncodedBlock());
-        rawStorage.put(C1.getEncodedBlock());
-        rawStorage.put(C2.getEncodedBlock());
+	store.put(d);
+	store.put(C1);
+	store.put(C2);
 
-        SplitReader r = new SplitReader(d.getFullKey(), storage);
+	SplitReader r = new SplitReader(d.getFullKey(), store);
 
 	Fragment got = r.fetchFirst();
 	assertEquals(new Fragment(0, D1), got);
@@ -249,11 +269,11 @@ public class SplitReaderTest {
     @Test
     public void testReadList() throws IOException {
 	TestData d = TestData.KEY_CONTENT_LIST;
-        rawStorage.put(d.getEncodedBlock());
-        rawStorage.put(C1.getEncodedBlock());
-        rawStorage.put(C2.getEncodedBlock());
+	store.put(d);
+	store.put(C1);
+	store.put(C2);
 
-        SplitReader r = new SplitReader(d.getFullKey(), storage);
+	SplitReader r = new SplitReader(d.getFullKey(), store);
 	Fragment got;
 
 	got = r.fetchFirst();
@@ -273,12 +293,12 @@ public class SplitReaderTest {
     @Test
     public void testReadSplit() throws IOException {
 	TestData d = TestData.KEY_NAME_SPLIT;
-        rawStorage.put(d.getEncodedBlock());
-	rawStorage.put(TestData.KEY_NAME_SPLIT_1.getEncodedBlock());
-        rawStorage.put(C1.getEncodedBlock());
-	rawStorage.put(TestData.KEY_NAME_SPLIT_2.getEncodedBlock());
-        rawStorage.put(C2.getEncodedBlock());
-        SplitReader r = new SplitReader(d.getFullKey(), storage);
+	store.put(d);
+	store.put(TestData.KEY_NAME_SPLIT_1);
+	store.put(C1);
+	store.put(TestData.KEY_NAME_SPLIT_2);
+	store.put(C2);
+	SplitReader r = new SplitReader(d.getFullKey(), store);
 	Fragment got;
 
 	got = r.fetchFirst();
@@ -295,14 +315,14 @@ public class SplitReaderTest {
      * 
      * @throws IOException
      */
-    @Test(expected = IOException.class)
+    @Test(expected = DecodeException.class)
     public void testBad() throws IOException {
-	rawStorage.put(C1.getEncodedBlock());
+	store.put(C1);
 
 	ContentFullKey k = (ContentFullKey) C1.getFullKey();
 	k = new ContentFullKey(k.getHash(), new Bytes());
 
-	SplitReader r = new SplitReader(k, storage);
+	SplitReader r = new SplitReader(k, store);
 
 	r.fetchAny();
     }
@@ -312,9 +332,9 @@ public class SplitReaderTest {
      * 
      * @throws IOException
      */
-    @Test(expected = IOException.class)
+    @Test(expected = DecodeException.class)
     public void testBad2() throws IOException {
-	rawStorage.put(C1.getEncodedBlock());
+	store.put(C1);
 
 	ContentFullKey k = (ContentFullKey) C1.getFullKey();
 	{
@@ -323,7 +343,7 @@ public class SplitReaderTest {
 	    k = new ContentFullKey(k.getHash(), new Bytes(b));
 	}
 
-	SplitReader r = new SplitReader(k, storage);
+	SplitReader r = new SplitReader(k, store);
 
 	r.fetchAny();
     }

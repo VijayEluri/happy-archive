@@ -240,6 +240,8 @@ public enum TestData {
      * a classic split block
      */
     @Full("name-hash:sha-256:split")
+    @Locator("name-hash:ad1a64057f9ab34fecfe3f4ee78660bb0316dbda9370581ffbeb1e"
+	    + "8bddf3d598")
     @Clear(CLEAR_NAME_SPLIT)
     KEY_NAME_SPLIT,
 
@@ -247,12 +249,16 @@ public enum TestData {
      * an indirect block in the split for part 1
      */
     @Full("name-hash:sha-256:split/0")
+    @Locator("name-hash:83013ce3b08bc6ef779a2dfae872c0171bcf463b646c1f6ff72062"
+	    + "ff93a28a32")
     KEY_NAME_SPLIT_1,
 
     /**
      * an indirect block in the split for part 2
      */
     @Full("name-hash:sha-256:split/1")
+    @Locator("name-hash:ba69e8638346563154fc571245edb331fbb71f420e97bce423c8ee"
+	    + "616eba279d")
     KEY_NAME_SPLIT_2,
 
     /**
