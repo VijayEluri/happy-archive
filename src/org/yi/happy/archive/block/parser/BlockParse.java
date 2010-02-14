@@ -16,6 +16,17 @@ public class BlockParse {
     }
 
     /**
+     * parse a block from a byte array
+     * 
+     * @param bytes
+     *            the byte array
+     * @return the block
+     */
+    public static Block parse(byte[] bytes) {
+	return new GenericBlockParse().parse(bytes);
+    }
+
+    /**
      * load a block into memory
      * 
      * @param in
@@ -30,17 +41,6 @@ public class BlockParse {
 	    IllegalArgumentException {
 	byte[] bytes = Streams.load(in, Blocks.MAX_SIZE);
 	return parse(bytes);
-    }
-
-    /**
-     * parse a block from a byte array
-     * 
-     * @param bytes
-     *            the byte array
-     * @return the block
-     */
-    public static Block parse(byte[] bytes) {
-	return new GenericBlockParse().parse(bytes);
     }
 
     /**
@@ -61,6 +61,15 @@ public class BlockParse {
 	}
     }
 
+    /**
+     * load a block into memory.
+     * 
+     * @param file
+     *            the file to load.
+     * @return the loaded block.
+     * @throws IOException
+     *             on IO errors.
+     */
     public static Block load(File file) throws IOException {
 	FileInputStream in = new FileInputStream(file);
 	try {
@@ -69,5 +78,4 @@ public class BlockParse {
 	    in.close();
 	}
     }
-
 }

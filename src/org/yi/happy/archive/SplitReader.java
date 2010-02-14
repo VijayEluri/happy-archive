@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.yi.happy.annotate.MagicLiteral;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.DataBlock;
 import org.yi.happy.archive.key.FullKey;
@@ -74,6 +75,7 @@ public class SplitReader {
      * @throws IOException
      *             if the block is available but fetching or decoding failed.
      */
+    @MagicLiteral
     private Fragment fetch(int index) throws IOException {
 	while (true) {
 	    if (index >= pending.size()) {
@@ -102,20 +104,7 @@ public class SplitReader {
 
 	    String type = b.getMeta().get("type");
 	    if (type == null) {
-		/*
-		 * data block
-		 */
-		DataBlock block;
-		try {
-		    block = DataBlockParse.parse(b);
-		} catch (IllegalArgumentException e) {
-		    throw new DecodeException(e);
-		}
-		Bytes data = block.getBody();
-
-		pending.remove(index);
-		fixOffset(index, item.offset + data.getSize());
-		return new Fragment(item.offset, data);
+		return processData(index, item.offset, b);
 	    }
 
 	    if (type.equals("map")) {
@@ -143,6 +132,24 @@ public class SplitReader {
 	}
     }
 
+    private Fragment processData(int index, long offset, Block b)
+	    throws DecodeException {
+	/*
+	 * data block
+	 */
+	DataBlock block;
+	try {
+	    block = DataBlockParse.parse(b);
+	} catch (IllegalArgumentException e) {
+	    throw new DecodeException(e);
+	}
+	Bytes data = block.getBody();
+
+	pending.remove(index);
+	fixOffset(index, offset + data.getSize());
+	return new Fragment(offset, data);
+    }
+
     /**
      * replace an item with the contents of a split block
      * 
@@ -153,6 +160,7 @@ public class SplitReader {
      * @param b
      *            the split block
      */
+    @MagicLiteral
     private void processSplit(int index, Pending item, Block b) {
 	String countString = b.getMeta().get("split-count");
 	int count = Integer.parseInt(countString);
