@@ -1,6 +1,5 @@
 package org.yi.happy.archive;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,18 +19,13 @@ public class StorageMemory implements BlockStore {
 	data.put(block.getKey(), block);
     }
 
-    @Override
     public boolean contains(LocatorKey key) {
 	return data.containsKey(key);
     }
 
     @Override
     public EncodedBlock get(LocatorKey key) throws IOException {
-	EncodedBlock out = data.get(key);
-	if (out == null) {
-	    throw new FileNotFoundException();
-	}
-	return out;
+	return data.get(key);
     }
 
 }

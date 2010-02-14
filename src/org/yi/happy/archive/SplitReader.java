@@ -1,6 +1,5 @@
 package org.yi.happy.archive;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -87,13 +86,8 @@ public class SplitReader {
 		return null;
 	    }
 
-	    Block b;
-	    try {
-		b = storage.retrieveBlock(item.key);
-		if (b == null) {
-		    return null;
-		}
-	    } catch (FileNotFoundException e) {
+	    Block b = storage.retrieveBlock(item.key);
+	    if (b == null) {
 		return null;
 	    }
 

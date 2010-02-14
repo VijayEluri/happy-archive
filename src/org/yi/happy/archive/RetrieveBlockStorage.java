@@ -1,5 +1,6 @@
 package org.yi.happy.archive;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.yi.happy.archive.block.Block;
@@ -7,8 +8,7 @@ import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.key.FullKey;
 
 /**
- * allow for retrieval by full key and the automatic decoding of the resulting
- * blocks.
+ * Block retrieval and decoding service that connects to a block store.
  */
 public class RetrieveBlockStorage implements RetrieveBlock {
 
@@ -23,46 +23,23 @@ public class RetrieveBlockStorage implements RetrieveBlock {
     }
 
     /**
-     * the storage object I am attached to.
+     * the storage service I am attached to.
      */
     private final BlockStore storage;
 
-    /**
-     * get a key from the store, and decode it.
-     * 
-     * @param key
-     *            the full key to read
-     * @return the decoded block
-     * @throws BlockNotFoundException
-     *             if the block is not in the store.
-     * @throws IOException
-     *             on decoding failure.
-     */
+    @Override
     public Block retrieveBlock(FullKey key) throws IOException {
-	EncodedBlock block;
 	try {
-	    block = storage.get(key.toLocatorKey());
+	    EncodedBlock b = storage.get(key.toLocatorKey());
+	    if (b == null) {
+		return null;
+	    }
+
+	    return b.decode(key);
 	} catch (IllegalArgumentException e) {
 	    throw new DecodeException(e);
-	}
-
-	try {
-	    return block.decode(key);
-	} catch (IllegalArgumentException e) {
-	    throw new DecodeException(e);
+	} catch (FileNotFoundException e) {
+	    return null;
 	}
     }
-
-    /**
-     * check if a key is in the store
-     * 
-     * @param key
-     *            the full key to check for
-     * @return true if it is in the store
-     * @throws IOException
-     */
-    public boolean blockHave(FullKey key) throws IOException {
-	return storage.contains(key.toLocatorKey());
-    }
-
 }
