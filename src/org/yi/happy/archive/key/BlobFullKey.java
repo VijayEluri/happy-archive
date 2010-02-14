@@ -2,7 +2,18 @@ package org.yi.happy.archive.key;
 
 import org.yi.happy.archive.Bytes;
 
+/**
+ * A full key for a blob encoded block.
+ */
 public class BlobFullKey extends AbstractContentFullKey implements FullKey {
+    /**
+     * create a full key for a blob encoded block.
+     * 
+     * @param hash
+     *            the hash part of the key.
+     * @param pass
+     *            the encryption key part of the key.
+     */
     public BlobFullKey(Bytes hash, Bytes pass) {
 	super(hash, pass);
     }

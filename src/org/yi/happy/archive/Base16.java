@@ -1,5 +1,8 @@
 package org.yi.happy.archive;
 
+/**
+ * Base16 conversion methods.
+ */
 public class Base16 {
 
     private static final char[] table = { '0', '1', '2', '3', '4', '5', '6',

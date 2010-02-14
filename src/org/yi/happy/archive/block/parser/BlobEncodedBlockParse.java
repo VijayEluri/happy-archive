@@ -14,10 +14,23 @@ import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.key.BlobLocatorKey;
 import org.yi.happy.archive.key.KeyParse;
 
+/**
+ * parser for a {@link BlobEncodedBlock}.
+ */
 public class BlobEncodedBlockParse {
 
+    /**
+     * Parse a BlobEncodedBlock.
+     * 
+     * @param block
+     *            the block to parse.
+     * @return the parsed block.
+     * @throws IllegalArgumentException
+     *             on parsing failure.
+     */
     @MagicLiteral
-    public static BlobEncodedBlock parse(Block block) {
+    public static BlobEncodedBlock parse(Block block)
+	    throws IllegalArgumentException {
 	if (block instanceof BlobEncodedBlock) {
 	    return (BlobEncodedBlock) block;
 	}

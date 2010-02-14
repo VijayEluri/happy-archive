@@ -10,7 +10,15 @@ import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.GenericBlock;
 import org.yi.happy.archive.test_data.TestData;
 
+/**
+ * tests for {@link BlobEncodedBlockParse}.
+ */
 public class BlobEncodedBlockParseTest {
+    /**
+     * parse a blob block.
+     * 
+     * @throws IOException
+     */
     @Test
     public void test1() throws IOException {
 	TestData d = TestData.KEY_BLOB;
@@ -24,6 +32,11 @@ public class BlobEncodedBlockParseTest {
 	assertEquals(b.getBody(), e.getBody());
     }
 
+    /**
+     * parse a blob block.
+     * 
+     * @throws IOException
+     */
     @Test
     public void test2() throws IOException {
 	TestData d = TestData.KEY_BLOB_AES128;
@@ -37,6 +50,11 @@ public class BlobEncodedBlockParseTest {
 	assertEquals(b.getBody(), e.getBody());
     }
 
+    /**
+     * parse a blob block.
+     * 
+     * @throws IOException
+     */
     @Test
     public void test3() throws IOException {
 	TestData d = TestData.KEY_BLOB_SHA1_AES192;
@@ -50,6 +68,11 @@ public class BlobEncodedBlockParseTest {
 	assertEquals(b.getBody(), e.getBody());
     }
 
+    /**
+     * try to parse a content block as a blob block.
+     * 
+     * @throws IOException
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testNotBlob() throws IOException {
 	TestData d = TestData.KEY_CONTENT;
@@ -58,6 +81,11 @@ public class BlobEncodedBlockParseTest {
 	BlobEncodedBlockParse.parse(b);
     }
 
+    /**
+     * try to parse a blank block as a blob block.
+     * 
+     * @throws IOException
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testBlank() throws IOException {
 	Block b = new GenericBlock();

@@ -17,6 +17,9 @@ import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.key.BlobLocatorKey;
 
+/**
+ * tests for {@link BlobEncodedBlock}.
+ */
 public class BlobEncodedBlockTest {
     private static final DigestProvider SHA256 = DigestFactory
 	    .getProvider("sha-256");

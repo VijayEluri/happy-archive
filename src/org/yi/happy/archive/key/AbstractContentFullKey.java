@@ -3,14 +3,26 @@ package org.yi.happy.archive.key;
 import org.yi.happy.archive.Base16;
 import org.yi.happy.archive.Bytes;
 
-public abstract class AbstractContentFullKey {
+/**
+ * The common parts of the keys where the key is based on the content of the
+ * block.
+ */
+public abstract class AbstractContentFullKey implements FullKey {
 
     public abstract String getType();
 
     private final Bytes hash;
     private final Bytes pass;
 
-    public AbstractContentFullKey(Bytes hash, Bytes pass) {
+    /**
+     * create.
+     * 
+     * @param hash
+     *            the hash part.
+     * @param pass
+     *            the encryption key part.
+     */
+    protected AbstractContentFullKey(Bytes hash, Bytes pass) {
 	if (hash.getSize() < 1) {
 	    throw new IllegalArgumentException("hash too short");
 	}
@@ -25,7 +37,7 @@ public abstract class AbstractContentFullKey {
 
     /**
      * 
-     * @return the hash
+     * @return the hash part of the key.
      */
     public Bytes getHash() {
 	return hash;
@@ -33,7 +45,7 @@ public abstract class AbstractContentFullKey {
 
     /**
      * 
-     * @return the cipher key
+     * @return the encryption key part of the key.
      */
     public Bytes getPass() {
 	return pass;
