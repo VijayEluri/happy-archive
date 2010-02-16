@@ -15,16 +15,35 @@ import org.yi.happy.archive.file_system.RealFileSystem;
 public class FileStoreBlockPutMain {
     private final FileSystem fs;
 
+    /**
+     * store a block in a file store.
+     * 
+     * @param args
+     * @throws IOException
+     */
     @EntryPoint
     public static void main(String[] args) throws IOException {
 	RealFileSystem fs = new RealFileSystem();
 	new FileStoreBlockPutMain(fs).run(args);
     }
 
+    /**
+     * create.
+     * 
+     * @param fs
+     *            the file system to use.
+     */
     public FileStoreBlockPutMain(FileSystem fs) {
 	this.fs = fs;
     }
 
+    /**
+     * store a block in the store.
+     * 
+     * @param args
+     *            the store, the block.
+     * @throws IOException
+     */
     public void run(String... args) throws IOException {
 	FileBlockStore store = new FileBlockStore(fs, args[0]);
 

@@ -17,7 +17,17 @@ import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.key.KeyParse;
 import org.yi.happy.archive.key.NameLocatorKey;
 
+/**
+ * parser for {@link NameEncodedBlock}.
+ */
 public class NameEncodedBlockParse {
+    /**
+     * parse a {@link Block} into a {@link NameEncodedBlock}.
+     * 
+     * @param block
+     *            the {@link Block} to parse.
+     * @return the resulting {@link NameEncodedBlock}.
+     */
     @MagicLiteral
     public static NameEncodedBlock parse(Block block) {
 	if (block instanceof NameEncodedBlock) {

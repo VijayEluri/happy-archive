@@ -5,6 +5,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+/**
+ * Utility methods for doing common operations {@link InputStream} and
+ * {@link OutputStream}.
+ */
 public class Streams {
 
     /**

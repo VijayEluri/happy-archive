@@ -6,6 +6,9 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.yi.happy.archive.test_data.TestData;
 
+/**
+ * tests for {@link NameFullKey}.
+ */
 public class NameFullKeyTest {
     /**
      * convert a full name key to a locator key

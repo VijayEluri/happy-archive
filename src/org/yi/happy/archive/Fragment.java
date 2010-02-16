@@ -80,10 +80,24 @@ public final class Fragment {
 	return true;
     }
 
+    /**
+     * get the size of the fragment.
+     * 
+     * @return the size of the fragment.
+     */
     public final int getSize() {
 	return data.getSize();
     }
 
+    /**
+     * get a byte from the fragment based on the absolute offset of the byte.
+     * 
+     * @param offset
+     *            the offset of the byte to get.
+     * @return the byte.
+     * @throws IndexOutOfBoundsException
+     *             if the index is not within the fragment.
+     */
     public byte getAbsolute(long offset) {
 	if (offset < this.offset || offset >= this.offset + data.getSize()) {
 	    throw new IndexOutOfBoundsException();

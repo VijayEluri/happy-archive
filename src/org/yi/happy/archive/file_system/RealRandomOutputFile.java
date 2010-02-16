@@ -3,9 +3,19 @@ package org.yi.happy.archive.file_system;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
+/**
+ * An implementation of {@link RandomOutputFile} which acts on a real file.
+ */
 public class RealRandomOutputFile implements RandomOutputFile {
     private RandomAccessFile f;
 
+    /**
+     * open a file for random output.
+     * 
+     * @param name
+     *            the name of the file to open.
+     * @throws IOException
+     */
     public RealRandomOutputFile(String name) throws IOException {
 	f = new RandomAccessFile(name, "rw");
     }

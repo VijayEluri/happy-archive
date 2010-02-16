@@ -1,18 +1,37 @@
 package org.yi.happy.archive.block.parser;
 
+/**
+ * A range.
+ */
 public class Range {
     private final int offset;
     private final int length;
 
+    /**
+     * create a range.
+     * 
+     * @param offset
+     *            the offset where the range starts.
+     * @param length
+     *            the length of the range.
+     */
     public Range(int offset, int length) {
 	this.offset = offset;
 	this.length = length;
     }
 
+    /**
+     * 
+     * @return the offset where the range starts.
+     */
     public int getOffset() {
 	return offset;
     }
 
+    /**
+     * 
+     * @return the length of the range.
+     */
     public int getLength() {
 	return length;
     }
@@ -52,6 +71,15 @@ public class Range {
 	return true;
     }
 
+    /**
+     * the slice of the current range that is before the given range.
+     * 
+     * @param other
+     *            the range to compare to.
+     * @return a range that starts at the minimum of the start of this and
+     *         other, and ends at the minimum of the end of this and the
+     *         beginning of other.
+     */
     public Range before(Range other) {
 	if (this.getEnd() < other.getOffset()) {
 	    return this;
@@ -64,6 +92,15 @@ public class Range {
 	return new Range(this.getOffset(), other.getOffset() - this.getOffset());
     }
 
+    /**
+     * the slice of the current range that is after the given range.
+     * 
+     * @param other
+     *            the range to compare to.
+     * @return a range that starts at the maximum of the end of the other range
+     *         and the beginning of this range, and ends at the maximum of the
+     *         end of the other range and the end of this range.
+     */
     public Range after(Range other) {
 	if (other.getEnd() < this.getOffset()) {
 	    return this;
@@ -75,5 +112,4 @@ public class Range {
 
 	return new Range(other.getEnd(), this.getEnd() - other.getEnd());
     }
-
 }

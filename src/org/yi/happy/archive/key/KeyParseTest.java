@@ -6,6 +6,9 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.yi.happy.archive.Bytes;
 
+/**
+ * tests for {@link KeyParse}.
+ */
 public class KeyParseTest {
     /**
      * parse a full name key

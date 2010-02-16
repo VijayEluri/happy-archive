@@ -8,11 +8,22 @@ import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.key.LocatorKey;
 
+/**
+ * A block store that uses a file system to store the blocks.
+ */
 public class FileBlockStore implements BlockStore {
 
     private final FileSystem fs;
     private final String base;
 
+    /**
+     * create a file system block store.
+     * 
+     * @param fs
+     *            the file system to use.
+     * @param base
+     *            the base path to use.
+     */
     public FileBlockStore(FileSystem fs, String base) {
 	this.fs = fs;
 	this.base = base;
@@ -44,7 +55,7 @@ public class FileBlockStore implements BlockStore {
 	fileName = fs.join(fileName, name);
 
 	try {
-	return EncodedBlockParse.parse(fs.load(fileName));
+	    return EncodedBlockParse.parse(fs.load(fileName));
 	} catch (FileNotFoundException e) {
 	    return null;
 	} catch (IllegalArgumentException e) {

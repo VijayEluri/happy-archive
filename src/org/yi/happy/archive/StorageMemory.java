@@ -19,6 +19,13 @@ public class StorageMemory implements BlockStore {
 	data.put(block.getKey(), block);
     }
 
+    /**
+     * test if the store contains the given key.
+     * 
+     * @param key
+     *            the key to check for.
+     * @return true if the store contains the key.
+     */
     public boolean contains(LocatorKey key) {
 	return data.containsKey(key);
     }

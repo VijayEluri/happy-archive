@@ -136,6 +136,9 @@ public enum TestData {
     @Clear(CLEAR_CONTENT)
     KEY_NAME_MD5_AES192,
 
+    /**
+     * the clear version of a map block for 2048 'a's.
+     */
     CLEAR_CONTENT_MAP_2048A,
 
     /**
@@ -149,8 +152,14 @@ public enum TestData {
     @Clear(CLEAR_CONTENT_MAP_2048A)
     KEY_CONTENT_MAP_2048A,
 
+    /**
+     * a clear block with 512 'a's in it.
+     */
     CLEAR_CONTENT_512A,
 
+    /**
+     * A content encoded block with 512 'a's in it.
+     */
     @Full("content-hash:61a0ef49ca8d2e54454bfb1a55d34570666ef71820fa1a33ba19ce"
 	    + "d94fdea2fb:d7004f5a0efeab8bafc9df8a4dbf1573bb07d846d8fa788e51ce"
 	    + "86ee44750f58")
@@ -368,10 +377,24 @@ public enum TestData {
 	throw new UnsupportedOperationException("not found");
     }
 
+    /**
+     * fetch the test data and parse it as an encoded block.
+     * 
+     * @return the test data as an encoded block.
+     * @throws IOException
+     *             on error.
+     */
     public EncodedBlock getEncodedBlock() throws IOException {
 	return EncodedBlockParse.load(getUrl());
     }
 
+    /**
+     * fetch the test data and parse it as a block.
+     * 
+     * @return the test data as a block.
+     * @throws IOException
+     *             on error.
+     */
     public Block getBlock() throws IOException {
 	return BlockParse.load(getUrl());
     }

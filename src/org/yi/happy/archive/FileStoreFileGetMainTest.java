@@ -12,8 +12,15 @@ import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.test_data.TestData;
 
-
+/**
+ * Tests for {@link FileStoreFileGetMain}.
+ */
 public class FileStoreFileGetMainTest {
+    /**
+     * an expected good run.
+     * 
+     * @throws IOException
+     */
     @Test
     public void test1() throws IOException {
 	/*

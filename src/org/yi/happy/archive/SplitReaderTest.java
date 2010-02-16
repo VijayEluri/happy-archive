@@ -28,6 +28,9 @@ import org.yi.happy.archive.test_data.TestData;
  * of files.
  */
 public class SplitReaderTest {
+    /**
+     * A trivial block retrieval method for testing.
+     */
     public static class SimpleRetrieveBlock implements RetrieveBlock {
 
 	private Map<LocatorKey, EncodedBlock> map = new HashMap<LocatorKey, EncodedBlock>();
@@ -45,6 +48,13 @@ public class SplitReaderTest {
 	    }
 	}
 
+	/**
+	 * make some test data available.
+	 * 
+	 * @param data
+	 *            the test data to make available.
+	 * @throws IOException
+	 */
 	public void put(TestData data) throws IOException {
 	    map.put(data.getLocatorKey(), data.getEncodedBlock());
 	}

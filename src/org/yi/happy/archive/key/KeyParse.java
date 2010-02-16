@@ -8,6 +8,9 @@ import org.yi.happy.archive.Base16;
 import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.crypto.DigestFactory;
 
+/**
+ * parser for {@link Key}.
+ */
 public class KeyParse {
     private KeyParse() {
 
@@ -72,6 +75,15 @@ public class KeyParse {
 	throw new IllegalArgumentException("can not parse key");
     }
 
+    /**
+     * parse a {@link FullKey}.
+     * 
+     * @param key
+     *            the string form of the key.
+     * @return the full key.
+     * @throws IllegalArgumentException
+     *             if the key does not parse.
+     */
     @SmellsMessy
     public static FullKey parseFullKey(String key) {
 	Matcher m = BLOB_KEY.matcher(key);
@@ -95,6 +107,15 @@ public class KeyParse {
 	throw new IllegalArgumentException("can not parse key");
     }
 
+    /**
+     * parse a {@link LocatorKey}.
+     * 
+     * @param key
+     *            the string form of the key.
+     * @return the parsed key.
+     * @throws IllegalArgumentException
+     *             if the key does not parse.
+     */
     public static LocatorKey parseLocatorKey(String key) {
 	Matcher m;
 	m = BLOB_LOCATOR.matcher(key);
@@ -153,14 +174,35 @@ public class KeyParse {
 	throw new IllegalArgumentException("unknown type: " + type);
     }
 
+    /**
+     * make a blob locator key from the hash part of the key.
+     * 
+     * @param hash
+     *            the hash part.
+     * @return the key.
+     */
     public static BlobLocatorKey parseBlobLocatorKey(String hash) {
 	return new BlobLocatorKey(new Bytes(Base16.decode(hash)));
     }
 
+    /**
+     * make a content locator key from the hash part of a key.
+     * 
+     * @param hash
+     *            the hash part.
+     * @return the key.
+     */
     public static ContentLocatorKey parseContentLocatorKey(String hash) {
 	return new ContentLocatorKey(new Bytes(Base16.decode(hash)));
     }
 
+    /**
+     * make a name locator key from the hash part of a key.
+     * 
+     * @param hash
+     *            the hash part.
+     * @return the key.
+     */
     public static NameLocatorKey parseNameLocatorKey(String hash) {
 	return new NameLocatorKey(new Bytes(Base16.decode(hash)));
     }

@@ -8,6 +8,9 @@ import org.junit.Test;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.test_data.TestData;
 
+/**
+ * Tests for {@link FileStoreBlockPutMain}.
+ */
 public class FileStoreBlockPutMainTest {
     /**
      * A normal good usage test.

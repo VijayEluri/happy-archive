@@ -11,8 +11,13 @@ import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.block.GenericBlock;
 import org.yi.happy.archive.block.GenericBlockTest;
 
-
+/**
+ * Tests for {@link GenericBlockParse}.
+ */
 public class GenericBlockParseTest {
+    /**
+     * parse the sample block.
+     */
     @Test
     public void testSampleBlock() {
 	GenericBlockParse p = new GenericBlockParse();
@@ -22,6 +27,9 @@ public class GenericBlockParseTest {
 	assertEquals(GenericBlockTest.createSampleBlock(), have);
     }
 
+    /**
+     * parse a block with mangled newlines.
+     */
     @Test
     public void testMangledBlock() {
 	GenericBlockParse p = new GenericBlockParse();
@@ -32,6 +40,9 @@ public class GenericBlockParseTest {
 		.asBytes());
     }
 
+    /**
+     * parse a zero byte array.
+     */
     @Test
     public void testEmptyBlock() {
 	GenericBlockParse p = new GenericBlockParse();

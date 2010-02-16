@@ -11,16 +11,34 @@ import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
 
+/**
+ * Verify that a set of blocks in files load, parse, and validate.
+ */
 public class VerifyMain {
 
     private final FileSystem fileSystem;
     private final Writer out;
 
+    /**
+     * create, injecting the dependencies.
+     * 
+     * @param fileSystem
+     *            the file system to use.
+     * @param out
+     *            where to send the output.
+     */
     public VerifyMain(FileSystem fileSystem, Writer out) {
 	this.fileSystem = fileSystem;
 	this.out = out;
     }
 
+    /**
+     * verify that a set of blocks in files load, parse, and validate.
+     * 
+     * @param args
+     *            the list of files to verify.
+     * @throws Exception
+     */
     public void run(String... args) throws Exception {
 	for (String arg : args) {
 	    String line;
@@ -56,6 +74,12 @@ public class VerifyMain {
 	}
     }
 
+    /**
+     * launch the command using the real resources.
+     * 
+     * @param args
+     * @throws Exception
+     */
     @EntryPoint
     public static void main(String[] args) throws Exception {
 	FileSystem fs = new RealFileSystem();

@@ -9,6 +9,9 @@ import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.block.GenericBlock;
 
+/**
+ * parser for {@link GenericBlock}.
+ */
 @SmellsProcedural
 public class GenericBlockParse {
 

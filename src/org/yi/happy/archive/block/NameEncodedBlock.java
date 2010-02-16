@@ -3,6 +3,7 @@ package org.yi.happy.archive.block;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.yi.happy.annotate.MagicLiteral;
 import org.yi.happy.archive.BadSignatureException;
 import org.yi.happy.archive.Base16;
 import org.yi.happy.archive.ByteString;
@@ -16,6 +17,9 @@ import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.NameFullKey;
 import org.yi.happy.archive.key.NameLocatorKey;
 
+/**
+ * A name encoded block.
+ */
 public final class NameEncodedBlock extends AbstractBlock implements
 	EncodedBlock {
 
@@ -25,6 +29,23 @@ public final class NameEncodedBlock extends AbstractBlock implements
     private final CipherProvider cipher;
     private final Bytes body;
 
+    /**
+     * create a name encoded block from all details.
+     * 
+     * @param key
+     *            the key of the block.
+     * @param hash
+     *            the hash of the body of the block.
+     * @param digest
+     *            the digest to use.
+     * @param cipher
+     *            the cipher to use.
+     * @param body
+     *            the body of the block.
+     * @throws IllegalArgumentException
+     *             if the details do not agree.
+     */
+    @MagicLiteral
     public NameEncodedBlock(NameLocatorKey key, Bytes hash,
 	    DigestProvider digest, CipherProvider cipher, Bytes body) {
 	GenericBlock.checkHeader("digest", digest.getAlgorithm());
@@ -42,6 +63,20 @@ public final class NameEncodedBlock extends AbstractBlock implements
 	this.body = body;
     }
 
+    /**
+     * create a name encoded block from minimal details.
+     * 
+     * @param key
+     *            the key of the block.
+     * @param digest
+     *            the digest to use.
+     * @param cipher
+     *            the cipher to use.
+     * @param body
+     *            the body of the block.
+     * @throws IllegalArgumentException
+     *             if the details do not agree or are not usable.
+     */
     public NameEncodedBlock(NameLocatorKey key, DigestProvider digest,
 	    CipherProvider cipher, Bytes body) {
 	GenericBlock.checkHeader("digest", digest.getAlgorithm());
@@ -60,6 +95,11 @@ public final class NameEncodedBlock extends AbstractBlock implements
 	return key;
     }
 
+    /**
+     * get the hash of the body.
+     * 
+     * @return the hash of the body.
+     */
     public Bytes getHash() {
 	return hash;
     }

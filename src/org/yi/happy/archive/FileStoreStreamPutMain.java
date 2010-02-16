@@ -20,12 +20,29 @@ public class FileStoreStreamPutMain {
     private InputStream in;
     private Writer out;
 
+    /**
+     * create.
+     * 
+     * @param fs
+     *            the file system to use.
+     * @param in
+     *            the stream to store.
+     * @param out
+     *            the stream to write the result.
+     */
     public FileStoreStreamPutMain(FileSystem fs, InputStream in, Writer out) {
 	this.fs = fs;
 	this.in = in;
 	this.out = out;
     }
 
+    /**
+     * store a stream in a file store.
+     * 
+     * @param args
+     *            the file store path.
+     * @throws IOException
+     */
     public void run(String... args) throws IOException {
 	BlockStore store = new FileBlockStore(fs, args[0]);
 	BlockEncoder encoder = BlockEncoderFactory.getContentDefault();
@@ -39,6 +56,12 @@ public class FileStoreStreamPutMain {
 	out.write(s.getFullKey() + "\n");
     }
 
+    /**
+     * store a stream in a file store.
+     * 
+     * @param args
+     * @throws IOException
+     */
     @EntryPoint
     public static void main(String[] args) throws IOException {
 	FileSystem fs = new RealFileSystem();

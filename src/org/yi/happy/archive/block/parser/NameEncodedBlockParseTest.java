@@ -11,8 +11,15 @@ import org.yi.happy.archive.block.GenericBlock;
 import org.yi.happy.archive.block.NameEncodedBlock;
 import org.yi.happy.archive.test_data.TestData;
 
-
+/**
+ * tests for {@link NameEncodedBlockParse}.
+ */
 public class NameEncodedBlockParseTest {
+    /**
+     * parse a version two name encoded block.
+     * 
+     * @throws IOException
+     */
     @Test
     public void test1() throws IOException {
 	TestData d = TestData.KEY_NAME;
@@ -30,6 +37,11 @@ public class NameEncodedBlockParseTest {
 	assertEquals(b.getBody(), e.getBody());
     }
 
+    /**
+     * parse a version two name encoded block.
+     * 
+     * @throws IOException
+     */
     @Test
     public void test2() throws IOException {
 	TestData d = TestData.KEY_NAME_MD5_AES192;
@@ -45,6 +57,9 @@ public class NameEncodedBlockParseTest {
 	assertEquals(b.getBody(), e.getBody());
     }
 
+    /**
+     * try to parse an empty block.
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testBad() {
 	Block b = new GenericBlock();
@@ -52,6 +67,11 @@ public class NameEncodedBlockParseTest {
 	NameEncodedBlockParse.parse(b);
     }
 
+    /**
+     * try to parse a content block.
+     * 
+     * @throws IOException
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testWrongType() throws IOException {
 	TestData d = TestData.KEY_CONTENT;
@@ -60,6 +80,11 @@ public class NameEncodedBlockParseTest {
 	NameEncodedBlockParse.parse(b);
     }
 
+    /**
+     * try to parse a truncated name block.
+     * 
+     * @throws IOException
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testShort() throws IOException {
 	TestData d = TestData.BAD_KEY_SHORT_NAME;

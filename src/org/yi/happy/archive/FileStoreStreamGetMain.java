@@ -23,6 +23,16 @@ public class FileStoreStreamGetMain {
     private final OutputStream out;
     private final WaitHandler waitHandler;
 
+    /**
+     * create.
+     * 
+     * @param fs
+     *            the file system.
+     * @param out
+     *            where to send the stream.
+     * @param waitHandler
+     *            what to do when no blocks are ready.
+     */
     public FileStoreStreamGetMain(FileSystem fs, OutputStream out,
 	    WaitHandler waitHandler) {
 	this.fs = fs;
@@ -74,6 +84,14 @@ public class FileStoreStreamGetMain {
 	new FileStoreStreamGetMain(fs, out, waitHandler).run(args);
     }
 
+    /**
+     * restore a stream.
+     * 
+     * @param args
+     *            the block store, where to write the pending block list, the
+     *            full key to fetch.
+     * @throws IOException
+     */
     public void run(String... args) throws IOException {
 	FileBlockStore store = new FileBlockStore(fs, args[0]);
 	pendingFile = args[1];

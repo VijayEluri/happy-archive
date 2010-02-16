@@ -11,6 +11,9 @@ import org.yi.happy.archive.block.encoder.BlockEncoder;
 import org.yi.happy.archive.block.encoder.BlockEncoderFactory;
 import org.yi.happy.archive.test_data.TestData;
 
+/**
+ * tests for {@link KeyOutputStream}.
+ */
 public class KeyOutputStreamTest {
     /**
      * write data

@@ -8,6 +8,9 @@ import java.io.InputStream;
 
 import org.yi.happy.archive.Streams;
 
+/**
+ * An implementation of {@link FileSystem} that acts on the real file system.
+ */
 public class RealFileSystem implements FileSystem {
 
     @Override

@@ -8,7 +8,15 @@ import org.junit.Test;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.test_data.TestData;
 
+/**
+ * tests for {@link VerifyMain}.
+ */
 public class VerifyMainTest {
+    /**
+     * verify a good file.
+     * 
+     * @throws Exception
+     */
     @Test
     public void testOk() throws Exception {
 	StringWriter out = new StringWriter();
@@ -23,6 +31,11 @@ public class VerifyMainTest {
 		+ TestData.KEY_CONTENT.getFileName() + "\n", out.toString());
     }
 
+    /**
+     * verify a missing file.
+     * 
+     * @throws Exception
+     */
     @Test
     public void testMissing() throws Exception {
 	StringWriter out = new StringWriter();
