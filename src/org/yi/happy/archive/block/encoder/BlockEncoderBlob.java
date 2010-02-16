@@ -10,7 +10,18 @@ import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.crypto.Digests;
 import org.yi.happy.archive.key.BlobFullKey;
 
+/**
+ * A block encoder that makes blob encoded blocks.
+ */
 public class BlockEncoderBlob implements BlockEncoder {
+    /**
+     * Create a block encoder that makes blob encoded blocks.
+     * 
+     * @param digest
+     *            the digest to use.
+     * @param cipher
+     *            the cipher to use.
+     */
     public BlockEncoderBlob(DigestProvider digest, CipherProvider cipher) {
 	this.digest = digest;
 	this.cipher = cipher;

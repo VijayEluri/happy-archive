@@ -14,6 +14,14 @@ import org.yi.happy.archive.key.ContentFullKey;
  * A block encoder for content hash blocks.
  */
 public class BlockEncoderContent implements BlockEncoder {
+    /**
+     * create a block encoder for content hash blocks.
+     * 
+     * @param digest
+     *            the digest to use.
+     * @param cipher
+     *            the cipher to use.
+     */
     public BlockEncoderContent(DigestProvider digest, CipherProvider cipher) {
 	this.digest = digest;
 	this.cipher = cipher;

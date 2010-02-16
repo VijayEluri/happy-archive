@@ -22,11 +22,25 @@ public class DecodeBlockMain {
     private final FileSystem fs;
     private final OutputStream out;
 
+    /**
+     * create the procedure.
+     * 
+     * @param fs
+     *            the file system to use.
+     * @param out
+     *            the output stream to use.
+     */
     public DecodeBlockMain(FileSystem fs, OutputStream out) {
 	this.fs = fs;
 	this.out = out;
     }
 
+    /**
+     * decode a single block.
+     * 
+     * @param args
+     * @throws Exception
+     */
     @EntryPoint
     public static void main(String[] args) throws Exception {
 	FileSystem fs = new RealFileSystem();
@@ -37,6 +51,13 @@ public class DecodeBlockMain {
 	out.flush();
     }
 
+    /**
+     * decode a single block.
+     * 
+     * @param args
+     *            file name of the block to decode, full key of the block.
+     * @throws IOException
+     */
     @SmellsMessy
     public void run(String... args) throws IOException {
 	/*

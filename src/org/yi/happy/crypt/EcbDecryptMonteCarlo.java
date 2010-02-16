@@ -4,9 +4,17 @@ import java.io.PrintStream;
 
 import org.yi.happy.archive.Base16;
 
+/**
+ * do the ECB Decryption Monte Carlo test.
+ */
 public class EcbDecryptMonteCarlo {
     private static PrintStream out;
 
+    /**
+     * run the test.
+     * 
+     * @param args
+     */
     public static void main(String[] args) {
 	out = System.out;
 

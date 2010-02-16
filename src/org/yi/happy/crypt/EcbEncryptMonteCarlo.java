@@ -4,9 +4,17 @@ import java.io.PrintStream;
 
 import org.yi.happy.archive.Base16;
 
+/**
+ * do the ECB Encryption Monte Carlo test on the AES cipher.
+ */
 public class EcbEncryptMonteCarlo {
     private static PrintStream out;
 
+    /**
+     * launch the test.
+     * 
+     * @param args
+     */
     public static void main(String[] args) {
 	out = System.out;
 

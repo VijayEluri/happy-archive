@@ -9,7 +9,15 @@ import org.junit.Test;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.test_data.TestData;
 
+/**
+ * tests for {@link EncodeContentMain}.
+ */
 public class EncodeContentMainTest {
+    /**
+     * an expected good usage.
+     * 
+     * @throws Exception
+     */
     @Test
     public void test1() throws Exception {
 	FakeFileSystem fs = new FakeFileSystem();

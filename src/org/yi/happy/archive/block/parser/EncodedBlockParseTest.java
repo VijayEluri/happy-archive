@@ -13,7 +13,15 @@ import org.yi.happy.archive.block.GenericBlock;
 import org.yi.happy.archive.block.NameEncodedBlock;
 import org.yi.happy.archive.test_data.TestData;
 
+/**
+ * Tests for {@link EncodedBlockParse}.
+ */
 public class EncodedBlockParseTest {
+    /**
+     * parse a content encoded block.
+     * 
+     * @throws IOException
+     */
     @Test
     public void testContent() throws IOException {
 	TestData d = TestData.KEY_CONTENT;
@@ -24,6 +32,11 @@ public class EncodedBlockParseTest {
 	assertTrue(e instanceof ContentEncodedBlock);
     }
 
+    /**
+     * parse a blob encoded block.
+     * 
+     * @throws IOException
+     */
     @Test
     public void testBlob() throws IOException {
 	TestData d = TestData.KEY_BLOB;
@@ -34,6 +47,11 @@ public class EncodedBlockParseTest {
 	assertTrue(e instanceof BlobEncodedBlock);
     }
 
+    /**
+     * parse a name encoded block.
+     * 
+     * @throws IOException
+     */
     @Test
     public void testName() throws IOException {
 	TestData d = TestData.KEY_NAME;
@@ -44,6 +62,9 @@ public class EncodedBlockParseTest {
 	assertTrue(e instanceof NameEncodedBlock);
     }
 
+    /**
+     * try to parse a block that is not an encoded block.
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testBlank() {
 	Block b = new GenericBlock();

@@ -5,8 +5,20 @@ import java.util.Map;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.DataBlock;
 
+/**
+ * parser for a basic data block.
+ */
 public class DataBlockParse {
 
+    /**
+     * parse a basic data block.
+     * 
+     * @param block
+     *            the block to parse.
+     * @return the parsed block.
+     * @throws IllegalArgumentException
+     *             if the block can not be parsed.
+     */
     public static DataBlock parse(Block block) {
 	if (block instanceof DataBlock) {
 	    return (DataBlock) block;

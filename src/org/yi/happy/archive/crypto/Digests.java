@@ -5,6 +5,9 @@ import java.security.MessageDigest;
 import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.UnknownDigestAlgorithmException;
 
+/**
+ * utility methods for dealing with digests.
+ */
 public class Digests {
     private Digests() {
 

@@ -4,16 +4,21 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-
+/**
+ * tests for {@link CipherFactory}.
+ */
 public class CipherFactoryTest {
     /**
-     * setting a bad cipher should fail right away
+     * creating a bad cipher should fail.
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = UnknownAlgorithmException.class)
     public void testBadCipher() {
 	CipherFactory.create("bad");
     }
 
+    /**
+     * check that unknown algorithms can still get providers.
+     */
     @Test
     public void testBadProvider() {
 	CipherProvider got = CipherFactory.getProvider("bad");
@@ -21,6 +26,9 @@ public class CipherFactoryTest {
 	assertEquals("bad", got.getAlgorithm());
     }
 
+    /**
+     * check that unknown algorithms do not get implementations.
+     */
     @Test(expected = UnknownAlgorithmException.class)
     public void testBadProvider2() {
 	CipherProvider got = CipherFactory.getProvider("bad");

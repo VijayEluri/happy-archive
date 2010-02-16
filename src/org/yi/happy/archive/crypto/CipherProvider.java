@@ -15,10 +15,19 @@ public abstract class CipherProvider {
 
     protected final String algorithm;
 
+    /**
+     * Create.
+     * 
+     * @param algorithm
+     *            the algorithm name.
+     */
     public CipherProvider(String algorithm) {
 	this.algorithm = algorithm;
     }
 
+    /**
+     * @return the algorithm name.
+     */
     public final String getAlgorithm() {
 	return algorithm;
     }

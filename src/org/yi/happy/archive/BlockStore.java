@@ -5,6 +5,9 @@ import java.io.IOException;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.key.LocatorKey;
 
+/**
+ * A block storage service.
+ */
 public interface BlockStore {
     /**
      * put a block into the store.

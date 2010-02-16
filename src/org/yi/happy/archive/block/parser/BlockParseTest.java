@@ -12,7 +12,15 @@ import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.GenericBlockTest;
 import org.yi.happy.archive.test_data.TestData;
 
+/**
+ * tests for {@link BlockParse}.
+ */
 public class BlockParseTest {
+    /**
+     * parse a content hash block.
+     * 
+     * @throws IOException
+     */
     @Test
     public void test1() throws IOException {
 	Block block = BlockParse.load(TestData.KEY_CONTENT.getUrl());
@@ -45,5 +53,4 @@ public class BlockParseTest {
 	Block want = GenericBlockTest.createSampleBlock();
 	Assert.assertEquals(want, have);
     }
-
 }

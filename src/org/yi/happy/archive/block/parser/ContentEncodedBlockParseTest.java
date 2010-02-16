@@ -10,8 +10,15 @@ import org.yi.happy.archive.block.ContentEncodedBlock;
 import org.yi.happy.archive.block.GenericBlock;
 import org.yi.happy.archive.test_data.TestData;
 
-
+/**
+ * tests for {@link ContentEncodedBlockParse}.
+ */
 public class ContentEncodedBlockParseTest {
+    /**
+     * parse a version two content encoded block.
+     * 
+     * @throws IOException
+     */
     @Test
     public void testCurrent() throws IOException {
 	TestData d = TestData.KEY_CONTENT;
@@ -25,6 +32,11 @@ public class ContentEncodedBlockParseTest {
 	assertEquals(b.getBody(), e.getBody());
     }
 
+    /**
+     * parse a version one content encoded block.
+     * 
+     * @throws IOException
+     */
     @Test
     public void testOld() throws IOException {
 	TestData d = TestData.KEY_OLD_CONTENT;
@@ -38,6 +50,11 @@ public class ContentEncodedBlockParseTest {
 	assertEquals(b.getBody(), e.getBody());
     }
 
+    /**
+     * parse a version two content encoded block.
+     * 
+     * @throws IOException
+     */
     @Test
     public void testContent2Aes() throws IOException {
 	TestData d = TestData.KEY_CONTENT_AES128;
@@ -51,6 +68,11 @@ public class ContentEncodedBlockParseTest {
 	assertEquals(b.getBody(), e.getBody());
     }
 
+    /**
+     * parse a version two content encoded block.
+     * 
+     * @throws IOException
+     */
     @Test
     public void testContent2Rijndael() throws IOException {
 	TestData d = TestData.KEY_CONTENT_RIJNDAEL;
@@ -64,6 +86,11 @@ public class ContentEncodedBlockParseTest {
 	assertEquals(b.getBody(), e.getBody());
     }
 
+    /**
+     * parse a truncated content encoded block.
+     * 
+     * @throws IOException
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testInvalid() throws IOException {
 	TestData d = TestData.BAD_KEY_SHORT_CONTENT;
@@ -72,6 +99,9 @@ public class ContentEncodedBlockParseTest {
 	ContentEncodedBlockParse.parse(b);
     }
 
+    /**
+     * parse a blank block.
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testBlank() {
 	Block b = new GenericBlock();
@@ -79,6 +109,11 @@ public class ContentEncodedBlockParseTest {
 	ContentEncodedBlockParse.parse(b);
     }
 
+    /**
+     * parse a block that is not a content encoded block.
+     * 
+     * @throws IOException
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testNotContent() throws IOException {
 	TestData d = TestData.KEY_BLOB;

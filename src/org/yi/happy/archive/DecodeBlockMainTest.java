@@ -9,7 +9,15 @@ import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.test_data.TestData;
 
+/**
+ * tests for {@link DecodeBlockMain}.
+ */
 public class DecodeBlockMainTest {
+    /**
+     * an expected successful run.
+     * 
+     * @throws Exception
+     */
     @Test
     @SmellsMessy
     public void test1() throws Exception {

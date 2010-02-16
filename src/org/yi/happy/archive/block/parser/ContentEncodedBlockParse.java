@@ -16,8 +16,20 @@ import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.key.ContentLocatorKey;
 import org.yi.happy.archive.key.KeyParse;
 
+/**
+ * parser for a content encoded block.
+ */
 public class ContentEncodedBlockParse {
 
+    /**
+     * parse a content encoded block.
+     * 
+     * @param block
+     *            the block to parse.
+     * @return the parsed block.
+     * @throws IllegalArgumentException
+     *             if the parsing can not be completed.
+     */
     @MagicLiteral
     public static ContentEncodedBlock parse(Block block) {
 	Map<String, String> meta = block.getMeta();

@@ -16,6 +16,9 @@ import org.yi.happy.archive.key.ContentFullKey;
 import org.yi.happy.archive.key.ContentLocatorKey;
 import org.yi.happy.archive.key.FullKey;
 
+/**
+ * A content encoded block.
+ */
 public final class ContentEncodedBlock extends AbstractBlock implements
 	EncodedBlock {
     private final ContentLocatorKey key;
@@ -23,6 +26,20 @@ public final class ContentEncodedBlock extends AbstractBlock implements
     private final CipherProvider cipher;
     private final Bytes body;
 
+    /**
+     * create a content encoded block with all details.
+     * 
+     * @param key
+     *            the locator key for the block.
+     * @param digest
+     *            the digest to use.
+     * @param cipher
+     *            the cipher to use.
+     * @param body
+     *            the body of the block.
+     * @throws IllegalArgumentException
+     *             if the details do not check out.
+     */
     @MagicLiteral
     public ContentEncodedBlock(ContentLocatorKey key, DigestProvider digest,
 	    CipherProvider cipher, Bytes body) {
@@ -41,6 +58,18 @@ public final class ContentEncodedBlock extends AbstractBlock implements
 	this.body = body;
     }
 
+    /**
+     * create a content encoded block with minimal details.
+     * 
+     * @param digest
+     *            the digest to use.
+     * @param cipher
+     *            the cipher to use.
+     * @param body
+     *            the body of the block.
+     * @throws IllegalArgumentException
+     *             if the details do not make sense.
+     */
     @MagicLiteral
     public ContentEncodedBlock(DigestProvider digest, CipherProvider cipher,
 	    Bytes body) {

@@ -12,6 +12,12 @@ import org.yi.happy.archive.Bytes;
 public class DataBlock extends AbstractBlock {
     private final Bytes body;
 
+    /**
+     * create a simple data block.
+     * 
+     * @param body
+     *            the body of the block.
+     */
     public DataBlock(Bytes body) {
 	if (body == null) {
 	    throw new NullPointerException();

@@ -58,6 +58,16 @@ public final class Bytes {
         this.data = new byte[0];
     }
 
+    /**
+     * Create from a slice of a byte array.
+     * 
+     * @param data
+     *            the byte array.
+     * @param offset
+     *            the offset where the slice begins.
+     * @param size
+     *            the size of the slice.
+     */
     public Bytes(Bytes data, int offset, int size) {
 	this(data.data, offset, size);
     }

@@ -2,6 +2,9 @@ package org.yi.happy.archive;
 
 import java.io.IOException;
 
+/**
+ * Signals that a stream was accessed after being closed.
+ */
 public class ClosedException extends IOException {
 
     /**

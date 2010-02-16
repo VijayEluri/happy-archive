@@ -33,6 +33,14 @@ public class ByteString {
 	return new String(out);
     }
 
+    /**
+     * convert bytes to a string, the string is made of characters with the low
+     * 8 bits set to the bytes.
+     * 
+     * @param data
+     *            the bytes
+     * @return an 8 bit string
+     */
     public static String toString(Bytes data) {
 	char[] out = new char[data.getSize()];
 
@@ -92,6 +100,17 @@ public class ByteString {
 	return fromUtf8(data, 0, data.length);
     }
 
+    /**
+     * convert UTF-8 to a string.
+     * 
+     * @param data
+     *            the UTF-8 encoded string.
+     * @param range
+     *            the range of indexes in the data array where the string is.
+     * @return the string.
+     * @throws Utf8NotSupportedError
+     *             if UTF-8 encoding is not supported.
+     */
     public static String fromUtf8(byte[] data, Range range) {
 	return fromUtf8(data, range.getOffset(), range.getLength());
     }

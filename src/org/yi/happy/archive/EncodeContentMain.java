@@ -3,7 +3,6 @@ package org.yi.happy.archive;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.security.NoSuchAlgorithmException;
 
 import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.archive.block.Block;
@@ -24,6 +23,10 @@ public class EncodeContentMain {
     private final FileSystem fs;
     private final Writer out;
 
+    /**
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
 	FileSystem fs = new RealFileSystem();
 	Writer out = new OutputStreamWriter(System.out);
@@ -33,14 +36,27 @@ public class EncodeContentMain {
 	out.flush();
     }
 
+    /**
+     * 
+     * @param fs
+     *            the file system to use.
+     * @param out
+     *            where to send output.
+     */
     public EncodeContentMain(FileSystem fs, Writer out) {
 	this.fs = fs;
 	this.out = out;
     }
 
+    /**
+     * encode a block.
+     * 
+     * @param args
+     *            the file name of the block.
+     * @throws IOException
+     */
     @EntryPoint
-    public void run(String... args) throws IOException,
-	    NoSuchAlgorithmException {
+    public void run(String... args) throws IOException {
 	BlockEncoder encoder = BlockEncoderFactory.getContentDefault();
 
 	Block block = BlockParse.parse(fs.load(args[0], Blocks.MAX_SIZE));

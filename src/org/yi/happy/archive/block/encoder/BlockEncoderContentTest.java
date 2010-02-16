@@ -12,7 +12,15 @@ import org.yi.happy.archive.crypto.CipherFactory;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.test_data.TestData;
 
+/**
+ * tests for {@link BlockEncoderContent}.
+ */
 public class BlockEncoderContentTest {
+    /**
+     * encode a block.
+     * 
+     * @throws IOException
+     */
     @Test
     public void test() throws IOException {
 	Block in = TestData.CLEAR_CONTENT.getBlock();

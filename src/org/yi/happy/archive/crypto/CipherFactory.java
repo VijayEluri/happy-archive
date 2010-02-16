@@ -34,9 +34,17 @@ public class CipherFactory {
 	    return new CipherRijndael(bs, ks);
 	}
 
+	// TODO specialize this exception.
 	throw new UnknownAlgorithmException(name);
     }
 
+    /**
+     * create a cipher provider.
+     * 
+     * @param algorithm
+     *            the algorithm the provider will provide.
+     * @return the provider.
+     */
     public static CipherProvider getProvider(String algorithm) {
 	return new CipherProvider(algorithm) {
 	    @Override

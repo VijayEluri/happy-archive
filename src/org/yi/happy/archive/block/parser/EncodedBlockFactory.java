@@ -8,14 +8,29 @@ import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.block.BlobEncodedBlock;
 import org.yi.happy.archive.block.ContentEncodedBlock;
+import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.NameEncodedBlock;
 import org.yi.happy.archive.crypto.Cipher;
 import org.yi.happy.archive.crypto.CipherProvider;
 import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.key.NameLocatorKey;
 
+/**
+ * Factories to create various {@link EncodedBlock}s, from encoded data.
+ */
 @SmellsMessy
 public class EncodedBlockFactory {
+    /**
+     * create a blob encoded block.
+     * 
+     * @param digest
+     *            the digest to use.
+     * @param cipher
+     *            the cipher that was used to encrypt the body.
+     * @param body
+     *            the encrypted body.
+     * @return a normalized blob encoded block.
+     */
     public static BlobEncodedBlock create(DigestProvider digest,
 	    CipherProvider cipher, Bytes body) {
 	cipher = normalizeCipherName(cipher);
@@ -23,6 +38,19 @@ public class EncodedBlockFactory {
 	return new BlobEncodedBlock(digest, cipher, body);
     }
 
+    /**
+     * create a name encoded block.
+     * 
+     * @param key
+     *            the locator key for the name.
+     * @param digest
+     *            the digest to use.
+     * @param cipher
+     *            the cipher used to encrypt.
+     * @param body
+     *            the result of encrypting with the full key.
+     * @return a normalized name encoded block.
+     */
     public static NameEncodedBlock createName(NameLocatorKey key,
 	    DigestProvider digest, CipherProvider cipher, Bytes body) {
 	cipher = normalizeCipherName(cipher);
@@ -53,6 +81,17 @@ public class EncodedBlockFactory {
 	};
     }
 
+    /**
+     * create a content encoded block.
+     * 
+     * @param digest
+     *            the digest to use.
+     * @param cipher
+     *            the cipher that was used to encrypt the body.
+     * @param body
+     *            the encrypted body.
+     * @return a normalized content encoded block.
+     */
     public static ContentEncodedBlock createContent(DigestProvider digest,
 	    CipherProvider cipher, Bytes body) {
 	cipher = normalizeCipherName(cipher);

@@ -7,6 +7,10 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A fake file system for testing. This should behave just like a real file
+ * system given the same calls under the same conditions.
+ */
 public class FakeFileSystem implements FileSystem {
 
     private Map<String, byte[]> files = new HashMap<String, byte[]>();

@@ -12,7 +12,13 @@ import org.yi.happy.archive.UnknownDigestAlgorithmException;
 public abstract class DigestProvider {
     protected final String algorithm;
 
-    public DigestProvider(String algorithm) {
+    /**
+     * create the value object part of the digest provider.
+     * 
+     * @param algorithm
+     *            the digest algorithm.
+     */
+    protected DigestProvider(String algorithm) {
 	this.algorithm = algorithm;
     }
 

@@ -13,7 +13,15 @@ import org.yi.happy.archive.key.KeyParse;
 import org.yi.happy.archive.key.NameFullKey;
 import org.yi.happy.archive.test_data.TestData;
 
+/**
+ * Tests for {@link EncodedBlock}.
+ */
 public class EncodedBlockTest {
+    /**
+     * decode an old content encoded block.
+     * 
+     * @throws IOException
+     */
     @Test
     @MisplacedTest(ContentEncodedBlockTest.class)
     public void testDecodeOldContent() throws IOException {
@@ -25,6 +33,11 @@ public class EncodedBlockTest {
 	assertEquals(want, have);
     }
 
+    /**
+     * decode a content encoded block.
+     * 
+     * @throws IOException
+     */
     @Test
     @MisplacedTest(ContentEncodedBlockTest.class)
     public void testDecodeContent() throws IOException {
@@ -36,6 +49,11 @@ public class EncodedBlockTest {
 	assertEquals(want, have);
     }
 
+    /**
+     * decode a name encoded block.
+     * 
+     * @throws IOException
+     */
     @Test
     @MisplacedTest(NameEncodedBlockTest.class)
     public void testDecodeName() throws IOException {
@@ -54,7 +72,7 @@ public class EncodedBlockTest {
      * @throws IOException
      */
     @Test
-    @MisplacedTest
+    @MisplacedTest(ContentEncodedBlockTest.class)
     public void testContentDecodeBadKey() throws IOException {
 	EncodedBlock b = TestData.KEY_CONTENT.getEncodedBlock();
 
@@ -118,6 +136,12 @@ public class EncodedBlockTest {
 	b.decode(k);
     }
 
+    /**
+     * given a name encoded block in memory; when I decode it with the right
+     * key; then it matches the clear version of the block.
+     * 
+     * @throws IOException
+     */
     @Test
     @MisplacedTest(NameEncodedBlockTest.class)
     public void testNameDecode() throws IOException {

@@ -5,15 +5,27 @@ import java.util.Arrays;
 
 import org.yi.happy.archive.ClosedException;
 
+/**
+ * an in memory random output file, for testing.
+ */
 public class FakeRandomOutputFile implements RandomOutputFile {
 
+    /**
+     * listener for receiving notifications of the file being closed.
+     */
     public interface CloseListener {
 
+	/**
+	 * The file was closed.
+	 * 
+	 * @param bytes
+	 *            the new content of the file.
+	 */
 	void onClose(byte[] bytes);
 
     }
 
-    private byte[] bytes = new byte[0];
+    private byte[] bytes;
 
     private int position = 0;
 
@@ -26,9 +38,19 @@ public class FakeRandomOutputFile implements RandomOutputFile {
 	}
     };
 
+    /**
+     * create empty.
+     */
     public FakeRandomOutputFile() {
+	this(new byte[0]);
     }
 
+    /**
+     * create with initial state.
+     * 
+     * @param bytes
+     *            the initial state. the buffer is not defensively copied.
+     */
     public FakeRandomOutputFile(byte[] bytes) {
 	this.bytes = bytes;
     }
@@ -102,6 +124,11 @@ public class FakeRandomOutputFile implements RandomOutputFile {
 	position += 1;
     }
 
+    /**
+     * get the current state of the buffer.
+     * 
+     * @return the buffer. the buffer is not defensively copied.
+     */
     public byte[] getBytes() {
 	return bytes;
     }
@@ -115,6 +142,12 @@ public class FakeRandomOutputFile implements RandomOutputFile {
 	return position;
     }
 
+    /**
+     * set the listener that will be notified when the file is closed.
+     * 
+     * @param closeListener
+     *            the new listener.
+     */
     public void setCloseListener(CloseListener closeListener) {
 	this.closeListener = closeListener;
     }

@@ -7,9 +7,15 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-
-
+/**
+ * Tests for {@link FakeRandomOutputFile}.
+ */
 public class FakeRandomOutputFileTest {
+    /**
+     * write at the beginning.
+     * 
+     * @throws IOException
+     */
     @Test
     public void testWrite() throws IOException {
 	FakeRandomOutputFile f = new FakeRandomOutputFile();
@@ -21,6 +27,11 @@ public class FakeRandomOutputFileTest {
 	assertArrayEquals(new byte[] { 0, 1, 2, 3 }, f.getBytes());
     }
 
+    /**
+     * close when empty.
+     * 
+     * @throws IOException
+     */
     @Test
     public void testClose() throws IOException {
 	FakeRandomOutputFile f = new FakeRandomOutputFile();
@@ -30,6 +41,11 @@ public class FakeRandomOutputFileTest {
 	assertArrayEquals(new byte[] {}, f.getBytes());
     }
 
+    /**
+     * write the content backwards.
+     * 
+     * @throws IOException
+     */
     @Test
     public void testWriteBackward() throws IOException {
 	FakeRandomOutputFile f = new FakeRandomOutputFile();
@@ -48,6 +64,11 @@ public class FakeRandomOutputFileTest {
 	assertArrayEquals(new byte[] { 0, 1, 2, 3 }, f.getBytes());
     }
 
+    /**
+     * write after closing the file.
+     * 
+     * @throws IOException
+     */
     @Test(expected = IOException.class)
     public void testWriteAfterClose() throws IOException {
 	FakeRandomOutputFile f = new FakeRandomOutputFile();
@@ -56,6 +77,11 @@ public class FakeRandomOutputFileTest {
 	f.write(0);
     }
 
+    /**
+     * seek after closing the file.
+     * 
+     * @throws IOException
+     */
     @Test(expected = IOException.class)
     public void testSeekAfterClose() throws IOException {
 	FakeRandomOutputFile f = new FakeRandomOutputFile();
@@ -64,6 +90,11 @@ public class FakeRandomOutputFileTest {
 	f.setPosition(0);
     }
 
+    /**
+     * get the file position after closing the file.
+     * 
+     * @throws IOException
+     */
     @Test(expected = IOException.class)
     public void testTellAfterClose() throws IOException {
 	FakeRandomOutputFile f = new FakeRandomOutputFile();
@@ -72,6 +103,11 @@ public class FakeRandomOutputFileTest {
 	f.getPosition();
     }
 
+    /**
+     * close the file twice.
+     * 
+     * @throws IOException
+     */
     @Test
     public void testCloseAfterClose() throws IOException {
 	FakeRandomOutputFile f = new FakeRandomOutputFile();
@@ -80,6 +116,11 @@ public class FakeRandomOutputFileTest {
 	f.close();
     }
 
+    /**
+     * overwrite the first part of a file.
+     * 
+     * @throws IOException
+     */
     @Test
     public void testModify() throws IOException {
 	FakeRandomOutputFile f = new FakeRandomOutputFile(new byte[] { 0, 1, 2,
@@ -92,6 +133,11 @@ public class FakeRandomOutputFileTest {
 	assertArrayEquals(new byte[] { 4, 1, 2, 3 }, f.getBytes());
     }
 
+    /**
+     * seek in the file.
+     * 
+     * @throws IOException
+     */
     @Test
     public void testSetPosition() throws IOException {
 	FakeRandomOutputFile f = new FakeRandomOutputFile();

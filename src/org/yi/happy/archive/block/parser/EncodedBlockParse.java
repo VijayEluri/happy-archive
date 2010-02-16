@@ -18,6 +18,17 @@ public class EncodedBlockParse {
 
     }
 
+    /**
+     * load an encoded block from a URL.
+     * 
+     * @param url
+     *            the url to load from.
+     * @return the encoded block.
+     * @throws IOException
+     *             on IO errors.
+     * @throws IllegalArgumentException
+     *             on parsing errors.
+     */
     public static EncodedBlock load(URL url) throws IOException {
 	InputStream in = url.openStream();
 	try {
@@ -28,11 +39,25 @@ public class EncodedBlockParse {
 	}
     }
 
+    /**
+     * parse an encoded block from bytes.
+     * 
+     * @param data
+     *            the block as bytes.
+     * @return the encoded block.
+     */
     public static EncodedBlock parse(byte[] data) {
 	Block block = new GenericBlockParse().parse(data);
 	return parse(block);
     }
 
+    /**
+     * parse an encoded block from a parsed block.
+     * 
+     * @param block
+     *            the parsed block.
+     * @return the encoded block.
+     */
     @MagicLiteral
     public static EncodedBlock parse(Block block) {
 	if (block instanceof EncodedBlock) {

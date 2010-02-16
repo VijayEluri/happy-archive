@@ -10,6 +10,9 @@ import org.yi.happy.archive.Blocks;
 import org.yi.happy.archive.Streams;
 import org.yi.happy.archive.block.Block;
 
+/**
+ * Generic block parsing.
+ */
 public class BlockParse {
     private BlockParse() {
 
