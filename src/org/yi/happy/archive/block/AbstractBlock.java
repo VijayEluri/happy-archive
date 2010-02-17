@@ -72,4 +72,30 @@ public abstract class AbstractBlock implements Block {
 
     @Override
     public abstract Bytes getBody();
+
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	result = prime * result + getMeta().hashCode();
+	result = prime * result + getBody().hashCode();
+	return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj)
+	    return true;
+	if (obj == null)
+	    return false;
+	if (!(obj instanceof Block))
+	    return false;
+	Block other = (Block) obj;
+	if (!getMeta().equals(other.getMeta()))
+	    return false;
+	if (!getBody().equals(other.getBody()))
+	    return false;
+	return true;
+    }
+
 }

@@ -111,36 +111,6 @@ public final class GenericBlock extends AbstractBlock implements Block {
 	return body;
     }
 
-    @Override
-    public int hashCode() {
-	final int PRIME = 31;
-	int result = 1;
-	result = PRIME * result + body.hashCode();
-	result = PRIME * result + meta.hashCode();
-	return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-	if (this == obj) {
-	    return true;
-	}
-	if (obj == null) {
-	    return false;
-	}
-	if (getClass() != obj.getClass()) {
-	    return false;
-	}
-	final GenericBlock other = (GenericBlock) obj;
-	if (!body.equals(other.body)) {
-	    return false;
-	}
-	if (!meta.equals(other.meta)) {
-	    return false;
-	}
-	return true;
-    }
-
     /**
      * Check a meta-data header.
      * 

@@ -171,12 +171,23 @@ public enum TestData {
     /**
      * the block that is created by writing "01234" x 8
      */
+    CLEAR_CONTENT_40,
+
+    /**
+     * the block that is created by writing "01234" x 8
+     */
     @Full("content-hash:7bd236857bc1af3cc3c65e1d0695175ceee65238b250"
 	    + "0c0d20237d3b7312afbf:c4e8a7d6e546c0e57489732a9c0c4e1743d"
 	    + "ac7dc0799bdcd1cda968e0f716b2b")
     @Locator("content-hash:7bd236857bc1af3cc3c65e1d0695175ceee65238b250"
 	    + "0c0d20237d3b7312afbf")
+    @Clear(CLEAR_CONTENT_40)
     KEY_CONTENT_40,
+
+    /**
+     * a data block containing "01234"
+     */
+    CLEAR_CONTENT_1,
 
     /**
      * a data block containing "01234"
@@ -186,7 +197,13 @@ public enum TestData {
 	    + "3e160e8c47274224c71552534bc63")
     @Locator("content-hash:cf5d4bb60ae7992a5569ce577f40fa66e8909ead5ba1"
 	    + "70ff1b9d136ca69bc8f1")
+    @Clear(CLEAR_CONTENT_1)
     KEY_CONTENT_1,
+
+    /**
+     * a data block containing "56789"
+     */
+    CLEAR_CONTENT_2,
 
     /**
      * a data block containing "56789"
@@ -196,7 +213,13 @@ public enum TestData {
 	    + "5b01586027de6a0d19bf292af5615")
     @Locator("content-hash:b4f02ef9f3c7dec4cd7604627ffc901fd2030c869779"
 	    + "301a3e8b39af7e6151cb")
+    @Clear(CLEAR_CONTENT_2)
     KEY_CONTENT_2,
+
+    /**
+     * a two part map for "01234" + "56789".
+     */
+    CLEAR_CONTENT_MAP,
 
     /**
      * a two part map for "01234" + "56789".
@@ -206,6 +229,7 @@ public enum TestData {
 	    + "d406322c5d3c773e2d2f6c883d26d")
     @Locator("content-hash:87bed19266dc934236c132b9538cd8ec833aa85856b0"
 	    + "4be7b90f5203f51aebf2")
+    @Clear(CLEAR_CONTENT_MAP)
     KEY_CONTENT_MAP,
 
     /**
@@ -257,10 +281,21 @@ public enum TestData {
     /**
      * an indirect block in the split for part 1
      */
+    CLEAR_NAME_SPLIT_1,
+
+    /**
+     * an indirect block in the split for part 1
+     */
     @Full("name-hash:sha-256:split/0")
     @Locator("name-hash:83013ce3b08bc6ef779a2dfae872c0171bcf463b646c1f6ff72062"
 	    + "ff93a28a32")
+    @Clear(CLEAR_NAME_SPLIT_1)
     KEY_NAME_SPLIT_1,
+
+    /**
+     * an indirect block in the split for part 1
+     */
+    CLEAR_NAME_SPLIT_2,
 
     /**
      * an indirect block in the split for part 2
@@ -268,7 +303,13 @@ public enum TestData {
     @Full("name-hash:sha-256:split/1")
     @Locator("name-hash:ba69e8638346563154fc571245edb331fbb71f420e97bce423c8ee"
 	    + "616eba279d")
+    @Clear(CLEAR_NAME_SPLIT_2)
     KEY_NAME_SPLIT_2,
+
+    /**
+     * a block list, precursor to map
+     */
+    CLEAR_CONTENT_LIST,
 
     /**
      * a block list, precursor to map
@@ -278,6 +319,7 @@ public enum TestData {
 	    + "85ed8af32d6d304fd61a50b12c5fd")
     @Locator("content-hash:430a7bc21e3f95c443ec2151fc9e727119b21cc5878a"
 	    + "af1361971445bf8b1d0c")
+    @Clear(CLEAR_CONTENT_LIST)
     KEY_CONTENT_LIST,
 
     ;

@@ -195,6 +195,7 @@ public class SplitReader {
      * @param b
      *            a map block
      */
+    @MagicLiteral
     private void processMap(int index, long base, Block b) {
 	String map = ByteString.toString(b.getBody().toByteArray());
 	String[] lines = map.split("\n");
@@ -219,6 +220,7 @@ public class SplitReader {
      * @param b
      *            the block
      */
+    @MagicLiteral
     private void processList(int index, long base, Block b) {
 	String map = ByteString.toString(b.getBody());
 	String[] lines = map.split("\n");

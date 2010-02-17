@@ -29,4 +29,30 @@ public interface Block {
      * @return the block as bytes.
      */
     public byte[] asBytes();
+
+    /**
+     * When implementing this method, it is expected that two different
+     * implementations of Block which have the same meta-data and body are
+     * equal.
+     * 
+     * @param obj
+     *            the object to compare to.
+     * @return true if the objects are equivalent, false otherwise.
+     * @see AbstractBlock
+     */
+    @Override
+    public boolean equals(Object obj);
+
+    /**
+     * When implementing this method, it is expected that two different
+     * implementations of Block which have the same meta-data and body are
+     * equal.
+     * 
+     * @param obj
+     *            the object to compare to.
+     * @return true if the objects are equivalent, false otherwise.
+     * @see AbstractBlock
+     */
+    @Override
+    public int hashCode();
 }
