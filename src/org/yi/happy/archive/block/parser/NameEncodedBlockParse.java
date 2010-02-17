@@ -28,7 +28,6 @@ public class NameEncodedBlockParse {
      *            the {@link Block} to parse.
      * @return the resulting {@link NameEncodedBlock}.
      */
-    @MagicLiteral
     public static NameEncodedBlock parse(Block block) {
 	if (block instanceof NameEncodedBlock) {
 	    return (NameEncodedBlock) block;
@@ -36,18 +35,11 @@ public class NameEncodedBlockParse {
 
 	Map<String, String> meta = block.getMeta();
 
-	String version = meta.get("version");
-	if (version == null) {
+	if (!meta.containsKey(NameEncodedBlock.VERSION_META)) {
 	    return parseVersion1(meta, block);
-	}
-	if (version.equals("1")) {
-	    return parseVersion1(meta, block);
-	}
-	if (version.equals("2")) {
-	    return parseVersion2(meta, block);
 	}
 
-	throw new IllegalArgumentException("unknown version");
+	return parseVersion2(meta, block);
     }
 
     @MagicLiteral
@@ -57,6 +49,11 @@ public class NameEncodedBlockParse {
 		Sets.asSet("version", "key-type", "key", "digest", "cipher",
 			"hash", "size"))) {
 	    throw new IllegalArgumentException("meta missmatch");
+	}
+
+	if (!meta.get(NameEncodedBlock.VERSION_META).equals(
+		NameEncodedBlock.VERSION)) {
+	    throw new IllegalArgumentException("bad version");
 	}
 
 	if (!meta.get("key-type").equals("name-hash")) {

@@ -4,6 +4,9 @@ import java.security.MessageDigest;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.yi.happy.annotate.BrokenContract;
+import org.yi.happy.annotate.ExternalName;
+import org.yi.happy.annotate.MagicLiteral;
 import org.yi.happy.archive.BadSignatureException;
 import org.yi.happy.archive.Base16;
 import org.yi.happy.archive.ByteString;
@@ -28,6 +31,18 @@ public final class BlobEncodedBlock extends AbstractBlock implements
     private final Bytes body;
 
     /**
+     * The name of the digest meta-data header.
+     */
+    @ExternalName
+    public static final String DIGEST_META = "digest";
+
+    /**
+     * The name of the cipher meta-data header.
+     */
+    @ExternalName
+    public static final String CIPHER_META = "cipher";
+
+    /**
      * create with all details available, they are checked.
      * 
      * @param key
@@ -50,8 +65,8 @@ public final class BlobEncodedBlock extends AbstractBlock implements
     public BlobEncodedBlock(BlobLocatorKey key, DigestProvider digest,
 	    CipherProvider cipher, Bytes body) throws IllegalArgumentException,
 	    BadSignatureException, UnknownDigestAlgorithmException {
-	GenericBlock.checkHeader("digest", digest.getAlgorithm());
-	GenericBlock.checkHeader("cipher", cipher.getAlgorithm());
+	GenericBlock.checkHeader(DIGEST_META, digest.getAlgorithm());
+	GenericBlock.checkHeader(CIPHER_META, cipher.getAlgorithm());
 
 	byte[] hash = getHash(digest, cipher, body);
 	if (!key.getHash().equalBytes(hash)) {
@@ -78,8 +93,8 @@ public final class BlobEncodedBlock extends AbstractBlock implements
      */
     public BlobEncodedBlock(DigestProvider digest, CipherProvider cipher,
 	    Bytes body) {
-	GenericBlock.checkHeader("digest", digest.getAlgorithm());
-	GenericBlock.checkHeader("cipher", cipher.getAlgorithm());
+	GenericBlock.checkHeader(DIGEST_META, digest.getAlgorithm());
+	GenericBlock.checkHeader(CIPHER_META, cipher.getAlgorithm());
 
 	byte[] hash = getHash(digest, cipher, body);
 
@@ -106,14 +121,32 @@ public final class BlobEncodedBlock extends AbstractBlock implements
 	return body;
     }
 
+    /**
+     * The name of the key type meta-data header.
+     */
+    @ExternalName
+    public static final String KEY_TYPE_META = "key-type";
+
+    /**
+     * The name of the key meta-data header.
+     */
+    @ExternalName
+    public static final String KEY_META = "key";
+
+    /**
+     * The name of the size meta-data header.
+     */
+    @ExternalName
+    public static final String SIZE_META = "size";
+
     @Override
     public Map<String, String> getMeta() {
 	Map<String, String> out = new LinkedHashMap<String, String>();
-	out.put("key-type", key.getType());
-	out.put("key", Base16.encode(key.getHash()));
-	out.put("digest", digest.getAlgorithm());
-	out.put("cipher", cipher.getAlgorithm());
-	out.put("size", Integer.toString(body.getSize()));
+	out.put(KEY_TYPE_META, key.getType());
+	out.put(KEY_META, Base16.encode(key.getHash()));
+	out.put(DIGEST_META, digest.getAlgorithm());
+	out.put(CIPHER_META, cipher.getAlgorithm());
+	out.put(SIZE_META, Integer.toString(body.getSize()));
 	return out;
     }
 
@@ -128,16 +161,17 @@ public final class BlobEncodedBlock extends AbstractBlock implements
      *            the body.
      * @return the hash value.
      */
+    @MagicLiteral
     public byte[] getHash(DigestProvider digest, CipherProvider cipher,
 	    Bytes body) {
 	MessageDigest d = digest.get();
-	d.update(ByteString.toUtf8("digest: "));
+	d.update(ByteString.toUtf8(DIGEST_META + ": "));
 	d.update(ByteString.toUtf8(digest.getAlgorithm()));
-	d.update(ByteString.toUtf8("\r\ncipher: "));
+	d.update(ByteString.toUtf8("\r\n" + CIPHER_META + ": "));
 	d.update(ByteString.toUtf8(cipher.getAlgorithm()));
-	d.update(ByteString.toUtf8("\r\nsize: "));
+	d.update(ByteString.toUtf8("\r\n" + SIZE_META + ": "));
 	d.update(ByteString.toUtf8(Integer.toString(body.getSize())));
-	d.update(ByteString.toUtf8("\r\n\r\n"));
+	d.update(ByteString.toUtf8("\r\n" + "\r\n"));
 	d.update(body.toByteArray());
 	return d.digest();
     }
@@ -163,6 +197,7 @@ public final class BlobEncodedBlock extends AbstractBlock implements
     }
 
     @Override
+    @BrokenContract(Block.class)
     public int hashCode() {
 	final int prime = 31;
 	int result = 1;
@@ -174,6 +209,7 @@ public final class BlobEncodedBlock extends AbstractBlock implements
     }
 
     @Override
+    @BrokenContract(Block.class)
     public boolean equals(Object obj) {
 	if (this == obj)
 	    return true;

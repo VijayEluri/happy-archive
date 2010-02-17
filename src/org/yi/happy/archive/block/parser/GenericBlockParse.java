@@ -25,7 +25,6 @@ public class GenericBlockParse {
      * @throws IllegalArgumentException
      *             if a header is repeated, or if the size header is not valid.
      */
-    @MagicLiteral
     public GenericBlock parse(byte[] bytes) {
 	Map<String, String> meta = new LinkedHashMap<String, String>();
 
@@ -62,7 +61,7 @@ public class GenericBlockParse {
 	    /*
 	     * if the size header is present...
 	     */
-	    String s = meta.get("size");
+	    String s = meta.get(GenericBlock.SIZE_META);
 	    if (s == null) {
 		break trim;
 	    }
@@ -115,6 +114,7 @@ public class GenericBlockParse {
      *         found. Before this range is the first line, after this range is
      *         the start of the next line.
      */
+    @MagicLiteral
     private Range findEndOfLine(byte[] bytes, Range range) {
 	for (int i = range.getOffset(); i < range.getEnd(); i++) {
 	    if (bytes[i] == '\r') {
@@ -145,6 +145,7 @@ public class GenericBlockParse {
      *         found. Before this range is the key, after this range is the
      *         value.
      */
+    @MagicLiteral
     private Range findDivider(byte[] bytes, Range line) {
 	for (int i = line.getOffset(); i < line.getEnd(); i++) {
 	    if (bytes[i] == ':') {

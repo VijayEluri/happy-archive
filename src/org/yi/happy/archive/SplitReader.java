@@ -7,6 +7,7 @@ import java.util.List;
 import org.yi.happy.annotate.MagicLiteral;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.DataBlock;
+import org.yi.happy.archive.block.MapBlock;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.KeyParse;
 
@@ -101,7 +102,7 @@ public class SplitReader {
 		return processData(index, item.offset, b);
 	    }
 
-	    if (type.equals("map")) {
+	    if (type.equals(MapBlock.TYPE)) {
 		processMap(index, item.offset, b);
 		continue;
 	    }

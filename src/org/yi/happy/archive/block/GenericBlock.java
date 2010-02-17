@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.yi.happy.annotate.ExternalName;
+import org.yi.happy.annotate.MagicLiteral;
 import org.yi.happy.archive.Bytes;
 
 /**
@@ -14,6 +16,12 @@ public final class GenericBlock extends AbstractBlock implements Block {
     private final Bytes body;
 
     private final Map<String, String> meta;
+
+    /**
+     * the size meta-data field name.
+     */
+    @ExternalName
+    public static final String SIZE_META = "size";
 
     /**
      * create, checking that the meta-data headers are valid.
@@ -33,7 +41,7 @@ public final class GenericBlock extends AbstractBlock implements Block {
 	}
 
 	checkSize: {
-	    String s = meta.get("size");
+	    String s = meta.get(SIZE_META);
 
 	    if (s == null) {
 		break checkSize;
@@ -124,7 +132,11 @@ public final class GenericBlock extends AbstractBlock implements Block {
      * @throws NullPointerException
      *             if name or value are null.
      */
+    @MagicLiteral
     public static void checkHeader(String name, String value) {
+	/*
+	 * TODO move this to AbstractBlock since many of the block types use it.
+	 */
 	for (int i = 0; i < name.length(); i++) {
 	    char c = name.charAt(i);
 	    if (c == ':' || c == '\r' || c == '\n') {

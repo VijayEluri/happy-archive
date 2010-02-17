@@ -3,7 +3,8 @@ package org.yi.happy.archive.block;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.yi.happy.annotate.MagicLiteral;
+import org.yi.happy.annotate.BrokenContract;
+import org.yi.happy.annotate.ExternalName;
 import org.yi.happy.archive.BadSignatureException;
 import org.yi.happy.archive.Base16;
 import org.yi.happy.archive.ByteString;
@@ -30,6 +31,18 @@ public final class NameEncodedBlock extends AbstractBlock implements
     private final Bytes body;
 
     /**
+     * the digest meta-data field name.
+     */
+    @ExternalName
+    public static final String DIGEST_META = "digest";
+
+    /**
+     * the cipher name meta-data field name.
+     */
+    @ExternalName
+    public static final String CIPHER_META = "cipher";
+
+    /**
      * create a name encoded block from all details.
      * 
      * @param key
@@ -45,11 +58,10 @@ public final class NameEncodedBlock extends AbstractBlock implements
      * @throws IllegalArgumentException
      *             if the details do not agree.
      */
-    @MagicLiteral
     public NameEncodedBlock(NameLocatorKey key, Bytes hash,
 	    DigestProvider digest, CipherProvider cipher, Bytes body) {
-	GenericBlock.checkHeader("digest", digest.getAlgorithm());
-	GenericBlock.checkHeader("cipher", cipher.getAlgorithm());
+	GenericBlock.checkHeader(DIGEST_META, digest.getAlgorithm());
+	GenericBlock.checkHeader(CIPHER_META, cipher.getAlgorithm());
 
 	byte[] hash0 = ContentEncodedBlock.getHash(digest, body);
 	if (!hash.equalBytes(hash0)) {
@@ -79,8 +91,8 @@ public final class NameEncodedBlock extends AbstractBlock implements
      */
     public NameEncodedBlock(NameLocatorKey key, DigestProvider digest,
 	    CipherProvider cipher, Bytes body) {
-	GenericBlock.checkHeader("digest", digest.getAlgorithm());
-	GenericBlock.checkHeader("cipher", cipher.getAlgorithm());
+	GenericBlock.checkHeader(DIGEST_META, digest.getAlgorithm());
+	GenericBlock.checkHeader(CIPHER_META, cipher.getAlgorithm());
 
 	byte[] hash = ContentEncodedBlock.getHash(digest, body);
 
@@ -117,16 +129,52 @@ public final class NameEncodedBlock extends AbstractBlock implements
 	return body;
     }
 
+    /**
+     * The version meta-data field name.
+     */
+    @ExternalName
+    public static final String VERSION_META = "version";
+
+    /**
+     * The current version of this block type.
+     */
+    @ExternalName
+    public static final String VERSION = "2";
+
+    /**
+     * The key type meta-data field name.
+     */
+    @ExternalName
+    public static final String KEY_TYPE_META = "key-type";
+
+    /**
+     * The key type meta-data field name.
+     */
+    @ExternalName
+    public static final String KEY_META = "key";
+
+    /**
+     * The hash of the body meta-data field name.
+     */
+    @ExternalName
+    public static final String HASH_META = "hash";
+
+    /**
+     * the size meta-data field name.
+     */
+    @ExternalName
+    public static final String SIZE_META = "size";
+
     @Override
     public Map<String, String> getMeta() {
 	Map<String, String> out = new LinkedHashMap<String, String>();
-	out.put("version", "2");
-	out.put("key-type", key.getType());
-	out.put("key", Base16.encode(key.getHash()));
-	out.put("hash", Base16.encode(hash));
-	out.put("digest", digest.getAlgorithm());
-	out.put("cipher", cipher.getAlgorithm());
-	out.put("size", Integer.toString(body.getSize()));
+	out.put(VERSION_META, VERSION);
+	out.put(KEY_TYPE_META, key.getType());
+	out.put(KEY_META, Base16.encode(key.getHash()));
+	out.put(HASH_META, Base16.encode(hash));
+	out.put(DIGEST_META, digest.getAlgorithm());
+	out.put(CIPHER_META, cipher.getAlgorithm());
+	out.put(SIZE_META, Integer.toString(body.getSize()));
 	return out;
     }
 
@@ -163,6 +211,7 @@ public final class NameEncodedBlock extends AbstractBlock implements
     }
 
     @Override
+    @BrokenContract(Block.class)
     public int hashCode() {
 	final int prime = 31;
 	int result = 1;
@@ -175,6 +224,7 @@ public final class NameEncodedBlock extends AbstractBlock implements
     }
 
     @Override
+    @BrokenContract(Block.class)
     public boolean equals(Object obj) {
 	if (this == obj)
 	    return true;

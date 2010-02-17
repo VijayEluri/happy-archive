@@ -30,43 +30,43 @@ public final class ContentEncodedBlock extends AbstractBlock implements
      * The name of the digest meta-data header.
      */
     @ExternalName
-    public static final String DIGEST = "digest";
+    public static final String DIGEST_META = "digest";
 
     /**
      * The name of the cipher meta-data header.
      */
     @ExternalName
-    public static final String CIPHER = "cipher";
+    public static final String CIPHER_META = "cipher";
 
     /**
      * The name of the version meta-data header.
      */
     @ExternalName
-    public static final String VERSION = "version";
+    public static final String VERSION_META = "version";
 
     /**
      * The name of the current version.
      */
     @ExternalName
-    public static final String VERSION_TWO = "2";
+    public static final String VERSION = "2";
 
     /**
      * The name of the key type meta-data header.
      */
     @ExternalName
-    public static final String KEY_TYPE = "key-type";
+    public static final String KEY_TYPE_META = "key-type";
 
     /**
      * The name of the key meta-data header.
      */
     @ExternalName
-    public static final String KEY = "key";
+    public static final String KEY_META = "key";
 
     /**
      * The name of the size meta-data header.
      */
     @ExternalName
-    public static final String SIZE = "size";
+    public static final String SIZE_META = "size";
 
     /**
      * create a content encoded block with all details.
@@ -85,8 +85,8 @@ public final class ContentEncodedBlock extends AbstractBlock implements
     public ContentEncodedBlock(ContentLocatorKey key, DigestProvider digest,
 	    CipherProvider cipher, Bytes body) {
 
-	GenericBlock.checkHeader(DIGEST, digest.getAlgorithm());
-	GenericBlock.checkHeader(CIPHER, cipher.getAlgorithm());
+	GenericBlock.checkHeader(DIGEST_META, digest.getAlgorithm());
+	GenericBlock.checkHeader(CIPHER_META, cipher.getAlgorithm());
 
 	byte[] hash = getHash(digest, body);
 	if (!key.getHash().equalBytes(hash)) {
@@ -114,8 +114,8 @@ public final class ContentEncodedBlock extends AbstractBlock implements
     public ContentEncodedBlock(DigestProvider digest, CipherProvider cipher,
 	    Bytes body) {
 
-	GenericBlock.checkHeader(DIGEST, digest.getAlgorithm());
-	GenericBlock.checkHeader(CIPHER, cipher.getAlgorithm());
+	GenericBlock.checkHeader(DIGEST_META, digest.getAlgorithm());
+	GenericBlock.checkHeader(CIPHER_META, cipher.getAlgorithm());
 
 	byte[] hash = getHash(digest, body);
 
@@ -145,12 +145,12 @@ public final class ContentEncodedBlock extends AbstractBlock implements
     @Override
     public Map<String, String> getMeta() {
 	Map<String, String> out = new LinkedHashMap<String, String>();
-	out.put(VERSION, VERSION_TWO);
-	out.put(KEY_TYPE, key.getType());
-	out.put(KEY, Base16.encode(key.getHash()));
-	out.put(DIGEST, digest.getAlgorithm());
-	out.put(CIPHER, cipher.getAlgorithm());
-	out.put(SIZE, Integer.toString(body.getSize()));
+	out.put(VERSION_META, VERSION);
+	out.put(KEY_TYPE_META, key.getType());
+	out.put(KEY_META, Base16.encode(key.getHash()));
+	out.put(DIGEST_META, digest.getAlgorithm());
+	out.put(CIPHER_META, cipher.getAlgorithm());
+	out.put(SIZE_META, Integer.toString(body.getSize()));
 	return out;
     }
 
