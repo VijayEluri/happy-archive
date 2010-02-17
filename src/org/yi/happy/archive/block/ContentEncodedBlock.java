@@ -3,7 +3,7 @@ package org.yi.happy.archive.block;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.yi.happy.annotate.MagicLiteral;
+import org.yi.happy.annotate.ExternalName;
 import org.yi.happy.archive.Base16;
 import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.UnknownDigestAlgorithmException;
@@ -27,6 +27,48 @@ public final class ContentEncodedBlock extends AbstractBlock implements
     private final Bytes body;
 
     /**
+     * The name of the digest meta-data header.
+     */
+    @ExternalName
+    public static final String DIGEST = "digest";
+
+    /**
+     * The name of the cipher meta-data header.
+     */
+    @ExternalName
+    public static final String CIPHER = "cipher";
+
+    /**
+     * The name of the version meta-data header.
+     */
+    @ExternalName
+    public static final String VERSION = "version";
+
+    /**
+     * The name of the current version.
+     */
+    @ExternalName
+    public static final String VERSION_TWO = "2";
+
+    /**
+     * The name of the key type meta-data header.
+     */
+    @ExternalName
+    public static final String KEY_TYPE = "key-type";
+
+    /**
+     * The name of the key meta-data header.
+     */
+    @ExternalName
+    public static final String KEY = "key";
+
+    /**
+     * The name of the size meta-data header.
+     */
+    @ExternalName
+    public static final String SIZE = "size";
+
+    /**
      * create a content encoded block with all details.
      * 
      * @param key
@@ -40,12 +82,11 @@ public final class ContentEncodedBlock extends AbstractBlock implements
      * @throws IllegalArgumentException
      *             if the details do not check out.
      */
-    @MagicLiteral
     public ContentEncodedBlock(ContentLocatorKey key, DigestProvider digest,
 	    CipherProvider cipher, Bytes body) {
 
-	GenericBlock.checkHeader("digest", digest.getAlgorithm());
-	GenericBlock.checkHeader("cipher", cipher.getAlgorithm());
+	GenericBlock.checkHeader(DIGEST, digest.getAlgorithm());
+	GenericBlock.checkHeader(CIPHER, cipher.getAlgorithm());
 
 	byte[] hash = getHash(digest, body);
 	if (!key.getHash().equalBytes(hash)) {
@@ -70,12 +111,11 @@ public final class ContentEncodedBlock extends AbstractBlock implements
      * @throws IllegalArgumentException
      *             if the details do not make sense.
      */
-    @MagicLiteral
     public ContentEncodedBlock(DigestProvider digest, CipherProvider cipher,
 	    Bytes body) {
 
-	GenericBlock.checkHeader("digest", digest.getAlgorithm());
-	GenericBlock.checkHeader("cipher", cipher.getAlgorithm());
+	GenericBlock.checkHeader(DIGEST, digest.getAlgorithm());
+	GenericBlock.checkHeader(CIPHER, cipher.getAlgorithm());
 
 	byte[] hash = getHash(digest, body);
 
@@ -103,15 +143,14 @@ public final class ContentEncodedBlock extends AbstractBlock implements
     }
 
     @Override
-    @MagicLiteral
     public Map<String, String> getMeta() {
 	Map<String, String> out = new LinkedHashMap<String, String>();
-	out.put("version", "2");
-	out.put("key-type", key.getType());
-	out.put("key", Base16.encode(key.getHash()));
-	out.put("digest", digest.getAlgorithm());
-	out.put("cipher", cipher.getAlgorithm());
-	out.put("size", Integer.toString(body.getSize()));
+	out.put(VERSION, VERSION_TWO);
+	out.put(KEY_TYPE, key.getType());
+	out.put(KEY, Base16.encode(key.getHash()));
+	out.put(DIGEST, digest.getAlgorithm());
+	out.put(CIPHER, cipher.getAlgorithm());
+	out.put(SIZE, Integer.toString(body.getSize()));
 	return out;
     }
 
