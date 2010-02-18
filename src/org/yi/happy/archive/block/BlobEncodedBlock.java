@@ -5,7 +5,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.yi.happy.annotate.BrokenContract;
-import org.yi.happy.annotate.ExternalName;
 import org.yi.happy.annotate.MagicLiteral;
 import org.yi.happy.archive.BadSignatureException;
 import org.yi.happy.archive.Base16;
@@ -29,18 +28,6 @@ public final class BlobEncodedBlock extends AbstractBlock implements
     private final DigestProvider digest;
     private final CipherProvider cipher;
     private final Bytes body;
-
-    /**
-     * The name of the digest meta-data header.
-     */
-    @ExternalName
-    public static final String DIGEST_META = "digest";
-
-    /**
-     * The name of the cipher meta-data header.
-     */
-    @ExternalName
-    public static final String CIPHER_META = "cipher";
 
     /**
      * create with all details available, they are checked.
@@ -120,24 +107,6 @@ public final class BlobEncodedBlock extends AbstractBlock implements
     public Bytes getBody() {
 	return body;
     }
-
-    /**
-     * The name of the key type meta-data header.
-     */
-    @ExternalName
-    public static final String KEY_TYPE_META = "key-type";
-
-    /**
-     * The name of the key meta-data header.
-     */
-    @ExternalName
-    public static final String KEY_META = "key";
-
-    /**
-     * The name of the size meta-data header.
-     */
-    @ExternalName
-    public static final String SIZE_META = "size";
 
     @Override
     public Map<String, String> getMeta() {

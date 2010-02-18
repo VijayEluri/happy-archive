@@ -3,6 +3,8 @@ package org.yi.happy.archive.crypto;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.yi.happy.annotate.MagicLiteral;
+
 
 /**
  * Factory for creating Cypher instances.
@@ -18,6 +20,7 @@ public class CipherFactory {
      * @throws UnknownAlgorithmException
      *             if the name is not known
      */
+    @MagicLiteral
     public static Cipher create(String name) {
 	Matcher m = Pattern.compile("(aes|rijndael)-(128|192|256)-cbc")
 		.matcher(name);

@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-import org.yi.happy.annotate.MagicLiteral;
 import org.yi.happy.archive.Blocks;
 import org.yi.happy.archive.Streams;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.EncodedBlock;
+import org.yi.happy.archive.key.KeyType;
 
 /**
  * parser for encoded blocks.
@@ -58,26 +58,25 @@ public class EncodedBlockParse {
      *            the parsed block.
      * @return the encoded block.
      */
-    @MagicLiteral
     public static EncodedBlock parse(Block block) {
 	if (block instanceof EncodedBlock) {
 	    return (EncodedBlock) block;
 	}
 
-	String keyType = block.getMeta().get("key-type");
+	String keyType = block.getMeta().get(EncodedBlock.KEY_TYPE_META);
 	if (keyType == null) {
 	    throw new IllegalArgumentException("missing key-type");
 	}
 
-	if (keyType.equals("content-hash")) {
+	if (keyType.equals(KeyType.CONTENT_HASH)) {
 	    return ContentEncodedBlockParse.parse(block);
 	}
 
-	if (keyType.equals("blob")) {
+	if (keyType.equals(KeyType.BLOB)) {
 	    return BlobEncodedBlockParse.parse(block);
 	}
 
-	if (keyType.equals("name-hash")) {
+	if (keyType.equals(KeyType.NAME_HASH)) {
 	    return NameEncodedBlockParse.parse(block);
 	}
 

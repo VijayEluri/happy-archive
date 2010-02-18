@@ -2,12 +2,13 @@ package org.yi.happy.archive.block.parser;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
-import org.yi.happy.annotate.MagicLiteral;
+import org.yi.happy.annotate.ExternalName;
 import org.yi.happy.archive.Base16;
 import org.yi.happy.archive.Bytes;
-import org.yi.happy.archive.Sets;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.NameEncodedBlock;
 import org.yi.happy.archive.crypto.CipherFactory;
@@ -15,6 +16,7 @@ import org.yi.happy.archive.crypto.CipherProvider;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.key.KeyParse;
+import org.yi.happy.archive.key.KeyType;
 import org.yi.happy.archive.key.NameLocatorKey;
 
 /**
@@ -42,12 +44,26 @@ public class NameEncodedBlockParse {
 	return parseVersion2(meta, block);
     }
 
-    @MagicLiteral
+    /**
+     * The version two meta-data field set.
+     */
+    @ExternalName
+    private static final Set<String> META;
+    static {
+	Set<String> m = new HashSet<String>();
+	m.add(NameEncodedBlock.VERSION_META);
+	m.add(NameEncodedBlock.KEY_TYPE_META);
+	m.add(NameEncodedBlock.KEY_META);
+	m.add(NameEncodedBlock.DIGEST_META);
+	m.add(NameEncodedBlock.CIPHER_META);
+	m.add(NameEncodedBlock.HASH_META);
+	m.add(NameEncodedBlock.SIZE_META);
+	META = Collections.unmodifiableSet(m);
+    }
+
     private static NameEncodedBlock parseVersion2(Map<String, String> meta,
 	    Block block) {
-	if (!meta.keySet().equals(
-		Sets.asSet("version", "key-type", "key", "digest", "cipher",
-			"hash", "size"))) {
+	if (!meta.keySet().equals(META)) {
 	    throw new IllegalArgumentException("meta missmatch");
 	}
 
@@ -56,15 +72,19 @@ public class NameEncodedBlockParse {
 	    throw new IllegalArgumentException("bad version");
 	}
 
-	if (!meta.get("key-type").equals("name-hash")) {
+	if (!meta.get(NameEncodedBlock.KEY_TYPE_META).equals(KeyType.NAME_HASH)) {
 	    throw new IllegalArgumentException("wrong block type");
 	}
 
-	NameLocatorKey key = KeyParse.parseNameLocatorKey(meta.get("key"));
-	DigestProvider digest = DigestFactory.getProvider(meta.get("digest"));
-	CipherProvider cipher = CipherFactory.getProvider(meta.get("cipher"));
-	Bytes hash = new Bytes(Base16.decode(meta.get("hash")));
-	int size = Integer.parseInt(meta.get("size"));
+	NameLocatorKey key = KeyParse.parseNameLocatorKey(meta
+		.get(NameEncodedBlock.KEY_META));
+	DigestProvider digest = DigestFactory.getProvider(meta
+		.get(NameEncodedBlock.DIGEST_META));
+	CipherProvider cipher = CipherFactory.getProvider(meta
+		.get(NameEncodedBlock.CIPHER_META));
+	Bytes hash = new Bytes(Base16.decode(meta
+		.get(NameEncodedBlock.HASH_META)));
+	int size = Integer.parseInt(meta.get(NameEncodedBlock.SIZE_META));
 	Bytes body = block.getBody();
 
 	if (body.getSize() != size) {
@@ -74,30 +94,41 @@ public class NameEncodedBlockParse {
 	return new NameEncodedBlock(key, hash, digest, cipher, body);
     }
 
-    @MagicLiteral
+    /**
+     * The version one meta-data field set.
+     */
+    @ExternalName
+    private static final Set<String> META_OLD;
+    static {
+        Set<String> m = new HashSet<String>();
+        m.add(NameEncodedBlock.KEY_TYPE_META);
+        m.add(NameEncodedBlock.KEY_META);
+        m.add(NameEncodedBlock.DIGEST_META);
+        m.add(NameEncodedBlock.CIPHER_META);
+        m.add(NameEncodedBlock.HASH_META);
+        m.add(NameEncodedBlock.SIZE_META);
+        META_OLD = Collections.unmodifiableSet(m);
+    }
+
     private static NameEncodedBlock parseVersion1(Map<String, String> meta,
 	    Block block) {
-	if (meta.size() > 6) {
-	    throw new IllegalArgumentException("extra meta-data");
-	}
-	if (!meta.keySet().containsAll(
-		Sets.asSet("key-type", "key", "digest", "cipher", "size"))) {
-	    throw new IllegalArgumentException("missing meta-data");
-	}
-	if (meta.size() == 6 && !meta.containsKey("version")) {
-	    throw new IllegalArgumentException("extra meta-data");
+	if (!meta.keySet().equals(META_OLD)) {
+	    throw new IllegalArgumentException("meta missmatch");
 	}
 
-	if (!meta.get("key-type").equals("name-hash")) {
+	if (!meta.get(NameEncodedBlock.KEY_TYPE_META).equals(KeyType.NAME_HASH)) {
 	    throw new IllegalArgumentException("wrong block type");
 	}
 
-	NameLocatorKey key = KeyParse.parseNameLocatorKey(meta.get("key"));
-	DigestProvider digest = DigestFactory.getProvider(meta.get("digest"));
-	CipherProvider cipher = CipherFactory.getProvider(fixCipher(meta
-		.get("cipher")));
-	Bytes hash = new Bytes(Base16.decode(meta.get("hash")));
-	int size = Integer.parseInt(meta.get("size"));
+	NameLocatorKey key = KeyParse.parseNameLocatorKey(meta
+		.get(NameEncodedBlock.KEY_META));
+	DigestProvider digest = DigestFactory.getProvider(meta
+		.get(NameEncodedBlock.DIGEST_META));
+	String cipher0 = meta.get(NameEncodedBlock.CIPHER_META);
+	CipherProvider cipher = CipherFactory.getProvider(fixCipher(cipher0));
+	Bytes hash = new Bytes(Base16.decode(meta
+		.get(NameEncodedBlock.HASH_META)));
+	int size = Integer.parseInt(meta.get(NameEncodedBlock.SIZE_META));
 	Bytes body = block.getBody();
 
 	if (body.getSize() != size) {
@@ -118,6 +149,7 @@ public class NameEncodedBlockParse {
     /**
      * translation map to fix cipher names between version 1 and 2.
      */
+    @ExternalName
     public static final Map<String, String> fixMap;
 
     static {

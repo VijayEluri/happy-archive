@@ -206,7 +206,7 @@ public class KeyOutputStream extends OutputStream {
 	    maps = maps.parent;
 	}
 
-	fullKey = storeMapBlock(maps.buffer.toByteArray());
+	fullKey = storeMapBlock(maps.map.toByteArray());
 	maps = null;
     }
 
@@ -233,7 +233,7 @@ public class KeyOutputStream extends OutputStream {
 	/**
 	 * the data for this layer so far
 	 */
-	public final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+	public final ByteArrayOutputStream map = new ByteArrayOutputStream();
 
 	/**
 	 * the only key in the layer (null if there are multiple)
@@ -256,7 +256,7 @@ public class KeyOutputStream extends OutputStream {
 	public void put(FullKey fullKey, long size) throws IOException {
 	    byte[] add = ByteString.toUtf8(fullKey + "\t" + totalSize + "\n");
 
-	    if (buffer.size() + add.length > splitSize) {
+	    if (map.size() + add.length > splitSize) {
 		flush();
 	    }
 
@@ -266,7 +266,7 @@ public class KeyOutputStream extends OutputStream {
 		onlyKey = null;
 	    }
 
-	    buffer.write(add);
+	    map.write(add);
 	    totalSize += size;
 	}
 
@@ -278,7 +278,7 @@ public class KeyOutputStream extends OutputStream {
 	 * @throws IOException
 	 */
 	public void flush() throws IOException {
-	    if (buffer.size() == 0) {
+	    if (map.size() == 0) {
 		throw new IllegalStateException("flusing empty map block");
 	    }
 
@@ -292,7 +292,7 @@ public class KeyOutputStream extends OutputStream {
 		}
 		parent.put(onlyKey, totalSize);
 	    } else {
-		FullKey fullKey = storeMapBlock(buffer.toByteArray());
+		FullKey fullKey = storeMapBlock(map.toByteArray());
 		if (parent == null) {
 		    parent = new Layer();
 		}
@@ -304,7 +304,7 @@ public class KeyOutputStream extends OutputStream {
 	     */
 	    totalSize = 0;
 	    onlyKey = null;
-	    buffer.reset();
+	    map.reset();
 	}
     }
 }

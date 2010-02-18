@@ -27,18 +27,6 @@ public final class ContentEncodedBlock extends AbstractBlock implements
     private final Bytes body;
 
     /**
-     * The name of the digest meta-data header.
-     */
-    @ExternalName
-    public static final String DIGEST_META = "digest";
-
-    /**
-     * The name of the cipher meta-data header.
-     */
-    @ExternalName
-    public static final String CIPHER_META = "cipher";
-
-    /**
      * The name of the version meta-data header.
      */
     @ExternalName
@@ -49,18 +37,6 @@ public final class ContentEncodedBlock extends AbstractBlock implements
      */
     @ExternalName
     public static final String VERSION = "2";
-
-    /**
-     * The name of the key type meta-data header.
-     */
-    @ExternalName
-    public static final String KEY_TYPE_META = "key-type";
-
-    /**
-     * The name of the key meta-data header.
-     */
-    @ExternalName
-    public static final String KEY_META = "key";
 
     /**
      * The name of the size meta-data header.

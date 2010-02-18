@@ -182,6 +182,7 @@ public class KeyParse {
      * @return the key.
      */
     public static BlobLocatorKey parseBlobLocatorKey(String hash) {
+	// XXX this is a bad name.
 	return new BlobLocatorKey(new Bytes(Base16.decode(hash)));
     }
 
@@ -193,6 +194,7 @@ public class KeyParse {
      * @return the key.
      */
     public static ContentLocatorKey parseContentLocatorKey(String hash) {
+	// XXX this is a bad name.
 	return new ContentLocatorKey(new Bytes(Base16.decode(hash)));
     }
 
@@ -204,6 +206,7 @@ public class KeyParse {
      * @return the key.
      */
     public static NameLocatorKey parseNameLocatorKey(String hash) {
+	// XXX this is a bad name.
 	return new NameLocatorKey(new Bytes(Base16.decode(hash)));
     }
 }

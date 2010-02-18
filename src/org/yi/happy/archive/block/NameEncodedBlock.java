@@ -31,18 +31,6 @@ public final class NameEncodedBlock extends AbstractBlock implements
     private final Bytes body;
 
     /**
-     * the digest meta-data field name.
-     */
-    @ExternalName
-    public static final String DIGEST_META = "digest";
-
-    /**
-     * the cipher name meta-data field name.
-     */
-    @ExternalName
-    public static final String CIPHER_META = "cipher";
-
-    /**
      * create a name encoded block from all details.
      * 
      * @param key
@@ -142,28 +130,10 @@ public final class NameEncodedBlock extends AbstractBlock implements
     public static final String VERSION = "2";
 
     /**
-     * The key type meta-data field name.
-     */
-    @ExternalName
-    public static final String KEY_TYPE_META = "key-type";
-
-    /**
-     * The key type meta-data field name.
-     */
-    @ExternalName
-    public static final String KEY_META = "key";
-
-    /**
      * The hash of the body meta-data field name.
      */
     @ExternalName
     public static final String HASH_META = "hash";
-
-    /**
-     * the size meta-data field name.
-     */
-    @ExternalName
-    public static final String SIZE_META = "size";
 
     @Override
     public Map<String, String> getMeta() {
