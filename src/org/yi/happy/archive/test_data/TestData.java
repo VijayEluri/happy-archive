@@ -322,6 +322,16 @@ public enum TestData {
     @Clear(CLEAR_CONTENT_LIST)
     KEY_CONTENT_LIST,
 
+    /**
+     * A tag list with just a single file in it.
+     */
+    TAG_FILE,
+
+    /**
+     * A tag list with two files in it.
+     */
+    TAG_FILES,
+
     ;
 
     /**

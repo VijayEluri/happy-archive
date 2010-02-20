@@ -98,7 +98,6 @@ public class ContentEncodedBlockParse {
     private static final Set<String> META_OLD;
     static {
 	Set<String> m = new HashSet<String>();
-	m.add(ContentEncodedBlock.VERSION_META);
 	m.add(ContentEncodedBlock.KEY_TYPE_META);
 	m.add(ContentEncodedBlock.KEY_META);
 	m.add(ContentEncodedBlock.DIGEST_META);

@@ -112,4 +112,9 @@ public class Range {
 
 	return new Range(other.getEnd(), this.getEnd() - other.getEnd());
     }
+    
+    @Override
+    public String toString() {
+	return "(" + getOffset() + ".." + getEnd() + ")";
+    }
 }
