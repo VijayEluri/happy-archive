@@ -323,14 +323,27 @@ public enum TestData {
     KEY_CONTENT_LIST,
 
     /**
-     * A tag list with just a single file in it.
+     * A tag list with just a single file in it. The entry named "test.txt" is
+     * {@link #FILE_CONTENT}.
      */
     TAG_FILE,
 
     /**
-     * A tag list with two files in it.
+     * A tag list with two files in it. The entry named "test.txt" is
+     * {@link #FILE_CONTENT}, the entry named "test.dat" is
+     * {@link #FILE_CONTENT_40}.
      */
     TAG_FILES,
+
+    /**
+     * The body of {@link #CLEAR_CONTENT}.
+     */
+    FILE_CONTENT,
+
+    /**
+     * The body of {@link #CLEAR_CONTENT_40}.
+     */
+    FILE_CONTENT_40,
 
     ;
 
