@@ -4,6 +4,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.junit.Test;
 import org.yi.happy.archive.SimpleRetrieveBlock;
@@ -34,4 +35,30 @@ public class RestoreFileTest {
 	assertEquals(true, f.isDone());
 	assertArrayEquals(TestData.FILE_CONTENT.getBytes(), fs.load("test.dat"));
     }
+
+    /**
+     * restore a file with no blocks initially available.
+     * 
+     * @throws IOException
+     */
+    @Test
+    public void test2() throws IOException {
+	FileSystem fs = new FakeFileSystem();
+	SimpleRetrieveBlock store = new SimpleRetrieveBlock();
+
+	RestoreFile f = new RestoreFile(new SplitReader(TestData.KEY_CONTENT
+		.getFullKey(), store), "test.dat", fs);
+	f.step();
+
+	assertEquals(false, f.isDone());
+	assertEquals(Arrays.asList(TestData.KEY_CONTENT.getFullKey()), f
+		.getPending());
+
+	store.put(TestData.KEY_CONTENT);
+	f.step();
+
+	assertEquals(true, f.isDone());
+	assertEquals(Arrays.asList(), f.getPending());
+    }
+
 }

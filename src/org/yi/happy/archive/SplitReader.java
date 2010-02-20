@@ -260,7 +260,7 @@ public class SplitReader {
      * get the list of blocks that are needed at this time. a later call to this
      * may return more blocks in the list.
      * 
-     * @return the list full keys for blocks that are needed.
+     * @return the list of full keys for blocks that are needed.
      */
     public List<FullKey> getPending() {
 	List<FullKey> out = new ArrayList<FullKey>(pending.size());
