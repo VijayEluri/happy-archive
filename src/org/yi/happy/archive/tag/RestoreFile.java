@@ -76,4 +76,13 @@ public class RestoreFile {
 	return data.getPending();
     }
 
+    /**
+     * Get the amount of progress that has been made.
+     * 
+     * @return the amount of progress that has been made.
+     */
+    public int getProgress() {
+	return data.getProgress();
+    }
+
 }

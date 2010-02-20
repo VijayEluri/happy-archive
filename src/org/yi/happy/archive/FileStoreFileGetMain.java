@@ -5,10 +5,10 @@ import java.io.InterruptedIOException;
 
 import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.archive.file_system.FileSystem;
-import org.yi.happy.archive.file_system.RandomOutputFile;
 import org.yi.happy.archive.file_system.RealFileSystem;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.KeyParse;
+import org.yi.happy.archive.tag.RestoreFile;
 
 /**
  * get a file from a file store.
@@ -92,22 +92,18 @@ public class FileStoreFileGetMain {
 	FileBlockStore store = new FileBlockStore(fs, args[0]);
 	pendingFile = args[1];
 	FullKey key = KeyParse.parseFullKey(args[2]);
-	RandomOutputFile out = fs.openRandomOutputFile(args[3]);
+	String path = args[3];
 
-	SplitReader r = new SplitReader(key, new RetrieveBlockStorage(store));
+	RestoreFile r = new RestoreFile(new SplitReader(key,
+		new RetrieveBlockStorage(store)), path, fs);
+	r.step();
 	while (!r.isDone()) {
-	    Fragment f = r.fetchAny();
-	    if (f == null) {
-		notReady(r);
-		continue;
-	    }
-	    out.setPosition(f.getOffset());
-	    out.write(f.getData().toByteArray());
+	    notReady(r);
+	    r.step();
 	}
-	out.close();
     }
 
-    private void notReady(SplitReader reader) throws IOException {
+    private void notReady(RestoreFile reader) throws IOException {
 	StringBuilder p = new StringBuilder();
 	for (FullKey k : reader.getPending()) {
 	    p.append(k.toLocatorKey() + "\n");
@@ -119,7 +115,7 @@ public class FileStoreFileGetMain {
 	progress = reader.getProgress();
     }
 
-    int progress;
+    private int progress;
 
     private WaitHandler waitHandler;
 }

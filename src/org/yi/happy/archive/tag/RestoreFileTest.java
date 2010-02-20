@@ -50,6 +50,7 @@ public class RestoreFileTest {
 		.getFullKey(), store), "test.dat", fs);
 	f.step();
 
+	assertEquals(0, f.getProgress());
 	assertEquals(false, f.isDone());
 	assertEquals(Arrays.asList(TestData.KEY_CONTENT.getFullKey()), f
 		.getPending());
@@ -57,6 +58,7 @@ public class RestoreFileTest {
 	store.put(TestData.KEY_CONTENT);
 	f.step();
 
+	assertEquals(1, f.getProgress());
 	assertEquals(true, f.isDone());
 	assertEquals(Arrays.asList(), f.getPending());
     }
