@@ -1,7 +1,6 @@
 package org.yi.happy.archive;
 
 import java.io.IOException;
-import java.io.InterruptedIOException;
 
 import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.archive.file_system.FileSystem;
@@ -23,40 +22,7 @@ public class FileStoreFileGetMain {
      */
     public static void main(String[] args) throws IOException {
 	FileSystem fs = new RealFileSystem();
-
-	/*
-	 * XXX duplicate of the wait handler in FileStoreStreamGetMain, they
-	 * should be extracted to a shared class.
-	 */
-	WaitHandler waitHandler = new WaitHandler() {
-	    private int delay = 1;
-	    private int lastDelay = 0;
-
-	    @Override
-	    public void doWait(boolean progress) throws IOException {
-		try {
-		    if (progress) {
-			delay = 1;
-			lastDelay = 0;
-
-			Thread.sleep(delay * 1000);
-			return;
-		    }
-
-		    Thread.sleep(delay * 1000);
-
-		    int nextDelay = delay + lastDelay;
-		    lastDelay = delay;
-		    delay = nextDelay;
-
-		    if (delay > 60) {
-			delay = 60;
-		    }
-		} catch (InterruptedException e) {
-		    throw new InterruptedIOException();
-		}
-	    }
-	};
+	WaitHandler waitHandler = new WaitHandlerProgressiveDelay();
 
 	new FileStoreFileGetMain(fs, waitHandler).run(args);
     }
