@@ -23,7 +23,7 @@ public enum TestData {
     /**
      * The empty file.
      */
-    BAD_EMPTY,
+    FILE_EMPTY,
 
     /**
      * Some basic content, the string "hello\n" in a plain data block.

@@ -35,7 +35,7 @@ public class BlockParseTest {
      */
     @Test
     public void test2() throws IOException {
-	Block block = BlockParse.load(TestData.BAD_EMPTY.getUrl());
+	Block block = BlockParse.load(TestData.FILE_EMPTY.getUrl());
 
 	assertEquals(Collections.emptyMap(), block.getMeta());
 	assertEquals(new Bytes(), block.getBody());
