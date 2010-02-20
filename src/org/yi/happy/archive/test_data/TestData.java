@@ -345,6 +345,21 @@ public enum TestData {
      */
     FILE_CONTENT_40,
 
+    /**
+     * A stored version of {@link #TAG_FILES}.
+     */
+    @Full("content-hash:36248dd4bf041f6ee767724e95de768cb3c82fdb25e41349f61e57"
+	    + "b7c4ad7c25:12497e09c4d7d5a8fd8890838d38f68c034c9eaeb38c41ef8899"
+	    + "4ad59283fcba")
+    @Locator("content-hash:36248dd4bf041f6ee767724e95de768cb3c82fdb25e41349f61"
+	    + "e57b7c4ad7c25")
+    KEY_TAG_FILES,
+
+    /**
+     * A tag list with files and a directory.
+     */
+    TAG_MIXED,
+
     ;
 
     /**
