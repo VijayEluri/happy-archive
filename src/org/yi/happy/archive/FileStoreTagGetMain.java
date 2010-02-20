@@ -109,12 +109,13 @@ public class FileStoreTagGetMain {
      * 
      * @param args
      *            the store; the request list.
+     * @throws IOException
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 	FileSystem fs = new RealFileSystem();
 	WaitHandler waitHandler = new WaitHandlerProgressiveDelay();
 	InputStream in = System.in;
 
-	new FileStoreTagGetMain(fs, waitHandler, in);
+	new FileStoreTagGetMain(fs, waitHandler, in).run(args);
     }
 }
