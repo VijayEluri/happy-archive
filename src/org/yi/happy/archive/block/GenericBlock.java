@@ -5,7 +5,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.yi.happy.annotate.ExternalName;
-import org.yi.happy.annotate.MagicLiteral;
 import org.yi.happy.archive.Bytes;
 
 /**
@@ -118,39 +117,4 @@ public final class GenericBlock extends AbstractBlock implements Block {
     public Bytes getBody() {
 	return body;
     }
-
-    /**
-     * Check a meta-data header.
-     * 
-     * @param name
-     *            the name part of the header.
-     * @param value
-     *            the value part of the header.
-     * @throws IllegalArgumentException
-     *             if the name or value have a newline in them, or if the name
-     *             has a ':' in it.
-     * @throws NullPointerException
-     *             if name or value are null.
-     */
-    @MagicLiteral
-    public static void checkHeader(String name, String value) {
-	/*
-	 * TODO move this to AbstractBlock since many of the block types use it.
-	 */
-	for (int i = 0; i < name.length(); i++) {
-	    char c = name.charAt(i);
-	    if (c == ':' || c == '\r' || c == '\n') {
-		throw new IllegalArgumentException(
-			"name can not have ':' or newline");
-	    }
-	}
-
-	for (int i = 0; i < value.length(); i++) {
-	    char c = value.charAt(i);
-	    if (c == '\r' || c == '\n') {
-		throw new IllegalArgumentException("value can not have newline");
-	    }
-	}
-    }
-
 }

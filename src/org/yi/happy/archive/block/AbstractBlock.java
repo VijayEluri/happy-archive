@@ -2,6 +2,7 @@ package org.yi.happy.archive.block;
 
 import java.util.Map;
 
+import org.yi.happy.annotate.MagicLiteral;
 import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.Bytes;
 
@@ -96,6 +97,37 @@ public abstract class AbstractBlock implements Block {
 	if (!getBody().equals(other.getBody()))
 	    return false;
 	return true;
+    }
+
+    /**
+     * Check a meta-data header.
+     * 
+     * @param name
+     *            the name part of the header.
+     * @param value
+     *            the value part of the header.
+     * @throws IllegalArgumentException
+     *             if the name or value have a newline in them, or if the name
+     *             has a ':' in it.
+     * @throws NullPointerException
+     *             if name or value are null.
+     */
+    @MagicLiteral
+    protected void checkHeader(String name, String value) {
+	for (int i = 0; i < name.length(); i++) {
+	    char c = name.charAt(i);
+	    if (c == ':' || c == '\r' || c == '\n') {
+		throw new IllegalArgumentException(
+			"name can not have ':' or newline");
+	    }
+	}
+
+	for (int i = 0; i < value.length(); i++) {
+	    char c = value.charAt(i);
+	    if (c == '\r' || c == '\n') {
+		throw new IllegalArgumentException("value can not have newline");
+	    }
+	}
     }
 
 }

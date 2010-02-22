@@ -52,8 +52,8 @@ public final class BlobEncodedBlock extends AbstractBlock implements
     public BlobEncodedBlock(BlobLocatorKey key, DigestProvider digest,
 	    CipherProvider cipher, Bytes body) throws IllegalArgumentException,
 	    BadSignatureException, UnknownDigestAlgorithmException {
-	GenericBlock.checkHeader(DIGEST_META, digest.getAlgorithm());
-	GenericBlock.checkHeader(CIPHER_META, cipher.getAlgorithm());
+	checkHeader(DIGEST_META, digest.getAlgorithm());
+	checkHeader(CIPHER_META, cipher.getAlgorithm());
 
 	byte[] hash = getHash(digest, cipher, body);
 	if (!key.getHash().equalBytes(hash)) {
@@ -80,8 +80,8 @@ public final class BlobEncodedBlock extends AbstractBlock implements
      */
     public BlobEncodedBlock(DigestProvider digest, CipherProvider cipher,
 	    Bytes body) {
-	GenericBlock.checkHeader(DIGEST_META, digest.getAlgorithm());
-	GenericBlock.checkHeader(CIPHER_META, cipher.getAlgorithm());
+	checkHeader(DIGEST_META, digest.getAlgorithm());
+	checkHeader(CIPHER_META, cipher.getAlgorithm());
 
 	byte[] hash = getHash(digest, cipher, body);
 

@@ -61,8 +61,8 @@ public final class ContentEncodedBlock extends AbstractBlock implements
     public ContentEncodedBlock(ContentLocatorKey key, DigestProvider digest,
 	    CipherProvider cipher, Bytes body) {
 
-	GenericBlock.checkHeader(DIGEST_META, digest.getAlgorithm());
-	GenericBlock.checkHeader(CIPHER_META, cipher.getAlgorithm());
+	checkHeader(DIGEST_META, digest.getAlgorithm());
+	checkHeader(CIPHER_META, cipher.getAlgorithm());
 
 	byte[] hash = getHash(digest, body);
 	if (!key.getHash().equalBytes(hash)) {
@@ -90,8 +90,8 @@ public final class ContentEncodedBlock extends AbstractBlock implements
     public ContentEncodedBlock(DigestProvider digest, CipherProvider cipher,
 	    Bytes body) {
 
-	GenericBlock.checkHeader(DIGEST_META, digest.getAlgorithm());
-	GenericBlock.checkHeader(CIPHER_META, cipher.getAlgorithm());
+	checkHeader(DIGEST_META, digest.getAlgorithm());
+	checkHeader(CIPHER_META, cipher.getAlgorithm());
 
 	byte[] hash = getHash(digest, body);
 
