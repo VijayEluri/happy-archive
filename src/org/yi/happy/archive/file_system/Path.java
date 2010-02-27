@@ -1,25 +1,26 @@
 package org.yi.happy.archive.file_system;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * A value object that represents a file path. ./a/b/c or /a/b/c
  */
 public class Path {
-    private final List<String> elements;
+    private final Path base;
+
+    private final String name;
+
     private final boolean absolute;
 
-    private Path(boolean absolute, List<String> elements) {
-        this.absolute = absolute;
-        this.elements = Collections.unmodifiableList(new ArrayList<String>(
-        	elements));
+    private Path(Path base, String name) {
+	this.absolute = base.absolute;
+	this.base = base;
+	this.name = name;
     }
 
     private Path(boolean absolute) {
 	this.absolute = absolute;
-	this.elements = Collections.emptyList();
+	this.base = null;
+	this.name = null;
     }
 
     /**
@@ -30,9 +31,7 @@ public class Path {
      * @return a path for that child.
      */
     public Path child(String name) {
-	ArrayList<String> elements = new ArrayList<String>(this.elements);
-	elements.add(name);
-	return new Path(absolute, elements);
+	return new Path(this, name);
     }
 
     /**
@@ -41,24 +40,39 @@ public class Path {
      * @return the name of the current path component.
      */
     public String getName() {
-	if (elements.isEmpty()) {
+	if (base == null) {
 	    return absolute ? "/" : ".";
 	}
-	return elements.get(elements.size() - 1);
+	return name;
     }
 
     @Override
     public String toString() {
+	if (base == null) {
+	    return absolute ? "/" : ".";
+	}
 	StringBuilder sb = new StringBuilder();
-	String join = "";
-	if (absolute) {
-	    join = "/";
-	}
-	for (String i : elements) {
-	    sb.append(join).append(i);
-	    join = "/";
-	}
+	toString(sb);
 	return sb.toString();
+    }
+
+    private void toString(StringBuilder sb) {
+	/*
+	 * recursive step
+	 */
+	if (base != null) {
+	    base.toString(sb);
+	    sb.append("/").append(name);
+	    return;
+	}
+
+	/*
+	 * base step
+	 */
+	if (absolute) {
+	    sb.append("/");
+	}
+	return;
     }
 
     /**
@@ -67,36 +81,10 @@ public class Path {
      * @return the length of the path.
      */
     public int size() {
-	return elements.size();
-    }
-
-    @Override
-    public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + (absolute ? 1231 : 1237);
-	result = prime * result
-		+ ((elements == null) ? 0 : elements.hashCode());
-	return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	Path other = (Path) obj;
-	if (absolute != other.absolute)
-	    return false;
-	if (elements == null) {
-	    if (other.elements != null)
-		return false;
-	} else if (!elements.equals(other.elements))
-	    return false;
-	return true;
+	if (base == null) {
+	    return 0;
+	}
+	return base.size() + 1;
     }
 
     /**
@@ -105,13 +93,11 @@ public class Path {
      * @return the base path.
      */
     public Path getBase() {
-	if (elements.isEmpty()) {
+	if (base == null) {
 	    return this;
 	}
 
-	List<String> elements = new ArrayList<String>(this.elements);
-	elements.remove(elements.size() - 1);
-	return new Path(absolute, elements);
+	return base;
     }
 
     /**
@@ -120,11 +106,11 @@ public class Path {
      * @return the parent path.
      */
     public Path parent() {
-	if (elements.isEmpty() && absolute) {
+	if (base == null && absolute) {
 	    return this;
 	}
 
-	if (elements.isEmpty() && !absolute) {
+	if (base == null && !absolute) {
 	    return child("..");
 	}
 
