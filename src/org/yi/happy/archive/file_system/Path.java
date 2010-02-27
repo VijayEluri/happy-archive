@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * A value object that represents a file path. ./a/b/c or /a/b/c
  */
-public class Path {
+public final class Path {
     private final List<String> elements;
     private final boolean absolute;
 
