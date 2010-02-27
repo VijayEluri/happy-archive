@@ -11,6 +11,12 @@ import org.junit.Test;
  */
 public class PathTest {
     /*
+     * as a concept, the most general path is what is acceptable after the
+     * domain of a URL, any length string in each element, the first element of
+     * the path is either absolute or relative to differentiate the two cases.
+     */
+
+    /*
      * The file path will be used as a look up key for the file system
      * implementations.
      */
