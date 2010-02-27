@@ -1,6 +1,5 @@
 package org.yi.happy.archive.file_system;
 
-
 /**
  * A value object that represents a file path. ./a/b/c or /a/b/c
  */
@@ -14,6 +13,12 @@ public class Path {
     private Path(Path base, String name) {
 	this.absolute = base.absolute;
 	this.base = base;
+	this.name = name;
+    }
+
+    private Path(boolean absolute, String name) {
+	this.absolute = absolute;
+	this.base = null;
 	this.name = name;
     }
 
@@ -31,6 +36,9 @@ public class Path {
      * @return a path for that child.
      */
     public Path child(String name) {
+	if (this.name == null) {
+	    return new Path(absolute, name);
+	}
 	return new Path(this, name);
     }
 
@@ -40,7 +48,7 @@ public class Path {
      * @return the name of the current path component.
      */
     public String getName() {
-	if (base == null) {
+	if (name == null) {
 	    return absolute ? "/" : ".";
 	}
 	return name;
@@ -48,9 +56,6 @@ public class Path {
 
     @Override
     public String toString() {
-	if (base == null) {
-	    return absolute ? "/" : ".";
-	}
 	StringBuilder sb = new StringBuilder();
 	toString(sb);
 	return sb.toString();
@@ -72,6 +77,11 @@ public class Path {
 	if (absolute) {
 	    sb.append("/");
 	}
+
+	if (name != null) {
+	    sb.append(name);
+	}
+
 	return;
     }
 
@@ -93,8 +103,12 @@ public class Path {
      * @return the base path.
      */
     public Path getBase() {
-	if (base == null) {
+	if (base == null && name == null) {
 	    return this;
+	}
+
+	if (base == null && name != null) {
+	    return new Path(absolute);
 	}
 
 	return base;
@@ -106,11 +120,11 @@ public class Path {
      * @return the parent path.
      */
     public Path parent() {
-	if (base == null && absolute) {
+	if (name == null && absolute) {
 	    return this;
 	}
 
-	if (base == null && !absolute) {
+	if (name == null && !absolute) {
 	    return child("..");
 	}
 
@@ -119,6 +133,40 @@ public class Path {
 	}
 
 	return getBase();
+    }
+
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	result = prime * result + (absolute ? 1231 : 1237);
+	result = prime * result + ((base == null) ? 0 : base.hashCode());
+	result = prime * result + ((name == null) ? 0 : name.hashCode());
+	return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj)
+	    return true;
+	if (obj == null)
+	    return false;
+	if (getClass() != obj.getClass())
+	    return false;
+	Path other = (Path) obj;
+	if (absolute != other.absolute)
+	    return false;
+	if (base == null) {
+	    if (other.base != null)
+		return false;
+	} else if (!base.equals(other.base))
+	    return false;
+	if (name == null) {
+	    if (other.name != null)
+		return false;
+	} else if (!name.equals(other.name))
+	    return false;
+	return true;
     }
 
     /**
