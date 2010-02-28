@@ -39,7 +39,7 @@ public class PathTest {
     }
 
     /**
-     * The base of the absolute path is the base of the absolute path
+     * The base of the absolute path is the absolute path
      */
     @Test
     public void testBase2() {
@@ -67,7 +67,7 @@ public class PathTest {
     }
 
     /**
-     * unless the previous named entry is "..".
+     * build up two directories.
      */
     @Test
     public void testParent4() {
@@ -76,6 +76,9 @@ public class PathTest {
 	assertEquals("../..", have.toString());
     }
 
+    /**
+     * build an absolute path
+     */
     @Test
     public void test1() {
 	Path have = Path.ABSOLUTE.child("foo");
@@ -83,6 +86,9 @@ public class PathTest {
 	assertEquals("/foo", have.toString());
     }
 
+    /**
+     * build an absolute path
+     */
     @Test
     public void test2() {
 	Path have = Path.ABSOLUTE.child("foo").child("bar");
@@ -90,6 +96,9 @@ public class PathTest {
 	assertEquals("/foo/bar", have.toString());
     }
 
+    /**
+     * build a relative path
+     */
     @Test
     public void test3() {
 	Path have = Path.RELATIVE.child("foo");
@@ -97,6 +106,9 @@ public class PathTest {
 	assertEquals("foo", have.toString());
     }
 
+    /**
+     * get the parent of a relative path.
+     */
     @Test
     public void testParent1() {
 	Path have = Path.RELATIVE.child("foo").parent();
@@ -104,6 +116,9 @@ public class PathTest {
 	assertEquals(Path.RELATIVE, have);
     }
 
+    /**
+     * the parent of the absolute base is the absolute base.
+     */
     @Test
     public void testParent2() {
 	Path have = Path.ABSOLUTE.parent();
@@ -111,6 +126,9 @@ public class PathTest {
 	assertEquals(Path.ABSOLUTE, have);
     }
 
+    /**
+     * the parent of the relative base is "..".
+     */
     @Test
     public void testParent3() {
 	Path have = Path.RELATIVE.parent();
@@ -118,6 +136,9 @@ public class PathTest {
 	assertEquals("..", have.toString());
     }
 
+    /**
+     * the parent of a child is the original.
+     */
     @Test
     public void testEqual2() {
 	Path have1 = Path.ABSOLUTE.child("foo").parent();
@@ -127,6 +148,9 @@ public class PathTest {
 	assertEquals(have1.hashCode(), have2.hashCode());
     }
 
+    /**
+     * the parent of an absolute child is not relative.
+     */
     @Test
     public void testEqual3() {
 	Path have1 = Path.ABSOLUTE.child("foo").parent();
@@ -135,6 +159,9 @@ public class PathTest {
 	assertFalse(have1.equals(have2));
     }
 
+    /**
+     * two parents from relative is the same.
+     */
     @Test
     public void testEqual4() {
 	Path have1 = Path.RELATIVE.parent().parent();
