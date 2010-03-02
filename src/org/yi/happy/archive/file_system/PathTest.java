@@ -170,4 +170,34 @@ public class PathTest {
 	assertTrue(have1.equals(have2));
 	assertEquals(have1.hashCode(), have2.hashCode());
     }
+
+    /**
+     * Check that the size calculates right.
+     */
+    @Test
+    public void testSize0() {
+	Path p = Path.RELATIVE;
+
+	assertEquals(0, p.size());
+    }
+
+    /**
+     * Check that the size calculates right.
+     */
+    @Test
+    public void testSize1() {
+	Path p = Path.RELATIVE.child("foo");
+
+	assertEquals(1, p.size());
+    }
+
+    /**
+     * Check that the size calculates right.
+     */
+    @Test
+    public void testSize2() {
+	Path p = Path.RELATIVE.child("foo").child("bar");
+
+	assertEquals(2, p.size());
+    }
 }

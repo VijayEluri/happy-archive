@@ -89,8 +89,11 @@ public final class Path {
      * @return the length of the path.
      */
     public int size() {
-	if (base == null) {
+	if (base == null && name == null) {
 	    return 0;
+	}
+	if (base == null) {
+	    return 1;
 	}
 	return base.size() + 1;
     }
