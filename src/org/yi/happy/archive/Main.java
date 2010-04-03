@@ -48,8 +48,11 @@ public class Main {
 	    
 	    new Cmd("encode", EncodeContentMain.class),
 	    
-	    new Cmd("verify", VerifyMain.class)
+	    new Cmd("verify", VerifyMain.class),
 
+	    new Cmd("index-search", IndexSearchMain.class),
+
+	    new Cmd("volume-get", VolumeGetMain.class)
 	    ));
 
     /**

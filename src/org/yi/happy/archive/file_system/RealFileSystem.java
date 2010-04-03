@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 
 import org.yi.happy.archive.Streams;
 
@@ -85,5 +87,10 @@ public class RealFileSystem implements FileSystem {
     public RandomOutputFile openRandomOutputFile(String path)
 	    throws IOException {
 	return new RealRandomOutputFile(path);
+    }
+
+    @Override
+    public List<String> list(String path) {
+	return Arrays.asList(new File(path).list());
     }
 }

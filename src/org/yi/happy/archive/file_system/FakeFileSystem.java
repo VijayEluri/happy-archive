@@ -4,8 +4,12 @@ import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A fake file system for testing. This should behave just like a real file
@@ -16,6 +20,13 @@ public class FakeFileSystem implements FileSystem {
     private Map<String, byte[]> files = new HashMap<String, byte[]>();
 
     private final byte[] DIR = new byte[0];
+
+    /**
+     * Create the fake file system, initially empty.
+     */
+    public FakeFileSystem() {
+	files.put("", DIR);
+    }
 
     @Override
     public void save(String name, byte[] bytes) throws IOException {
@@ -72,7 +83,8 @@ public class FakeFileSystem implements FileSystem {
     public boolean mkdir(String path) throws IOException {
 	if (path.contains("/")
 		&& files.get(path.replaceAll("/[^/]*$", "")) != DIR) {
-	    throw new FileNotFoundException("parent does is not a folder");
+	    throw new FileNotFoundException(
+		    "parent does not exist or is not a folder");
 	}
 
 	byte[] cur = files.get(path);
@@ -158,5 +170,28 @@ public class FakeFileSystem implements FileSystem {
 	});
 
 	return f;
+    }
+
+    @Override
+    public List<String> list(String path) {
+	List<String> out = new ArrayList<String>();
+
+	if (path.equals(".")) {
+	    path = "";
+	}
+	if (path.length() > 0 && !path.endsWith("/")) {
+	    path = path + "/";
+	}
+
+	Pattern p = Pattern.compile(Pattern.quote(path) + "([^/]+)");
+	for (String name : files.keySet()) {
+	    Matcher m = p.matcher(name);
+	    if (!m.matches()) {
+		continue;
+	    }
+	    out.add(m.group(1));
+	}
+
+	return out;
     }
 }

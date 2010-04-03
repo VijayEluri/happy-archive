@@ -8,6 +8,8 @@ import static org.junit.Assert.assertNotNull;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -298,5 +300,58 @@ public class FakeFileSystemTest {
 	f.close();
 
 	assertArrayEquals(new byte[] { 0, 1, 3 }, real.load("a"));
+    }
+
+    /**
+     * List the current directory with one item.
+     * 
+     * @throws IOException
+     */
+    @Test
+    public void testList1() throws IOException {
+	real.mkdir("a");
+
+	List<String> have = real.list("");
+
+	assertEquals(Arrays.asList("a"), have);
+    }
+
+    /**
+     * List a subdirectory current directory with one item.
+     * 
+     * @throws IOException
+     */
+    @Test
+    public void testList2() throws IOException {
+	real.mkdir("a");
+	real.mkdir("a/b");
+
+	List<String> have = real.list("a");
+
+	assertEquals(Arrays.asList("b"), have);
+    }
+
+    /**
+     * List the current directory with one item.
+     * 
+     * @throws IOException
+     */
+    @Test
+    public void testList3() throws IOException {
+	real.mkdir("a");
+
+	List<String> have = real.list(".");
+
+	assertEquals(Arrays.asList("a"), have);
+    }
+
+    /**
+     * create an absolute directory.
+     * 
+     * @throws IOException
+     */
+    @Test
+    public void testMakeAbsolute() throws IOException {
+	real.mkdir("/a");
     }
 }

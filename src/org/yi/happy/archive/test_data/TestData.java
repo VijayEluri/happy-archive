@@ -222,7 +222,8 @@ public enum TestData {
     CLEAR_CONTENT_MAP,
 
     /**
-     * a two part map for "01234" + "56789".
+     * a two part map for "01234" + "56789". {@link #KEY_CONTENT_1},
+     * {@link #KEY_CONTENT_2}.
      */
     @Full("content-hash:87bed19266dc934236c132b9538cd8ec833aa85856b04be7b90f52"
 	    + "03f51aebf2:e43a2194e64835a3a90562c7497d1f70390"
@@ -360,7 +361,12 @@ public enum TestData {
      */
     TAG_MIXED,
 
-    ;
+    /**
+     * An index for a volume that has the three blocks of
+     * {@link #KEY_CONTENT_MAP}. '00.dat' => {@link #KEY_CONTENT_MAP}, '01.dat'
+     * => {@link #KEY_CONTENT_1}, '02.dat' => {@link #KEY_CONTENT_2}.
+     */
+    INDEX_MAP;
 
     /**
      * get the file name for this enumeration constant, relative to the

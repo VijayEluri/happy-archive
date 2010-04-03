@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.yi.happy.annotate.EntryPoint;
-import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
-import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.KeyParse;
 
 /**
@@ -15,7 +13,6 @@ import org.yi.happy.archive.key.KeyParse;
  * ones that are needed are put in a list, and the process continues to be
  * retried until all the needed blocks become available.
  */
-@SmellsMessy
 public class FileStoreStreamGetMain {
 
     private final FileSystem fs;
@@ -81,13 +78,8 @@ public class FileStoreStreamGetMain {
 
 	@Override
 	public void notReady(SplitReader reader) throws IOException {
-	    StringBuilder p = new StringBuilder();
-	    for (FullKey k : reader.getPending()) {
-		p.append(k.toLocatorKey() + "\n");
-	    }
-	    fs.save(pendingFile + ".tmp", ByteString.toUtf8(p.toString()));
-	    fs.rename(pendingFile + ".tmp", pendingFile);
-
+	    PendingList.savePendingListFile(reader.getPending(), fs,
+		    pendingFile);
 	    waitHandler.doWait(progress != reader.getProgress());
 	    progress = reader.getProgress();
 	}

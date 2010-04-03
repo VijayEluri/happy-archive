@@ -2,6 +2,7 @@ package org.yi.happy.archive.file_system;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 /**
  * A file system interface.
@@ -111,4 +112,13 @@ public interface FileSystem {
      *             on error.
      */
     RandomOutputFile openRandomOutputFile(String path) throws IOException;
+
+    /**
+     * List the names in a directory.
+     * 
+     * @param path
+     *            the directory to get the list of names from.
+     * @return the list of names.
+     */
+    List<String> list(String path);
 }
