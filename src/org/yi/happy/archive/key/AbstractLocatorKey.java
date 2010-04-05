@@ -15,8 +15,8 @@ public abstract class AbstractLocatorKey implements LocatorKey {
      *            the hash
      */
     public AbstractLocatorKey(HashValue hash) {
-        if (hash.getSize() < 1) {
-            throw new IllegalArgumentException("hash too short");
+        if (hash == null) {
+            throw new IllegalArgumentException("hash is null");
         }
         this.hash = hash;
     }

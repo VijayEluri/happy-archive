@@ -105,15 +105,6 @@ public final class HashValue implements Comparable<HashValue> {
     }
 
     /**
-     * Get the length of the hash.
-     * 
-     * @return the length of the hash.
-     */
-    public int getSize() {
-        return value.getSize();
-    }
-
-    /**
      * Compare the bytes of this hash to a byte array.
      * 
      * @param other
