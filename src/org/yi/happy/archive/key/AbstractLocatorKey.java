@@ -6,7 +6,7 @@ import org.yi.happy.archive.Bytes;
 /**
  * common function of locator keys
  */
-public abstract class AbstractLocatorKey {
+public abstract class AbstractLocatorKey implements LocatorKey {
 
     private final Bytes hash;
 
@@ -64,4 +64,12 @@ public abstract class AbstractLocatorKey {
         return true;
     }
 
+    @Override
+    public int compareTo(LocatorKey o) {
+        int out = getHash().compareTo(o.getHash());
+        if (out != 0) {
+            return out;
+        }
+        return getType().compareTo(o.getType());
+    }
 }
