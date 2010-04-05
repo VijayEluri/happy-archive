@@ -31,44 +31,44 @@ public final class GenericBlock extends AbstractBlock implements Block {
      *            the bytes of the body.
      */
     public GenericBlock(Map<String, String> meta, Bytes body) {
-	for (Map.Entry<String, String> i : meta.entrySet()) {
-	    checkHeader(i.getKey(), i.getValue());
-	}
+        for (Map.Entry<String, String> i : meta.entrySet()) {
+            checkHeader(i.getKey(), i.getValue());
+        }
 
-	if (body == null) {
-	    body = new Bytes();
-	}
+        if (body == null) {
+            body = new Bytes();
+        }
 
-	checkSize: {
-	    String s = meta.get(SIZE_META);
+        checkSize: {
+            String s = meta.get(SIZE_META);
 
-	    if (s == null) {
-		break checkSize;
-	    }
+            if (s == null) {
+                break checkSize;
+            }
 
-	    int i;
-	    try {
-		i = Integer.parseInt(s);
-	    } catch (NumberFormatException e) {
-		throw new IllegalArgumentException("invalid size header");
-	    }
+            int i;
+            try {
+                i = Integer.parseInt(s);
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("invalid size header");
+            }
 
-	    if (i != body.getSize()) {
-		throw new IllegalArgumentException("invalid size header");
-	    }
-	}
+            if (i != body.getSize()) {
+                throw new IllegalArgumentException("invalid size header");
+            }
+        }
 
-	this.meta = Collections
-		.unmodifiableMap(new LinkedHashMap<String, String>(meta));
-	this.body = body;
+        this.meta = Collections
+                .unmodifiableMap(new LinkedHashMap<String, String>(meta));
+        this.body = body;
     }
 
     /**
      * create blank.
      */
     public GenericBlock() {
-	this.meta = Collections.emptyMap();
-	this.body = new Bytes();
+        this.meta = Collections.emptyMap();
+        this.body = new Bytes();
     }
 
     /**
@@ -82,20 +82,20 @@ public final class GenericBlock extends AbstractBlock implements Block {
      * @return the created block
      */
     public static GenericBlock create(Bytes body, String... meta) {
-	if (meta.length % 2 != 0) {
-	    throw new IllegalArgumentException("meta needs to be pairs");
-	}
+        if (meta.length % 2 != 0) {
+            throw new IllegalArgumentException("meta needs to be pairs");
+        }
 
-	Map<String, String> m = new LinkedHashMap<String, String>();
-	for (int i = 0; i < meta.length; i += 2) {
-	    if (m.containsKey(meta[i])) {
-		throw new IllegalArgumentException("repeated header: "
-			+ meta[i]);
-	    }
-	    m.put(meta[i], meta[i + 1]);
-	}
+        Map<String, String> m = new LinkedHashMap<String, String>();
+        for (int i = 0; i < meta.length; i += 2) {
+            if (m.containsKey(meta[i])) {
+                throw new IllegalArgumentException("repeated header: "
+                        + meta[i]);
+            }
+            m.put(meta[i], meta[i + 1]);
+        }
 
-	return new GenericBlock(m, body);
+        return new GenericBlock(m, body);
     }
 
     /**
@@ -105,7 +105,7 @@ public final class GenericBlock extends AbstractBlock implements Block {
      */
     @Override
     public Map<String, String> getMeta() {
-	return meta;
+        return meta;
     }
 
     /**
@@ -115,6 +115,6 @@ public final class GenericBlock extends AbstractBlock implements Block {
      */
     @Override
     public Bytes getBody() {
-	return body;
+        return body;
     }
 }

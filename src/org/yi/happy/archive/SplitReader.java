@@ -27,9 +27,9 @@ public class SplitReader {
      *            where to find the blocks
      */
     public SplitReader(FullKey fullKey, RetrieveBlock storage) {
-	this.pending = new ArrayList<Pending>();
-	this.pending.add(new Pending(fullKey, 0l));
-	this.storage = storage;
+        this.pending = new ArrayList<Pending>();
+        this.pending.add(new Pending(fullKey, 0l));
+        this.storage = storage;
     }
 
     /**
@@ -41,13 +41,13 @@ public class SplitReader {
      *             if the block is available but fetching or decoding failed.
      */
     public Fragment fetchAny() throws IOException {
-	for (int i = 0; i < pending.size(); i++) {
-	    Fragment out = fetch(i);
-	    if (out != null) {
-		return out;
-	    }
-	}
-	return null;
+        for (int i = 0; i < pending.size(); i++) {
+            Fragment out = fetch(i);
+            if (out != null) {
+                return out;
+            }
+        }
+        return null;
     }
 
     /**
@@ -58,7 +58,7 @@ public class SplitReader {
      *             if the block is available but fetching or decoding failed.
      */
     public Fragment fetchFirst() throws IOException {
-	return fetch(0);
+        return fetch(0);
     }
 
     /**
@@ -77,72 +77,72 @@ public class SplitReader {
      */
     @MagicLiteral
     private Fragment fetch(int index) throws IOException {
-	while (true) {
-	    if (index >= pending.size()) {
-		return null;
-	    }
+        while (true) {
+            if (index >= pending.size()) {
+                return null;
+            }
 
-	    Pending item = pending.get(index);
-	    if (item.offset == null) {
-		return null;
-	    }
+            Pending item = pending.get(index);
+            if (item.offset == null) {
+                return null;
+            }
 
-	    Block b = storage.retrieveBlock(item.key);
-	    if (b == null) {
-		return null;
-	    }
+            Block b = storage.retrieveBlock(item.key);
+            if (b == null) {
+                return null;
+            }
 
-	    /*
-	     * note that progress was made
-	     */
-	    progress++;
+            /*
+             * note that progress was made
+             */
+            progress++;
 
-	    String type = b.getMeta().get("type");
-	    if (type == null) {
-		return processData(index, item.offset, b);
-	    }
+            String type = b.getMeta().get("type");
+            if (type == null) {
+                return processData(index, item.offset, b);
+            }
 
-	    if (type.equals(MapBlock.TYPE)) {
-		processMap(index, item.offset, b);
-		continue;
-	    }
+            if (type.equals(MapBlock.TYPE)) {
+                processMap(index, item.offset, b);
+                continue;
+            }
 
-	    if (type.equals("split")) {
-		processSplit(index, item, b);
-		continue;
-	    }
+            if (type.equals("split")) {
+                processSplit(index, item, b);
+                continue;
+            }
 
-	    if (type.equals("indirect")) {
-		item.key = KeyParse.parseFullKey(ByteString.toString(b
-			.getBody()));
-		continue;
-	    }
+            if (type.equals("indirect")) {
+                item.key = KeyParse.parseFullKey(ByteString.toString(b
+                        .getBody()));
+                continue;
+            }
 
-	    if (type.equals("list")) {
-		processList(index, item.offset, b);
-		continue;
-	    }
+            if (type.equals("list")) {
+                processList(index, item.offset, b);
+                continue;
+            }
 
-	    throw new DecodeException("can not handle type: " + type);
-	}
+            throw new DecodeException("can not handle type: " + type);
+        }
     }
 
     private Fragment processData(int index, long offset, Block b)
-	    throws DecodeException {
-	/*
-	 * data block
-	 */
-	DataBlock block;
-	try {
-	    block = DataBlockParse.parse(b);
-	} catch (IllegalArgumentException e) {
-	    throw new DecodeException(e);
-	}
-	Bytes data = block.getBody();
+            throws DecodeException {
+        /*
+         * data block
+         */
+        DataBlock block;
+        try {
+            block = DataBlockParse.parse(b);
+        } catch (IllegalArgumentException e) {
+            throw new DecodeException(e);
+        }
+        Bytes data = block.getBody();
 
-	pending.remove(index);
-	fixOffset(index, offset + data.getSize());
-	return new Fragment(offset, data);
+        pending.remove(index);
+        fixOffset(index, offset + data.getSize());
+        return new Fragment(offset, data);
     }
 
     /**
@@ -157,16 +157,16 @@ public class SplitReader {
      */
     @MagicLiteral
     private void processSplit(int index, Pending item, Block b) {
-	String countString = b.getMeta().get("split-count");
-	int count = Integer.parseInt(countString);
-	List<Pending> add = new ArrayList<Pending>(count);
-	String base = item.key + "/";
-	for (int i = 0; i < count; i++) {
-	    FullKey key = KeyParse.parseFullKey(base + i);
-	    add.add(new Pending(key, null));
-	}
+        String countString = b.getMeta().get("split-count");
+        int count = Integer.parseInt(countString);
+        List<Pending> add = new ArrayList<Pending>(count);
+        String base = item.key + "/";
+        for (int i = 0; i < count; i++) {
+            FullKey key = KeyParse.parseFullKey(base + i);
+            add.add(new Pending(key, null));
+        }
 
-	replaceItem(index, add, item.offset);
+        replaceItem(index, add, item.offset);
     }
 
     /**
@@ -180,9 +180,9 @@ public class SplitReader {
      *            the offset of the first block if missing
      */
     private void replaceItem(int index, List<Pending> add, long offset) {
-	pending.remove(index);
-	pending.addAll(index, add);
-	fixOffset(index, offset);
+        pending.remove(index);
+        pending.addAll(index, add);
+        fixOffset(index, offset);
     }
 
     /**
@@ -198,17 +198,17 @@ public class SplitReader {
      */
     @MagicLiteral
     private void processMap(int index, long base, Block b) {
-	String map = ByteString.toString(b.getBody().toByteArray());
-	String[] lines = map.split("\n");
-	List<Pending> add = new ArrayList<Pending>(lines.length);
-	for (String line : lines) {
-	    String[] cols = line.split("\t", 2);
-	    FullKey key = KeyParse.parseFullKey(cols[0]);
-	    long offset = Long.parseLong(cols[1]) + base;
-	    add.add(new Pending(key, offset));
-	}
+        String map = ByteString.toString(b.getBody().toByteArray());
+        String[] lines = map.split("\n");
+        List<Pending> add = new ArrayList<Pending>(lines.length);
+        for (String line : lines) {
+            String[] cols = line.split("\t", 2);
+            FullKey key = KeyParse.parseFullKey(cols[0]);
+            long offset = Long.parseLong(cols[1]) + base;
+            add.add(new Pending(key, offset));
+        }
 
-	replaceItem(index, add, base);
+        replaceItem(index, add, base);
     }
 
     /**
@@ -223,15 +223,15 @@ public class SplitReader {
      */
     @MagicLiteral
     private void processList(int index, long base, Block b) {
-	String map = ByteString.toString(b.getBody());
-	String[] lines = map.split("\n");
-	List<Pending> add = new ArrayList<Pending>(lines.length);
-	for (String line : lines) {
-	    FullKey key = KeyParse.parseFullKey(line);
-	    add.add(new Pending(key, null));
-	}
+        String map = ByteString.toString(b.getBody());
+        String[] lines = map.split("\n");
+        List<Pending> add = new ArrayList<Pending>(lines.length);
+        for (String line : lines) {
+            FullKey key = KeyParse.parseFullKey(line);
+            add.add(new Pending(key, null));
+        }
 
-	replaceItem(index, add, base);
+        replaceItem(index, add, base);
     }
 
     /**
@@ -244,16 +244,16 @@ public class SplitReader {
      *            the offset to set if it is not already set
      */
     private void fixOffset(int index, long offset) {
-	if (pending.size() <= index) {
-	    return;
-	}
+        if (pending.size() <= index) {
+            return;
+        }
 
-	Pending item = pending.get(index);
-	if (item.offset != null) {
-	    return;
-	}
+        Pending item = pending.get(index);
+        if (item.offset != null) {
+            return;
+        }
 
-	item.offset = offset;
+        item.offset = offset;
     }
 
     /**
@@ -263,11 +263,11 @@ public class SplitReader {
      * @return the list of full keys for blocks that are needed.
      */
     public List<FullKey> getPending() {
-	List<FullKey> out = new ArrayList<FullKey>(pending.size());
-	for (Pending i : pending) {
-	    out.add(i.key);
-	}
-	return out;
+        List<FullKey> out = new ArrayList<FullKey>(pending.size());
+        for (Pending i : pending) {
+            out.add(i.key);
+        }
+        return out;
     }
 
     /**
@@ -276,7 +276,7 @@ public class SplitReader {
      * @return true if there are no more pending blocks.
      */
     public boolean isDone() {
-	return pending.isEmpty();
+        return pending.isEmpty();
     }
 
     /**
@@ -286,28 +286,28 @@ public class SplitReader {
      * 
      */
     private static class Pending {
-	/**
-	 * create an entry
-	 * 
-	 * @param key
-	 *            the key value
-	 * @param offset
-	 *            the offset value
-	 */
-	public Pending(FullKey key, Long offset) {
-	    this.key = key;
-	    this.offset = offset;
-	}
+        /**
+         * create an entry
+         * 
+         * @param key
+         *            the key value
+         * @param offset
+         *            the offset value
+         */
+        public Pending(FullKey key, Long offset) {
+            this.key = key;
+            this.offset = offset;
+        }
 
-	/**
-	 * the byte offset from the creating key where this block should appear
-	 */
-	public Long offset;
+        /**
+         * the byte offset from the creating key where this block should appear
+         */
+        public Long offset;
 
-	/**
-	 * the key that needs to be loaded in this position
-	 */
-	public FullKey key;
+        /**
+         * the key that needs to be loaded in this position
+         */
+        public FullKey key;
     }
 
     private List<Pending> pending;
@@ -320,10 +320,10 @@ public class SplitReader {
      * @return the next offset, or null if done
      */
     public Long getOffset() {
-	if (pending.isEmpty()) {
-	    return null;
-	}
-	return pending.get(0).offset;
+        if (pending.isEmpty()) {
+            return null;
+        }
+        return pending.get(0).offset;
     }
 
     /**
@@ -335,6 +335,6 @@ public class SplitReader {
      *         successfully retrieved from storage.
      */
     public int getProgress() {
-	return progress;
+        return progress;
     }
 }

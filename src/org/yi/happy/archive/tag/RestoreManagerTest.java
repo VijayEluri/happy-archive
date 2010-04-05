@@ -24,28 +24,28 @@ public class RestoreManagerTest {
      */
     @Test
     public void test1() throws IOException {
-	SimpleRetrieveBlock store = new SimpleRetrieveBlock();
-	FileSystem fs = new FakeFileSystem();
-	RestoreManager r = new RestoreManager(fs, store);
+        SimpleRetrieveBlock store = new SimpleRetrieveBlock();
+        FileSystem fs = new FakeFileSystem();
+        RestoreManager r = new RestoreManager(fs, store);
 
-	r.addFile("test.dat", TestData.KEY_CONTENT.getFullKey());
+        r.addFile("test.dat", TestData.KEY_CONTENT.getFullKey());
 
-	r.step();
+        r.step();
 
-	assertEquals(0, r.getProgress());
-	assertEquals(Arrays.asList(TestData.KEY_CONTENT.getFullKey()), r
-		.getPending());
-	assertEquals(false, r.isDone());
+        assertEquals(0, r.getProgress());
+        assertEquals(Arrays.asList(TestData.KEY_CONTENT.getFullKey()), r
+                .getPending());
+        assertEquals(false, r.isDone());
 
-	store.put(TestData.KEY_CONTENT);
+        store.put(TestData.KEY_CONTENT);
 
-	r.step();
+        r.step();
 
-	assertEquals(1, r.getProgress());
-	assertEquals(Arrays.asList(), r.getPending());
-	assertEquals(true, r.isDone());
+        assertEquals(1, r.getProgress());
+        assertEquals(Arrays.asList(), r.getPending());
+        assertEquals(true, r.isDone());
 
-	assertArrayEquals(TestData.FILE_CONTENT.getBytes(), fs.load("test.dat"));
+        assertArrayEquals(TestData.FILE_CONTENT.getBytes(), fs.load("test.dat"));
     }
 
     /**
@@ -56,32 +56,32 @@ public class RestoreManagerTest {
      */
     @Test
     public void test2() throws IOException {
-	SimpleRetrieveBlock store = new SimpleRetrieveBlock();
-	FileSystem fs = new FakeFileSystem();
-	RestoreManager r = new RestoreManager(fs, store);
+        SimpleRetrieveBlock store = new SimpleRetrieveBlock();
+        FileSystem fs = new FakeFileSystem();
+        RestoreManager r = new RestoreManager(fs, store);
 
-	r.addFile("test.dat", TestData.KEY_CONTENT.getFullKey());
-	r.addFile("hello.dat", TestData.KEY_CONTENT_40.getFullKey());
+        r.addFile("test.dat", TestData.KEY_CONTENT.getFullKey());
+        r.addFile("hello.dat", TestData.KEY_CONTENT_40.getFullKey());
 
-	r.step();
+        r.step();
 
-	assertEquals(0, r.getProgress());
-	assertEquals(Arrays.asList(TestData.KEY_CONTENT.getFullKey(),
-		TestData.KEY_CONTENT_40.getFullKey()), r.getPending());
-	assertEquals(false, r.isDone());
+        assertEquals(0, r.getProgress());
+        assertEquals(Arrays.asList(TestData.KEY_CONTENT.getFullKey(),
+                TestData.KEY_CONTENT_40.getFullKey()), r.getPending());
+        assertEquals(false, r.isDone());
 
-	store.put(TestData.KEY_CONTENT);
-	store.put(TestData.KEY_CONTENT_40);
+        store.put(TestData.KEY_CONTENT);
+        store.put(TestData.KEY_CONTENT_40);
 
-	r.step();
+        r.step();
 
-	assertEquals(2, r.getProgress());
-	assertEquals(Arrays.asList(), r.getPending());
-	assertEquals(true, r.isDone());
+        assertEquals(2, r.getProgress());
+        assertEquals(Arrays.asList(), r.getPending());
+        assertEquals(true, r.isDone());
 
-	assertArrayEquals(TestData.FILE_CONTENT.getBytes(), fs.load("test.dat"));
-	assertArrayEquals(TestData.FILE_CONTENT_40.getBytes(), fs
-		.load("hello.dat"));
+        assertArrayEquals(TestData.FILE_CONTENT.getBytes(), fs.load("test.dat"));
+        assertArrayEquals(TestData.FILE_CONTENT_40.getBytes(), fs
+                .load("hello.dat"));
     }
 
     /**
@@ -91,18 +91,18 @@ public class RestoreManagerTest {
      */
     @Test
     public void testRestore2() throws IOException {
-	SimpleRetrieveBlock store = new SimpleRetrieveBlock();
-	FileSystem fs = new FakeFileSystem();
-	RestoreManager r = new RestoreManager(fs, store);
+        SimpleRetrieveBlock store = new SimpleRetrieveBlock();
+        FileSystem fs = new FakeFileSystem();
+        RestoreManager r = new RestoreManager(fs, store);
 
-	r.addFile("test.dat", TestData.KEY_CONTENT.getFullKey());
-	r.addFile("test2.dat", TestData.KEY_CONTENT.getFullKey());
+        r.addFile("test.dat", TestData.KEY_CONTENT.getFullKey());
+        r.addFile("test2.dat", TestData.KEY_CONTENT.getFullKey());
 
-	r.step();
+        r.step();
 
-	assertEquals(0, r.getProgress());
-	assertEquals(Arrays.asList(TestData.KEY_CONTENT.getFullKey()), r
-		.getPending());
-	assertEquals(false, r.isDone());
+        assertEquals(0, r.getProgress());
+        assertEquals(Arrays.asList(TestData.KEY_CONTENT.getFullKey()), r
+                .getPending());
+        assertEquals(false, r.isDone());
     }
 }

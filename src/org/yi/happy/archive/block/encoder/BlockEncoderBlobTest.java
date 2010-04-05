@@ -23,17 +23,17 @@ public class BlockEncoderBlobTest {
      */
     @Test
     public void testContentEncode() throws IOException {
-	Block in = TestData.CLEAR_CONTENT.getBlock();
+        Block in = TestData.CLEAR_CONTENT.getBlock();
 
-	BlockEncoder e = new BlockEncoderBlob(DigestFactory
-		.getProvider("sha-256"), CipherFactory
-		.getProvider("rijndael256-256-cbc"));
-	BlockEncoderResult r = e.encode(in);
-	Block out = r.getBlock();
+        BlockEncoder e = new BlockEncoderBlob(DigestFactory
+                .getProvider("sha-256"), CipherFactory
+                .getProvider("rijndael256-256-cbc"));
+        BlockEncoderResult r = e.encode(in);
+        Block out = r.getBlock();
 
-	Block want = TestData.KEY_BLOB.getBlock();
-	Assert.assertArrayEquals(want.asBytes(), out.asBytes());
-	Assert.assertEquals(TestData.KEY_BLOB.getFullKey(), r.getKey());
+        Block want = TestData.KEY_BLOB.getBlock();
+        Assert.assertArrayEquals(want.asBytes(), out.asBytes());
+        Assert.assertEquals(TestData.KEY_BLOB.getFullKey(), r.getKey());
     }
 
     /**
@@ -43,17 +43,17 @@ public class BlockEncoderBlobTest {
      */
     @Test
     public void testEncodeNonDefault() throws IOException {
-	Block in = TestData.CLEAR_CONTENT.getBlock();
+        Block in = TestData.CLEAR_CONTENT.getBlock();
 
-	BlockEncoder be = new BlockEncoderBlob(DigestFactory
-		.getProvider("sha-1"), CipherFactory.getProvider("aes-192-cbc"));
-	BlockEncoderResult r = be.encode(in);
-	Block have = r.getBlock();
+        BlockEncoder be = new BlockEncoderBlob(DigestFactory
+                .getProvider("sha-1"), CipherFactory.getProvider("aes-192-cbc"));
+        BlockEncoderResult r = be.encode(in);
+        Block have = r.getBlock();
 
-	TestData d = TestData.KEY_BLOB_SHA1_AES192;
-	Block want = d.getBlock();
-	assertEquals(d.getFullKey(), r.getKey());
-	assertArrayEquals(want.asBytes(), have.asBytes());
+        TestData d = TestData.KEY_BLOB_SHA1_AES192;
+        Block want = d.getBlock();
+        assertEquals(d.getFullKey(), r.getKey());
+        assertArrayEquals(want.asBytes(), have.asBytes());
     }
 
     /**
@@ -63,17 +63,17 @@ public class BlockEncoderBlobTest {
      */
     @Test
     public void testEncodeDefault() throws IOException {
-	Block in = TestData.CLEAR_CONTENT.getBlock();
+        Block in = TestData.CLEAR_CONTENT.getBlock();
 
-	BlockEncoder be = new BlockEncoderBlob(DigestFactory
-		.getProvider("sha-256"), CipherFactory
-		.getProvider("aes-128-cbc"));
-	BlockEncoderResult r = be.encode(in);
-	Block have = r.getBlock();
+        BlockEncoder be = new BlockEncoderBlob(DigestFactory
+                .getProvider("sha-256"), CipherFactory
+                .getProvider("aes-128-cbc"));
+        BlockEncoderResult r = be.encode(in);
+        Block have = r.getBlock();
 
-	TestData d = TestData.KEY_BLOB_AES128;
-	Block want = d.getBlock();
-	assertEquals(d.getFullKey(), r.getKey());
-	assertArrayEquals(want.asBytes(), have.asBytes());
+        TestData d = TestData.KEY_BLOB_AES128;
+        Block want = d.getBlock();
+        assertEquals(d.getFullKey(), r.getKey());
+        assertArrayEquals(want.asBytes(), have.asBytes());
     }
 }

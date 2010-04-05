@@ -33,8 +33,8 @@ public class IndexSearchMain {
      *            the output.
      */
     public IndexSearchMain(FileSystem fs, Writer out) {
-	this.fs = fs;
-	this.out = out;
+        this.fs = fs;
+        this.out = out;
     }
 
     /**
@@ -45,12 +45,12 @@ public class IndexSearchMain {
      */
     @EntryPoint
     public static void main(String[] args) throws IOException {
-	FileSystem fs = new RealFileSystem();
-	Writer out = new OutputStreamWriter(System.out, "utf-8");
+        FileSystem fs = new RealFileSystem();
+        Writer out = new OutputStreamWriter(System.out, "utf-8");
 
-	new IndexSearchMain(fs, out).run(args);
+        new IndexSearchMain(fs, out).run(args);
 
-	out.flush();
+        out.flush();
     }
 
     /**
@@ -62,49 +62,49 @@ public class IndexSearchMain {
      */
     @SmellsMessy
     public void run(String... args) throws IOException {
-	if (args.length != 2) {
-	    out.write("use: index key-list\n");
-	    return;
-	}
+        if (args.length != 2) {
+            out.write("use: index key-list\n");
+            return;
+        }
 
-	Set<LocatorKey> want = new HashSet<LocatorKey>();
+        Set<LocatorKey> want = new HashSet<LocatorKey>();
 
-	InputStream in0 = fs.openInputStream(args[1]);
-	try {
-	    LineCursor in = new LineCursor(in0);
-	    while (in.next()) {
-		want.add(KeyParse.parseLocatorKey(in.get()));
-	    }
-	} finally {
-	    in0.close();
-	}
+        InputStream in0 = fs.openInputStream(args[1]);
+        try {
+            LineCursor in = new LineCursor(in0);
+            while (in.next()) {
+                want.add(KeyParse.parseLocatorKey(in.get()));
+            }
+        } finally {
+            in0.close();
+        }
 
-	/*
-	 * scan each index in sequence listing matching entries.
-	 */
-	List<String> volumeSets = new ArrayList<String>(fs.list(args[0]));
-	Collections.sort(volumeSets);
-	for (String volumeSet : volumeSets) {
-	    List<String> volumeNames = new ArrayList<String>(fs.list(fs.join(
-		    args[0], volumeSet)));
-	    Collections.sort(volumeNames);
-	    for (String volumeName : volumeNames) {
-		String fileName = fs.join(fs.join(args[0], volumeSet),
-			volumeName);
-		in0 = fs.openInputStream(fileName);
-		try {
-		    LineCursor in = new LineCursor(in0);
-		    while (in.next()) {
-			String[] line = in.get().split("\t", -1);
-			if (want.contains(KeyParse.parseLocatorKey(line[2]))) {
-			    out.write(volumeSet + "\t" + volumeName + "\t"
-				    + line[0] + "\t" + line[2] + "\n");
-			}
-		    }
-		} finally {
-		    in0.close();
-		}
-	    }
-	}
+        /*
+         * scan each index in sequence listing matching entries.
+         */
+        List<String> volumeSets = new ArrayList<String>(fs.list(args[0]));
+        Collections.sort(volumeSets);
+        for (String volumeSet : volumeSets) {
+            List<String> volumeNames = new ArrayList<String>(fs.list(fs.join(
+                    args[0], volumeSet)));
+            Collections.sort(volumeNames);
+            for (String volumeName : volumeNames) {
+                String fileName = fs.join(fs.join(args[0], volumeSet),
+                        volumeName);
+                in0 = fs.openInputStream(fileName);
+                try {
+                    LineCursor in = new LineCursor(in0);
+                    while (in.next()) {
+                        String[] line = in.get().split("\t", -1);
+                        if (want.contains(KeyParse.parseLocatorKey(line[2]))) {
+                            out.write(volumeSet + "\t" + volumeName + "\t"
+                                    + line[0] + "\t" + line[2] + "\n");
+                        }
+                    }
+                } finally {
+                    in0.close();
+                }
+            }
+        }
     }
 }

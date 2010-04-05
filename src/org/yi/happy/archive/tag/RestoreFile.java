@@ -28,9 +28,9 @@ public class RestoreFile {
      *            the file system to use.
      */
     public RestoreFile(SplitReader data, String path, FileSystem fs) {
-	this.data = data;
-	this.path = path;
-	this.fs = fs;
+        this.data = data;
+        this.path = path;
+        this.fs = fs;
     }
 
     /**
@@ -40,22 +40,22 @@ public class RestoreFile {
      * @throws IOException
      */
     public void step() throws IOException {
-	Fragment part = data.fetchAny();
-	if (part == null) {
-	    return;
-	}
+        Fragment part = data.fetchAny();
+        if (part == null) {
+            return;
+        }
 
-	RandomOutputFile f = fs.openRandomOutputFile(path);
-	try {
-	    while (part != null) {
-		f.setPosition(part.getOffset());
-		f.write(part.getData().toByteArray());
+        RandomOutputFile f = fs.openRandomOutputFile(path);
+        try {
+            while (part != null) {
+                f.setPosition(part.getOffset());
+                f.write(part.getData().toByteArray());
 
-		part = data.fetchAny();
-	    }
-	} finally {
-	    f.close();
-	}
+                part = data.fetchAny();
+            }
+        } finally {
+            f.close();
+        }
     }
 
     /**
@@ -64,7 +64,7 @@ public class RestoreFile {
      * @return true if there is no more reading to do.
      */
     public boolean isDone() {
-	return data.isDone();
+        return data.isDone();
     }
 
     /**
@@ -73,7 +73,7 @@ public class RestoreFile {
      * @return the full keys of the blocks that are needed at this time.
      */
     public List<FullKey> getPending() {
-	return data.getPending();
+        return data.getPending();
     }
 
     /**
@@ -82,7 +82,7 @@ public class RestoreFile {
      * @return the amount of progress that has been made.
      */
     public int getProgress() {
-	return data.getProgress();
+        return data.getProgress();
     }
 
 }

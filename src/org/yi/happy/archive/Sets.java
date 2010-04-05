@@ -19,7 +19,7 @@ public class Sets {
      * @return a linked hash set of the given elements.
      */
     public static <T> Set<T> asSet(T... elements) {
-	return new LinkedHashSet<T>(Arrays.asList(elements));
+        return new LinkedHashSet<T>(Arrays.asList(elements));
     }
 
 }

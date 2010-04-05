@@ -29,9 +29,9 @@ public class RestoreManager {
      *            the block store to use.
      */
     public RestoreManager(FileSystem fs, RetrieveBlock store) {
-	this.fs = fs;
-	this.store = store;
-	files = new ArrayList<RestoreFile>();
+        this.fs = fs;
+        this.store = store;
+        files = new ArrayList<RestoreFile>();
     }
 
     /**
@@ -43,7 +43,7 @@ public class RestoreManager {
      *            the key to store there.
      */
     public void addFile(String path, FullKey fullKey) {
-	files.add(new RestoreFile(new SplitReader(fullKey, store), path, fs));
+        files.add(new RestoreFile(new SplitReader(fullKey, store), path, fs));
     }
 
     /**
@@ -52,9 +52,9 @@ public class RestoreManager {
      * @throws IOException
      */
     public void step() throws IOException {
-	for (RestoreFile f : files) {
-	    f.step();
-	}
+        for (RestoreFile f : files) {
+            f.step();
+        }
     }
 
     /**
@@ -63,11 +63,11 @@ public class RestoreManager {
      * @return the progress so far.
      */
     public int getProgress() {
-	int progress = 0;
-	for (RestoreFile f : files) {
-	    progress += f.getProgress();
-	}
-	return progress;
+        int progress = 0;
+        for (RestoreFile f : files) {
+            progress += f.getProgress();
+        }
+        return progress;
     }
 
     /**
@@ -76,18 +76,18 @@ public class RestoreManager {
      * @return a list of the needed blocks.
      */
     public List<FullKey> getPending() {
-	List<FullKey> out = new ArrayList<FullKey>();
-	Set<FullKey> seen = new HashSet<FullKey>();
-	for (RestoreFile f : files) {
-	    for (FullKey k : f.getPending()) {
-		if (seen.contains(k)) {
-		    continue;
-		}
-		out.add(k);
-		seen.add(k);
-	    }
-	}
-	return out;
+        List<FullKey> out = new ArrayList<FullKey>();
+        Set<FullKey> seen = new HashSet<FullKey>();
+        for (RestoreFile f : files) {
+            for (FullKey k : f.getPending()) {
+                if (seen.contains(k)) {
+                    continue;
+                }
+                out.add(k);
+                seen.add(k);
+            }
+        }
+        return out;
     }
 
     /**
@@ -96,12 +96,12 @@ public class RestoreManager {
      * @return true if the restore is done.
      */
     public boolean isDone() {
-	for (RestoreFile f : files) {
-	    if (!f.isDone()) {
-		return false;
-	    }
-	}
-	return true;
+        for (RestoreFile f : files) {
+            if (!f.isDone()) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

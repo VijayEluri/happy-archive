@@ -32,10 +32,10 @@ public class EncodedBlockFactory {
      * @return a normalized blob encoded block.
      */
     public static BlobEncodedBlock create(DigestProvider digest,
-	    CipherProvider cipher, Bytes body) {
-	cipher = normalizeCipherName(cipher);
+            CipherProvider cipher, Bytes body) {
+        cipher = normalizeCipherName(cipher);
 
-	return new BlobEncodedBlock(digest, cipher, body);
+        return new BlobEncodedBlock(digest, cipher, body);
     }
 
     /**
@@ -52,33 +52,33 @@ public class EncodedBlockFactory {
      * @return a normalized name encoded block.
      */
     public static NameEncodedBlock createName(NameLocatorKey key,
-	    DigestProvider digest, CipherProvider cipher, Bytes body) {
-	cipher = normalizeCipherName(cipher);
+            DigestProvider digest, CipherProvider cipher, Bytes body) {
+        cipher = normalizeCipherName(cipher);
 
-	return new NameEncodedBlock(key, digest, cipher, body);
+        return new NameEncodedBlock(key, digest, cipher, body);
     }
 
     private static String normalizeCipherName(String cipher) {
-	String c = normalizeMap.get(cipher);
-	if (c != null) {
-	    return c;
-	}
+        String c = normalizeMap.get(cipher);
+        if (c != null) {
+            return c;
+        }
 
-	return cipher;
+        return cipher;
     }
 
     private static CipherProvider normalizeCipherName(
-	    final CipherProvider cipher) {
-	String c = normalizeCipherName(cipher.getAlgorithm());
-	if (c.equals(cipher.getAlgorithm())) {
-	    return cipher;
-	}
-	return new CipherProvider(c) {
-	    @Override
-	    public Cipher get() {
-		return cipher.get();
-	    }
-	};
+            final CipherProvider cipher) {
+        String c = normalizeCipherName(cipher.getAlgorithm());
+        if (c.equals(cipher.getAlgorithm())) {
+            return cipher;
+        }
+        return new CipherProvider(c) {
+            @Override
+            public Cipher get() {
+                return cipher.get();
+            }
+        };
     }
 
     /**
@@ -93,10 +93,10 @@ public class EncodedBlockFactory {
      * @return a normalized content encoded block.
      */
     public static ContentEncodedBlock createContent(DigestProvider digest,
-	    CipherProvider cipher, Bytes body) {
-	cipher = normalizeCipherName(cipher);
+            CipherProvider cipher, Bytes body) {
+        cipher = normalizeCipherName(cipher);
 
-	return new ContentEncodedBlock(digest, cipher, body);
+        return new ContentEncodedBlock(digest, cipher, body);
     }
 
     /**
@@ -105,10 +105,10 @@ public class EncodedBlockFactory {
     private static final Map<String, String> normalizeMap;
 
     static {
-	Map<String, String> n = new HashMap<String, String>(3);
-	n.put("rijndael-128-cbc", "aes-128-cbc");
-	n.put("rijndael-192-cbc", "aes-192-cbc");
-	n.put("rijndael-256-cbc", "aes-256-cbc");
-	normalizeMap = Collections.unmodifiableMap(n);
+        Map<String, String> n = new HashMap<String, String>(3);
+        n.put("rijndael-128-cbc", "aes-128-cbc");
+        n.put("rijndael-192-cbc", "aes-192-cbc");
+        n.put("rijndael-256-cbc", "aes-256-cbc");
+        normalizeMap = Collections.unmodifiableMap(n);
     }
 }

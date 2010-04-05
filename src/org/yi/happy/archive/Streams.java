@@ -22,8 +22,8 @@ public class Streams {
      *             on error
      */
     public static void copy(InputStream in, OutputStream out)
-	    throws IOException {
-	copy(in, out, null);
+            throws IOException {
+        copy(in, out, null);
     }
 
     /**
@@ -40,20 +40,20 @@ public class Streams {
      *             on error
      */
     public static void copy(InputStream in, OutputStream out, byte[] buff)
-	    throws IOException {
-	if (buff == null) {
-	    buff = new byte[8192];
-	}
+            throws IOException {
+        if (buff == null) {
+            buff = new byte[8192];
+        }
 
-	while (true) {
-	    int n = in.read(buff);
+        while (true) {
+            int n = in.read(buff);
 
-	    if (n < 0) {
-		break;
-	    }
+            if (n < 0) {
+                break;
+            }
 
-	    out.write(buff, 0, n);
-	}
+            out.write(buff, 0, n);
+        }
     }
 
     /**
@@ -66,9 +66,9 @@ public class Streams {
      *             on error.
      */
     public static byte[] load(InputStream in) throws IOException {
-	ByteArrayOutputStream out = new ByteArrayOutputStream();
-	Streams.copy(in, out);
-	return out.toByteArray();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Streams.copy(in, out);
+        return out.toByteArray();
     }
 
     /**
@@ -84,6 +84,6 @@ public class Streams {
      *             on error, including exceeding the limit.
      */
     public static byte[] load(InputStream in, int limit) throws IOException {
-	return load(new InputStreamLimit(in, limit));
+        return load(new InputStreamLimit(in, limit));
     }
 }

@@ -28,72 +28,72 @@ public class FileBlockStore implements BlockStore {
      *            the base path to use.
      */
     public FileBlockStore(FileSystem fs, String base) {
-	this.fs = fs;
-	this.base = base;
+        this.fs = fs;
+        this.base = base;
     }
 
     public void put(EncodedBlock b) throws IOException {
-	LocatorKey key = b.getKey();
-	String name = Base16.encode(key.getHash()) + "-" + key.getType();
+        LocatorKey key = b.getKey();
+        String name = Base16.encode(key.getHash()) + "-" + key.getType();
 
-	fs.mkdir(base);
-	String fileName = fs.join(base, name.substring(0, 1));
-	fs.mkdir(fileName);
-	fileName = fs.join(fileName, name.substring(0, 2));
-	fs.mkdir(fileName);
-	fileName = fs.join(fileName, name.substring(0, 3));
-	fs.mkdir(fileName);
-	fileName = fs.join(fileName, name);
+        fs.mkdir(base);
+        String fileName = fs.join(base, name.substring(0, 1));
+        fs.mkdir(fileName);
+        fileName = fs.join(fileName, name.substring(0, 2));
+        fs.mkdir(fileName);
+        fileName = fs.join(fileName, name.substring(0, 3));
+        fs.mkdir(fileName);
+        fileName = fs.join(fileName, name);
 
-	fs.save(fileName, b.asBytes());
+        fs.save(fileName, b.asBytes());
     }
 
     @Override
     public EncodedBlock get(LocatorKey key) throws IOException {
-	String name = Base16.encode(key.getHash()) + "-" + key.getType();
+        String name = Base16.encode(key.getHash()) + "-" + key.getType();
 
-	String fileName = fs.join(base, name.substring(0, 1));
-	fileName = fs.join(fileName, name.substring(0, 2));
-	fileName = fs.join(fileName, name.substring(0, 3));
-	fileName = fs.join(fileName, name);
+        String fileName = fs.join(base, name.substring(0, 1));
+        fileName = fs.join(fileName, name.substring(0, 2));
+        fileName = fs.join(fileName, name.substring(0, 3));
+        fileName = fs.join(fileName, name);
 
-	try {
-	    return EncodedBlockParse.parse(fs.load(fileName));
-	} catch (FileNotFoundException e) {
-	    return null;
-	} catch (IllegalArgumentException e) {
-	    // TODO remove the corrupted file
-	    throw new DecodeException(e);
-	}
+        try {
+            return EncodedBlockParse.parse(fs.load(fileName));
+        } catch (FileNotFoundException e) {
+            return null;
+        } catch (IllegalArgumentException e) {
+            // TODO remove the corrupted file
+            throw new DecodeException(e);
+        }
     }
 
     @Override
     public <T extends Throwable> void visit(BlockStoreVisitor<T> visitor)
-	    throws T {
-	visit(visitor, base, 3);
+            throws T {
+        visit(visitor, base, 3);
     }
 
     private <T extends Throwable> void visit(BlockStoreVisitor<T> visitor,
-	    String path, int levels) throws T {
-	if (levels == 0) {
-	    List<String> names = fs.list(path);
-	    Collections.sort(names);
-	    for (String name : names) {
-		String[] part = name.split("-", 2);
-		visitor.accept(KeyParse.parseLocatorKey(part[1], new Bytes(
-			Base16.decode(part[0]))));
-	    }
-	}
-	if (fs.isDir(path)) {
-	    List<String> names = fs.list(path);
-	    Collections.sort(names);
-	    for (String name : names) {
-		name = fs.join(path, name);
-		if (!fs.isDir(name)) {
-		    continue;
-		}
-		visit(visitor, name, levels - 1);
-	    }
-	}
+            String path, int levels) throws T {
+        if (levels == 0) {
+            List<String> names = fs.list(path);
+            Collections.sort(names);
+            for (String name : names) {
+                String[] part = name.split("-", 2);
+                visitor.accept(KeyParse.parseLocatorKey(part[1], new Bytes(
+                        Base16.decode(part[0]))));
+            }
+        }
+        if (fs.isDir(path)) {
+            List<String> names = fs.list(path);
+            Collections.sort(names);
+            for (String name : names) {
+                name = fs.join(path, name);
+                if (!fs.isDir(name)) {
+                    continue;
+                }
+                visit(visitor, name, levels - 1);
+            }
+        }
     }
 }

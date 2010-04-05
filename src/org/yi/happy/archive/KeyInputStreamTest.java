@@ -70,9 +70,9 @@ public class KeyInputStreamTest {
      */
     @Test
     public void testRead() throws IOException {
-	rawStore.put(MAP.getEncodedBlock());
-	rawStore.put(C1.getEncodedBlock());
-	rawStore.put(C2.getEncodedBlock());
+        rawStore.put(MAP.getEncodedBlock());
+        rawStore.put(C1.getEncodedBlock());
+        rawStore.put(C2.getEncodedBlock());
 
         KeyInputStream in = new KeyInputStream(MAP.getFullKey(), store,
                 new NotReadyError());
@@ -88,16 +88,16 @@ public class KeyInputStreamTest {
      * @throws IOException
      */
     private void assertReadMap(InputStream in) throws IOException {
-	assertEquals('0', in.read());
-	assertEquals('1', in.read());
-	assertEquals('2', in.read());
-	assertEquals('3', in.read());
-	assertEquals('4', in.read());
-	assertEquals('5', in.read());
-	assertEquals('6', in.read());
-	assertEquals('7', in.read());
-	assertEquals('8', in.read());
-	assertEquals('9', in.read());
+        assertEquals('0', in.read());
+        assertEquals('1', in.read());
+        assertEquals('2', in.read());
+        assertEquals('3', in.read());
+        assertEquals('4', in.read());
+        assertEquals('5', in.read());
+        assertEquals('6', in.read());
+        assertEquals('7', in.read());
+        assertEquals('8', in.read());
+        assertEquals('9', in.read());
         assertEquals(-1, in.read());
     }
 
@@ -109,7 +109,7 @@ public class KeyInputStreamTest {
      */
     @Test
     public void testReadDelay() throws IOException {
-	List<TestData> script = new ArrayList<TestData>();
+        List<TestData> script = new ArrayList<TestData>();
         script.add(null);
         script.add(MAP);
         script.add(null);
@@ -118,8 +118,7 @@ public class KeyInputStreamTest {
 
         NotReadyHandler handler = new ScriptNotReadyHandler(rawStore, script);
 
-        KeyInputStream in = new KeyInputStream(MAP.getFullKey(), store,
-                handler);
+        KeyInputStream in = new KeyInputStream(MAP.getFullKey(), store, handler);
 
         assertReadMap(in);
     }
@@ -131,10 +130,10 @@ public class KeyInputStreamTest {
      */
     @Test
     public void testReadOverlap() throws IOException {
-	TestData d = TestData.KEY_CONTENT_MAP_OVERLAP;
-	rawStore.put(d.getEncodedBlock());
-	rawStore.put(C1.getEncodedBlock());
-	rawStore.put(C2.getEncodedBlock());
+        TestData d = TestData.KEY_CONTENT_MAP_OVERLAP;
+        rawStore.put(d.getEncodedBlock());
+        rawStore.put(C1.getEncodedBlock());
+        rawStore.put(C2.getEncodedBlock());
 
         KeyInputStream in = new KeyInputStream(d.getFullKey(), store,
                 new NotReadyError());
@@ -153,10 +152,10 @@ public class KeyInputStreamTest {
      */
     @Test
     public void testReadPad() throws IOException {
-	TestData d = TestData.KEY_CONTENT_MAP_PAD;
-	rawStore.put(d.getEncodedBlock());
-	rawStore.put(C1.getEncodedBlock());
-	rawStore.put(C2.getEncodedBlock());
+        TestData d = TestData.KEY_CONTENT_MAP_PAD;
+        rawStore.put(d.getEncodedBlock());
+        rawStore.put(C1.getEncodedBlock());
+        rawStore.put(C2.getEncodedBlock());
 
         KeyInputStream in = new KeyInputStream(d.getFullKey(), store,
                 new NotReadyError());
@@ -176,7 +175,7 @@ public class KeyInputStreamTest {
     @Test
     public void testReadNegativeByte() throws IOException {
         KeyOutputStream out = new KeyOutputStream(new StoreBlockStorage(
-		BlockEncoderFactory.getContentDefault(), rawStore));
+                BlockEncoderFactory.getContentDefault(), rawStore));
         out.write(0xff);
         out.close();
 

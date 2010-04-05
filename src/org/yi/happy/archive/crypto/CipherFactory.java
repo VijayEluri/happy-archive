@@ -5,7 +5,6 @@ import java.util.regex.Pattern;
 
 import org.yi.happy.annotate.MagicLiteral;
 
-
 /**
  * Factory for creating Cypher instances.
  */
@@ -22,23 +21,23 @@ public class CipherFactory {
      */
     @MagicLiteral
     public static Cipher create(String name) {
-	Matcher m = Pattern.compile("(aes|rijndael)-(128|192|256)-cbc")
-		.matcher(name);
-	if (m.matches()) {
-	    int ks = Integer.parseInt(m.group(2)) / 8;
-	    return new CipherRijndael(16, ks);
-	}
+        Matcher m = Pattern.compile("(aes|rijndael)-(128|192|256)-cbc")
+                .matcher(name);
+        if (m.matches()) {
+            int ks = Integer.parseInt(m.group(2)) / 8;
+            return new CipherRijndael(16, ks);
+        }
 
-	m = Pattern.compile("rijndael(192|256)-(128|192|256)-cbc")
-		.matcher(name);
-	if (m.matches()) {
-	    int bs = Integer.parseInt(m.group(1)) / 8;
-	    int ks = Integer.parseInt(m.group(2)) / 8;
-	    return new CipherRijndael(bs, ks);
-	}
+        m = Pattern.compile("rijndael(192|256)-(128|192|256)-cbc")
+                .matcher(name);
+        if (m.matches()) {
+            int bs = Integer.parseInt(m.group(1)) / 8;
+            int ks = Integer.parseInt(m.group(2)) / 8;
+            return new CipherRijndael(bs, ks);
+        }
 
-	// TODO specialize this exception.
-	throw new UnknownAlgorithmException(name);
+        // TODO specialize this exception.
+        throw new UnknownAlgorithmException(name);
     }
 
     /**
@@ -49,11 +48,11 @@ public class CipherFactory {
      * @return the provider.
      */
     public static CipherProvider getProvider(String algorithm) {
-	return new CipherProvider(algorithm) {
-	    @Override
-	    public Cipher get() {
-		return create(algorithm);
-	    }
-	};
+        return new CipherProvider(algorithm) {
+            @Override
+            public Cipher get() {
+                return create(algorithm);
+            }
+        };
     }
 }

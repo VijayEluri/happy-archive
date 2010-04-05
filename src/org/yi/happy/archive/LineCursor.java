@@ -22,11 +22,11 @@ public class LineCursor {
      *            the reader to attach to.
      */
     public LineCursor(Reader in) {
-	if (in instanceof BufferedReader) {
-	    this.in = (BufferedReader) in;
-	} else {
-	    this.in = new BufferedReader(in);
-	}
+        if (in instanceof BufferedReader) {
+            this.in = (BufferedReader) in;
+        } else {
+            this.in = new BufferedReader(in);
+        }
     }
 
     /**
@@ -38,7 +38,7 @@ public class LineCursor {
      * @throws IOException
      */
     public LineCursor(InputStream in) throws IOException {
-	this(new InputStreamReader(in, "utf-8"));
+        this(new InputStreamReader(in, "utf-8"));
     }
 
     /**
@@ -49,8 +49,8 @@ public class LineCursor {
      *             on errors.
      */
     public boolean next() throws IOException {
-	item = in.readLine();
-	return item != null;
+        item = in.readLine();
+        return item != null;
     }
 
     /**
@@ -61,11 +61,11 @@ public class LineCursor {
      *             if there is no current line.
      */
     public String get() {
-	if (item == null) {
-	    throw new IllegalStateException();
-	}
+        if (item == null) {
+            throw new IllegalStateException();
+        }
 
-	return item;
+        return item;
     }
 
     /**
@@ -74,7 +74,7 @@ public class LineCursor {
      * @throws IOException
      */
     public void close() throws IOException {
-	item = null;
-	in.close();
+        item = null;
+        in.close();
     }
 }

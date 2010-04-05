@@ -25,13 +25,13 @@ public class PendingList {
      *             on error.
      */
     public static void savePendingListFile(List<FullKey> pending,
-	    FileSystem fs, String pendingFile) throws IOException {
-	StringBuilder p = new StringBuilder();
-	for (FullKey k : pending) {
-	    p.append(k.toLocatorKey() + "\n");
-	}
-	fs.save(pendingFile + ".tmp", ByteString.toUtf8(p.toString()));
-	fs.rename(pendingFile + ".tmp", pendingFile);
+            FileSystem fs, String pendingFile) throws IOException {
+        StringBuilder p = new StringBuilder();
+        for (FullKey k : pending) {
+            p.append(k.toLocatorKey() + "\n");
+        }
+        fs.save(pendingFile + ".tmp", ByteString.toUtf8(p.toString()));
+        fs.rename(pendingFile + ".tmp", pendingFile);
     }
 
 }

@@ -17,7 +17,7 @@ public class Tag {
      *            the fields.
      */
     public Tag(Map<String, String> fields) {
-	this.fields = new LinkedHashMap<String, String>(fields);
+        this.fields = new LinkedHashMap<String, String>(fields);
     }
 
     /**
@@ -28,7 +28,7 @@ public class Tag {
      * @return the value of that field, or null if not found.
      */
     public String get(String field) {
-	return fields.get(field);
+        return fields.get(field);
     }
 
 }

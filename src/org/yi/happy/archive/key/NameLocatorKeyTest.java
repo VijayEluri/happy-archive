@@ -16,10 +16,10 @@ public class NameLocatorKeyTest {
      */
     @Test
     public void testGood2() {
-	Bytes hash = new Bytes(0x00);
-	LocatorKey key = new NameLocatorKey(hash);
-	assertEquals("name-hash", key.getType());
-	assertEquals(hash, key.getHash());
+        Bytes hash = new Bytes(0x00);
+        LocatorKey key = new NameLocatorKey(hash);
+        assertEquals("name-hash", key.getType());
+        assertEquals(hash, key.getHash());
     }
 
     /**
@@ -27,8 +27,8 @@ public class NameLocatorKeyTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testBad1() {
-	Bytes hash = new Bytes();
-	new NameLocatorKey(hash);
+        Bytes hash = new Bytes();
+        new NameLocatorKey(hash);
     }
 
     /**
@@ -36,11 +36,11 @@ public class NameLocatorKeyTest {
      */
     @Test
     public void testToLocatorKey3() {
-	Key key = TestData.KEY_NAME.getLocatorKey();
-	assertTrue(key instanceof NameLocatorKey);
+        Key key = TestData.KEY_NAME.getLocatorKey();
+        assertTrue(key instanceof NameLocatorKey);
 
-	LocatorKey have = key.toLocatorKey();
-	LocatorKey want = TestData.KEY_NAME.getLocatorKey();
-	assertEquals(want, have);
+        LocatorKey have = key.toLocatorKey();
+        LocatorKey want = TestData.KEY_NAME.getLocatorKey();
+        assertEquals(want, have);
     }
 }

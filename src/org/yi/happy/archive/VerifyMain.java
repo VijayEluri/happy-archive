@@ -28,8 +28,8 @@ public class VerifyMain {
      *            where to send the output.
      */
     public VerifyMain(FileSystem fileSystem, Writer out) {
-	this.fileSystem = fileSystem;
-	this.out = out;
+        this.fileSystem = fileSystem;
+        this.out = out;
     }
 
     /**
@@ -40,38 +40,38 @@ public class VerifyMain {
      * @throws Exception
      */
     public void run(String... args) throws Exception {
-	for (String arg : args) {
-	    String line;
+        for (String arg : args) {
+            String line;
 
-	    try {
-		/*
-		 * load the file
-		 */
-		byte[] data = fileSystem.load(arg, Blocks.MAX_SIZE);
+            try {
+                /*
+                 * load the file
+                 */
+                byte[] data = fileSystem.load(arg, Blocks.MAX_SIZE);
 
-		/*
-		 * parse into a block
-		 */
-		Block block = BlockParse.parse(data);
+                /*
+                 * parse into a block
+                 */
+                Block block = BlockParse.parse(data);
 
-		/*
-		 * try to parse into an encoded block
-		 */
-		EncodedBlock b = EncodedBlockParse.parse(block);
+                /*
+                 * try to parse into an encoded block
+                 */
+                EncodedBlock b = EncodedBlockParse.parse(block);
 
-		/*
-		 * on success print ok key arg
-		 */
-		line = "ok " + b.getKey() + " " + arg + "\n";
-	    } catch (Exception e) {
-		/*
-		 * on failure print fail arg
-		 */
-		line = "fail " + arg + "\n";
-	    }
+                /*
+                 * on success print ok key arg
+                 */
+                line = "ok " + b.getKey() + " " + arg + "\n";
+            } catch (Exception e) {
+                /*
+                 * on failure print fail arg
+                 */
+                line = "fail " + arg + "\n";
+            }
 
-	    out.write(line);
-	}
+            out.write(line);
+        }
     }
 
     /**
@@ -82,11 +82,11 @@ public class VerifyMain {
      */
     @EntryPoint
     public static void main(String[] args) throws Exception {
-	FileSystem fs = new RealFileSystem();
-	Writer out = new PrintWriter(System.out, true);
+        FileSystem fs = new RealFileSystem();
+        Writer out = new PrintWriter(System.out, true);
 
-	new VerifyMain(fs, out).run(args);
+        new VerifyMain(fs, out).run(args);
 
-	out.flush();
+        out.flush();
     }
 }

@@ -16,11 +16,11 @@ public class ContentLocatorKeyTest {
      */
     @Test
     public void testGood1() {
-	Bytes hash = new Bytes(0);
-	LocatorKey key = new ContentLocatorKey(hash);
-	assertEquals("content-hash", key.getType());
-	assertEquals(hash, key.getHash());
-	assertEquals("content-hash:00", key.toString());
+        Bytes hash = new Bytes(0);
+        LocatorKey key = new ContentLocatorKey(hash);
+        assertEquals("content-hash", key.getType());
+        assertEquals(hash, key.getHash());
+        assertEquals("content-hash:00", key.toString());
     }
 
     /**
@@ -28,14 +28,14 @@ public class ContentLocatorKeyTest {
      */
     @Test
     public void testToLocatorKey5() {
-	Key key = TestData.KEY_CONTENT.getLocatorKey();
+        Key key = TestData.KEY_CONTENT.getLocatorKey();
 
-	assertTrue(key instanceof ContentLocatorKey);
+        assertTrue(key instanceof ContentLocatorKey);
 
-	LocatorKey have = key.toLocatorKey();
+        LocatorKey have = key.toLocatorKey();
 
-	LocatorKey want = TestData.KEY_CONTENT.getLocatorKey();
-	assertEquals(want, have);
+        LocatorKey want = TestData.KEY_CONTENT.getLocatorKey();
+        assertEquals(want, have);
     }
 
 }

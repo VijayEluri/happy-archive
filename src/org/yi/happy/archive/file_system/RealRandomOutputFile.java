@@ -17,36 +17,36 @@ public class RealRandomOutputFile implements RandomOutputFile {
      * @throws IOException
      */
     public RealRandomOutputFile(String name) throws IOException {
-	f = new RandomAccessFile(name, "rw");
+        f = new RandomAccessFile(name, "rw");
     }
 
     @Override
     public void close() throws IOException {
-	f.close();
+        f.close();
     }
 
     @Override
     public long getPosition() throws IOException {
-	return f.getFilePointer();
+        return f.getFilePointer();
     }
 
     @Override
     public void setPosition(long position) throws IOException {
-	f.seek(position);
+        f.seek(position);
     }
 
     @Override
     public void write(byte[] b, int offset, int length) throws IOException {
-	f.write(b, offset, length);
+        f.write(b, offset, length);
     }
 
     @Override
     public void write(byte[] b) throws IOException {
-	f.write(b);
+        f.write(b);
     }
 
     @Override
     public void write(int b) throws IOException {
-	f.write(b);
+        f.write(b);
     }
 }

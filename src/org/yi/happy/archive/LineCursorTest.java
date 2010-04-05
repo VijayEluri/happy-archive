@@ -21,17 +21,17 @@ public class LineCursorTest {
      */
     @Test
     public void test1() throws IOException {
-	Reader in = new StringReader("a\nb\n");
+        Reader in = new StringReader("a\nb\n");
 
-	LineCursor c = new LineCursor(in);
+        LineCursor c = new LineCursor(in);
 
-	assertTrue(c.next());
-	assertEquals("a", c.get());
-	assertTrue(c.next());
-	assertEquals("b", c.get());
-	assertFalse(c.next());
+        assertTrue(c.next());
+        assertEquals("a", c.get());
+        assertTrue(c.next());
+        assertEquals("b", c.get());
+        assertFalse(c.next());
 
-	c.close();
+        c.close();
     }
 
     /**
@@ -41,13 +41,13 @@ public class LineCursorTest {
      */
     @Test
     public void test2() throws IOException {
-	Reader in = new StringReader("");
+        Reader in = new StringReader("");
 
-	LineCursor c = new LineCursor(in);
+        LineCursor c = new LineCursor(in);
 
-	assertFalse(c.next());
+        assertFalse(c.next());
 
-	c.close();
+        c.close();
     }
 
     /**
@@ -57,11 +57,11 @@ public class LineCursorTest {
      */
     @Test(expected = IllegalStateException.class)
     public void test3() throws IOException {
-	Reader in = new StringReader("");
+        Reader in = new StringReader("");
 
-	LineCursor c = new LineCursor(in);
+        LineCursor c = new LineCursor(in);
 
-	c.get();
+        c.get();
     }
 
     /**
@@ -71,11 +71,11 @@ public class LineCursorTest {
      */
     @Test(expected = IllegalStateException.class)
     public void test4() throws IOException {
-	Reader in = new StringReader("a\nb\n");
+        Reader in = new StringReader("a\nb\n");
 
-	LineCursor c = new LineCursor(in);
+        LineCursor c = new LineCursor(in);
 
-	c.get();
+        c.get();
     }
 
     /**
@@ -85,14 +85,14 @@ public class LineCursorTest {
      */
     @Test(expected = IllegalStateException.class)
     public void test5() throws IOException {
-	Reader in = new StringReader("a\nb\n");
-	LineCursor c = new LineCursor(in);
-	assertTrue(c.next());
-	assertEquals("a", c.get());
-	assertTrue(c.next());
-	assertEquals("b", c.get());
-	assertFalse(c.next());
+        Reader in = new StringReader("a\nb\n");
+        LineCursor c = new LineCursor(in);
+        assertTrue(c.next());
+        assertEquals("a", c.get());
+        assertTrue(c.next());
+        assertEquals("b", c.get());
+        assertFalse(c.next());
 
-	c.get();
+        c.get();
     }
 }

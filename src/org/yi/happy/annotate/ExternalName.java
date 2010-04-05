@@ -13,10 +13,10 @@ public @interface ExternalName {
      * the choices for types of external names.
      */
     public enum Type {
-	/**
-	 * the value of the constant is the external name.
-	 */
-	VALUE;
+        /**
+         * the value of the constant is the external name.
+         */
+        VALUE;
     }
 
     /**

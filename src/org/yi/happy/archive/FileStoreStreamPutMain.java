@@ -31,9 +31,9 @@ public class FileStoreStreamPutMain {
      *            the stream to write the result.
      */
     public FileStoreStreamPutMain(FileSystem fs, InputStream in, Writer out) {
-	this.fs = fs;
-	this.in = in;
-	this.out = out;
+        this.fs = fs;
+        this.in = in;
+        this.out = out;
     }
 
     /**
@@ -44,16 +44,16 @@ public class FileStoreStreamPutMain {
      * @throws IOException
      */
     public void run(String... args) throws IOException {
-	BlockStore store = new FileBlockStore(fs, args[0]);
-	BlockEncoder encoder = BlockEncoderFactory.getContentDefault();
+        BlockStore store = new FileBlockStore(fs, args[0]);
+        BlockEncoder encoder = BlockEncoderFactory.getContentDefault();
 
-	KeyOutputStream s = new KeyOutputStream(new StoreBlockStorage(encoder,
-		store));
+        KeyOutputStream s = new KeyOutputStream(new StoreBlockStorage(encoder,
+                store));
 
-	Streams.copy(in, s);
-	s.close();
+        Streams.copy(in, s);
+        s.close();
 
-	out.write(s.getFullKey() + "\n");
+        out.write(s.getFullKey() + "\n");
     }
 
     /**
@@ -64,12 +64,12 @@ public class FileStoreStreamPutMain {
      */
     @EntryPoint
     public static void main(String[] args) throws IOException {
-	FileSystem fs = new RealFileSystem();
-	InputStream in = System.in;
-	Writer out = new OutputStreamWriter(System.out, "UTF-8");
+        FileSystem fs = new RealFileSystem();
+        InputStream in = System.in;
+        Writer out = new OutputStreamWriter(System.out, "UTF-8");
 
-	new FileStoreStreamPutMain(fs, in, out).run(args);
+        new FileStoreStreamPutMain(fs, in, out).run(args);
 
-	out.flush();
+        out.flush();
     }
 }

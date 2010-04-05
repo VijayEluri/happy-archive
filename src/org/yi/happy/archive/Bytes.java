@@ -18,7 +18,7 @@ public final class Bytes {
      *            the contents.
      */
     public Bytes(byte... data) {
-	this.data = data.clone();
+        this.data = data.clone();
     }
 
     /**
@@ -30,10 +30,10 @@ public final class Bytes {
      *            significant eight bits.
      */
     public Bytes(int... data) {
-	this.data = new byte[data.length];
-	for (int i = 0; i < data.length; i++) {
-	    this.data[i] = (byte) data[i];
-	}
+        this.data = new byte[data.length];
+        for (int i = 0; i < data.length; i++) {
+            this.data[i] = (byte) data[i];
+        }
     }
 
     /**
@@ -69,7 +69,7 @@ public final class Bytes {
      *            the size of the slice.
      */
     public Bytes(Bytes data, int offset, int size) {
-	this(data.data, offset, size);
+        this(data.data, offset, size);
     }
 
     /**

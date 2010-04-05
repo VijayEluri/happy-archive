@@ -14,7 +14,7 @@ public class MissingMetaException extends IllegalArgumentException {
      * signal missing meta data.
      */
     public MissingMetaException() {
-	super();
+        super();
     }
 
     /**
@@ -26,7 +26,7 @@ public class MissingMetaException extends IllegalArgumentException {
      *            the cause.
      */
     public MissingMetaException(String message, Throwable cause) {
-	super(message, cause);
+        super(message, cause);
     }
 
     /**
@@ -36,7 +36,7 @@ public class MissingMetaException extends IllegalArgumentException {
      *            the message.
      */
     public MissingMetaException(String message) {
-	super(message);
+        super(message);
     }
 
     /**
@@ -46,7 +46,7 @@ public class MissingMetaException extends IllegalArgumentException {
      *            the cause.
      */
     public MissingMetaException(Throwable cause) {
-	super(cause);
+        super(cause);
     }
 
 }

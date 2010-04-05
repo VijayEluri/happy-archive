@@ -6,11 +6,11 @@ import org.yi.happy.archive.Bytes;
  * a content locator key
  */
 public final class ContentLocatorKey extends AbstractLocatorKey implements
-	LocatorKey {
+        LocatorKey {
 
     @Override
     public String getType() {
-	return KeyType.CONTENT_HASH;
+        return KeyType.CONTENT_HASH;
     }
 
     /**
@@ -20,11 +20,11 @@ public final class ContentLocatorKey extends AbstractLocatorKey implements
      *            the hash
      */
     public ContentLocatorKey(Bytes hash) {
-	super(hash);
+        super(hash);
     }
 
     @Override
     public ContentLocatorKey toLocatorKey() {
-	return this;
+        return this;
     }
 }

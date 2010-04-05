@@ -19,7 +19,7 @@ public class RetrieveBlockStorage implements RetrieveBlock {
      *            the storage object
      */
     public RetrieveBlockStorage(BlockStore storage) {
-	this.storage = storage;
+        this.storage = storage;
     }
 
     /**
@@ -29,17 +29,17 @@ public class RetrieveBlockStorage implements RetrieveBlock {
 
     @Override
     public Block retrieveBlock(FullKey key) throws IOException {
-	try {
-	    EncodedBlock b = storage.get(key.toLocatorKey());
-	    if (b == null) {
-		return null;
-	    }
+        try {
+            EncodedBlock b = storage.get(key.toLocatorKey());
+            if (b == null) {
+                return null;
+            }
 
-	    return b.decode(key);
-	} catch (IllegalArgumentException e) {
-	    throw new DecodeException(e);
-	} catch (FileNotFoundException e) {
-	    return null;
-	}
+            return b.decode(key);
+        } catch (IllegalArgumentException e) {
+            throw new DecodeException(e);
+        } catch (FileNotFoundException e) {
+            return null;
+        }
     }
 }

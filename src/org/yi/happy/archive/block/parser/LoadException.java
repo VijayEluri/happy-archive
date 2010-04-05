@@ -15,7 +15,7 @@ public class LoadException extends RuntimeException {
      * cause is not initialized.
      */
     public LoadException() {
-	super();
+        super();
     }
 
     /**
@@ -28,7 +28,7 @@ public class LoadException extends RuntimeException {
      *            the cause
      */
     public LoadException(String message, Throwable cause) {
-	super(message, cause);
+        super(message, cause);
     }
 
     /**
@@ -39,7 +39,7 @@ public class LoadException extends RuntimeException {
      *            the detail message
      */
     public LoadException(String message) {
-	super(message);
+        super(message);
     }
 
     /**
@@ -49,7 +49,7 @@ public class LoadException extends RuntimeException {
      *            the cause
      */
     public LoadException(Throwable cause) {
-	super(cause);
+        super(cause);
     }
 
 }

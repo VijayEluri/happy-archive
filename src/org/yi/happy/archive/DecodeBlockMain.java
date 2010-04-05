@@ -31,8 +31,8 @@ public class DecodeBlockMain {
      *            the output stream to use.
      */
     public DecodeBlockMain(FileSystem fs, OutputStream out) {
-	this.fs = fs;
-	this.out = out;
+        this.fs = fs;
+        this.out = out;
     }
 
     /**
@@ -43,12 +43,12 @@ public class DecodeBlockMain {
      */
     @EntryPoint
     public static void main(String[] args) throws Exception {
-	FileSystem fs = new RealFileSystem();
-	OutputStream out = System.out;
+        FileSystem fs = new RealFileSystem();
+        OutputStream out = System.out;
 
-	new DecodeBlockMain(fs, out).run(args);
+        new DecodeBlockMain(fs, out).run(args);
 
-	out.flush();
+        out.flush();
     }
 
     /**
@@ -60,14 +60,14 @@ public class DecodeBlockMain {
      */
     @SmellsMessy
     public void run(String... args) throws IOException {
-	/*
-	 * TODO check arguments and display help if needed
-	 */
+        /*
+         * TODO check arguments and display help if needed
+         */
 
-	EncodedBlock b = EncodedBlockParse.parse(fs.load(args[0],
-		Blocks.MAX_SIZE));
-	FullKey k = KeyParse.parseFullKey(args[1]);
-	Block d = b.decode(k);
-	out.write(d.asBytes());
+        EncodedBlock b = EncodedBlockParse.parse(fs.load(args[0],
+                Blocks.MAX_SIZE));
+        FullKey k = KeyParse.parseFullKey(args[1]);
+        Block d = b.decode(k);
+        out.write(d.asBytes());
     }
 }

@@ -29,8 +29,8 @@ public class FakeFileSystemTest {
      */
     @Before
     public void before() {
-	fake = new FakeFileSystem();
-	real = fake;
+        fake = new FakeFileSystem();
+        real = fake;
     }
 
     /**
@@ -38,8 +38,8 @@ public class FakeFileSystemTest {
      */
     @After
     public void after() {
-	fake = null;
-	real = null;
+        fake = null;
+        real = null;
     }
 
     /**
@@ -49,11 +49,11 @@ public class FakeFileSystemTest {
      */
     @Test
     public void testLoad() throws IOException {
-	real.save("test.dat", new byte[0]);
+        real.save("test.dat", new byte[0]);
 
-	byte[] data = real.load("test.dat");
+        byte[] data = real.load("test.dat");
 
-	assertArrayEquals(new byte[0], data);
+        assertArrayEquals(new byte[0], data);
     }
 
     /**
@@ -63,11 +63,11 @@ public class FakeFileSystemTest {
      */
     @Test
     public void testLoad2() throws IOException {
-	real.save("test.dat", new byte[5]);
+        real.save("test.dat", new byte[5]);
 
-	byte[] data = real.load("test.dat");
+        byte[] data = real.load("test.dat");
 
-	assertArrayEquals(new byte[5], data);
+        assertArrayEquals(new byte[5], data);
     }
 
     /**
@@ -77,9 +77,9 @@ public class FakeFileSystemTest {
      */
     @Test(expected = IOException.class)
     public void testLoadLimit() throws IOException {
-	real.save("test.dat", ByteString.toUtf8("Hello\n"));
+        real.save("test.dat", ByteString.toUtf8("Hello\n"));
 
-	real.load("test.dat", 5);
+        real.load("test.dat", 5);
     }
 
     /**
@@ -89,13 +89,13 @@ public class FakeFileSystemTest {
      */
     @Test
     public void testOpenInput() throws Exception {
-	real.save("test.dat", ByteString.toUtf8("Hello\n"));
+        real.save("test.dat", ByteString.toUtf8("Hello\n"));
 
-	InputStream in = real.openInputStream("test.dat");
+        InputStream in = real.openInputStream("test.dat");
 
-	assertNotNull(in);
-	byte[] data = new byte[10];
-	assertEquals(6, in.read(data));
+        assertNotNull(in);
+        byte[] data = new byte[10];
+        assertEquals(6, in.read(data));
     }
 
     /**
@@ -105,7 +105,7 @@ public class FakeFileSystemTest {
      */
     @Test(expected = FileNotFoundException.class)
     public void testNeedParentBeforeChildren() throws IOException {
-	real.save("a/b", new byte[0]);
+        real.save("a/b", new byte[0]);
     }
 
     /**
@@ -115,7 +115,7 @@ public class FakeFileSystemTest {
      */
     @Test(expected = IOException.class)
     public void testNeedParentBeforeChildren2() throws IOException {
-	real.mkdir("a/b");
+        real.mkdir("a/b");
     }
 
     /**
@@ -125,9 +125,9 @@ public class FakeFileSystemTest {
      */
     @Test
     public void testMkdir() throws IOException {
-	boolean out = real.mkdir("a");
+        boolean out = real.mkdir("a");
 
-	assertEquals(true, out);
+        assertEquals(true, out);
     }
 
     /**
@@ -137,11 +137,11 @@ public class FakeFileSystemTest {
      */
     @Test
     public void testMkdir2() throws IOException {
-	real.mkdir("a");
+        real.mkdir("a");
 
-	boolean out = real.mkdir("a");
+        boolean out = real.mkdir("a");
 
-	assertEquals(false, out);
+        assertEquals(false, out);
     }
 
     /**
@@ -151,9 +151,9 @@ public class FakeFileSystemTest {
      */
     @Test(expected = IOException.class)
     public void testMkdir3() throws IOException {
-	real.save("a", new byte[0]);
+        real.save("a", new byte[0]);
 
-	real.mkdir("a");
+        real.mkdir("a");
     }
 
     /**
@@ -163,9 +163,9 @@ public class FakeFileSystemTest {
      */
     @Test(expected = IOException.class)
     public void testMkdir4() throws IOException {
-	real.save("a", new byte[0]);
+        real.save("a", new byte[0]);
 
-	real.mkdir("a/b");
+        real.mkdir("a/b");
     }
 
     /**
@@ -175,9 +175,9 @@ public class FakeFileSystemTest {
      */
     @Test(expected = IOException.class)
     public void testMkdir5() throws IOException {
-	real.mkdir("a");
+        real.mkdir("a");
 
-	real.save("a", new byte[0]);
+        real.save("a", new byte[0]);
     }
 
     /**
@@ -187,12 +187,12 @@ public class FakeFileSystemTest {
      */
     @Test
     public void testRename() throws IOException {
-	real.save("a", new byte[0]);
+        real.save("a", new byte[0]);
 
-	real.rename("a", "b");
+        real.rename("a", "b");
 
-	assertArrayEquals(new byte[0], real.load("b"));
-	assertFalse(fake.exists("a"));
+        assertArrayEquals(new byte[0], real.load("b"));
+        assertFalse(fake.exists("a"));
     }
 
     /**
@@ -203,10 +203,10 @@ public class FakeFileSystemTest {
      */
     @Test(expected = IOException.class)
     public void testRename2() throws IOException {
-	real.save("a", new byte[0]);
-	real.mkdir("b");
+        real.save("a", new byte[0]);
+        real.mkdir("b");
 
-	real.rename("a", "b");
+        real.rename("a", "b");
     }
 
     /**
@@ -217,10 +217,10 @@ public class FakeFileSystemTest {
      */
     @Test(expected = IOException.class)
     public void testRename3() throws IOException {
-	real.save("b", new byte[0]);
-	real.mkdir("a");
+        real.save("b", new byte[0]);
+        real.mkdir("a");
 
-	real.rename("a", "b");
+        real.rename("a", "b");
     }
 
     /**
@@ -231,13 +231,13 @@ public class FakeFileSystemTest {
      */
     @Test
     public void testRename4() throws IOException {
-	real.save("a", new byte[] { 1 });
-	real.save("b", new byte[] { 2 });
-	
-	real.rename("a", "b");
+        real.save("a", new byte[] { 1 });
+        real.save("b", new byte[] { 2 });
 
-	assertArrayEquals(new byte[] { 1 }, real.load("b"));
-	assertFalse(fake.exists("a"));
+        real.rename("a", "b");
+
+        assertArrayEquals(new byte[] { 1 }, real.load("b"));
+        assertFalse(fake.exists("a"));
     }
 
     /**
@@ -248,9 +248,9 @@ public class FakeFileSystemTest {
      */
     @Test(expected = IOException.class)
     public void testRename5() throws IOException {
-	real.save("a", new byte[0]);
+        real.save("a", new byte[0]);
 
-	real.rename("a", "b/a");
+        real.rename("a", "b/a");
     }
 
     /**
@@ -261,13 +261,13 @@ public class FakeFileSystemTest {
      */
     @Test
     public void testRename6() throws IOException {
-	real.save("a", new byte[0]);
-	real.mkdir("b");
+        real.save("a", new byte[0]);
+        real.mkdir("b");
 
-	real.rename("a", "b/a");
+        real.rename("a", "b/a");
 
-	assertArrayEquals(new byte[] {}, real.load("b/a"));
-	assertFalse(fake.exists("a"));
+        assertArrayEquals(new byte[] {}, real.load("b/a"));
+        assertFalse(fake.exists("a"));
     }
 
     /**
@@ -278,11 +278,11 @@ public class FakeFileSystemTest {
      */
     @Test
     public void randomWrite() throws IOException {
-	RandomOutputFile f = real.openRandomOutputFile("a");
-	f.write(new byte[] { 0, 1 });
-	f.close();
+        RandomOutputFile f = real.openRandomOutputFile("a");
+        f.write(new byte[] { 0, 1 });
+        f.close();
 
-	assertArrayEquals(new byte[] { 0, 1 }, real.load("a"));
+        assertArrayEquals(new byte[] { 0, 1 }, real.load("a"));
     }
 
     /**
@@ -294,13 +294,13 @@ public class FakeFileSystemTest {
      */
     @Test
     public void randomWrite2() throws IOException {
-	real.save("a", new byte[] { 1, 2, 3 });
+        real.save("a", new byte[] { 1, 2, 3 });
 
-	RandomOutputFile f = real.openRandomOutputFile("a");
-	f.write(new byte[] { 0, 1 });
-	f.close();
+        RandomOutputFile f = real.openRandomOutputFile("a");
+        f.write(new byte[] { 0, 1 });
+        f.close();
 
-	assertArrayEquals(new byte[] { 0, 1, 3 }, real.load("a"));
+        assertArrayEquals(new byte[] { 0, 1, 3 }, real.load("a"));
     }
 
     /**
@@ -310,11 +310,11 @@ public class FakeFileSystemTest {
      */
     @Test
     public void testList1() throws IOException {
-	real.mkdir("a");
+        real.mkdir("a");
 
-	List<String> have = real.list("");
+        List<String> have = real.list("");
 
-	assertEquals(Arrays.asList("a"), have);
+        assertEquals(Arrays.asList("a"), have);
     }
 
     /**
@@ -324,12 +324,12 @@ public class FakeFileSystemTest {
      */
     @Test
     public void testList2() throws IOException {
-	real.mkdir("a");
-	real.mkdir("a/b");
+        real.mkdir("a");
+        real.mkdir("a/b");
 
-	List<String> have = real.list("a");
+        List<String> have = real.list("a");
 
-	assertEquals(Arrays.asList("b"), have);
+        assertEquals(Arrays.asList("b"), have);
     }
 
     /**
@@ -339,11 +339,11 @@ public class FakeFileSystemTest {
      */
     @Test
     public void testList3() throws IOException {
-	real.mkdir("a");
+        real.mkdir("a");
 
-	List<String> have = real.list(".");
+        List<String> have = real.list(".");
 
-	assertEquals(Arrays.asList("a"), have);
+        assertEquals(Arrays.asList("a"), have);
     }
 
     /**
@@ -353,9 +353,9 @@ public class FakeFileSystemTest {
      */
     @Test
     public void testMkdirAbsolute() throws IOException {
-	real.mkdir("/a");
+        real.mkdir("/a");
 
-	assertTrue(real.exists("/a"));
+        assertTrue(real.exists("/a"));
     }
 
     /**
@@ -365,9 +365,9 @@ public class FakeFileSystemTest {
      */
     @Test
     public void testIsDir1() throws IOException {
-	real.mkdir("a");
+        real.mkdir("a");
 
-	assertTrue(real.isDir("a"));
+        assertTrue(real.isDir("a"));
     }
 
     /**
@@ -377,9 +377,9 @@ public class FakeFileSystemTest {
      */
     @Test
     public void testIsDir2() throws IOException {
-	real.save("a", new byte[0]);
+        real.save("a", new byte[0]);
 
-	assertFalse(real.isDir("a"));
+        assertFalse(real.isDir("a"));
     }
 
     /**
@@ -389,6 +389,6 @@ public class FakeFileSystemTest {
      */
     @Test
     public void testIsDir3() throws IOException {
-	assertFalse(real.isDir("a"));
+        assertFalse(real.isDir("a"));
     }
 }

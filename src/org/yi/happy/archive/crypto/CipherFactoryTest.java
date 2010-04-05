@@ -13,7 +13,7 @@ public class CipherFactoryTest {
      */
     @Test(expected = UnknownAlgorithmException.class)
     public void testBadCipher() {
-	CipherFactory.create("bad");
+        CipherFactory.create("bad");
     }
 
     /**
@@ -21,9 +21,9 @@ public class CipherFactoryTest {
      */
     @Test
     public void testBadProvider() {
-	CipherProvider got = CipherFactory.getProvider("bad");
+        CipherProvider got = CipherFactory.getProvider("bad");
 
-	assertEquals("bad", got.getAlgorithm());
+        assertEquals("bad", got.getAlgorithm());
     }
 
     /**
@@ -31,8 +31,8 @@ public class CipherFactoryTest {
      */
     @Test(expected = UnknownAlgorithmException.class)
     public void testBadProvider2() {
-	CipherProvider got = CipherFactory.getProvider("bad");
+        CipherProvider got = CipherFactory.getProvider("bad");
 
-	got.get();
+        got.get();
     }
 }

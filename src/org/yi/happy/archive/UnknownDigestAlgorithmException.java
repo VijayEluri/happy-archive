@@ -16,7 +16,7 @@ public class UnknownDigestAlgorithmException extends UnknownAlgorithmException {
      *            the cause.
      */
     public UnknownDigestAlgorithmException(String algorithm, Throwable cause) {
-	super(algorithm, cause);
+        super(algorithm, cause);
     }
 
     /**
@@ -26,7 +26,7 @@ public class UnknownDigestAlgorithmException extends UnknownAlgorithmException {
      *            the algorithm that is not known.
      */
     public UnknownDigestAlgorithmException(String algorithm) {
-	super(algorithm);
+        super(algorithm);
     }
 
     /**

@@ -28,7 +28,7 @@ public class DecodeException extends IOException {
      *            the cause.
      */
     public DecodeException(String message, Throwable cause) {
-	super(message, cause);
+        super(message, cause);
     }
 
     /**
@@ -39,7 +39,7 @@ public class DecodeException extends IOException {
      *            the custom message.
      */
     public DecodeException(String message) {
-	super(message);
+        super(message);
     }
 
     /**
@@ -50,7 +50,7 @@ public class DecodeException extends IOException {
      *            the cause.
      */
     public DecodeException(Throwable cause) {
-	super(cause);
+        super(cause);
     }
 
 }

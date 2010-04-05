@@ -26,7 +26,7 @@ public class BadSignatureException extends IllegalArgumentException {
      *            the cause.
      */
     public BadSignatureException(String message, Throwable cause) {
-	super(message, cause);
+        super(message, cause);
     }
 
     /**
@@ -37,7 +37,7 @@ public class BadSignatureException extends IllegalArgumentException {
      *            the custom message.
      */
     public BadSignatureException(String message) {
-	super(message);
+        super(message);
     }
 
     /**
@@ -48,7 +48,7 @@ public class BadSignatureException extends IllegalArgumentException {
      *            the cause.
      */
     public BadSignatureException(Throwable cause) {
-	super(cause);
+        super(cause);
     }
 
 }

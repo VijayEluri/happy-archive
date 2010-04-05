@@ -22,22 +22,22 @@ public class KeyOutputStreamTest {
      */
     @Test
     public void testWrite() throws IOException {
-	BlockEncoder e = BlockEncoderFactory.getContentDefault();
-	StorageMemory s = new StorageMemory();
-	KeyOutputStream out = new KeyOutputStream(new StoreBlockStorage(e, s));
+        BlockEncoder e = BlockEncoderFactory.getContentDefault();
+        StorageMemory s = new StorageMemory();
+        KeyOutputStream out = new KeyOutputStream(new StoreBlockStorage(e, s));
 
-	byte[] data = "0123401234".getBytes();
-	out.write(data);
-	out.write(data, 0, 2);
-	out.write(data, 2, 3);
-	out.write(data, 5, 5);
-	out.write(data, 0, 10);
-	out.write(data);
-	out.close();
+        byte[] data = "0123401234".getBytes();
+        out.write(data);
+        out.write(data, 0, 2);
+        out.write(data, 2, 3);
+        out.write(data, 5, 5);
+        out.write(data, 0, 10);
+        out.write(data);
+        out.close();
 
-	TestData d = TestData.KEY_CONTENT_40;
-	assertEquals(d.getFullKey(), out.getFullKey());
-	assertTrue(s.contains(d.getLocatorKey()));
+        TestData d = TestData.KEY_CONTENT_40;
+        assertEquals(d.getFullKey(), out.getFullKey());
+        assertTrue(s.contains(d.getLocatorKey()));
     }
 
     /**
@@ -47,16 +47,16 @@ public class KeyOutputStreamTest {
      */
     @Test
     public void testWrite2() throws IOException {
-	BlockEncoder e = BlockEncoderFactory.getContentDefault();
-	StorageMemory s = new StorageMemory();
-	KeyOutputStream out = new KeyOutputStream(new StoreBlockStorage(e, s));
+        BlockEncoder e = BlockEncoderFactory.getContentDefault();
+        StorageMemory s = new StorageMemory();
+        KeyOutputStream out = new KeyOutputStream(new StoreBlockStorage(e, s));
 
-	out.write("hello\n".getBytes());
-	out.close();
+        out.write("hello\n".getBytes());
+        out.close();
 
-	TestData d = TestData.KEY_CONTENT;
-	assertEquals(d.getFullKey(), out.getFullKey());
-	assertTrue(s.contains(d.getLocatorKey()));
+        TestData d = TestData.KEY_CONTENT;
+        assertEquals(d.getFullKey(), out.getFullKey());
+        assertTrue(s.contains(d.getLocatorKey()));
     }
 
     /**
@@ -66,12 +66,12 @@ public class KeyOutputStreamTest {
      */
     @Test(expected = IOException.class)
     public void testWriteAfterClose() throws IOException {
-	BlockEncoder e = BlockEncoderFactory.getContentDefault();
-	StorageMemory s = new StorageMemory();
-	KeyOutputStream out = new KeyOutputStream(new StoreBlockStorage(e, s));
+        BlockEncoder e = BlockEncoderFactory.getContentDefault();
+        StorageMemory s = new StorageMemory();
+        KeyOutputStream out = new KeyOutputStream(new StoreBlockStorage(e, s));
 
-	out.close();
-	out.write("hi".getBytes());
+        out.close();
+        out.write("hi".getBytes());
     }
 
     /**
@@ -82,16 +82,16 @@ public class KeyOutputStreamTest {
      */
     @Test
     public void testCloseAgain() throws IOException {
-	BlockEncoder e = BlockEncoderFactory.getContentDefault();
-	StorageMemory s = new StorageMemory();
-	KeyOutputStream out = new KeyOutputStream(new StoreBlockStorage(e, s));
+        BlockEncoder e = BlockEncoderFactory.getContentDefault();
+        StorageMemory s = new StorageMemory();
+        KeyOutputStream out = new KeyOutputStream(new StoreBlockStorage(e, s));
 
-	out.write("hello\n".getBytes());
-	out.close();
+        out.write("hello\n".getBytes());
+        out.close();
 
-	out.close();
+        out.close();
 
-	assertEquals(TestData.KEY_CONTENT.getFullKey(), out.getFullKey());
+        assertEquals(TestData.KEY_CONTENT.getFullKey(), out.getFullKey());
     }
 
     /**
@@ -101,21 +101,21 @@ public class KeyOutputStreamTest {
      */
     @Test
     public void testSetSplitSize() throws IOException {
-	BlockEncoder e = BlockEncoderFactory.getContentDefault();
-	StorageMemory s = new StorageMemory();
-	KeyOutputStream out = new KeyOutputStream(new StoreBlockStorage(e, s));
+        BlockEncoder e = BlockEncoderFactory.getContentDefault();
+        StorageMemory s = new StorageMemory();
+        KeyOutputStream out = new KeyOutputStream(new StoreBlockStorage(e, s));
 
-	out.setSplitSize(512);
-	byte[] data = new byte[2048];
-	Arrays.fill(data, (byte) 'a');
-	out.write(data);
-	out.close();
+        out.setSplitSize(512);
+        byte[] data = new byte[2048];
+        Arrays.fill(data, (byte) 'a');
+        out.write(data);
+        out.close();
 
-	TestData d = TestData.KEY_CONTENT_MAP_2048A;
-	assertEquals(d.getFullKey(), out.getFullKey());
-	assertTrue(s.contains(d.getLocatorKey()));
+        TestData d = TestData.KEY_CONTENT_MAP_2048A;
+        assertEquals(d.getFullKey(), out.getFullKey());
+        assertTrue(s.contains(d.getLocatorKey()));
 
-	assertTrue(s.contains(TestData.KEY_CONTENT_512A.getLocatorKey()));
+        assertTrue(s.contains(TestData.KEY_CONTENT_512A.getLocatorKey()));
     }
 
 }

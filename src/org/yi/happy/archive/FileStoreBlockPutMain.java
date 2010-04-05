@@ -23,8 +23,8 @@ public class FileStoreBlockPutMain {
      */
     @EntryPoint
     public static void main(String[] args) throws IOException {
-	RealFileSystem fs = new RealFileSystem();
-	new FileStoreBlockPutMain(fs).run(args);
+        RealFileSystem fs = new RealFileSystem();
+        new FileStoreBlockPutMain(fs).run(args);
     }
 
     /**
@@ -34,7 +34,7 @@ public class FileStoreBlockPutMain {
      *            the file system to use.
      */
     public FileStoreBlockPutMain(FileSystem fs) {
-	this.fs = fs;
+        this.fs = fs;
     }
 
     /**
@@ -45,11 +45,11 @@ public class FileStoreBlockPutMain {
      * @throws IOException
      */
     public void run(String... args) throws IOException {
-	FileBlockStore store = new FileBlockStore(fs, args[0]);
+        FileBlockStore store = new FileBlockStore(fs, args[0]);
 
-	EncodedBlock b = EncodedBlockParse.parse(fs.load(args[1],
-		Blocks.MAX_SIZE));
+        EncodedBlock b = EncodedBlockParse.parse(fs.load(args[1],
+                Blocks.MAX_SIZE));
 
-	store.put(b);
+        store.put(b);
     }
 }

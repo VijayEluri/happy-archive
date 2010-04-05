@@ -20,7 +20,7 @@ import org.yi.happy.archive.key.FullKey;
  * A content encoded block.
  */
 public final class ContentEncodedBlock extends AbstractBlock implements
-	EncodedBlock {
+        EncodedBlock {
     private final ContentLocatorKey key;
     private final DigestProvider digest;
     private final CipherProvider cipher;
@@ -59,20 +59,20 @@ public final class ContentEncodedBlock extends AbstractBlock implements
      *             if the details do not check out.
      */
     public ContentEncodedBlock(ContentLocatorKey key, DigestProvider digest,
-	    CipherProvider cipher, Bytes body) {
+            CipherProvider cipher, Bytes body) {
 
-	checkHeader(DIGEST_META, digest.getAlgorithm());
-	checkHeader(CIPHER_META, cipher.getAlgorithm());
+        checkHeader(DIGEST_META, digest.getAlgorithm());
+        checkHeader(CIPHER_META, cipher.getAlgorithm());
 
-	byte[] hash = getHash(digest, body);
-	if (!key.getHash().equalBytes(hash)) {
-	    throw new IllegalArgumentException();
-	}
+        byte[] hash = getHash(digest, body);
+        if (!key.getHash().equalBytes(hash)) {
+            throw new IllegalArgumentException();
+        }
 
-	this.key = key;
-	this.digest = digest;
-	this.cipher = cipher;
-	this.body = body;
+        this.key = key;
+        this.digest = digest;
+        this.cipher = cipher;
+        this.body = body;
     }
 
     /**
@@ -88,46 +88,46 @@ public final class ContentEncodedBlock extends AbstractBlock implements
      *             if the details do not make sense.
      */
     public ContentEncodedBlock(DigestProvider digest, CipherProvider cipher,
-	    Bytes body) {
+            Bytes body) {
 
-	checkHeader(DIGEST_META, digest.getAlgorithm());
-	checkHeader(CIPHER_META, cipher.getAlgorithm());
+        checkHeader(DIGEST_META, digest.getAlgorithm());
+        checkHeader(CIPHER_META, cipher.getAlgorithm());
 
-	byte[] hash = getHash(digest, body);
+        byte[] hash = getHash(digest, body);
 
-	this.key = new ContentLocatorKey(new Bytes(hash));
-	this.digest = digest;
-	this.cipher = cipher;
-	this.body = body;
+        this.key = new ContentLocatorKey(new Bytes(hash));
+        this.digest = digest;
+        this.cipher = cipher;
+        this.body = body;
     }
 
     public ContentLocatorKey getKey() {
-	return key;
+        return key;
     }
 
     public DigestProvider getDigest() {
-	return digest;
+        return digest;
     }
 
     public CipherProvider getCipher() {
-	return cipher;
+        return cipher;
     }
 
     @Override
     public Bytes getBody() {
-	return body;
+        return body;
     }
 
     @Override
     public Map<String, String> getMeta() {
-	Map<String, String> out = new LinkedHashMap<String, String>();
-	out.put(VERSION_META, VERSION);
-	out.put(KEY_TYPE_META, key.getType());
-	out.put(KEY_META, Base16.encode(key.getHash()));
-	out.put(DIGEST_META, digest.getAlgorithm());
-	out.put(CIPHER_META, cipher.getAlgorithm());
-	out.put(SIZE_META, Integer.toString(body.getSize()));
-	return out;
+        Map<String, String> out = new LinkedHashMap<String, String>();
+        out.put(VERSION_META, VERSION);
+        out.put(KEY_TYPE_META, key.getType());
+        out.put(KEY_META, Base16.encode(key.getHash()));
+        out.put(DIGEST_META, digest.getAlgorithm());
+        out.put(CIPHER_META, cipher.getAlgorithm());
+        out.put(SIZE_META, Integer.toString(body.getSize()));
+        return out;
     }
 
     /**
@@ -144,67 +144,67 @@ public final class ContentEncodedBlock extends AbstractBlock implements
      *             if the implementation for the digest is unknown.
      */
     public static byte[] getHash(DigestProvider digest, Bytes body)
-	    throws UnknownDigestAlgorithmException {
-	return Digests.digestData(digest, body);
+            throws UnknownDigestAlgorithmException {
+        return Digests.digestData(digest, body);
     }
 
     public Block decode(FullKey fullKey) {
-	if (!fullKey.toLocatorKey().equals(key)) {
-	    throw new IllegalArgumentException("the key is not for this block");
-	}
-	ContentFullKey k = (ContentFullKey) fullKey;
+        if (!fullKey.toLocatorKey().equals(key)) {
+            throw new IllegalArgumentException("the key is not for this block");
+        }
+        ContentFullKey k = (ContentFullKey) fullKey;
 
-	Cipher c = cipher.get();
-	c.setKey(k.getPass().toByteArray());
+        Cipher c = cipher.get();
+        c.setKey(k.getPass().toByteArray());
 
-	if (body.getSize() % c.getBlockSize() != 0) {
-	    throw new IllegalArgumentException(
-		    "size is not a multiple of the cipher block size");
-	}
+        if (body.getSize() % c.getBlockSize() != 0) {
+            throw new IllegalArgumentException(
+                    "size is not a multiple of the cipher block size");
+        }
 
-	byte[] out = body.toByteArray();
-	c.decrypt(out);
+        byte[] out = body.toByteArray();
+        c.decrypt(out);
 
-	return BlockParse.parse(out);
+        return BlockParse.parse(out);
     }
 
     @Override
     public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + body.hashCode();
-	result = prime * result + cipher.hashCode();
-	result = prime * result + digest.hashCode();
-	result = prime * result + key.hashCode();
-	return result;
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + body.hashCode();
+        result = prime * result + cipher.hashCode();
+        result = prime * result + digest.hashCode();
+        result = prime * result + key.hashCode();
+        return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	ContentEncodedBlock other = (ContentEncodedBlock) obj;
-	if (!body.equals(other.body))
-	    return false;
-	if (cipher == null) {
-	    if (other.cipher != null)
-		return false;
-	} else if (!cipher.equals(other.cipher))
-	    return false;
-	if (digest == null) {
-	    if (other.digest != null)
-		return false;
-	} else if (!digest.equals(other.digest))
-	    return false;
-	if (key == null) {
-	    if (other.key != null)
-		return false;
-	} else if (!key.equals(other.key))
-	    return false;
-	return true;
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ContentEncodedBlock other = (ContentEncodedBlock) obj;
+        if (!body.equals(other.body))
+            return false;
+        if (cipher == null) {
+            if (other.cipher != null)
+                return false;
+        } else if (!cipher.equals(other.cipher))
+            return false;
+        if (digest == null) {
+            if (other.digest != null)
+                return false;
+        } else if (!digest.equals(other.digest))
+            return false;
+        if (key == null) {
+            if (other.key != null)
+                return false;
+        } else if (!key.equals(other.key))
+            return false;
+        return true;
     }
 }

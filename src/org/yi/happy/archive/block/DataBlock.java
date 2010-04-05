@@ -19,21 +19,21 @@ public class DataBlock extends AbstractBlock {
      *            the body of the block.
      */
     public DataBlock(Bytes body) {
-	if (body == null) {
-	    throw new NullPointerException();
-	}
+        if (body == null) {
+            throw new NullPointerException();
+        }
 
-	this.body = body;
+        this.body = body;
     }
 
     @Override
     public Bytes getBody() {
-	return body;
+        return body;
     }
 
     @Override
     public Map<String, String> getMeta() {
-	return Collections.singletonMap("size", Integer
-		.toString(body.getSize()));
+        return Collections.singletonMap("size", Integer
+                .toString(body.getSize()));
     }
 }

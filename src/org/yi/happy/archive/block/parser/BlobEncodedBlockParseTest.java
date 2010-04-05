@@ -21,15 +21,15 @@ public class BlobEncodedBlockParseTest {
      */
     @Test
     public void test1() throws IOException {
-	TestData d = TestData.KEY_BLOB;
-	Block b = d.getBlock();
+        TestData d = TestData.KEY_BLOB;
+        Block b = d.getBlock();
 
-	BlobEncodedBlock e = BlobEncodedBlockParse.parse(b);
+        BlobEncodedBlock e = BlobEncodedBlockParse.parse(b);
 
-	assertEquals(d.getLocatorKey(), e.getKey());
-	assertEquals("rijndael256-256-cbc", e.getCipher().getAlgorithm());
-	assertEquals("sha-256", e.getDigest().getAlgorithm());
-	assertEquals(b.getBody(), e.getBody());
+        assertEquals(d.getLocatorKey(), e.getKey());
+        assertEquals("rijndael256-256-cbc", e.getCipher().getAlgorithm());
+        assertEquals("sha-256", e.getDigest().getAlgorithm());
+        assertEquals(b.getBody(), e.getBody());
     }
 
     /**
@@ -39,15 +39,15 @@ public class BlobEncodedBlockParseTest {
      */
     @Test
     public void test2() throws IOException {
-	TestData d = TestData.KEY_BLOB_AES128;
-	Block b = d.getBlock();
+        TestData d = TestData.KEY_BLOB_AES128;
+        Block b = d.getBlock();
 
-	BlobEncodedBlock e = BlobEncodedBlockParse.parse(b);
+        BlobEncodedBlock e = BlobEncodedBlockParse.parse(b);
 
-	assertEquals(d.getLocatorKey(), e.getKey());
-	assertEquals("aes-128-cbc", e.getCipher().getAlgorithm());
-	assertEquals("sha-256", e.getDigest().getAlgorithm());
-	assertEquals(b.getBody(), e.getBody());
+        assertEquals(d.getLocatorKey(), e.getKey());
+        assertEquals("aes-128-cbc", e.getCipher().getAlgorithm());
+        assertEquals("sha-256", e.getDigest().getAlgorithm());
+        assertEquals(b.getBody(), e.getBody());
     }
 
     /**
@@ -57,15 +57,15 @@ public class BlobEncodedBlockParseTest {
      */
     @Test
     public void test3() throws IOException {
-	TestData d = TestData.KEY_BLOB_SHA1_AES192;
-	Block b = d.getBlock();
+        TestData d = TestData.KEY_BLOB_SHA1_AES192;
+        Block b = d.getBlock();
 
-	BlobEncodedBlock e = BlobEncodedBlockParse.parse(b);
+        BlobEncodedBlock e = BlobEncodedBlockParse.parse(b);
 
-	assertEquals(d.getLocatorKey(), e.getKey());
-	assertEquals("aes-192-cbc", e.getCipher().getAlgorithm());
-	assertEquals("sha-1", e.getDigest().getAlgorithm());
-	assertEquals(b.getBody(), e.getBody());
+        assertEquals(d.getLocatorKey(), e.getKey());
+        assertEquals("aes-192-cbc", e.getCipher().getAlgorithm());
+        assertEquals("sha-1", e.getDigest().getAlgorithm());
+        assertEquals(b.getBody(), e.getBody());
     }
 
     /**
@@ -75,10 +75,10 @@ public class BlobEncodedBlockParseTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testNotBlob() throws IOException {
-	TestData d = TestData.KEY_CONTENT;
-	Block b = d.getBlock();
+        TestData d = TestData.KEY_CONTENT;
+        Block b = d.getBlock();
 
-	BlobEncodedBlockParse.parse(b);
+        BlobEncodedBlockParse.parse(b);
     }
 
     /**
@@ -88,8 +88,8 @@ public class BlobEncodedBlockParseTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testBlank() throws IOException {
-	Block b = new GenericBlock();
+        Block b = new GenericBlock();
 
-	BlobEncodedBlockParse.parse(b);
+        BlobEncodedBlockParse.parse(b);
     }
 }

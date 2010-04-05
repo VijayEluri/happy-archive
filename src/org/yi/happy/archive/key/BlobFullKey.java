@@ -15,16 +15,16 @@ public class BlobFullKey extends AbstractContentFullKey implements FullKey {
      *            the encryption key part of the key.
      */
     public BlobFullKey(Bytes hash, Bytes pass) {
-	super(hash, pass);
+        super(hash, pass);
     }
 
     @Override
     public String getType() {
-	return KeyType.BLOB;
+        return KeyType.BLOB;
     }
 
     @Override
     public BlobLocatorKey toLocatorKey() {
-	return new BlobLocatorKey(getHash());
+        return new BlobLocatorKey(getHash());
     }
 }

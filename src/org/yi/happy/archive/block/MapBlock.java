@@ -21,42 +21,42 @@ public class MapBlock extends AbstractBlock implements Block {
      * An entry in the block.
      */
     public static class Entry {
-	private final FullKey key;
-	private final long offset;
+        private final FullKey key;
+        private final long offset;
 
-	/**
-	 * get the key part of the entry.
-	 * 
-	 * @return the key part of the entry.
-	 */
-	public FullKey getKey() {
-	    return key;
-	}
+        /**
+         * get the key part of the entry.
+         * 
+         * @return the key part of the entry.
+         */
+        public FullKey getKey() {
+            return key;
+        }
 
-	/**
-	 * get the offset part of the entry.
-	 * 
-	 * @return the offset where the entry applies, relative to the start of
-	 *         the block.
-	 */
-	public long getOffset() {
-	    return offset;
-	}
+        /**
+         * get the offset part of the entry.
+         * 
+         * @return the offset where the entry applies, relative to the start of
+         *         the block.
+         */
+        public long getOffset() {
+            return offset;
+        }
 
-	/**
-	 * create a map entry.
-	 * 
-	 * @param key
-	 *            the key in the map.
-	 * @param offset
-	 *            the offset where the entry applies, relative to the start
-	 *            of the block.
-	 */
-	public Entry(FullKey key, long offset) {
-	    super();
-	    this.key = key;
-	    this.offset = offset;
-	}
+        /**
+         * create a map entry.
+         * 
+         * @param key
+         *            the key in the map.
+         * @param offset
+         *            the offset where the entry applies, relative to the start
+         *            of the block.
+         */
+        public Entry(FullKey key, long offset) {
+            super();
+            this.key = key;
+            this.offset = offset;
+        }
     }
 
     private final List<Entry> entries;
@@ -70,16 +70,16 @@ public class MapBlock extends AbstractBlock implements Block {
      *            the map block entries.
      */
     public MapBlock(List<Entry> entries) {
-	entries = new ArrayList<Entry>(entries);
-	this.entries = Collections.unmodifiableList(entries);
+        entries = new ArrayList<Entry>(entries);
+        this.entries = Collections.unmodifiableList(entries);
 
-	int size = 0;
-	for (Entry i : entries) {
-	    byte[] k = ByteString.toUtf8(i.getKey().toString());
-	    byte[] o = ByteString.toUtf8("" + i.getOffset());
-	    size += k.length + 1 + o.length + 1;
-	}
-	this.size = size;
+        int size = 0;
+        for (Entry i : entries) {
+            byte[] k = ByteString.toUtf8(i.getKey().toString());
+            byte[] o = ByteString.toUtf8("" + i.getOffset());
+            size += k.length + 1 + o.length + 1;
+        }
+        this.size = size;
     }
 
     /**
@@ -94,22 +94,22 @@ public class MapBlock extends AbstractBlock implements Block {
 
     @Override
     public Bytes getBody() {
-	byte[] out = new byte[size];
-	int i = 0;
-	for (Entry j : entries) {
-	    byte[] k = ByteString.toUtf8(j.getKey().toString());
-	    byte[] o = ByteString.toUtf8(Long.toString(j.getOffset()));
+        byte[] out = new byte[size];
+        int i = 0;
+        for (Entry j : entries) {
+            byte[] k = ByteString.toUtf8(j.getKey().toString());
+            byte[] o = ByteString.toUtf8(Long.toString(j.getOffset()));
 
-	    System.arraycopy(k, 0, out, i, k.length);
-	    i += k.length;
-	    out[i] = FIELD_SEPARATOR;
-	    i++;
-	    System.arraycopy(o, 0, out, i, o.length);
-	    i += o.length;
-	    out[i] = RECORD_SEPARATOR;
-	    i++;
-	}
-	return new Bytes(out);
+            System.arraycopy(k, 0, out, i, k.length);
+            i += k.length;
+            out[i] = FIELD_SEPARATOR;
+            i++;
+            System.arraycopy(o, 0, out, i, o.length);
+            i += o.length;
+            out[i] = RECORD_SEPARATOR;
+            i++;
+        }
+        return new Bytes(out);
     }
 
     /**
@@ -132,10 +132,10 @@ public class MapBlock extends AbstractBlock implements Block {
 
     @Override
     public Map<String, String> getMeta() {
-	Map<String, String> out = new LinkedHashMap<String, String>();
-	out.put(TYPE_META, TYPE);
-	out.put(SIZE_META, Integer.toString(size));
-	return out;
+        Map<String, String> out = new LinkedHashMap<String, String>();
+        out.put(TYPE_META, TYPE);
+        out.put(SIZE_META, Integer.toString(size));
+        return out;
     }
 
 }

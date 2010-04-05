@@ -24,12 +24,12 @@ public class EncodedBlockParseTest {
      */
     @Test
     public void testContent() throws IOException {
-	TestData d = TestData.KEY_CONTENT;
-	Block b = d.getBlock();
-	
-	EncodedBlock e = EncodedBlockParse.parse(b);
-	
-	assertTrue(e instanceof ContentEncodedBlock);
+        TestData d = TestData.KEY_CONTENT;
+        Block b = d.getBlock();
+
+        EncodedBlock e = EncodedBlockParse.parse(b);
+
+        assertTrue(e instanceof ContentEncodedBlock);
     }
 
     /**
@@ -39,12 +39,12 @@ public class EncodedBlockParseTest {
      */
     @Test
     public void testBlob() throws IOException {
-	TestData d = TestData.KEY_BLOB;
-	Block b = d.getBlock();
+        TestData d = TestData.KEY_BLOB;
+        Block b = d.getBlock();
 
-	EncodedBlock e = EncodedBlockParse.parse(b);
+        EncodedBlock e = EncodedBlockParse.parse(b);
 
-	assertTrue(e instanceof BlobEncodedBlock);
+        assertTrue(e instanceof BlobEncodedBlock);
     }
 
     /**
@@ -54,12 +54,12 @@ public class EncodedBlockParseTest {
      */
     @Test
     public void testName() throws IOException {
-	TestData d = TestData.KEY_NAME;
-	Block b = d.getBlock();
+        TestData d = TestData.KEY_NAME;
+        Block b = d.getBlock();
 
-	EncodedBlock e = EncodedBlockParse.parse(b);
+        EncodedBlock e = EncodedBlockParse.parse(b);
 
-	assertTrue(e instanceof NameEncodedBlock);
+        assertTrue(e instanceof NameEncodedBlock);
     }
 
     /**
@@ -67,9 +67,9 @@ public class EncodedBlockParseTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testBlank() {
-	Block b = new GenericBlock();
+        Block b = new GenericBlock();
 
-	EncodedBlockParse.parse(b);
+        EncodedBlockParse.parse(b);
     }
 
 }

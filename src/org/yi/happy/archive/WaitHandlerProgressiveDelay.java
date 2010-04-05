@@ -12,26 +12,26 @@ public class WaitHandlerProgressiveDelay implements WaitHandler {
 
     @Override
     public void doWait(boolean progress) throws IOException {
-	try {
-	    if (progress) {
-		delay = 1;
-		lastDelay = 0;
+        try {
+            if (progress) {
+                delay = 1;
+                lastDelay = 0;
 
-		Thread.sleep(delay * 1000);
-		return;
-	    }
+                Thread.sleep(delay * 1000);
+                return;
+            }
 
-	    Thread.sleep(delay * 1000);
+            Thread.sleep(delay * 1000);
 
-	    int nextDelay = delay + lastDelay;
-	    lastDelay = delay;
-	    delay = nextDelay;
+            int nextDelay = delay + lastDelay;
+            lastDelay = delay;
+            delay = nextDelay;
 
-	    if (delay > 60) {
-		delay = 60;
-	    }
-	} catch (InterruptedException e) {
-	    throw new InterruptedIOException();
-	}
+            if (delay > 60) {
+                delay = 60;
+            }
+        } catch (InterruptedException e) {
+            throw new InterruptedIOException();
+        }
     }
 }

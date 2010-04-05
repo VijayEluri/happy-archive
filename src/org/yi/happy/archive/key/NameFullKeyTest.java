@@ -15,11 +15,11 @@ public class NameFullKeyTest {
      */
     @Test
     public void testToLocatorKey2() {
-	Key key = TestData.KEY_NAME.getFullKey();
-	assertTrue(key instanceof NameFullKey);
+        Key key = TestData.KEY_NAME.getFullKey();
+        assertTrue(key instanceof NameFullKey);
 
-	LocatorKey have = key.toLocatorKey();
-	LocatorKey want = TestData.KEY_NAME.getLocatorKey();
-	assertEquals(want, have);
+        LocatorKey have = key.toLocatorKey();
+        LocatorKey want = TestData.KEY_NAME.getLocatorKey();
+        assertEquals(want, have);
     }
 }

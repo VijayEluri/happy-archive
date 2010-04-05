@@ -14,7 +14,7 @@ public interface BlockStoreVisitor<T extends Throwable> {
      * 
      * @param key
      *            the current key.
-     * @throws T 
+     * @throws T
      */
     public void accept(LocatorKey key) throws T;
 }

@@ -21,22 +21,22 @@ public class FileStoreListMainTest {
      */
     @Test
     public void test1() throws IOException {
-	FileSystem fs = new FakeFileSystem();
-	String base = "store";
-	BlockStore store = new FileBlockStore(fs, base);
-	store.put(TestData.KEY_CONTENT.getEncodedBlock());
-	store.put(TestData.KEY_CONTENT_1.getEncodedBlock());
-	store.put(TestData.KEY_CONTENT_2.getEncodedBlock());
+        FileSystem fs = new FakeFileSystem();
+        String base = "store";
+        BlockStore store = new FileBlockStore(fs, base);
+        store.put(TestData.KEY_CONTENT.getEncodedBlock());
+        store.put(TestData.KEY_CONTENT_1.getEncodedBlock());
+        store.put(TestData.KEY_CONTENT_2.getEncodedBlock());
 
-	StringWriter out = new StringWriter();
+        StringWriter out = new StringWriter();
 
-	new FileStoreListMain(fs, out).run("store");
+        new FileStoreListMain(fs, out).run("store");
 
-	String want = TestData.KEY_CONTENT.getLocatorKey() + "\n"
-		+ TestData.KEY_CONTENT_2.getLocatorKey() + "\n"
-		+ TestData.KEY_CONTENT_1.getLocatorKey() + "\n";
+        String want = TestData.KEY_CONTENT.getLocatorKey() + "\n"
+                + TestData.KEY_CONTENT_2.getLocatorKey() + "\n"
+                + TestData.KEY_CONTENT_1.getLocatorKey() + "\n";
 
-	assertEquals(want, out.toString());
+        assertEquals(want, out.toString());
     }
 
 }

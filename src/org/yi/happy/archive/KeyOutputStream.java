@@ -38,7 +38,7 @@ public class KeyOutputStream extends OutputStream {
      *            where blocks are to be stored
      */
     public KeyOutputStream(StoreBlock store) {
-	this.store = store;
+        this.store = store;
     }
 
     /**
@@ -46,15 +46,15 @@ public class KeyOutputStream extends OutputStream {
      */
     @Override
     public void write(int b) throws IOException {
-	if (fullKey != null) {
-	    throw new ClosedException();
-	}
+        if (fullKey != null) {
+            throw new ClosedException();
+        }
 
-	if (buffer.size() == splitSize) {
-	    flushBlock();
-	}
+        if (buffer.size() == splitSize) {
+            flushBlock();
+        }
 
-	buffer.write(b);
+        buffer.write(b);
     }
 
     /**
@@ -62,22 +62,22 @@ public class KeyOutputStream extends OutputStream {
      */
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
-	if (fullKey != null) {
-	    throw new ClosedException();
-	}
+        if (fullKey != null) {
+            throw new ClosedException();
+        }
 
-	int left = splitSize - buffer.size();
+        int left = splitSize - buffer.size();
 
-	while (len > left) {
-	    buffer.write(b, off, left);
-	    flushBlock();
+        while (len > left) {
+            buffer.write(b, off, left);
+            flushBlock();
 
-	    off += left;
-	    len -= left;
-	    left = splitSize;
-	}
+            off += left;
+            len -= left;
+            left = splitSize;
+        }
 
-	buffer.write(b, off, len);
+        buffer.write(b, off, len);
     }
 
     /**
@@ -86,13 +86,13 @@ public class KeyOutputStream extends OutputStream {
      * @throws IOException
      */
     private void flushBlock() throws IOException {
-	byte[] data = buffer.toByteArray();
+        byte[] data = buffer.toByteArray();
 
-	FullKey fullKey = storeDataBlock(data);
+        FullKey fullKey = storeDataBlock(data);
 
-	putMap(fullKey, data.length);
+        putMap(fullKey, data.length);
 
-	buffer.reset();
+        buffer.reset();
     }
 
     /**
@@ -107,13 +107,13 @@ public class KeyOutputStream extends OutputStream {
      *             on error.
      */
     private FullKey storeMapBlock(byte[] data) throws IOException {
-	/*
-	 * XXX there should be a map block type that I could just store.
-	 */
-	GenericBlock b = GenericBlock.create(new Bytes(data), "type", "map",
-		"size", "" + data.length);
+        /*
+         * XXX there should be a map block type that I could just store.
+         */
+        GenericBlock b = GenericBlock.create(new Bytes(data), "type", "map",
+                "size", "" + data.length);
 
-	return store.storeBlock(b);
+        return store.storeBlock(b);
     }
 
     /**
@@ -126,7 +126,7 @@ public class KeyOutputStream extends OutputStream {
      *             on error.
      */
     private FullKey storeDataBlock(byte[] data) throws IOException {
-	return store.storeBlock(new DataBlock(new Bytes(data)));
+        return store.storeBlock(new DataBlock(new Bytes(data)));
     }
 
     /**
@@ -140,11 +140,11 @@ public class KeyOutputStream extends OutputStream {
      *             on error.
      */
     private void putMap(FullKey fullKey, long size) throws IOException {
-	if (maps == null) {
-	    maps = new Layer();
-	}
+        if (maps == null) {
+            maps = new Layer();
+        }
 
-	maps.put(fullKey, size);
+        maps.put(fullKey, size);
     }
 
     /**
@@ -155,10 +155,10 @@ public class KeyOutputStream extends OutputStream {
      *             if the stream is not closed.
      */
     public FullKey getFullKey() {
-	if (fullKey == null) {
-	    throw new IllegalStateException("stream not closed");
-	}
-	return fullKey;
+        if (fullKey == null) {
+            throw new IllegalStateException("stream not closed");
+        }
+        return fullKey;
     }
 
     /**
@@ -169,15 +169,15 @@ public class KeyOutputStream extends OutputStream {
      *            the size to split at
      */
     public void setSplitSize(int size) {
-	if (fullKey != null) {
-	    throw new IllegalStateException();
-	}
+        if (fullKey != null) {
+            throw new IllegalStateException();
+        }
 
-	if (buffer.size() != 0) {
-	    throw new IllegalStateException();
-	}
+        if (buffer.size() != 0) {
+            throw new IllegalStateException();
+        }
 
-	splitSize = size;
+        splitSize = size;
     }
 
     /**
@@ -185,29 +185,29 @@ public class KeyOutputStream extends OutputStream {
      */
     @Override
     public void close() throws IOException {
-	if (fullKey != null) {
-	    return;
-	}
+        if (fullKey != null) {
+            return;
+        }
 
-	if (maps == null) {
-	    fullKey = storeDataBlock(buffer.toByteArray());
-	    buffer = null;
-	    return;
-	}
+        if (maps == null) {
+            fullKey = storeDataBlock(buffer.toByteArray());
+            buffer = null;
+            return;
+        }
 
-	/*
-	 * there will always be data in the buffer here
-	 */
+        /*
+         * there will always be data in the buffer here
+         */
 
-	flushBlock();
+        flushBlock();
 
-	while (maps.parent != null) {
-	    maps.flush();
-	    maps = maps.parent;
-	}
+        while (maps.parent != null) {
+            maps.flush();
+            maps = maps.parent;
+        }
 
-	fullKey = storeMapBlock(maps.map.toByteArray());
-	maps = null;
+        fullKey = storeMapBlock(maps.map.toByteArray());
+        maps = null;
     }
 
     /**
@@ -225,86 +225,86 @@ public class KeyOutputStream extends OutputStream {
      * gets full a new parent layer is added.
      */
     private class Layer {
-	/**
-	 * the total size of all the keys in this layer.
-	 */
-	public long totalSize = 0;
+        /**
+         * the total size of all the keys in this layer.
+         */
+        public long totalSize = 0;
 
-	/**
-	 * the data for this layer so far
-	 */
-	public final ByteArrayOutputStream map = new ByteArrayOutputStream();
+        /**
+         * the data for this layer so far
+         */
+        public final ByteArrayOutputStream map = new ByteArrayOutputStream();
 
-	/**
-	 * the only key in the layer (null if there are multiple)
-	 */
-	public FullKey onlyKey;
+        /**
+         * the only key in the layer (null if there are multiple)
+         */
+        public FullKey onlyKey;
 
-	public Layer parent;
+        public Layer parent;
 
-	/**
-	 * put a key into the map
-	 * 
-	 * @param index
-	 *            the layer of the map to put it in
-	 * @param fullKey
-	 *            the key to add
-	 * @param size
-	 *            how much data is represented by this key
-	 * @throws IOException
-	 */
-	public void put(FullKey fullKey, long size) throws IOException {
-	    byte[] add = ByteString.toUtf8(fullKey + "\t" + totalSize + "\n");
+        /**
+         * put a key into the map
+         * 
+         * @param index
+         *            the layer of the map to put it in
+         * @param fullKey
+         *            the key to add
+         * @param size
+         *            how much data is represented by this key
+         * @throws IOException
+         */
+        public void put(FullKey fullKey, long size) throws IOException {
+            byte[] add = ByteString.toUtf8(fullKey + "\t" + totalSize + "\n");
 
-	    if (map.size() + add.length > splitSize) {
-		flush();
-	    }
+            if (map.size() + add.length > splitSize) {
+                flush();
+            }
 
-	    if (totalSize == 0) {
-		onlyKey = fullKey;
-	    } else {
-		onlyKey = null;
-	    }
+            if (totalSize == 0) {
+                onlyKey = fullKey;
+            } else {
+                onlyKey = null;
+            }
 
-	    map.write(add);
-	    totalSize += size;
-	}
+            map.write(add);
+            totalSize += size;
+        }
 
-	/**
-	 * flush a map layer.
-	 * 
-	 * @param index
-	 *            the layer to flush
-	 * @throws IOException
-	 */
-	public void flush() throws IOException {
-	    if (map.size() == 0) {
-		throw new IllegalStateException("flusing empty map block");
-	    }
+        /**
+         * flush a map layer.
+         * 
+         * @param index
+         *            the layer to flush
+         * @throws IOException
+         */
+        public void flush() throws IOException {
+            if (map.size() == 0) {
+                throw new IllegalStateException("flusing empty map block");
+            }
 
-	    if (onlyKey != null) {
-		/*
-		 * if there is only one key in the map push it up as is, this is
-		 * a special case for close.
-		 */
-		if (parent == null) {
-		    throw new IllegalStateException();
-		}
-		parent.put(onlyKey, totalSize);
-	    } else {
-		FullKey fullKey = storeMapBlock(map.toByteArray());
-		if (parent == null) {
-		    parent = new Layer();
-		}
-		parent.put(fullKey, totalSize);
-	    }
+            if (onlyKey != null) {
+                /*
+                 * if there is only one key in the map push it up as is, this is
+                 * a special case for close.
+                 */
+                if (parent == null) {
+                    throw new IllegalStateException();
+                }
+                parent.put(onlyKey, totalSize);
+            } else {
+                FullKey fullKey = storeMapBlock(map.toByteArray());
+                if (parent == null) {
+                    parent = new Layer();
+                }
+                parent.put(fullKey, totalSize);
+            }
 
-	    /*
-	     * prepare for the next key to be stored.
-	     */
-	    totalSize = 0;
-	    onlyKey = null;
-	    map.reset();
-	}
+            /*
+             * prepare for the next key to be stored.
+             */
+            totalSize = 0;
+            onlyKey = null;
+            map.reset();
+        }
     }
 }

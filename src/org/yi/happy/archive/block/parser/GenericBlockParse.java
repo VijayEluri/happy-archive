@@ -26,81 +26,81 @@ public class GenericBlockParse {
      *             if a header is repeated, or if the size header is not valid.
      */
     public GenericBlock parse(byte[] bytes) {
-	Map<String, String> meta = new LinkedHashMap<String, String>();
+        Map<String, String> meta = new LinkedHashMap<String, String>();
 
-	Range rest = new Range(0, bytes.length);
+        Range rest = new Range(0, bytes.length);
 
-	/*
-	 * parse the headers
-	 */
-	while (true) {
-	    Range endOfLine = findEndOfLine(bytes, rest);
-	    Range line = rest.before(endOfLine);
-	    rest = rest.after(endOfLine);
+        /*
+         * parse the headers
+         */
+        while (true) {
+            Range endOfLine = findEndOfLine(bytes, rest);
+            Range line = rest.before(endOfLine);
+            rest = rest.after(endOfLine);
 
-	    /*
-	     * if the line has zero length, then the headers are done and the
-	     * rest is the body.
-	     */
-	    if (line.getLength() == 0) {
-		break;
-	    }
+            /*
+             * if the line has zero length, then the headers are done and the
+             * rest is the body.
+             */
+            if (line.getLength() == 0) {
+                break;
+            }
 
-	    Range divider = findDivider(bytes, line);
+            Range divider = findDivider(bytes, line);
 
-	    String name = ByteString.fromUtf8(bytes, line.before(divider));
-	    String value = ByteString.fromUtf8(bytes, line.after(divider));
+            String name = ByteString.fromUtf8(bytes, line.before(divider));
+            String value = ByteString.fromUtf8(bytes, line.after(divider));
 
-	    if (meta.containsKey(name)) {
-		throw new IllegalArgumentException("repeated header: " + name);
-	    }
-	    meta.put(name, value);
-	}
+            if (meta.containsKey(name)) {
+                throw new IllegalArgumentException("repeated header: " + name);
+            }
+            meta.put(name, value);
+        }
 
-	trim: {
-	    /*
-	     * if the size header is present...
-	     */
-	    String s = meta.get(GenericBlock.SIZE_META);
-	    if (s == null) {
-		break trim;
-	    }
+        trim: {
+            /*
+             * if the size header is present...
+             */
+            String s = meta.get(GenericBlock.SIZE_META);
+            if (s == null) {
+                break trim;
+            }
 
-	    /*
-	     * it is required to be valid, it is not valid if it does not parse
-	     * as a number, or it is less than zero, or it is greater than the
-	     * length of the rest of the data.
-	     */
-	    int i;
-	    try {
-		i = Integer.parseInt(s);
-	    } catch (NumberFormatException e) {
-		throw new IllegalArgumentException("bad size header");
-	    }
-	    if (i < 0 || i > rest.getLength()) {
-		throw new IllegalArgumentException("bad size header");
-	    }
+            /*
+             * it is required to be valid, it is not valid if it does not parse
+             * as a number, or it is less than zero, or it is greater than the
+             * length of the rest of the data.
+             */
+            int i;
+            try {
+                i = Integer.parseInt(s);
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("bad size header");
+            }
+            if (i < 0 || i > rest.getLength()) {
+                throw new IllegalArgumentException("bad size header");
+            }
 
-	    /*
-	     * if it matches the size of the rest of the data, then it does not
-	     * need trimming.
-	     */
-	    if (i == rest.getLength()) {
-		break trim;
-	    }
+            /*
+             * if it matches the size of the rest of the data, then it does not
+             * need trimming.
+             */
+            if (i == rest.getLength()) {
+                break trim;
+            }
 
-	    /*
-	     * otherwise trim it.
-	     */
-	    rest = new Range(rest.getOffset(), i);
-	}
+            /*
+             * otherwise trim it.
+             */
+            rest = new Range(rest.getOffset(), i);
+        }
 
-	/*
-	 * copy the body out of the buffer.
-	 */
-	Bytes body = new Bytes(bytes, rest.getOffset(), rest.getLength());
+        /*
+         * copy the body out of the buffer.
+         */
+        Bytes body = new Bytes(bytes, rest.getOffset(), rest.getLength());
 
-	return new GenericBlock(meta, body);
+        return new GenericBlock(meta, body);
     }
 
     /**
@@ -116,22 +116,22 @@ public class GenericBlockParse {
      */
     @MagicLiteral
     private Range findEndOfLine(byte[] bytes, Range range) {
-	for (int i = range.getOffset(); i < range.getEnd(); i++) {
-	    if (bytes[i] == '\r') {
-		if (i + 1 < range.getEnd() && bytes[i + 1] == '\n') {
-		    return new Range(i, 2);
-		}
-		return new Range(i, 1);
-	    }
-	    if (bytes[i] == '\n') {
-		if (i + 1 < range.getEnd() && bytes[i + 1] == '\r') {
-		    return new Range(i, 2);
-		}
-		return new Range(i, 1);
-	    }
-	}
+        for (int i = range.getOffset(); i < range.getEnd(); i++) {
+            if (bytes[i] == '\r') {
+                if (i + 1 < range.getEnd() && bytes[i + 1] == '\n') {
+                    return new Range(i, 2);
+                }
+                return new Range(i, 1);
+            }
+            if (bytes[i] == '\n') {
+                if (i + 1 < range.getEnd() && bytes[i + 1] == '\r') {
+                    return new Range(i, 2);
+                }
+                return new Range(i, 1);
+            }
+        }
 
-	return new Range(range.getEnd(), 0);
+        return new Range(range.getEnd(), 0);
     }
 
     /**
@@ -147,15 +147,15 @@ public class GenericBlockParse {
      */
     @MagicLiteral
     private Range findDivider(byte[] bytes, Range line) {
-	for (int i = line.getOffset(); i < line.getEnd(); i++) {
-	    if (bytes[i] == ':') {
-		if (i + 1 < line.getEnd() && bytes[i + 1] == ' ') {
-		    return new Range(i, 2);
-		}
-		return new Range(i, 1);
-	    }
-	}
+        for (int i = line.getOffset(); i < line.getEnd(); i++) {
+            if (bytes[i] == ':') {
+                if (i + 1 < line.getEnd() && bytes[i + 1] == ' ') {
+                    return new Range(i, 2);
+                }
+                return new Range(i, 1);
+            }
+        }
 
-	return new Range(line.getEnd(), 0);
+        return new Range(line.getEnd(), 0);
     }
 }

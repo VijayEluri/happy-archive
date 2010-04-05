@@ -19,10 +19,10 @@ public class GenericBlockTest {
      */
     @Test
     public void testBlockHeader() {
-	GenericBlock block = GenericBlock.create(new Bytes(), "aA", "b");
+        GenericBlock block = GenericBlock.create(new Bytes(), "aA", "b");
 
-	assertEquals("b", block.getMeta().get("aA"));
-	assertEquals(null, block.getMeta().get("Aa"));
+        assertEquals("b", block.getMeta().get("aA"));
+        assertEquals(null, block.getMeta().get("Aa"));
     }
 
     /**
@@ -30,12 +30,12 @@ public class GenericBlockTest {
      */
     @Test
     public void testAsBytes() {
-	GenericBlock block = createSampleBlock();
+        GenericBlock block = createSampleBlock();
 
-	byte[] have = block.asBytes();
+        byte[] have = block.asBytes();
 
-	byte[] want = createSampleBytes();
-	assertArrayEquals(want, have);
+        byte[] want = createSampleBytes();
+        assertArrayEquals(want, have);
     }
 
     /**
@@ -44,14 +44,14 @@ public class GenericBlockTest {
      * @return the sample block
      */
     public static GenericBlock createSampleBlock() {
-	Map<String, String> meta = new LinkedHashMap<String, String>();
-	meta.put("a", "c");
-	meta.put("b", "d");
-	meta.put("c", "e");
+        Map<String, String> meta = new LinkedHashMap<String, String>();
+        meta.put("a", "c");
+        meta.put("b", "d");
+        meta.put("c", "e");
 
-	Bytes body = new Bytes(ByteString.toBytes("body\ndata\n"));
+        Bytes body = new Bytes(ByteString.toBytes("body\ndata\n"));
 
-	return new GenericBlock(meta, body);
+        return new GenericBlock(meta, body);
     }
 
     /**
@@ -60,6 +60,6 @@ public class GenericBlockTest {
      * @return the bytes for the sample block
      */
     public static byte[] createSampleBytes() {
-	return ByteString.toBytes("a: c\r\nb: d\r\nc: e\r\n\r\nbody\ndata\n");
+        return ByteString.toBytes("a: c\r\nb: d\r\nc: e\r\n\r\nbody\ndata\n");
     }
 }

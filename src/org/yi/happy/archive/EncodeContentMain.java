@@ -28,12 +28,12 @@ public class EncodeContentMain {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-	FileSystem fs = new RealFileSystem();
-	Writer out = new OutputStreamWriter(System.out);
+        FileSystem fs = new RealFileSystem();
+        Writer out = new OutputStreamWriter(System.out);
 
-	new EncodeContentMain(fs, out).run(args);
+        new EncodeContentMain(fs, out).run(args);
 
-	out.flush();
+        out.flush();
     }
 
     /**
@@ -44,8 +44,8 @@ public class EncodeContentMain {
      *            where to send output.
      */
     public EncodeContentMain(FileSystem fs, Writer out) {
-	this.fs = fs;
-	this.out = out;
+        this.fs = fs;
+        this.out = out;
     }
 
     /**
@@ -57,12 +57,12 @@ public class EncodeContentMain {
      */
     @EntryPoint
     public void run(String... args) throws IOException {
-	BlockEncoder encoder = BlockEncoderFactory.getContentDefault();
+        BlockEncoder encoder = BlockEncoderFactory.getContentDefault();
 
-	Block block = BlockParse.parse(fs.load(args[0], Blocks.MAX_SIZE));
-	BlockEncoderResult e = encoder.encode(block);
-	fs.save(args[1], e.getBlock().asBytes());
+        Block block = BlockParse.parse(fs.load(args[0], Blocks.MAX_SIZE));
+        BlockEncoderResult e = encoder.encode(block);
+        fs.save(args[1], e.getBlock().asBytes());
 
-	out.write(e.getKey() + "\n");
+        out.write(e.getKey() + "\n");
     }
 }

@@ -6,11 +6,11 @@ import org.yi.happy.archive.Bytes;
  * a content full key. what is required to decode a content block.
  */
 public final class ContentFullKey extends AbstractContentFullKey implements
-	FullKey {
+        FullKey {
 
     @Override
     public String getType() {
-	return KeyType.CONTENT_HASH;
+        return KeyType.CONTENT_HASH;
     }
 
     /**
@@ -22,11 +22,11 @@ public final class ContentFullKey extends AbstractContentFullKey implements
      *            the cipher key
      */
     public ContentFullKey(Bytes hash, Bytes pass) {
-	super(hash, pass);
+        super(hash, pass);
     }
 
     @Override
     public ContentLocatorKey toLocatorKey() {
-	return new ContentLocatorKey(getHash());
+        return new ContentLocatorKey(getHash());
     }
 }

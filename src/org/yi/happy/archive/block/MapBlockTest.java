@@ -20,12 +20,11 @@ public class MapBlockTest {
      */
     @Test
     public void test1() throws IOException {
-	MapBlock block = new MapBlock(Arrays.asList(new MapBlock.Entry(
-		TestData.KEY_CONTENT_1.getFullKey(), 0), new MapBlock.Entry(
-		TestData.KEY_CONTENT_2
-			.getFullKey(), 5)));
+        MapBlock block = new MapBlock(Arrays.asList(new MapBlock.Entry(
+                TestData.KEY_CONTENT_1.getFullKey(), 0), new MapBlock.Entry(
+                TestData.KEY_CONTENT_2.getFullKey(), 5)));
 
-	assertEquals(TestData.CLEAR_CONTENT_MAP.getBlock(), block);
+        assertEquals(TestData.CLEAR_CONTENT_MAP.getBlock(), block);
     }
 
     /**
@@ -35,11 +34,11 @@ public class MapBlockTest {
      */
     @Test
     public void test2() throws IOException {
-	MapBlock block = new MapBlock(Arrays.asList(new MapBlock.Entry(
-		TestData.KEY_CONTENT_1.getFullKey(), 0), new MapBlock.Entry(
-		TestData.KEY_CONTENT_2.getFullKey(), 10)));
+        MapBlock block = new MapBlock(Arrays.asList(new MapBlock.Entry(
+                TestData.KEY_CONTENT_1.getFullKey(), 0), new MapBlock.Entry(
+                TestData.KEY_CONTENT_2.getFullKey(), 10)));
 
-	assertArrayEquals(TestData.CLEAR_CONTENT_MAP_PAD.getBytes(), block
-		.asBytes());
+        assertArrayEquals(TestData.CLEAR_CONTENT_MAP_PAD.getBytes(), block
+                .asBytes());
     }
 }

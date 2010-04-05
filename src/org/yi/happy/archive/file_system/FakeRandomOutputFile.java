@@ -15,13 +15,13 @@ public class FakeRandomOutputFile implements RandomOutputFile {
      */
     public interface CloseListener {
 
-	/**
-	 * The file was closed.
-	 * 
-	 * @param bytes
-	 *            the new content of the file.
-	 */
-	void onClose(byte[] bytes);
+        /**
+         * The file was closed.
+         * 
+         * @param bytes
+         *            the new content of the file.
+         */
+        void onClose(byte[] bytes);
 
     }
 
@@ -32,17 +32,17 @@ public class FakeRandomOutputFile implements RandomOutputFile {
     private boolean closed = false;
 
     private CloseListener closeListener = new CloseListener() {
-	@Override
-	public void onClose(byte[] bytes) {
+        @Override
+        public void onClose(byte[] bytes) {
 
-	}
+        }
     };
 
     /**
      * create empty.
      */
     public FakeRandomOutputFile() {
-	this(new byte[0]);
+        this(new byte[0]);
     }
 
     /**
@@ -52,76 +52,76 @@ public class FakeRandomOutputFile implements RandomOutputFile {
      *            the initial state. the buffer is not defensively copied.
      */
     public FakeRandomOutputFile(byte[] bytes) {
-	this.bytes = bytes;
+        this.bytes = bytes;
     }
 
     @Override
     public void close() throws IOException {
-	if (closed) {
-	    return;
-	}
+        if (closed) {
+            return;
+        }
 
-	closed = true;
+        closed = true;
 
-	closeListener.onClose(bytes);
+        closeListener.onClose(bytes);
     }
 
     @Override
     public void setPosition(long position) throws IOException {
-	if (closed) {
-	    throw new ClosedException();
-	}
+        if (closed) {
+            throw new ClosedException();
+        }
 
-	if (position < 0) {
-	    throw new IllegalArgumentException();
-	}
+        if (position < 0) {
+            throw new IllegalArgumentException();
+        }
 
-	this.position = (int) position;
+        this.position = (int) position;
     }
 
     @Override
     public void write(byte[] b, int offset, int length) throws IOException {
-	if (closed) {
-	    throw new ClosedException();
-	}
+        if (closed) {
+            throw new ClosedException();
+        }
 
-	if (position + length > bytes.length) {
-	    bytes = Arrays.copyOf(bytes, position + length);
-	}
+        if (position + length > bytes.length) {
+            bytes = Arrays.copyOf(bytes, position + length);
+        }
 
-	System.arraycopy(b, offset, bytes, position, length);
+        System.arraycopy(b, offset, bytes, position, length);
 
-	position += length;
+        position += length;
     }
 
     @Override
     public void write(byte[] b) throws IOException {
-	if (closed) {
-	    throw new ClosedException();
-	}
+        if (closed) {
+            throw new ClosedException();
+        }
 
-	if (position + b.length > bytes.length) {
-	    bytes = Arrays.copyOf(bytes, position + b.length);
-	}
+        if (position + b.length > bytes.length) {
+            bytes = Arrays.copyOf(bytes, position + b.length);
+        }
 
-	System.arraycopy(b, 0, bytes, position, b.length);
+        System.arraycopy(b, 0, bytes, position, b.length);
 
-	position += b.length;
+        position += b.length;
     }
 
     @Override
     public void write(int b) throws IOException {
-	if (closed) {
-	    throw new ClosedException();
-	}
+        if (closed) {
+            throw new ClosedException();
+        }
 
-	if (position + 1 > bytes.length) {
-	    bytes = Arrays.copyOf(bytes, position + 1);
-	}
+        if (position + 1 > bytes.length) {
+            bytes = Arrays.copyOf(bytes, position + 1);
+        }
 
-	bytes[position] = (byte) b;
+        bytes[position] = (byte) b;
 
-	position += 1;
+        position += 1;
     }
 
     /**
@@ -130,16 +130,16 @@ public class FakeRandomOutputFile implements RandomOutputFile {
      * @return the buffer. the buffer is not defensively copied.
      */
     public byte[] getBytes() {
-	return bytes;
+        return bytes;
     }
 
     @Override
     public long getPosition() throws IOException {
-	if (closed) {
-	    throw new ClosedException();
-	}
+        if (closed) {
+            throw new ClosedException();
+        }
 
-	return position;
+        return position;
     }
 
     /**
@@ -149,7 +149,7 @@ public class FakeRandomOutputFile implements RandomOutputFile {
      *            the new listener.
      */
     public void setCloseListener(CloseListener closeListener) {
-	this.closeListener = closeListener;
+        this.closeListener = closeListener;
     }
 
 }

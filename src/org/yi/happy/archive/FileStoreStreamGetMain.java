@@ -30,10 +30,10 @@ public class FileStoreStreamGetMain {
      *            what to do when no blocks are ready.
      */
     public FileStoreStreamGetMain(FileSystem fs, OutputStream out,
-	    WaitHandler waitHandler) {
-	this.fs = fs;
-	this.out = out;
-	this.waitHandler = waitHandler;
+            WaitHandler waitHandler) {
+        this.fs = fs;
+        this.out = out;
+        this.waitHandler = waitHandler;
     }
 
     /**
@@ -43,13 +43,13 @@ public class FileStoreStreamGetMain {
      */
     @EntryPoint
     public static void main(String[] args) throws IOException {
-	WaitHandler waitHandler = new WaitHandlerProgressiveDelay();
+        WaitHandler waitHandler = new WaitHandlerProgressiveDelay();
 
-	FileSystem fs = new RealFileSystem();
+        FileSystem fs = new RealFileSystem();
 
-	OutputStream out = System.out;
+        OutputStream out = System.out;
 
-	new FileStoreStreamGetMain(fs, out, waitHandler).run(args);
+        new FileStoreStreamGetMain(fs, out, waitHandler).run(args);
     }
 
     /**
@@ -61,27 +61,26 @@ public class FileStoreStreamGetMain {
      * @throws IOException
      */
     public void run(String... args) throws IOException {
-	FileBlockStore store = new FileBlockStore(fs, args[0]);
-	pendingFile = args[1];
-	
-	KeyInputStream in = new KeyInputStream(KeyParse
-		.parseFullKey(args[2]), new RetrieveBlockStorage(store),
-		notReadyHandler);
+        FileBlockStore store = new FileBlockStore(fs, args[0]);
+        pendingFile = args[1];
 
-	Streams.copy(in, out);
+        KeyInputStream in = new KeyInputStream(KeyParse.parseFullKey(args[2]),
+                new RetrieveBlockStorage(store), notReadyHandler);
+
+        Streams.copy(in, out);
     }
 
     private String pendingFile;
 
     private NotReadyHandler notReadyHandler = new NotReadyHandler() {
-	private int progress;
+        private int progress;
 
-	@Override
-	public void notReady(SplitReader reader) throws IOException {
-	    PendingList.savePendingListFile(reader.getPending(), fs,
-		    pendingFile);
-	    waitHandler.doWait(progress != reader.getProgress());
-	    progress = reader.getProgress();
-	}
+        @Override
+        public void notReady(SplitReader reader) throws IOException {
+            PendingList.savePendingListFile(reader.getPending(), fs,
+                    pendingFile);
+            waitHandler.doWait(progress != reader.getProgress());
+            progress = reader.getProgress();
+        }
     };
 }

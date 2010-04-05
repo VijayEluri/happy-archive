@@ -16,8 +16,8 @@ public class Range {
      *            the length of the range.
      */
     public Range(int offset, int length) {
-	this.offset = offset;
-	this.length = length;
+        this.offset = offset;
+        this.length = length;
     }
 
     /**
@@ -25,7 +25,7 @@ public class Range {
      * @return the offset where the range starts.
      */
     public int getOffset() {
-	return offset;
+        return offset;
     }
 
     /**
@@ -33,7 +33,7 @@ public class Range {
      * @return the length of the range.
      */
     public int getLength() {
-	return length;
+        return length;
     }
 
     /**
@@ -43,32 +43,32 @@ public class Range {
      * @return index just past the end of the range.
      */
     public int getEnd() {
-	return offset + length;
+        return offset + length;
     }
 
     @Override
     public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + length;
-	result = prime * result + offset;
-	return result;
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + length;
+        result = prime * result + offset;
+        return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	Range other = (Range) obj;
-	if (length != other.length)
-	    return false;
-	if (offset != other.offset)
-	    return false;
-	return true;
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Range other = (Range) obj;
+        if (length != other.length)
+            return false;
+        if (offset != other.offset)
+            return false;
+        return true;
     }
 
     /**
@@ -81,15 +81,15 @@ public class Range {
      *         beginning of other.
      */
     public Range before(Range other) {
-	if (this.getEnd() < other.getOffset()) {
-	    return this;
-	}
+        if (this.getEnd() < other.getOffset()) {
+            return this;
+        }
 
-	if (other.getOffset() < this.getOffset()) {
-	    return new Range(other.getOffset(), 0);
-	}
+        if (other.getOffset() < this.getOffset()) {
+            return new Range(other.getOffset(), 0);
+        }
 
-	return new Range(this.getOffset(), other.getOffset() - this.getOffset());
+        return new Range(this.getOffset(), other.getOffset() - this.getOffset());
     }
 
     /**
@@ -102,19 +102,19 @@ public class Range {
      *         end of the other range and the end of this range.
      */
     public Range after(Range other) {
-	if (other.getEnd() < this.getOffset()) {
-	    return this;
-	}
+        if (other.getEnd() < this.getOffset()) {
+            return this;
+        }
 
-	if (other.getEnd() > this.getEnd()) {
-	    return new Range(other.getEnd(), 0);
-	}
+        if (other.getEnd() > this.getEnd()) {
+            return new Range(other.getEnd(), 0);
+        }
 
-	return new Range(other.getEnd(), this.getEnd() - other.getEnd());
+        return new Range(other.getEnd(), this.getEnd() - other.getEnd());
     }
-    
+
     @Override
     public String toString() {
-	return "(" + getOffset() + ".." + getEnd() + ")";
+        return "(" + getOffset() + ".." + getEnd() + ")";
     }
 }

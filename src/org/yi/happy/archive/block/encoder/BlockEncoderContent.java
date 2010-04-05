@@ -23,8 +23,8 @@ public class BlockEncoderContent implements BlockEncoder {
      *            the cipher to use.
      */
     public BlockEncoderContent(DigestProvider digest, CipherProvider cipher) {
-	this.digest = digest;
-	this.cipher = cipher;
+        this.digest = digest;
+        this.cipher = cipher;
     }
 
     /**
@@ -45,24 +45,24 @@ public class BlockEncoderContent implements BlockEncoder {
      * @return the resulting block
      */
     public BlockEncoderResult encode(Block block) {
-	byte[] body = block.asBytes();
+        byte[] body = block.asBytes();
 
-	byte[] ph = Digests.digestData(digest, body);
+        byte[] ph = Digests.digestData(digest, body);
 
-	Cipher c = cipher.get();
-	byte[] key = Digests.expandKey(digest, ph, c.getKeySize());
-	c.setKey(key);
+        Cipher c = cipher.get();
+        byte[] key = Digests.expandKey(digest, ph, c.getKeySize());
+        c.setKey(key);
 
-	body = pad(body, c.getBlockSize());
-	c.encrypt(body);
+        body = pad(body, c.getBlockSize());
+        c.encrypt(body);
 
-	EncodedBlock out = EncodedBlockFactory.createContent(digest, cipher,
-		new Bytes(body));
+        EncodedBlock out = EncodedBlockFactory.createContent(digest, cipher,
+                new Bytes(body));
 
-	ContentFullKey fullKey = new ContentFullKey(out.getKey().getHash(),
-		new Bytes(key));
+        ContentFullKey fullKey = new ContentFullKey(out.getKey().getHash(),
+                new Bytes(key));
 
-	return new BlockEncoderResult(fullKey, out);
+        return new BlockEncoderResult(fullKey, out);
     }
 
     /**
@@ -76,14 +76,14 @@ public class BlockEncoderContent implements BlockEncoder {
      *         with zeros to blockSize
      */
     private static byte[] pad(byte[] block, int blockSize) {
-	int slack = block.length % blockSize;
+        int slack = block.length % blockSize;
 
-	if (slack == 0) {
-	    return block;
-	}
+        if (slack == 0) {
+            return block;
+        }
 
-	byte[] out = new byte[block.length + blockSize - slack];
-	System.arraycopy(block, 0, out, 0, block.length);
-	return out;
+        byte[] out = new byte[block.length + blockSize - slack];
+        System.arraycopy(block, 0, out, 0, block.length);
+        return out;
     }
 }

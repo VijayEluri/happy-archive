@@ -24,16 +24,16 @@ public class RestoreFileTest {
      */
     @Test
     public void test1() throws IOException {
-	FileSystem fs = new FakeFileSystem();
-	SimpleRetrieveBlock store = new SimpleRetrieveBlock();
-	store.put(TestData.KEY_CONTENT);
+        FileSystem fs = new FakeFileSystem();
+        SimpleRetrieveBlock store = new SimpleRetrieveBlock();
+        store.put(TestData.KEY_CONTENT);
 
-	RestoreFile f = new RestoreFile(new SplitReader(TestData.KEY_CONTENT
-		.getFullKey(), store), "test.dat", fs);
-	f.step();
+        RestoreFile f = new RestoreFile(new SplitReader(TestData.KEY_CONTENT
+                .getFullKey(), store), "test.dat", fs);
+        f.step();
 
-	assertEquals(true, f.isDone());
-	assertArrayEquals(TestData.FILE_CONTENT.getBytes(), fs.load("test.dat"));
+        assertEquals(true, f.isDone());
+        assertArrayEquals(TestData.FILE_CONTENT.getBytes(), fs.load("test.dat"));
     }
 
     /**
@@ -43,24 +43,24 @@ public class RestoreFileTest {
      */
     @Test
     public void test2() throws IOException {
-	FileSystem fs = new FakeFileSystem();
-	SimpleRetrieveBlock store = new SimpleRetrieveBlock();
+        FileSystem fs = new FakeFileSystem();
+        SimpleRetrieveBlock store = new SimpleRetrieveBlock();
 
-	RestoreFile f = new RestoreFile(new SplitReader(TestData.KEY_CONTENT
-		.getFullKey(), store), "test.dat", fs);
-	f.step();
+        RestoreFile f = new RestoreFile(new SplitReader(TestData.KEY_CONTENT
+                .getFullKey(), store), "test.dat", fs);
+        f.step();
 
-	assertEquals(0, f.getProgress());
-	assertEquals(false, f.isDone());
-	assertEquals(Arrays.asList(TestData.KEY_CONTENT.getFullKey()), f
-		.getPending());
+        assertEquals(0, f.getProgress());
+        assertEquals(false, f.isDone());
+        assertEquals(Arrays.asList(TestData.KEY_CONTENT.getFullKey()), f
+                .getPending());
 
-	store.put(TestData.KEY_CONTENT);
-	f.step();
+        store.put(TestData.KEY_CONTENT);
+        f.step();
 
-	assertEquals(1, f.getProgress());
-	assertEquals(true, f.isDone());
-	assertEquals(Arrays.asList(), f.getPending());
+        assertEquals(1, f.getProgress());
+        assertEquals(true, f.isDone());
+        assertEquals(Arrays.asList(), f.getPending());
     }
 
 }

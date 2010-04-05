@@ -26,7 +26,7 @@ public class BlockParse {
      * @return the block
      */
     public static Block parse(byte[] bytes) {
-	return new GenericBlockParse().parse(bytes);
+        return new GenericBlockParse().parse(bytes);
     }
 
     /**
@@ -41,9 +41,9 @@ public class BlockParse {
      *             on parsing errors.
      */
     public static Block load(InputStream in) throws IOException,
-	    IllegalArgumentException {
-	byte[] bytes = Streams.load(in, Blocks.MAX_SIZE);
-	return parse(bytes);
+            IllegalArgumentException {
+        byte[] bytes = Streams.load(in, Blocks.MAX_SIZE);
+        return parse(bytes);
     }
 
     /**
@@ -56,12 +56,12 @@ public class BlockParse {
      *             on IO errors
      */
     public static Block load(URL resource) throws IOException {
-	InputStream in = resource.openStream();
-	try {
-	    return load(in);
-	} finally {
-	    in.close();
-	}
+        InputStream in = resource.openStream();
+        try {
+            return load(in);
+        } finally {
+            in.close();
+        }
     }
 
     /**
@@ -74,11 +74,11 @@ public class BlockParse {
      *             on IO errors.
      */
     public static Block load(File file) throws IOException {
-	FileInputStream in = new FileInputStream(file);
-	try {
-	    return load(in);
-	} finally {
-	    in.close();
-	}
+        FileInputStream in = new FileInputStream(file);
+        try {
+            return load(in);
+        } finally {
+            in.close();
+        }
     }
 }

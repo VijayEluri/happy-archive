@@ -30,13 +30,13 @@ public class EncodedBlockParse {
      *             on parsing errors.
      */
     public static EncodedBlock load(URL url) throws IOException {
-	InputStream in = url.openStream();
-	try {
-	    byte[] data = Streams.load(in, Blocks.MAX_SIZE);
-	    return parse(data);
-	} finally {
-	    in.close();
-	}
+        InputStream in = url.openStream();
+        try {
+            byte[] data = Streams.load(in, Blocks.MAX_SIZE);
+            return parse(data);
+        } finally {
+            in.close();
+        }
     }
 
     /**
@@ -47,8 +47,8 @@ public class EncodedBlockParse {
      * @return the encoded block.
      */
     public static EncodedBlock parse(byte[] data) {
-	Block block = new GenericBlockParse().parse(data);
-	return parse(block);
+        Block block = new GenericBlockParse().parse(data);
+        return parse(block);
     }
 
     /**
@@ -59,27 +59,27 @@ public class EncodedBlockParse {
      * @return the encoded block.
      */
     public static EncodedBlock parse(Block block) {
-	if (block instanceof EncodedBlock) {
-	    return (EncodedBlock) block;
-	}
+        if (block instanceof EncodedBlock) {
+            return (EncodedBlock) block;
+        }
 
-	String keyType = block.getMeta().get(EncodedBlock.KEY_TYPE_META);
-	if (keyType == null) {
-	    throw new IllegalArgumentException("missing key-type");
-	}
+        String keyType = block.getMeta().get(EncodedBlock.KEY_TYPE_META);
+        if (keyType == null) {
+            throw new IllegalArgumentException("missing key-type");
+        }
 
-	if (keyType.equals(KeyType.CONTENT_HASH)) {
-	    return ContentEncodedBlockParse.parse(block);
-	}
+        if (keyType.equals(KeyType.CONTENT_HASH)) {
+            return ContentEncodedBlockParse.parse(block);
+        }
 
-	if (keyType.equals(KeyType.BLOB)) {
-	    return BlobEncodedBlockParse.parse(block);
-	}
+        if (keyType.equals(KeyType.BLOB)) {
+            return BlobEncodedBlockParse.parse(block);
+        }
 
-	if (keyType.equals(KeyType.NAME_HASH)) {
-	    return NameEncodedBlockParse.parse(block);
-	}
+        if (keyType.equals(KeyType.NAME_HASH)) {
+            return NameEncodedBlockParse.parse(block);
+        }
 
-	throw new UnknownKeyTypeException();
+        throw new UnknownKeyTypeException();
     }
 }

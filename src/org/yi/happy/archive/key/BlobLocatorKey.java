@@ -6,7 +6,7 @@ import org.yi.happy.archive.Bytes;
  * A locator key for a blob encoded block.
  */
 public final class BlobLocatorKey extends AbstractLocatorKey implements
-	LocatorKey {
+        LocatorKey {
 
     /**
      * Create a locator key for a blob encoded block.
@@ -15,16 +15,16 @@ public final class BlobLocatorKey extends AbstractLocatorKey implements
      *            the hash part of the key.
      */
     public BlobLocatorKey(Bytes hash) {
-	super(hash);
+        super(hash);
     }
 
     @Override
     public String getType() {
-	return KeyType.BLOB;
+        return KeyType.BLOB;
     }
 
     @Override
     public BlobLocatorKey toLocatorKey() {
-	return this;
+        return this;
     }
 }

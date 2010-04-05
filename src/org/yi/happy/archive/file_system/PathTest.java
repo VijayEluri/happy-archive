@@ -29,13 +29,13 @@ public class PathTest {
      */
     @Test
     public void testBase1() {
-	Path p = Path.ABSOLUTE.child("foo").child("bar");
+        Path p = Path.ABSOLUTE.child("foo").child("bar");
 
-	Path have = p.getBase();
+        Path have = p.getBase();
 
-	Path want = Path.ABSOLUTE.child("foo");
-	assertEquals(want, have);
-	assertEquals(want.hashCode(), have.hashCode());
+        Path want = Path.ABSOLUTE.child("foo");
+        assertEquals(want, have);
+        assertEquals(want.hashCode(), have.hashCode());
     }
 
     /**
@@ -43,7 +43,7 @@ public class PathTest {
      */
     @Test
     public void testBase2() {
-	assertEquals(Path.ABSOLUTE, Path.ABSOLUTE.getBase());
+        assertEquals(Path.ABSOLUTE, Path.ABSOLUTE.getBase());
     }
 
     /**
@@ -51,7 +51,7 @@ public class PathTest {
      */
     @Test
     public void testBase3() {
-	assertEquals(Path.RELATIVE, Path.RELATIVE.getBase());
+        assertEquals(Path.RELATIVE, Path.RELATIVE.getBase());
     }
 
     /**
@@ -59,11 +59,11 @@ public class PathTest {
      */
     @Test
     public void testEqual1() {
-	Path have1 = Path.ABSOLUTE.child("foo");
-	Path have2 = Path.ABSOLUTE.child("foo");
+        Path have1 = Path.ABSOLUTE.child("foo");
+        Path have2 = Path.ABSOLUTE.child("foo");
 
-	assertTrue(have1.equals(have2));
-	assertEquals(have1.hashCode(), have2.hashCode());
+        assertTrue(have1.equals(have2));
+        assertEquals(have1.hashCode(), have2.hashCode());
     }
 
     /**
@@ -71,9 +71,9 @@ public class PathTest {
      */
     @Test
     public void testParent4() {
-	Path have = Path.RELATIVE.child("..").child("..");
+        Path have = Path.RELATIVE.child("..").child("..");
 
-	assertEquals("../..", have.toString());
+        assertEquals("../..", have.toString());
     }
 
     /**
@@ -81,9 +81,9 @@ public class PathTest {
      */
     @Test
     public void test1() {
-	Path have = Path.ABSOLUTE.child("foo");
+        Path have = Path.ABSOLUTE.child("foo");
 
-	assertEquals("/foo", have.toString());
+        assertEquals("/foo", have.toString());
     }
 
     /**
@@ -91,9 +91,9 @@ public class PathTest {
      */
     @Test
     public void test2() {
-	Path have = Path.ABSOLUTE.child("foo").child("bar");
+        Path have = Path.ABSOLUTE.child("foo").child("bar");
 
-	assertEquals("/foo/bar", have.toString());
+        assertEquals("/foo/bar", have.toString());
     }
 
     /**
@@ -101,9 +101,9 @@ public class PathTest {
      */
     @Test
     public void test3() {
-	Path have = Path.RELATIVE.child("foo");
+        Path have = Path.RELATIVE.child("foo");
 
-	assertEquals("foo", have.toString());
+        assertEquals("foo", have.toString());
     }
 
     /**
@@ -111,9 +111,9 @@ public class PathTest {
      */
     @Test
     public void testParent1() {
-	Path have = Path.RELATIVE.child("foo").parent();
+        Path have = Path.RELATIVE.child("foo").parent();
 
-	assertEquals(Path.RELATIVE, have);
+        assertEquals(Path.RELATIVE, have);
     }
 
     /**
@@ -121,9 +121,9 @@ public class PathTest {
      */
     @Test
     public void testParent2() {
-	Path have = Path.ABSOLUTE.parent();
+        Path have = Path.ABSOLUTE.parent();
 
-	assertEquals(Path.ABSOLUTE, have);
+        assertEquals(Path.ABSOLUTE, have);
     }
 
     /**
@@ -131,9 +131,9 @@ public class PathTest {
      */
     @Test
     public void testParent3() {
-	Path have = Path.RELATIVE.parent();
+        Path have = Path.RELATIVE.parent();
 
-	assertEquals("..", have.toString());
+        assertEquals("..", have.toString());
     }
 
     /**
@@ -141,11 +141,11 @@ public class PathTest {
      */
     @Test
     public void testEqual2() {
-	Path have1 = Path.ABSOLUTE.child("foo").parent();
-	Path have2 = Path.ABSOLUTE;
+        Path have1 = Path.ABSOLUTE.child("foo").parent();
+        Path have2 = Path.ABSOLUTE;
 
-	assertTrue(have1.equals(have2));
-	assertEquals(have1.hashCode(), have2.hashCode());
+        assertTrue(have1.equals(have2));
+        assertEquals(have1.hashCode(), have2.hashCode());
     }
 
     /**
@@ -153,10 +153,10 @@ public class PathTest {
      */
     @Test
     public void testEqual3() {
-	Path have1 = Path.ABSOLUTE.child("foo").parent();
-	Path have2 = Path.RELATIVE;
+        Path have1 = Path.ABSOLUTE.child("foo").parent();
+        Path have2 = Path.RELATIVE;
 
-	assertFalse(have1.equals(have2));
+        assertFalse(have1.equals(have2));
     }
 
     /**
@@ -164,11 +164,11 @@ public class PathTest {
      */
     @Test
     public void testEqual4() {
-	Path have1 = Path.RELATIVE.parent().parent();
-	Path have2 = Path.RELATIVE.parent().parent();
+        Path have1 = Path.RELATIVE.parent().parent();
+        Path have2 = Path.RELATIVE.parent().parent();
 
-	assertTrue(have1.equals(have2));
-	assertEquals(have1.hashCode(), have2.hashCode());
+        assertTrue(have1.equals(have2));
+        assertEquals(have1.hashCode(), have2.hashCode());
     }
 
     /**
@@ -176,9 +176,9 @@ public class PathTest {
      */
     @Test
     public void testSize0() {
-	Path p = Path.RELATIVE;
+        Path p = Path.RELATIVE;
 
-	assertEquals(0, p.size());
+        assertEquals(0, p.size());
     }
 
     /**
@@ -186,9 +186,9 @@ public class PathTest {
      */
     @Test
     public void testSize1() {
-	Path p = Path.RELATIVE.child("foo");
+        Path p = Path.RELATIVE.child("foo");
 
-	assertEquals(1, p.size());
+        assertEquals(1, p.size());
     }
 
     /**
@@ -196,8 +196,8 @@ public class PathTest {
      */
     @Test
     public void testSize2() {
-	Path p = Path.RELATIVE.child("foo").child("bar");
+        Path p = Path.RELATIVE.child("foo").child("bar");
 
-	assertEquals(2, p.size());
+        assertEquals(2, p.size());
     }
 }

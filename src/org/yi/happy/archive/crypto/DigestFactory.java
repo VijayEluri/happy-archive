@@ -19,15 +19,15 @@ public class DigestFactory {
      *             if the algorithm is unknown
      */
     public static DigestProvider getProvider(String algorithm) {
-	return new DigestProvider(algorithm) {
-	    @Override
-	    public MessageDigest get() throws UnknownAlgorithmException {
-		try {
-		    return MessageDigest.getInstance(algorithm);
-		} catch (NoSuchAlgorithmException e) {
-		    throw new UnknownDigestAlgorithmException(algorithm, e);
-		}
-	    }
-	};
+        return new DigestProvider(algorithm) {
+            @Override
+            public MessageDigest get() throws UnknownAlgorithmException {
+                try {
+                    return MessageDigest.getInstance(algorithm);
+                } catch (NoSuchAlgorithmException e) {
+                    throw new UnknownDigestAlgorithmException(algorithm, e);
+                }
+            }
+        };
     }
 }

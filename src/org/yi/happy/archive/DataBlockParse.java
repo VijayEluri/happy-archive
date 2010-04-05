@@ -20,22 +20,22 @@ public class DataBlockParse {
      *             if the block can not be parsed.
      */
     public static DataBlock parse(Block block) {
-	if (block instanceof DataBlock) {
-	    return (DataBlock) block;
-	}
+        if (block instanceof DataBlock) {
+            return (DataBlock) block;
+        }
 
-	Map<String, String> meta = block.getMeta();
+        Map<String, String> meta = block.getMeta();
 
-	if (!meta.keySet().equals(Sets.asSet("size"))) {
-	    throw new IllegalArgumentException("not a plain data block");
-	}
+        if (!meta.keySet().equals(Sets.asSet("size"))) {
+            throw new IllegalArgumentException("not a plain data block");
+        }
 
-	int size = Integer.parseInt(meta.get("size"));
-	if (size != block.getBody().getSize()) {
-	    throw new IllegalArgumentException("size mismatch");
-	}
+        int size = Integer.parseInt(meta.get("size"));
+        if (size != block.getBody().getSize()) {
+            throw new IllegalArgumentException("size mismatch");
+        }
 
-	return new DataBlock(block.getBody());
+        return new DataBlock(block.getBody());
     }
 
 }

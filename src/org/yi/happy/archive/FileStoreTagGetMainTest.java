@@ -23,26 +23,26 @@ public class FileStoreTagGetMainTest {
      */
     @Test
     public void test1() throws IOException {
-	ByteArrayInputStream in = new ByteArrayInputStream(TestData.TAG_FILES
-		.getBytes());
-	FileSystem fs = new FakeFileSystem();
-	FileBlockStore store = new FileBlockStore(fs, "store");
-	store.put(TestData.KEY_CONTENT.getEncodedBlock());
-	store.put(TestData.KEY_CONTENT_40.getEncodedBlock());
+        ByteArrayInputStream in = new ByteArrayInputStream(TestData.TAG_FILES
+                .getBytes());
+        FileSystem fs = new FakeFileSystem();
+        FileBlockStore store = new FileBlockStore(fs, "store");
+        store.put(TestData.KEY_CONTENT.getEncodedBlock());
+        store.put(TestData.KEY_CONTENT_40.getEncodedBlock());
 
-	WaitHandler waitHandler = new WaitHandler() {
-	    @Override
-	    public void doWait(boolean progress) throws IOException {
-		fail();
-	    }
-	};
+        WaitHandler waitHandler = new WaitHandler() {
+            @Override
+            public void doWait(boolean progress) throws IOException {
+                fail();
+            }
+        };
 
-	new FileStoreTagGetMain(fs, waitHandler, in).run("store", "request");
-	
-	assertArrayEquals(TestData.FILE_CONTENT.getBytes(), fs
-		.load("hello.txt"));
-	assertArrayEquals(TestData.FILE_CONTENT_40.getBytes(), fs
-		.load("test.dat"));
+        new FileStoreTagGetMain(fs, waitHandler, in).run("store", "request");
+
+        assertArrayEquals(TestData.FILE_CONTENT.getBytes(), fs
+                .load("hello.txt"));
+        assertArrayEquals(TestData.FILE_CONTENT_40.getBytes(), fs
+                .load("test.dat"));
     }
 
     /**
@@ -52,47 +52,47 @@ public class FileStoreTagGetMainTest {
      */
     @Test
     public void test2() throws IOException {
-	ByteArrayInputStream in = new ByteArrayInputStream(TestData.TAG_FILES
-		.getBytes());
-	final FileSystem fs = new FakeFileSystem();
-	final FileBlockStore store = new FileBlockStore(fs, "store");
+        ByteArrayInputStream in = new ByteArrayInputStream(TestData.TAG_FILES
+                .getBytes());
+        final FileSystem fs = new FakeFileSystem();
+        final FileBlockStore store = new FileBlockStore(fs, "store");
 
-	WaitHandler waitHandler = new WaitHandler() {
-	    @Override
-	    public void doWait(boolean progress) throws IOException {
-		state.doWait(progress);
-	    }
+        WaitHandler waitHandler = new WaitHandler() {
+            @Override
+            public void doWait(boolean progress) throws IOException {
+                state.doWait(progress);
+            }
 
-	    private WaitHandler state = new WaitHandler() {
-		@Override
-		public void doWait(boolean progress) throws IOException {
-		    assertFalse(progress);
+            private WaitHandler state = new WaitHandler() {
+                @Override
+                public void doWait(boolean progress) throws IOException {
+                    assertFalse(progress);
 
-		    String want = TestData.KEY_CONTENT.getLocatorKey() + "\n"
-			    + TestData.KEY_CONTENT_40.getLocatorKey() + "\n";
-		    assertArrayEquals(ByteString.toUtf8(want), fs
-			    .load("request"));
+                    String want = TestData.KEY_CONTENT.getLocatorKey() + "\n"
+                            + TestData.KEY_CONTENT_40.getLocatorKey() + "\n";
+                    assertArrayEquals(ByteString.toUtf8(want), fs
+                            .load("request"));
 
-		    store.put(TestData.KEY_CONTENT.getEncodedBlock());
-		    store.put(TestData.KEY_CONTENT_40.getEncodedBlock());
+                    store.put(TestData.KEY_CONTENT.getEncodedBlock());
+                    store.put(TestData.KEY_CONTENT_40.getEncodedBlock());
 
-		    state = state1;
-		}
-	    };
+                    state = state1;
+                }
+            };
 
-	    private WaitHandler state1 = new WaitHandler() {
-		@Override
-		public void doWait(boolean progress) throws IOException {
-		    fail();
-		}
-	    };
-	};
+            private WaitHandler state1 = new WaitHandler() {
+                @Override
+                public void doWait(boolean progress) throws IOException {
+                    fail();
+                }
+            };
+        };
 
-	new FileStoreTagGetMain(fs, waitHandler, in).run("store", "request");
+        new FileStoreTagGetMain(fs, waitHandler, in).run("store", "request");
 
-	assertArrayEquals(TestData.FILE_CONTENT.getBytes(), fs
-		.load("hello.txt"));
-	assertArrayEquals(TestData.FILE_CONTENT_40.getBytes(), fs
-		.load("test.dat"));
+        assertArrayEquals(TestData.FILE_CONTENT.getBytes(), fs
+                .load("hello.txt"));
+        assertArrayEquals(TestData.FILE_CONTENT_40.getBytes(), fs
+                .load("test.dat"));
     }
 }

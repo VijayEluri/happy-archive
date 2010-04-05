@@ -14,49 +14,49 @@ import org.yi.happy.annotate.EntryPoint;
 public class Main {
     private static final class Cmd {
 
-	private final String name;
-	private final Class<?> cls;
+        private final String name;
+        private final Class<?> cls;
 
-	public Cmd(String name, Class<?> cls) {
-	    this.name = name;
-	    this.cls = cls;
-	}
+        public Cmd(String name, Class<?> cls) {
+            this.name = name;
+            this.cls = cls;
+        }
 
-	public String getName() {
-	    return name;
-	}
+        public String getName() {
+            return name;
+        }
 
-	public Class<?> getCls() {
-	    return cls;
-	}
+        public Class<?> getCls() {
+            return cls;
+        }
     }
-    
-    private static final List<Cmd> cmds = Collections
-	    .unmodifiableList(Arrays.asList(
 
-	    new Cmd("file-get", FileStoreFileGetMain.class),
-	    
-	    new Cmd("block-put", FileStoreBlockPutMain.class),
+    private static final List<Cmd> cmds = Collections.unmodifiableList(Arrays
+            .asList(
 
-	    new Cmd("stream-get", FileStoreStreamGetMain.class),
+            new Cmd("file-get", FileStoreFileGetMain.class),
 
-	    new Cmd("stream-put", FileStoreStreamPutMain.class),
+            new Cmd("block-put", FileStoreBlockPutMain.class),
 
-	    new Cmd("tag-get", FileStoreTagGetMain.class),
+            new Cmd("stream-get", FileStoreStreamGetMain.class),
 
-	    new Cmd("decode", DecodeBlockMain.class),
-	    
-	    new Cmd("encode", EncodeContentMain.class),
-	    
-	    new Cmd("verify", VerifyMain.class),
+            new Cmd("stream-put", FileStoreStreamPutMain.class),
 
-	    new Cmd("index-search", IndexSearchMain.class),
+            new Cmd("tag-get", FileStoreTagGetMain.class),
 
-	    new Cmd("volume-get", VolumeGetMain.class),
+            new Cmd("decode", DecodeBlockMain.class),
 
-	    new Cmd("store-list", FileStoreListMain.class)
+            new Cmd("encode", EncodeContentMain.class),
 
-	    ));
+            new Cmd("verify", VerifyMain.class),
+
+            new Cmd("index-search", IndexSearchMain.class),
+
+            new Cmd("volume-get", VolumeGetMain.class),
+
+            new Cmd("store-list", FileStoreListMain.class)
+
+            ));
 
     /**
      * Run the given sub command, from the command line.
@@ -66,26 +66,26 @@ public class Main {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-	if (args.length < 1) {
-	    help();
-	    return;
-	}
+        if (args.length < 1) {
+            help();
+            return;
+        }
 
-	for (Cmd cmd : cmds) {
-	    if (cmd.getName().equals(args[0])) {
-		Method m = cmd.getCls().getMethod("main", args.getClass());
-		String[] a = Arrays.copyOfRange(args, 1, args.length);
-		m.invoke(null, (Object) a);
-		return;
-	    }
-	}
+        for (Cmd cmd : cmds) {
+            if (cmd.getName().equals(args[0])) {
+                Method m = cmd.getCls().getMethod("main", args.getClass());
+                String[] a = Arrays.copyOfRange(args, 1, args.length);
+                m.invoke(null, (Object) a);
+                return;
+            }
+        }
 
-	help();
+        help();
     }
 
     private static void help() {
-	for (Cmd cmd : cmds) {
-	    System.out.println(cmd.getName());
-	}
+        for (Cmd cmd : cmds) {
+            System.out.println(cmd.getName());
+        }
     }
 }

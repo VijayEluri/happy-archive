@@ -15,9 +15,9 @@ public class DigestFactoryTest {
      */
     @Test
     public void testSha256() {
-	DigestProvider d = DigestFactory.getProvider("sha-256");
-	Assert.assertEquals("sha-256", d.getAlgorithm());
-	Assert.assertEquals(32, d.get().getDigestLength());
+        DigestProvider d = DigestFactory.getProvider("sha-256");
+        Assert.assertEquals("sha-256", d.getAlgorithm());
+        Assert.assertEquals(32, d.get().getDigestLength());
     }
 
     /**
@@ -25,9 +25,9 @@ public class DigestFactoryTest {
      */
     @Test
     public void testSha512() {
-	DigestProvider d = DigestFactory.getProvider("sha-512");
-	Assert.assertEquals("sha-512", d.getAlgorithm());
-	Assert.assertEquals(64, d.get().getDigestLength());
+        DigestProvider d = DigestFactory.getProvider("sha-512");
+        Assert.assertEquals("sha-512", d.getAlgorithm());
+        Assert.assertEquals(64, d.get().getDigestLength());
     }
 
     /**
@@ -35,9 +35,9 @@ public class DigestFactoryTest {
      */
     @Test
     public void testMd5() {
-	DigestProvider d = DigestFactory.getProvider("md5");
-	Assert.assertEquals("md5", d.getAlgorithm());
-	Assert.assertEquals(16, d.get().getDigestLength());
+        DigestProvider d = DigestFactory.getProvider("md5");
+        Assert.assertEquals("md5", d.getAlgorithm());
+        Assert.assertEquals(16, d.get().getDigestLength());
     }
 
     /**
@@ -45,9 +45,9 @@ public class DigestFactoryTest {
      */
     @Test
     public void testSha1() {
-	DigestProvider d = DigestFactory.getProvider("sha1");
-	Assert.assertEquals("sha1", d.getAlgorithm());
-	Assert.assertEquals(20, d.get().getDigestLength());
+        DigestProvider d = DigestFactory.getProvider("sha1");
+        Assert.assertEquals("sha1", d.getAlgorithm());
+        Assert.assertEquals(20, d.get().getDigestLength());
     }
 
     /**
@@ -55,9 +55,9 @@ public class DigestFactoryTest {
      */
     @Test
     public void testSha1a() {
-	DigestProvider d = DigestFactory.getProvider("Sha1");
-	Assert.assertEquals("Sha1", d.getAlgorithm());
-	Assert.assertEquals(20, d.get().getDigestLength());
+        DigestProvider d = DigestFactory.getProvider("Sha1");
+        Assert.assertEquals("Sha1", d.getAlgorithm());
+        Assert.assertEquals(20, d.get().getDigestLength());
     }
 
     /**
@@ -65,9 +65,9 @@ public class DigestFactoryTest {
      */
     @Test
     public void testProvideBad1() {
-	DigestProvider got = DigestFactory.getProvider("bad");
+        DigestProvider got = DigestFactory.getProvider("bad");
 
-	assertNotNull(got);
+        assertNotNull(got);
     }
 
     /**
@@ -75,9 +75,9 @@ public class DigestFactoryTest {
      */
     @Test(expected = UnknownAlgorithmException.class)
     public void testProvideBad2() {
-	DigestProvider got = DigestFactory.getProvider("bad");
+        DigestProvider got = DigestFactory.getProvider("bad");
 
-	got.get();
+        got.get();
     }
 
     /**
@@ -85,11 +85,11 @@ public class DigestFactoryTest {
      */
     @Test
     public void testProvideGood() {
-	DigestProvider got = DigestFactory.getProvider("sha1");
+        DigestProvider got = DigestFactory.getProvider("sha1");
 
-	assertNotNull(got);
-	assertEquals("sha1", got.getAlgorithm());
+        assertNotNull(got);
+        assertEquals("sha1", got.getAlgorithm());
 
-	assertNotNull(got.get());
+        assertNotNull(got.get());
     }
 }

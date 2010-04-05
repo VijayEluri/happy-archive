@@ -21,10 +21,10 @@ public class FileStoreFileGetMain {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-	FileSystem fs = new RealFileSystem();
-	WaitHandler waitHandler = new WaitHandlerProgressiveDelay();
+        FileSystem fs = new RealFileSystem();
+        WaitHandler waitHandler = new WaitHandlerProgressiveDelay();
 
-	new FileStoreFileGetMain(fs, waitHandler).run(args);
+        new FileStoreFileGetMain(fs, waitHandler).run(args);
     }
 
     /**
@@ -36,8 +36,8 @@ public class FileStoreFileGetMain {
      *            what to do when it is time to wait for data.
      */
     public FileStoreFileGetMain(FileSystem fs, WaitHandler waitHandler) {
-	this.fs = fs;
-	this.waitHandler = waitHandler;
+        this.fs = fs;
+        this.waitHandler = waitHandler;
     }
 
     private FileSystem fs;
@@ -52,33 +52,33 @@ public class FileStoreFileGetMain {
      * @throws IOException
      */
     public void run(String... args) throws IOException {
-	/*
-	 * arguments: store, request, key, output
-	 */
-	FileBlockStore store = new FileBlockStore(fs, args[0]);
-	pendingFile = args[1];
-	FullKey key = KeyParse.parseFullKey(args[2]);
-	String path = args[3];
+        /*
+         * arguments: store, request, key, output
+         */
+        FileBlockStore store = new FileBlockStore(fs, args[0]);
+        pendingFile = args[1];
+        FullKey key = KeyParse.parseFullKey(args[2]);
+        String path = args[3];
 
-	RestoreFile r = new RestoreFile(new SplitReader(key,
-		new RetrieveBlockStorage(store)), path, fs);
-	r.step();
-	while (!r.isDone()) {
-	    notReady(r);
-	    r.step();
-	}
+        RestoreFile r = new RestoreFile(new SplitReader(key,
+                new RetrieveBlockStorage(store)), path, fs);
+        r.step();
+        while (!r.isDone()) {
+            notReady(r);
+            r.step();
+        }
     }
 
     private void notReady(RestoreFile reader) throws IOException {
-	StringBuilder p = new StringBuilder();
-	for (FullKey k : reader.getPending()) {
-	    p.append(k.toLocatorKey() + "\n");
-	}
-	fs.save(pendingFile + ".tmp", ByteString.toUtf8(p.toString()));
-	fs.rename(pendingFile + ".tmp", pendingFile);
+        StringBuilder p = new StringBuilder();
+        for (FullKey k : reader.getPending()) {
+            p.append(k.toLocatorKey() + "\n");
+        }
+        fs.save(pendingFile + ".tmp", ByteString.toUtf8(p.toString()));
+        fs.rename(pendingFile + ".tmp", pendingFile);
 
-	waitHandler.doWait(progress != reader.getProgress());
-	progress = reader.getProgress();
+        waitHandler.doWait(progress != reader.getProgress());
+        progress = reader.getProgress();
     }
 
     private int progress;

@@ -23,9 +23,9 @@ public class BlockParseTest {
      */
     @Test
     public void test1() throws IOException {
-	Block block = BlockParse.load(TestData.KEY_CONTENT.getUrl());
+        Block block = BlockParse.load(TestData.KEY_CONTENT.getUrl());
 
-	assertEquals("content-hash", block.getMeta().get("key-type"));
+        assertEquals("content-hash", block.getMeta().get("key-type"));
     }
 
     /**
@@ -35,10 +35,10 @@ public class BlockParseTest {
      */
     @Test
     public void test2() throws IOException {
-	Block block = BlockParse.load(TestData.FILE_EMPTY.getUrl());
+        Block block = BlockParse.load(TestData.FILE_EMPTY.getUrl());
 
-	assertEquals(Collections.emptyMap(), block.getMeta());
-	assertEquals(new Bytes(), block.getBody());
+        assertEquals(Collections.emptyMap(), block.getMeta());
+        assertEquals(new Bytes(), block.getBody());
     }
 
     /**
@@ -48,9 +48,9 @@ public class BlockParseTest {
      */
     @Test
     public void testLoad() throws IOException {
-	Block have = BlockParse.load(TestData.OK_SMALL.getUrl());
+        Block have = BlockParse.load(TestData.OK_SMALL.getUrl());
 
-	Block want = GenericBlockTest.createSampleBlock();
-	Assert.assertEquals(want, have);
+        Block want = GenericBlockTest.createSampleBlock();
+        Assert.assertEquals(want, have);
     }
 }

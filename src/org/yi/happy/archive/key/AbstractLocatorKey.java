@@ -17,10 +17,10 @@ public abstract class AbstractLocatorKey {
      *            the hash
      */
     public AbstractLocatorKey(Bytes hash) {
-	if (hash.getSize() < 1) {
-	    throw new IllegalArgumentException("hash too short");
-	}
-	this.hash = hash;
+        if (hash.getSize() < 1) {
+            throw new IllegalArgumentException("hash too short");
+        }
+        this.hash = hash;
     }
 
     /**
@@ -28,12 +28,12 @@ public abstract class AbstractLocatorKey {
      * @return the hash
      */
     public Bytes getHash() {
-	return hash;
+        return hash;
     }
 
     @Override
     public String toString() {
-	return getType() + ":" + Base16.encode(hash);
+        return getType() + ":" + Base16.encode(hash);
     }
 
     /**
@@ -43,25 +43,25 @@ public abstract class AbstractLocatorKey {
 
     @Override
     public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + getType().hashCode();
-	result = prime * result + hash.hashCode();
-	return result;
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + getType().hashCode();
+        result = prime * result + hash.hashCode();
+        return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	final AbstractLocatorKey other = (AbstractLocatorKey) obj;
-	if (!hash.equals(other.hash))
-	    return false;
-	return true;
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final AbstractLocatorKey other = (AbstractLocatorKey) obj;
+        if (!hash.equals(other.hash))
+            return false;
+        return true;
     }
 
 }

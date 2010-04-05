@@ -23,15 +23,15 @@ public class VolumeGetMainTest {
      */
     @Test
     public void test1() throws UnsupportedOperationException, IOException {
-	FileSystem fs = new FakeFileSystem();
-	fs.mkdir("/media");
-	fs.save("/media/00.dat", TestData.KEY_CONTENT_MAP.getBytes());
-	Reader in = new StringReader("00.dat\n");
-	
-	new VolumeGetMain(fs, in, null, null).run("store", "/media");
-	
-	FileBlockStore s = new FileBlockStore(fs, "store");
-	assertEquals(TestData.KEY_CONTENT_MAP.getEncodedBlock(), s
-		.get(TestData.KEY_CONTENT_MAP.getLocatorKey()));
+        FileSystem fs = new FakeFileSystem();
+        fs.mkdir("/media");
+        fs.save("/media/00.dat", TestData.KEY_CONTENT_MAP.getBytes());
+        Reader in = new StringReader("00.dat\n");
+
+        new VolumeGetMain(fs, in, null, null).run("store", "/media");
+
+        FileBlockStore s = new FileBlockStore(fs, "store");
+        assertEquals(TestData.KEY_CONTENT_MAP.getEncodedBlock(), s
+                .get(TestData.KEY_CONTENT_MAP.getLocatorKey()));
     }
 }

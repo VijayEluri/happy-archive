@@ -31,17 +31,17 @@ public class NameEncodedBlockParse {
      * @return the resulting {@link NameEncodedBlock}.
      */
     public static NameEncodedBlock parse(Block block) {
-	if (block instanceof NameEncodedBlock) {
-	    return (NameEncodedBlock) block;
-	}
+        if (block instanceof NameEncodedBlock) {
+            return (NameEncodedBlock) block;
+        }
 
-	Map<String, String> meta = block.getMeta();
+        Map<String, String> meta = block.getMeta();
 
-	if (!meta.containsKey(NameEncodedBlock.VERSION_META)) {
-	    return parseVersion1(meta, block);
-	}
+        if (!meta.containsKey(NameEncodedBlock.VERSION_META)) {
+            return parseVersion1(meta, block);
+        }
 
-	return parseVersion2(meta, block);
+        return parseVersion2(meta, block);
     }
 
     /**
@@ -50,48 +50,48 @@ public class NameEncodedBlockParse {
     @ExternalName
     private static final Set<String> META;
     static {
-	Set<String> m = new HashSet<String>();
-	m.add(NameEncodedBlock.VERSION_META);
-	m.add(NameEncodedBlock.KEY_TYPE_META);
-	m.add(NameEncodedBlock.KEY_META);
-	m.add(NameEncodedBlock.DIGEST_META);
-	m.add(NameEncodedBlock.CIPHER_META);
-	m.add(NameEncodedBlock.HASH_META);
-	m.add(NameEncodedBlock.SIZE_META);
-	META = Collections.unmodifiableSet(m);
+        Set<String> m = new HashSet<String>();
+        m.add(NameEncodedBlock.VERSION_META);
+        m.add(NameEncodedBlock.KEY_TYPE_META);
+        m.add(NameEncodedBlock.KEY_META);
+        m.add(NameEncodedBlock.DIGEST_META);
+        m.add(NameEncodedBlock.CIPHER_META);
+        m.add(NameEncodedBlock.HASH_META);
+        m.add(NameEncodedBlock.SIZE_META);
+        META = Collections.unmodifiableSet(m);
     }
 
     private static NameEncodedBlock parseVersion2(Map<String, String> meta,
-	    Block block) {
-	if (!meta.keySet().equals(META)) {
-	    throw new IllegalArgumentException("meta missmatch");
-	}
+            Block block) {
+        if (!meta.keySet().equals(META)) {
+            throw new IllegalArgumentException("meta missmatch");
+        }
 
-	if (!meta.get(NameEncodedBlock.VERSION_META).equals(
-		NameEncodedBlock.VERSION)) {
-	    throw new IllegalArgumentException("bad version");
-	}
+        if (!meta.get(NameEncodedBlock.VERSION_META).equals(
+                NameEncodedBlock.VERSION)) {
+            throw new IllegalArgumentException("bad version");
+        }
 
-	if (!meta.get(NameEncodedBlock.KEY_TYPE_META).equals(KeyType.NAME_HASH)) {
-	    throw new IllegalArgumentException("wrong block type");
-	}
+        if (!meta.get(NameEncodedBlock.KEY_TYPE_META).equals(KeyType.NAME_HASH)) {
+            throw new IllegalArgumentException("wrong block type");
+        }
 
-	NameLocatorKey key = KeyParse.parseNameLocatorKey(meta
-		.get(NameEncodedBlock.KEY_META));
-	DigestProvider digest = DigestFactory.getProvider(meta
-		.get(NameEncodedBlock.DIGEST_META));
-	CipherProvider cipher = CipherFactory.getProvider(meta
-		.get(NameEncodedBlock.CIPHER_META));
-	Bytes hash = new Bytes(Base16.decode(meta
-		.get(NameEncodedBlock.HASH_META)));
-	int size = Integer.parseInt(meta.get(NameEncodedBlock.SIZE_META));
-	Bytes body = block.getBody();
+        NameLocatorKey key = KeyParse.parseNameLocatorKey(meta
+                .get(NameEncodedBlock.KEY_META));
+        DigestProvider digest = DigestFactory.getProvider(meta
+                .get(NameEncodedBlock.DIGEST_META));
+        CipherProvider cipher = CipherFactory.getProvider(meta
+                .get(NameEncodedBlock.CIPHER_META));
+        Bytes hash = new Bytes(Base16.decode(meta
+                .get(NameEncodedBlock.HASH_META)));
+        int size = Integer.parseInt(meta.get(NameEncodedBlock.SIZE_META));
+        Bytes body = block.getBody();
 
-	if (body.getSize() != size) {
-	    throw new IllegalArgumentException("size missmatch");
-	}
+        if (body.getSize() != size) {
+            throw new IllegalArgumentException("size missmatch");
+        }
 
-	return new NameEncodedBlock(key, hash, digest, cipher, body);
+        return new NameEncodedBlock(key, hash, digest, cipher, body);
     }
 
     /**
@@ -111,39 +111,39 @@ public class NameEncodedBlockParse {
     }
 
     private static NameEncodedBlock parseVersion1(Map<String, String> meta,
-	    Block block) {
-	if (!meta.keySet().equals(META_OLD)) {
-	    throw new IllegalArgumentException("meta missmatch");
-	}
+            Block block) {
+        if (!meta.keySet().equals(META_OLD)) {
+            throw new IllegalArgumentException("meta missmatch");
+        }
 
-	if (!meta.get(NameEncodedBlock.KEY_TYPE_META).equals(KeyType.NAME_HASH)) {
-	    throw new IllegalArgumentException("wrong block type");
-	}
+        if (!meta.get(NameEncodedBlock.KEY_TYPE_META).equals(KeyType.NAME_HASH)) {
+            throw new IllegalArgumentException("wrong block type");
+        }
 
-	NameLocatorKey key = KeyParse.parseNameLocatorKey(meta
-		.get(NameEncodedBlock.KEY_META));
-	DigestProvider digest = DigestFactory.getProvider(meta
-		.get(NameEncodedBlock.DIGEST_META));
-	String cipher0 = meta.get(NameEncodedBlock.CIPHER_META);
-	CipherProvider cipher = CipherFactory.getProvider(fixCipher(cipher0));
-	Bytes hash = new Bytes(Base16.decode(meta
-		.get(NameEncodedBlock.HASH_META)));
-	int size = Integer.parseInt(meta.get(NameEncodedBlock.SIZE_META));
-	Bytes body = block.getBody();
+        NameLocatorKey key = KeyParse.parseNameLocatorKey(meta
+                .get(NameEncodedBlock.KEY_META));
+        DigestProvider digest = DigestFactory.getProvider(meta
+                .get(NameEncodedBlock.DIGEST_META));
+        String cipher0 = meta.get(NameEncodedBlock.CIPHER_META);
+        CipherProvider cipher = CipherFactory.getProvider(fixCipher(cipher0));
+        Bytes hash = new Bytes(Base16.decode(meta
+                .get(NameEncodedBlock.HASH_META)));
+        int size = Integer.parseInt(meta.get(NameEncodedBlock.SIZE_META));
+        Bytes body = block.getBody();
 
-	if (body.getSize() != size) {
-	    throw new IllegalArgumentException("size missmatch");
-	}
+        if (body.getSize() != size) {
+            throw new IllegalArgumentException("size missmatch");
+        }
 
-	return new NameEncodedBlock(key, hash, digest, cipher, body);
+        return new NameEncodedBlock(key, hash, digest, cipher, body);
     }
 
     private static String fixCipher(String cipher) {
-	String name = fixMap.get(cipher);
-	if (name == null) {
-	    return cipher;
-	}
-	return name;
+        String name = fixMap.get(cipher);
+        if (name == null) {
+            return cipher;
+        }
+        return name;
     }
 
     /**
@@ -153,9 +153,9 @@ public class NameEncodedBlockParse {
     public static final Map<String, String> fixMap;
 
     static {
-	Map<String, String> m = new HashMap<String, String>(2);
-	m.put("aes-192-cbc", "rijndael192-192-cbc");
-	m.put("aes-256-cbc", "rijndael256-256-cbc");
-	fixMap = Collections.unmodifiableMap(m);
+        Map<String, String> m = new HashMap<String, String>(2);
+        m.put("aes-192-cbc", "rijndael192-192-cbc");
+        m.put("aes-256-cbc", "rijndael256-256-cbc");
+        fixMap = Collections.unmodifiableMap(m);
     }
 }

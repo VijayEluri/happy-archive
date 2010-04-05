@@ -25,12 +25,12 @@ public class EncodedBlockTest {
     @Test
     @MisplacedTest(ContentEncodedBlockTest.class)
     public void testDecodeOldContent() throws IOException {
-	EncodedBlock b = TestData.KEY_OLD_CONTENT.getEncodedBlock();
+        EncodedBlock b = TestData.KEY_OLD_CONTENT.getEncodedBlock();
 
-	Block have = b.decode(TestData.KEY_OLD_CONTENT.getFullKey());
+        Block have = b.decode(TestData.KEY_OLD_CONTENT.getFullKey());
 
-	Block want = TestData.CLEAR_CONTENT.getBlock();
-	assertEquals(want, have);
+        Block want = TestData.CLEAR_CONTENT.getBlock();
+        assertEquals(want, have);
     }
 
     /**
@@ -41,12 +41,12 @@ public class EncodedBlockTest {
     @Test
     @MisplacedTest(ContentEncodedBlockTest.class)
     public void testDecodeContent() throws IOException {
-	EncodedBlock b = TestData.KEY_CONTENT.getEncodedBlock();
+        EncodedBlock b = TestData.KEY_CONTENT.getEncodedBlock();
 
-	Block have = b.decode(TestData.KEY_CONTENT.getFullKey());
+        Block have = b.decode(TestData.KEY_CONTENT.getFullKey());
 
-	Block want = TestData.CLEAR_CONTENT.getBlock();
-	assertEquals(want, have);
+        Block want = TestData.CLEAR_CONTENT.getBlock();
+        assertEquals(want, have);
     }
 
     /**
@@ -57,12 +57,12 @@ public class EncodedBlockTest {
     @Test
     @MisplacedTest(NameEncodedBlockTest.class)
     public void testDecodeName() throws IOException {
-	EncodedBlock b = TestData.KEY_NAME.getEncodedBlock();
+        EncodedBlock b = TestData.KEY_NAME.getEncodedBlock();
 
-	Block have = b.decode(TestData.KEY_NAME.getFullKey());
+        Block have = b.decode(TestData.KEY_NAME.getFullKey());
 
-	Block want = TestData.CLEAR_CONTENT.getBlock();
-	assertEquals(want, have);
+        Block want = TestData.CLEAR_CONTENT.getBlock();
+        assertEquals(want, have);
     }
 
     /**
@@ -74,15 +74,15 @@ public class EncodedBlockTest {
     @Test
     @MisplacedTest(ContentEncodedBlockTest.class)
     public void testContentDecodeBadKey() throws IOException {
-	EncodedBlock b = TestData.KEY_CONTENT.getEncodedBlock();
+        EncodedBlock b = TestData.KEY_CONTENT.getEncodedBlock();
 
-	FullKey key = KeyParse.parseFullKey("content-hash:87c5f6fe"
-		+ "4ea801c8eb227b8b218a0659c18ece76b7c200c645ab4364becf"
-		+ "68d5:f6bd9f3b01b4ee40f60df2dc622f9d6f3aa38a5673a87e8"
-		+ "20b40164e930edead");
-	Block c = b.decode(key);
+        FullKey key = KeyParse.parseFullKey("content-hash:87c5f6fe"
+                + "4ea801c8eb227b8b218a0659c18ece76b7c200c645ab4364becf"
+                + "68d5:f6bd9f3b01b4ee40f60df2dc622f9d6f3aa38a5673a87e8"
+                + "20b40164e930edead");
+        Block c = b.decode(key);
 
-	assertFalse(TestData.CLEAR_CONTENT.getBlock().equals(c));
+        assertFalse(TestData.CLEAR_CONTENT.getBlock().equals(c));
     }
 
     /**
@@ -94,12 +94,12 @@ public class EncodedBlockTest {
     @Test(expected = IllegalArgumentException.class)
     @MisplacedTest(ContentEncodedBlockTest.class)
     public void testContentDecodeBadKey2() throws IOException {
-	EncodedBlock b = TestData.KEY_CONTENT.getEncodedBlock();
-	FullKey key = KeyParse.parseFullKey("content-hash:87c5f6fe"
-		+ "4ea801c8eb227b8b218a0659c18ece76b7c200c645ab4364becf"
-		+ "68d5:f6bd9f3b01b4ee40f60df2dc622f9d6f");
+        EncodedBlock b = TestData.KEY_CONTENT.getEncodedBlock();
+        FullKey key = KeyParse.parseFullKey("content-hash:87c5f6fe"
+                + "4ea801c8eb227b8b218a0659c18ece76b7c200c645ab4364becf"
+                + "68d5:f6bd9f3b01b4ee40f60df2dc622f9d6f");
 
-	b.decode(key);
+        b.decode(key);
     }
 
     /**
@@ -111,13 +111,13 @@ public class EncodedBlockTest {
     @Test(expected = IllegalArgumentException.class)
     @MisplacedTest(ContentEncodedBlockTest.class)
     public void testContentDecodeBadLocator() throws IOException {
-	EncodedBlock b = TestData.KEY_CONTENT.getEncodedBlock();
+        EncodedBlock b = TestData.KEY_CONTENT.getEncodedBlock();
 
-	FullKey key = KeyParse.parseFullKey("content-hash:87c5f6fe"
-		+ "4ea801c8eb227b8b218a0659c18ece76b7c200c645ab4364becf"
-		+ "68df:f6bd9f3b01b4ee40f60df2dc622f9d6f3aa38a5673a87e8"
-		+ "20b40164e930edeac");
-	b.decode(key);
+        FullKey key = KeyParse.parseFullKey("content-hash:87c5f6fe"
+                + "4ea801c8eb227b8b218a0659c18ece76b7c200c645ab4364becf"
+                + "68df:f6bd9f3b01b4ee40f60df2dc622f9d6f3aa38a5673a87e8"
+                + "20b40164e930edeac");
+        b.decode(key);
     }
 
     /**
@@ -129,11 +129,11 @@ public class EncodedBlockTest {
     @Test(expected = IllegalArgumentException.class)
     @MisplacedTest(NameEncodedBlockTest.class)
     public void testNameDecodeBad() throws IOException {
-	EncodedBlock b = TestData.KEY_NAME.getEncodedBlock();
+        EncodedBlock b = TestData.KEY_NAME.getEncodedBlock();
 
-	NameFullKey k = new NameFullKey(DigestFactory.getProvider("sha-256"),
-		"test2");
-	b.decode(k);
+        NameFullKey k = new NameFullKey(DigestFactory.getProvider("sha-256"),
+                "test2");
+        b.decode(k);
     }
 
     /**
@@ -145,11 +145,11 @@ public class EncodedBlockTest {
     @Test
     @MisplacedTest(NameEncodedBlockTest.class)
     public void testNameDecode() throws IOException {
-	EncodedBlock b = TestData.KEY_NAME.getEncodedBlock();
+        EncodedBlock b = TestData.KEY_NAME.getEncodedBlock();
 
-	Block have = b.decode(TestData.KEY_NAME.getFullKey());
+        Block have = b.decode(TestData.KEY_NAME.getFullKey());
 
-	Block want = TestData.CLEAR_CONTENT.getBlock();
-	assertEquals(want, have);
+        Block want = TestData.CLEAR_CONTENT.getBlock();
+        assertEquals(want, have);
     }
 }

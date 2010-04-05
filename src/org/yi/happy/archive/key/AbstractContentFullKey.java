@@ -23,16 +23,16 @@ public abstract class AbstractContentFullKey implements FullKey {
      *            the encryption key part.
      */
     protected AbstractContentFullKey(Bytes hash, Bytes pass) {
-	if (hash.getSize() < 1) {
-	    throw new IllegalArgumentException("hash too short");
-	}
+        if (hash.getSize() < 1) {
+            throw new IllegalArgumentException("hash too short");
+        }
 
-	if (pass == null) {
-	    throw new IllegalArgumentException("pass is null");
-	}
+        if (pass == null) {
+            throw new IllegalArgumentException("pass is null");
+        }
 
-	this.hash = hash;
-	this.pass = pass;
+        this.hash = hash;
+        this.pass = pass;
     }
 
     /**
@@ -40,7 +40,7 @@ public abstract class AbstractContentFullKey implements FullKey {
      * @return the hash part of the key.
      */
     public Bytes getHash() {
-	return hash;
+        return hash;
     }
 
     /**
@@ -48,38 +48,38 @@ public abstract class AbstractContentFullKey implements FullKey {
      * @return the encryption key part of the key.
      */
     public Bytes getPass() {
-	return pass;
+        return pass;
     }
 
     @Override
     public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + hash.hashCode();
-	result = prime * result + pass.hashCode();
-	return result;
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + hash.hashCode();
+        result = prime * result + pass.hashCode();
+        return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	final AbstractContentFullKey other = (AbstractContentFullKey) obj;
-	if (!hash.equals(other.hash))
-	    return false;
-	if (!pass.equals(other.pass))
-	    return false;
-	return true;
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final AbstractContentFullKey other = (AbstractContentFullKey) obj;
+        if (!hash.equals(other.hash))
+            return false;
+        if (!pass.equals(other.pass))
+            return false;
+        return true;
     }
 
     @Override
     public String toString() {
-	return getType() + ":" + Base16.encode(hash) + ":"
-		+ Base16.encode(pass);
+        return getType() + ":" + Base16.encode(hash) + ":"
+                + Base16.encode(pass);
     }
 
 }

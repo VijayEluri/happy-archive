@@ -25,8 +25,8 @@ public class FileStoreListMain {
      *            the output stream.
      */
     public FileStoreListMain(FileSystem fs, Writer out) {
-	this.fs = fs;
-	this.out = out;
+        this.fs = fs;
+        this.out = out;
     }
 
     /**
@@ -37,18 +37,18 @@ public class FileStoreListMain {
      * @throws IOException
      */
     public void run(String... args) throws IOException {
-	if (args.length < 1) {
-	    out.append("use: store\n");
-	    return;
-	}
+        if (args.length < 1) {
+            out.append("use: store\n");
+            return;
+        }
 
-	FileBlockStore store = new FileBlockStore(fs, args[0]);
-	store.visit(new BlockStoreVisitor<IOException>() {
-	    @Override
-	    public void accept(LocatorKey key) throws IOException {
-		out.write(key + "\n");
-	    }
-	});
+        FileBlockStore store = new FileBlockStore(fs, args[0]);
+        store.visit(new BlockStoreVisitor<IOException>() {
+            @Override
+            public void accept(LocatorKey key) throws IOException {
+                out.write(key + "\n");
+            }
+        });
     }
 
     /**
@@ -58,9 +58,9 @@ public class FileStoreListMain {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-	FileSystem fs = new RealFileSystem();
-	Writer out = new OutputStreamWriter(System.out);
-	new FileStoreListMain(fs, out).run(args);
-	out.flush();
+        FileSystem fs = new RealFileSystem();
+        Writer out = new OutputStreamWriter(System.out);
+        new FileStoreListMain(fs, out).run(args);
+        out.flush();
     }
 }

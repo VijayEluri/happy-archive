@@ -28,7 +28,7 @@ public class Utf8NotSupportedError extends Error {
      *            the cause.
      */
     public Utf8NotSupportedError(String message, Throwable cause) {
-	super(message, cause);
+        super(message, cause);
     }
 
     /**
@@ -39,7 +39,7 @@ public class Utf8NotSupportedError extends Error {
      *            the message.
      */
     public Utf8NotSupportedError(String message) {
-	super(message);
+        super(message);
     }
 
     /**
@@ -50,6 +50,6 @@ public class Utf8NotSupportedError extends Error {
      *            the cause.
      */
     public Utf8NotSupportedError(Throwable cause) {
-	super(cause);
+        super(cause);
     }
 }

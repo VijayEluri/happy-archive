@@ -63,16 +63,16 @@ public class KeyInputStream extends InputStream {
             /*
              * if the buffer is before the current offset, drop it
              */
-	    if (buff != null && buff.getOffset() + buff.getSize() <= offset) {
+            if (buff != null && buff.getOffset() + buff.getSize() <= offset) {
                 buff = null;
             }
 
             if (buff != null) {
-		if (buff.getOffset() > offset) {
+                if (buff.getOffset() > offset) {
                     return 0;
                 }
 
-		int out = buff.getAbsolute(offset) & 0xff;
+                int out = buff.getAbsolute(offset) & 0xff;
                 offset++;
 
                 return out;
@@ -87,12 +87,12 @@ public class KeyInputStream extends InputStream {
                 return 0;
             }
 
-	    try {
-		buff = reader.fetchFirst();
-	    } catch (IOException e) {
-		buff = null;
-	    }
-	    if (buff == null) {
+            try {
+                buff = reader.fetchFirst();
+            } catch (IOException e) {
+                buff = null;
+            }
+            if (buff == null) {
                 notReadyHandler.notReady(reader);
             }
         }

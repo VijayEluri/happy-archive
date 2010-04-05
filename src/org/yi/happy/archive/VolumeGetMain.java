@@ -36,10 +36,10 @@ public class VolumeGetMain {
      *            the standard error.
      */
     public VolumeGetMain(FileSystem fs, Reader in, Writer out, PrintStream err) {
-	this.fs = fs;
-	this.in = in;
-	this.out = out;
-	this.err = err;
+        this.fs = fs;
+        this.in = in;
+        this.out = out;
+        this.err = err;
     }
 
     /**
@@ -50,24 +50,24 @@ public class VolumeGetMain {
      * @throws IOException
      */
     public void run(String... args) throws IOException {
-	if (args.length != 2) {
-	    out.write("use: store base < list\n");
-	    return;
-	}
+        if (args.length != 2) {
+            out.write("use: store base < list\n");
+            return;
+        }
 
-	FileBlockStore s = new FileBlockStore(fs, args[0]);
+        FileBlockStore s = new FileBlockStore(fs, args[0]);
 
-	LineCursor in = new LineCursor(this.in);
-	while (in.next()) {
-	    try {
-		byte[] data = fs.load(fs.join(args[1], in.get()),
-			Blocks.MAX_SIZE);
-		EncodedBlock b = EncodedBlockParse.parse(data);
-		s.put(b);
-	    } catch (Exception e) {
-		e.printStackTrace(err);
-	    }
-	}
+        LineCursor in = new LineCursor(this.in);
+        while (in.next()) {
+            try {
+                byte[] data = fs.load(fs.join(args[1], in.get()),
+                        Blocks.MAX_SIZE);
+                EncodedBlock b = EncodedBlockParse.parse(data);
+                s.put(b);
+            } catch (Exception e) {
+                e.printStackTrace(err);
+            }
+        }
     }
 
     /**
@@ -79,11 +79,11 @@ public class VolumeGetMain {
      */
     @EntryPoint
     public static void main(String[] args) throws IOException {
-	FileSystem fs = new RealFileSystem();
-	Reader in = new InputStreamReader(System.in, "UTF-8");
-	Writer out = new OutputStreamWriter(System.out, "UTF-8");
-	PrintStream err = System.err;
+        FileSystem fs = new RealFileSystem();
+        Reader in = new InputStreamReader(System.in, "UTF-8");
+        Writer out = new OutputStreamWriter(System.out, "UTF-8");
+        PrintStream err = System.err;
 
-	new VolumeGetMain(fs, in, out, err).run(args);
+        new VolumeGetMain(fs, in, out, err).run(args);
     }
 }

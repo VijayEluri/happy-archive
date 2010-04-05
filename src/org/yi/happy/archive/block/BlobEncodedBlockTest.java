@@ -22,33 +22,33 @@ import org.yi.happy.archive.key.BlobLocatorKey;
  */
 public class BlobEncodedBlockTest {
     private static final DigestProvider SHA256 = DigestFactory
-	    .getProvider("sha-256");
+            .getProvider("sha-256");
 
     private static final CipherProvider NULL = CipherFactory
-	    .getProvider("null");
+            .getProvider("null");
 
     private static final Bytes TEST = new Bytes('t', 'e', 's', 't');
 
     private static final String HASH = "321f47896a9ae31c24d307120f273668"
-	    + "6d3258d55a4c3890a35ec594049bd49d";
+            + "6d3258d55a4c3890a35ec594049bd49d";
 
     private static final String BAD_HASH = "321f47896a9ae31c24d307120f273668"
-	    + "6d3258d55a4c3890a35ec594049bd49e";
+            + "6d3258d55a4c3890a35ec594049bd49e";
 
     /**
      * Create with minimal detail.
      */
     @Test
     public void test1() {
-	Block block = new BlobEncodedBlock(SHA256, NULL, TEST);
+        Block block = new BlobEncodedBlock(SHA256, NULL, TEST);
 
-	Map<String, String> want = new HashMap<String, String>();
-	want.put("key-type", "blob");
-	want.put("key", HASH);
-	want.put("cipher", "null");
-	want.put("digest", "sha-256");
-	want.put("size", "4");
-	assertEquals(want, block.getMeta());
+        Map<String, String> want = new HashMap<String, String>();
+        want.put("key-type", "blob");
+        want.put("key", HASH);
+        want.put("cipher", "null");
+        want.put("digest", "sha-256");
+        want.put("size", "4");
+        assertEquals(want, block.getMeta());
     }
 
     /**
@@ -57,16 +57,16 @@ public class BlobEncodedBlockTest {
     @Test
     @SmellsMessy
     public void test2() {
-	Block block = new BlobEncodedBlock(new BlobLocatorKey(new Bytes(Base16
-		.decode(HASH))), SHA256, NULL, TEST);
+        Block block = new BlobEncodedBlock(new BlobLocatorKey(new Bytes(Base16
+                .decode(HASH))), SHA256, NULL, TEST);
 
-	Map<String, String> want = new HashMap<String, String>();
-	want.put("key-type", "blob");
-	want.put("key", HASH);
-	want.put("cipher", "null");
-	want.put("digest", "sha-256");
-	want.put("size", "4");
-	assertEquals(want, block.getMeta());
+        Map<String, String> want = new HashMap<String, String>();
+        want.put("key-type", "blob");
+        want.put("key", HASH);
+        want.put("cipher", "null");
+        want.put("digest", "sha-256");
+        want.put("size", "4");
+        assertEquals(want, block.getMeta());
     }
 
     /**
@@ -74,12 +74,12 @@ public class BlobEncodedBlockTest {
      */
     @Test
     public void testAsBytes() {
-	Block block = new BlobEncodedBlock(SHA256, NULL, TEST);
+        Block block = new BlobEncodedBlock(SHA256, NULL, TEST);
 
-	byte[] expect = ByteString.toUtf8("key-type: blob\r\n" + "key: " + HASH
-		+ "\r\n" + "digest: sha-256\r\n" + "cipher: null\r\n"
-		+ "size: 4\r\n" + "\r\n" + "test");
-	assertArrayEquals(expect, block.asBytes());
+        byte[] expect = ByteString.toUtf8("key-type: blob\r\n" + "key: " + HASH
+                + "\r\n" + "digest: sha-256\r\n" + "cipher: null\r\n"
+                + "size: 4\r\n" + "\r\n" + "test");
+        assertArrayEquals(expect, block.asBytes());
     }
 
     /**
@@ -88,7 +88,7 @@ public class BlobEncodedBlockTest {
     @Test(expected = IllegalArgumentException.class)
     @SmellsMessy
     public void test3() {
-	new BlobEncodedBlock(new BlobLocatorKey(new Bytes(Base16
-		.decode(BAD_HASH))), SHA256, NULL, TEST);
+        new BlobEncodedBlock(new BlobLocatorKey(new Bytes(Base16
+                .decode(BAD_HASH))), SHA256, NULL, TEST);
     }
 }

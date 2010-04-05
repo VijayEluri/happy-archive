@@ -2,12 +2,11 @@ package org.yi.happy.archive.key;
 
 import org.yi.happy.archive.Bytes;
 
-
 /**
  * a name locator key.
  */
 public final class NameLocatorKey extends AbstractLocatorKey implements
-	LocatorKey {
+        LocatorKey {
 
     /**
      * create
@@ -16,16 +15,16 @@ public final class NameLocatorKey extends AbstractLocatorKey implements
      *            the hash
      */
     public NameLocatorKey(Bytes hash) {
-	super(hash);
+        super(hash);
     }
 
     @Override
     public String getType() {
-	return KeyType.NAME_HASH;
+        return KeyType.NAME_HASH;
     }
 
     @Override
     public NameLocatorKey toLocatorKey() {
-	return this;
+        return this;
     }
 }

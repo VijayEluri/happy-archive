@@ -43,10 +43,10 @@ public class ScriptNotReadyHandler implements NotReadyHandler {
             throw new IONotReadyException();
         }
 
-	TestData item = script.remove(0);
+        TestData item = script.remove(0);
 
         if (item != null) {
-	    store.put(item.getEncodedBlock());
+            store.put(item.getEncodedBlock());
         }
     }
 

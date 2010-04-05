@@ -14,7 +14,7 @@ public class UnknownKeyTypeException extends IllegalArgumentException {
      * signal that a key type is not known.
      */
     public UnknownKeyTypeException() {
-	super();
+        super();
     }
 
     /**
@@ -26,7 +26,7 @@ public class UnknownKeyTypeException extends IllegalArgumentException {
      *            the cause.
      */
     public UnknownKeyTypeException(String message, Throwable cause) {
-	super(message, cause);
+        super(message, cause);
     }
 
     /**
@@ -36,7 +36,7 @@ public class UnknownKeyTypeException extends IllegalArgumentException {
      *            the message.
      */
     public UnknownKeyTypeException(String message) {
-	super(message);
+        super(message);
     }
 
     /**
@@ -46,7 +46,7 @@ public class UnknownKeyTypeException extends IllegalArgumentException {
      *            the cause.
      */
     public UnknownKeyTypeException(Throwable cause) {
-	super(cause);
+        super(cause);
     }
 
 }

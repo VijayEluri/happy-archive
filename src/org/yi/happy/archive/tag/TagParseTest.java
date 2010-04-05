@@ -20,15 +20,15 @@ public class TagParseTest {
      */
     @Test
     public void testFullParse1() throws IOException {
-	byte[] d = TestData.TAG_FILE.getBytes();
+        byte[] d = TestData.TAG_FILE.getBytes();
 
-	List<Tag> t = TagParse.parse(d);
+        List<Tag> t = TagParse.parse(d);
 
-	assertEquals(1, t.size());
-	assertEquals("hello.txt", t.get(0).get("name"));
-	assertEquals("file", t.get(0).get("type"));
-	assertEquals(TestData.KEY_CONTENT.getFullKey().toString(), t.get(0)
-		.get("data"));
+        assertEquals(1, t.size());
+        assertEquals("hello.txt", t.get(0).get("name"));
+        assertEquals("file", t.get(0).get("type"));
+        assertEquals(TestData.KEY_CONTENT.getFullKey().toString(), t.get(0)
+                .get("data"));
     }
 
     /**
@@ -38,11 +38,11 @@ public class TagParseTest {
      */
     @Test
     public void testFullParse2() throws IOException {
-	byte[] d = TestData.TAG_FILES.getBytes();
+        byte[] d = TestData.TAG_FILES.getBytes();
 
-	List<Tag> t = TagParse.parse(d);
+        List<Tag> t = TagParse.parse(d);
 
-	assertEquals(2, t.size());
+        assertEquals(2, t.size());
     }
 
     /**
@@ -53,12 +53,12 @@ public class TagParseTest {
      */
     @Test
     public void testFindRecordSeparator1() throws IOException {
-	byte[] d = TestData.TAG_FILES.getBytes();
-	Range r = new Range(0, 448);
+        byte[] d = TestData.TAG_FILES.getBytes();
+        Range r = new Range(0, 448);
 
-	r = TagParse.findRecordSeparator(d, r);
+        r = TagParse.findRecordSeparator(d, r);
 
-	assertEquals(new Range(223, 1), r);
+        assertEquals(new Range(223, 1), r);
     }
 
     /**
@@ -69,12 +69,12 @@ public class TagParseTest {
      */
     @Test
     public void testFindRecordSeparator2() throws IOException {
-	byte[] d = TestData.TAG_FILES.getBytes();
-	Range r = new Range(224, 223);
+        byte[] d = TestData.TAG_FILES.getBytes();
+        Range r = new Range(224, 223);
 
-	r = TagParse.findRecordSeparator(d, r);
+        r = TagParse.findRecordSeparator(d, r);
 
-	assertEquals(new Range(447, 0), r);
+        assertEquals(new Range(447, 0), r);
     }
 
     /**
@@ -84,12 +84,12 @@ public class TagParseTest {
      */
     @Test
     public void testPraseFragment1() throws IOException {
-	byte[] d = TestData.TAG_FILES.getBytes();
-	Range r = new Range(0, 224);
+        byte[] d = TestData.TAG_FILES.getBytes();
+        Range r = new Range(0, 224);
 
-	List<Tag> t = TagParse.parse(d, r);
+        List<Tag> t = TagParse.parse(d, r);
 
-	assertEquals(1, t.size());
+        assertEquals(1, t.size());
     }
 
     /**
@@ -99,12 +99,12 @@ public class TagParseTest {
      */
     @Test
     public void testParseFragment2() throws IOException {
-	byte[] d = TestData.TAG_FILES.getBytes();
-	Range r = new Range(0, d.length);
+        byte[] d = TestData.TAG_FILES.getBytes();
+        Range r = new Range(0, d.length);
 
-	List<Tag> t = TagParse.parse(d, r);
+        List<Tag> t = TagParse.parse(d, r);
 
-	assertEquals(2, t.size());
+        assertEquals(2, t.size());
     }
 
     /**
@@ -114,13 +114,13 @@ public class TagParseTest {
      */
     @Test
     public void testFindCompleteRecords1() throws IOException {
-	byte[] d = TestData.TAG_FILES.getBytes();
-	Range r = new Range(0, d.length);
+        byte[] d = TestData.TAG_FILES.getBytes();
+        Range r = new Range(0, d.length);
 
-	r = TagParse.findFullRecords(d, r);
+        r = TagParse.findFullRecords(d, r);
 
-	// after the blank line on the second record.
-	assertEquals(new Range(0, 448), r);
+        // after the blank line on the second record.
+        assertEquals(new Range(0, 448), r);
     }
 
     /**
@@ -130,14 +130,14 @@ public class TagParseTest {
      */
     @Test
     public void testFindCompleteRecords2() throws IOException {
-	byte[] d = TestData.TAG_FILES.getBytes();
-	// before the blank line on the second record.
-	Range r = new Range(0, 447);
+        byte[] d = TestData.TAG_FILES.getBytes();
+        // before the blank line on the second record.
+        Range r = new Range(0, 447);
 
-	r = TagParse.findFullRecords(d, r);
+        r = TagParse.findFullRecords(d, r);
 
-	// after the blank line on the first record.
-	assertEquals(new Range(0, 224), r);
+        // after the blank line on the first record.
+        assertEquals(new Range(0, 224), r);
     }
 
 }

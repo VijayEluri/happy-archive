@@ -26,13 +26,13 @@ public class BlobEncodedBlockParse {
      */
     private static final Set<String> META;
     static {
-	Set<String> m = new HashSet<String>();
-	m.add(BlobEncodedBlock.KEY_TYPE_META);
-	m.add(BlobEncodedBlock.KEY_META);
-	m.add(BlobEncodedBlock.DIGEST_META);
-	m.add(BlobEncodedBlock.CIPHER_META);
-	m.add(BlobEncodedBlock.SIZE_META);
-	META = Collections.unmodifiableSet(m);
+        Set<String> m = new HashSet<String>();
+        m.add(BlobEncodedBlock.KEY_TYPE_META);
+        m.add(BlobEncodedBlock.KEY_META);
+        m.add(BlobEncodedBlock.DIGEST_META);
+        m.add(BlobEncodedBlock.CIPHER_META);
+        m.add(BlobEncodedBlock.SIZE_META);
+        META = Collections.unmodifiableSet(m);
     }
 
     /**
@@ -45,34 +45,34 @@ public class BlobEncodedBlockParse {
      *             on parsing failure.
      */
     public static BlobEncodedBlock parse(Block block)
-	    throws IllegalArgumentException {
-	if (block instanceof BlobEncodedBlock) {
-	    return (BlobEncodedBlock) block;
-	}
+            throws IllegalArgumentException {
+        if (block instanceof BlobEncodedBlock) {
+            return (BlobEncodedBlock) block;
+        }
 
-	Map<String, String> meta = block.getMeta();
+        Map<String, String> meta = block.getMeta();
 
-	if (!meta.keySet().equals(META)) {
-	    throw new IllegalArgumentException("meta missmatch");
-	}
+        if (!meta.keySet().equals(META)) {
+            throw new IllegalArgumentException("meta missmatch");
+        }
 
-	if (!meta.get(BlobEncodedBlock.KEY_TYPE_META).equals(KeyType.BLOB)) {
-	    throw new IllegalArgumentException("wrong key-type");
-	}
+        if (!meta.get(BlobEncodedBlock.KEY_TYPE_META).equals(KeyType.BLOB)) {
+            throw new IllegalArgumentException("wrong key-type");
+        }
 
-	BlobLocatorKey key = KeyParse.parseBlobLocatorKey(meta
-		.get(BlobEncodedBlock.KEY_META));
-	DigestProvider digest = DigestFactory.getProvider(meta
-		.get(BlobEncodedBlock.DIGEST_META));
-	CipherProvider cipher = CipherFactory.getProvider(meta
-		.get(BlobEncodedBlock.CIPHER_META));
-	int size = Integer.parseInt(meta.get(BlobEncodedBlock.SIZE_META));
+        BlobLocatorKey key = KeyParse.parseBlobLocatorKey(meta
+                .get(BlobEncodedBlock.KEY_META));
+        DigestProvider digest = DigestFactory.getProvider(meta
+                .get(BlobEncodedBlock.DIGEST_META));
+        CipherProvider cipher = CipherFactory.getProvider(meta
+                .get(BlobEncodedBlock.CIPHER_META));
+        int size = Integer.parseInt(meta.get(BlobEncodedBlock.SIZE_META));
 
-	Bytes body = block.getBody();
-	if (body.getSize() != size) {
-	    throw new IllegalArgumentException("size missmatch");
-	}
+        Bytes body = block.getBody();
+        if (body.getSize() != size) {
+            throw new IllegalArgumentException("size missmatch");
+        }
 
-	return new BlobEncodedBlock(key, digest, cipher, body);
+        return new BlobEncodedBlock(key, digest, cipher, body);
     }
 }

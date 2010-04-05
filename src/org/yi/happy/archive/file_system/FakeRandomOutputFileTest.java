@@ -18,13 +18,13 @@ public class FakeRandomOutputFileTest {
      */
     @Test
     public void testWrite() throws IOException {
-	FakeRandomOutputFile f = new FakeRandomOutputFile();
+        FakeRandomOutputFile f = new FakeRandomOutputFile();
 
-	f.write(new byte[] { 0, 1, 2, 3 });
+        f.write(new byte[] { 0, 1, 2, 3 });
 
-	f.close();
+        f.close();
 
-	assertArrayEquals(new byte[] { 0, 1, 2, 3 }, f.getBytes());
+        assertArrayEquals(new byte[] { 0, 1, 2, 3 }, f.getBytes());
     }
 
     /**
@@ -34,11 +34,11 @@ public class FakeRandomOutputFileTest {
      */
     @Test
     public void testClose() throws IOException {
-	FakeRandomOutputFile f = new FakeRandomOutputFile();
+        FakeRandomOutputFile f = new FakeRandomOutputFile();
 
-	f.close();
+        f.close();
 
-	assertArrayEquals(new byte[] {}, f.getBytes());
+        assertArrayEquals(new byte[] {}, f.getBytes());
     }
 
     /**
@@ -48,20 +48,20 @@ public class FakeRandomOutputFileTest {
      */
     @Test
     public void testWriteBackward() throws IOException {
-	FakeRandomOutputFile f = new FakeRandomOutputFile();
+        FakeRandomOutputFile f = new FakeRandomOutputFile();
 
-	f.setPosition(3);
-	f.write(3);
+        f.setPosition(3);
+        f.write(3);
 
-	f.setPosition(1);
-	f.write(new byte[] { 0, 1, 2, 3 }, 1, 2);
+        f.setPosition(1);
+        f.write(new byte[] { 0, 1, 2, 3 }, 1, 2);
 
-	f.setPosition(0);
-	f.write(0);
+        f.setPosition(0);
+        f.write(0);
 
-	f.close();
+        f.close();
 
-	assertArrayEquals(new byte[] { 0, 1, 2, 3 }, f.getBytes());
+        assertArrayEquals(new byte[] { 0, 1, 2, 3 }, f.getBytes());
     }
 
     /**
@@ -71,10 +71,10 @@ public class FakeRandomOutputFileTest {
      */
     @Test(expected = IOException.class)
     public void testWriteAfterClose() throws IOException {
-	FakeRandomOutputFile f = new FakeRandomOutputFile();
-	f.close();
+        FakeRandomOutputFile f = new FakeRandomOutputFile();
+        f.close();
 
-	f.write(0);
+        f.write(0);
     }
 
     /**
@@ -84,10 +84,10 @@ public class FakeRandomOutputFileTest {
      */
     @Test(expected = IOException.class)
     public void testSeekAfterClose() throws IOException {
-	FakeRandomOutputFile f = new FakeRandomOutputFile();
-	f.close();
+        FakeRandomOutputFile f = new FakeRandomOutputFile();
+        f.close();
 
-	f.setPosition(0);
+        f.setPosition(0);
     }
 
     /**
@@ -97,10 +97,10 @@ public class FakeRandomOutputFileTest {
      */
     @Test(expected = IOException.class)
     public void testTellAfterClose() throws IOException {
-	FakeRandomOutputFile f = new FakeRandomOutputFile();
-	f.close();
+        FakeRandomOutputFile f = new FakeRandomOutputFile();
+        f.close();
 
-	f.getPosition();
+        f.getPosition();
     }
 
     /**
@@ -110,10 +110,10 @@ public class FakeRandomOutputFileTest {
      */
     @Test
     public void testCloseAfterClose() throws IOException {
-	FakeRandomOutputFile f = new FakeRandomOutputFile();
-	f.close();
+        FakeRandomOutputFile f = new FakeRandomOutputFile();
+        f.close();
 
-	f.close();
+        f.close();
     }
 
     /**
@@ -123,14 +123,14 @@ public class FakeRandomOutputFileTest {
      */
     @Test
     public void testModify() throws IOException {
-	FakeRandomOutputFile f = new FakeRandomOutputFile(new byte[] { 0, 1, 2,
-		3 });
+        FakeRandomOutputFile f = new FakeRandomOutputFile(new byte[] { 0, 1, 2,
+                3 });
 
-	f.write(4);
+        f.write(4);
 
-	f.close();
+        f.close();
 
-	assertArrayEquals(new byte[] { 4, 1, 2, 3 }, f.getBytes());
+        assertArrayEquals(new byte[] { 4, 1, 2, 3 }, f.getBytes());
     }
 
     /**
@@ -140,10 +140,10 @@ public class FakeRandomOutputFileTest {
      */
     @Test
     public void testSetPosition() throws IOException {
-	FakeRandomOutputFile f = new FakeRandomOutputFile();
+        FakeRandomOutputFile f = new FakeRandomOutputFile();
 
-	f.setPosition(5);
+        f.setPosition(5);
 
-	assertEquals(5, f.getPosition());
+        assertEquals(5, f.getPosition());
     }
 }

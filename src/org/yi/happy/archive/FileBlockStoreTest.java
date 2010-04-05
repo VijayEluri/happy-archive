@@ -24,23 +24,23 @@ public class FileBlockStoreTest {
      */
     @Test
     public void test1() throws IOException {
-	FileSystem fs = new FakeFileSystem();
-	String base = "store";
-	BlockStore store = new FileBlockStore(fs, base);
-	store.put(TestData.KEY_CONTENT.getEncodedBlock());
-	store.put(TestData.KEY_CONTENT_1.getEncodedBlock());
-	store.put(TestData.KEY_CONTENT_2.getEncodedBlock());
+        FileSystem fs = new FakeFileSystem();
+        String base = "store";
+        BlockStore store = new FileBlockStore(fs, base);
+        store.put(TestData.KEY_CONTENT.getEncodedBlock());
+        store.put(TestData.KEY_CONTENT_1.getEncodedBlock());
+        store.put(TestData.KEY_CONTENT_2.getEncodedBlock());
 
-	final List<LocatorKey> keys = new ArrayList<LocatorKey>();
-	BlockStoreVisitor<RuntimeException> visitor = new BlockStoreVisitor<RuntimeException>() {
-	    public void accept(LocatorKey key) {
-		keys.add(key);
-	    }
-	};
-	store.visit(visitor);
+        final List<LocatorKey> keys = new ArrayList<LocatorKey>();
+        BlockStoreVisitor<RuntimeException> visitor = new BlockStoreVisitor<RuntimeException>() {
+            public void accept(LocatorKey key) {
+                keys.add(key);
+            }
+        };
+        store.visit(visitor);
 
-	assertEquals(Arrays.asList(TestData.KEY_CONTENT.getLocatorKey(),
-		TestData.KEY_CONTENT_2.getLocatorKey(), TestData.KEY_CONTENT_1
-			.getLocatorKey()), keys);
+        assertEquals(Arrays.asList(TestData.KEY_CONTENT.getLocatorKey(),
+                TestData.KEY_CONTENT_2.getLocatorKey(), TestData.KEY_CONTENT_1
+                        .getLocatorKey()), keys);
     }
 }

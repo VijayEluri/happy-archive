@@ -19,11 +19,11 @@ public class Base16Test extends Assert {
      */
     @Test
     public void testHexToByte() {
-	byte[] e = dataByte;
+        byte[] e = dataByte;
 
-	byte[] h = Base16.decode(dataHex);
+        byte[] h = Base16.decode(dataHex);
 
-	assertArrayEquals(e, h);
+        assertArrayEquals(e, h);
     }
 
     /**
@@ -32,11 +32,11 @@ public class Base16Test extends Assert {
      */
     @Test
     public void testHexToByte2() {
-	byte[] e = dataByte;
+        byte[] e = dataByte;
 
-	byte[] h = Base16.decode(dataHex2);
+        byte[] h = Base16.decode(dataHex2);
 
-	assertArrayEquals(e, h);
+        assertArrayEquals(e, h);
     }
 
     /**
@@ -45,10 +45,10 @@ public class Base16Test extends Assert {
      */
     @Test
     public void testByteToHex() {
-	String e = dataHex;
+        String e = dataHex;
 
-	String h = Base16.encode(dataByte);
+        String h = Base16.encode(dataByte);
 
-	assertEquals(e, h);
+        assertEquals(e, h);
     }
 }

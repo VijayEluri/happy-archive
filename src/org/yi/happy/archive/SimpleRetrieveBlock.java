@@ -21,12 +21,12 @@ public class SimpleRetrieveBlock implements RetrieveBlock {
     public Block retrieveBlock(FullKey key) throws IOException {
         EncodedBlock block = map.get(key.toLocatorKey());
         if (block == null) {
-    	return null;
+            return null;
         }
         try {
-    	return block.decode(key);
+            return block.decode(key);
         } catch (IllegalArgumentException e) {
-    	throw new DecodeException(e);
+            throw new DecodeException(e);
         }
     }
 

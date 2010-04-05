@@ -22,15 +22,15 @@ public class StoreBlockStorage implements StoreBlock {
      * @param store
      */
     public StoreBlockStorage(BlockEncoder encoder, BlockStore store) {
-	this.encoder = encoder;
-	this.store = store;
+        this.encoder = encoder;
+        this.store = store;
     }
 
     @Override
     public FullKey storeBlock(Block block) throws IOException {
-	BlockEncoderResult e = encoder.encode(block);
-	store.put(e.getBlock());
-	return e.getKey();
+        BlockEncoderResult e = encoder.encode(block);
+        store.put(e.getBlock());
+        return e.getKey();
     }
 
 }
