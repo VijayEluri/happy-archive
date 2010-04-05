@@ -28,7 +28,7 @@ public class StorageMemoryTest {
 	store.put(TestData.KEY_CONTENT_2.getEncodedBlock());
 
 	final List<LocatorKey> keys = new ArrayList<LocatorKey>();
-	BlockStoreVisitor visitor = new BlockStoreVisitor() {
+	BlockStoreVisitor<RuntimeException> visitor = new BlockStoreVisitor<RuntimeException>() {
 	    public void accept(LocatorKey key) {
 		keys.add(key);
 	    }

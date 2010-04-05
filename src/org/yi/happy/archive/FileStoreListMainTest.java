@@ -3,22 +3,19 @@ package org.yi.happy.archive;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.StringWriter;
 
 import org.junit.Test;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.file_system.FileSystem;
-import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
- * Tests for {@link FileBlockStore}.
+ * Tests for {@link FileStoreListMain}.
  */
-public class FileBlockStoreTest {
+public class FileStoreListMainTest {
     /**
-     * Check out the key iterator.
+     * A good run.
      * 
      * @throws IOException
      */
@@ -31,16 +28,15 @@ public class FileBlockStoreTest {
 	store.put(TestData.KEY_CONTENT_1.getEncodedBlock());
 	store.put(TestData.KEY_CONTENT_2.getEncodedBlock());
 
-	final List<LocatorKey> keys = new ArrayList<LocatorKey>();
-	BlockStoreVisitor<RuntimeException> visitor = new BlockStoreVisitor<RuntimeException>() {
-	    public void accept(LocatorKey key) {
-		keys.add(key);
-	    }
-	};
-	store.visit(visitor);
+	StringWriter out = new StringWriter();
 
-	assertEquals(Arrays.asList(TestData.KEY_CONTENT.getLocatorKey(),
-		TestData.KEY_CONTENT_2.getLocatorKey(), TestData.KEY_CONTENT_1
-			.getLocatorKey()), keys);
+	new FileStoreListMain(fs, out).run("store");
+
+	String want = TestData.KEY_CONTENT.getLocatorKey() + "\n"
+		+ TestData.KEY_CONTENT_2.getLocatorKey() + "\n"
+		+ TestData.KEY_CONTENT_1.getLocatorKey() + "\n";
+
+	assertEquals(want, out.toString());
     }
+
 }

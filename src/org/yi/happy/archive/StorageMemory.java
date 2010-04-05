@@ -40,7 +40,8 @@ public class StorageMemory implements BlockStore {
     }
 
     @Override
-    public void visit(BlockStoreVisitor visitor) {
+    public <T extends Throwable> void visit(BlockStoreVisitor<T> visitor)
+	    throws T {
 	final List<LocatorKey> keys = new ArrayList<LocatorKey>(data.keySet());
 	Collections.sort(keys, new Comparator<LocatorKey>() {
 	    @Override

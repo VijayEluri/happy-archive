@@ -52,7 +52,10 @@ public class Main {
 
 	    new Cmd("index-search", IndexSearchMain.class),
 
-	    new Cmd("volume-get", VolumeGetMain.class)
+	    new Cmd("volume-get", VolumeGetMain.class),
+
+	    new Cmd("store-list", FileStoreListMain.class)
+
 	    ));
 
     /**

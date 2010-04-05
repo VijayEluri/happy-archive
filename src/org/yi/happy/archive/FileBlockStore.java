@@ -68,11 +68,13 @@ public class FileBlockStore implements BlockStore {
     }
 
     @Override
-    public void visit(BlockStoreVisitor visitor) {
+    public <T extends Throwable> void visit(BlockStoreVisitor<T> visitor)
+	    throws T {
 	visit(visitor, base, 3);
     }
 
-    private void visit(BlockStoreVisitor visitor, String path, int levels) {
+    private <T extends Throwable> void visit(BlockStoreVisitor<T> visitor,
+	    String path, int levels) throws T {
 	if (levels == 0) {
 	    List<String> names = fs.list(path);
 	    Collections.sort(names);

@@ -33,8 +33,13 @@ public interface BlockStore {
     /**
      * Visit all the keys in the store.
      * 
+     * @param <T>
+     *            the type of the exceptions that can be thrown from the
+     *            visitor.
+     * 
      * @param visitor
      *            the visitor that is visiting the keys in the store.
+     * @throws T
      */
-    void visit(BlockStoreVisitor visitor);
+    <T extends Throwable> void visit(BlockStoreVisitor<T> visitor) throws T;
 }
