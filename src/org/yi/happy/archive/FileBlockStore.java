@@ -2,10 +2,13 @@ package org.yi.happy.archive;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.file_system.FileSystem;
+import org.yi.happy.archive.key.KeyParse;
 import org.yi.happy.archive.key.LocatorKey;
 
 /**
@@ -64,4 +67,31 @@ public class FileBlockStore implements BlockStore {
 	}
     }
 
+    @Override
+    public void visit(BlockStoreVisitor visitor) {
+	visit(visitor, base, 3);
+    }
+
+    private void visit(BlockStoreVisitor visitor, String path, int levels) {
+	if (levels == 0) {
+	    List<String> names = fs.list(path);
+	    Collections.sort(names);
+	    for (String name : names) {
+		String[] part = name.split("-", 2);
+		visitor.accept(KeyParse.parseLocatorKey(part[1], new Bytes(
+			Base16.decode(part[0]))));
+	    }
+	}
+	if (fs.isDir(path)) {
+	    List<String> names = fs.list(path);
+	    Collections.sort(names);
+	    for (String name : names) {
+		name = fs.join(path, name);
+		if (!fs.isDir(name)) {
+		    continue;
+		}
+		visit(visitor, name, levels - 1);
+	    }
+	}
+    }
 }

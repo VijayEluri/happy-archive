@@ -93,4 +93,9 @@ public class RealFileSystem implements FileSystem {
     public List<String> list(String path) {
 	return Arrays.asList(new File(path).list());
     }
+
+    @Override
+    public boolean isDir(String path) {
+	return new File(path).isDirectory();
+    }
 }

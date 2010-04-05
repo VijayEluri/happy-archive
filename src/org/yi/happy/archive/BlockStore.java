@@ -29,4 +29,12 @@ public interface BlockStore {
      *             on errors other than the block not being available.
      */
     EncodedBlock get(LocatorKey key) throws IOException;
+
+    /**
+     * Visit all the keys in the store.
+     * 
+     * @param visitor
+     *            the visitor that is visiting the keys in the store.
+     */
+    void visit(BlockStoreVisitor visitor);
 }

@@ -4,6 +4,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -351,7 +352,43 @@ public class FakeFileSystemTest {
      * @throws IOException
      */
     @Test
-    public void testMakeAbsolute() throws IOException {
+    public void testMkdirAbsolute() throws IOException {
 	real.mkdir("/a");
+
+	assertTrue(real.exists("/a"));
+    }
+
+    /**
+     * directory is a directory
+     * 
+     * @throws IOException
+     */
+    @Test
+    public void testIsDir1() throws IOException {
+	real.mkdir("a");
+
+	assertTrue(real.isDir("a"));
+    }
+
+    /**
+     * file is not a directory
+     * 
+     * @throws IOException
+     */
+    @Test
+    public void testIsDir2() throws IOException {
+	real.save("a", new byte[0]);
+
+	assertFalse(real.isDir("a"));
+    }
+
+    /**
+     * not exist is not a directory
+     * 
+     * @throws IOException
+     */
+    @Test
+    public void testIsDir3() throws IOException {
+	assertFalse(real.isDir("a"));
     }
 }

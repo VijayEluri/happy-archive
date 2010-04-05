@@ -194,4 +194,9 @@ public class FakeFileSystem implements FileSystem {
 
 	return out;
     }
+
+    @Override
+    public boolean isDir(String path) {
+	return files.get(path) == DIR;
+    }
 }

@@ -121,4 +121,13 @@ public interface FileSystem {
      * @return the list of names.
      */
     List<String> list(String path);
+
+    /**
+     * check that a path exists and is a directory.
+     * 
+     * @param path
+     *            the path to check.
+     * @return true if the path exists and is a directory.
+     */
+    boolean isDir(String path);
 }

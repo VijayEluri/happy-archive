@@ -1,7 +1,11 @@
 package org.yi.happy.archive;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.yi.happy.archive.block.EncodedBlock;
@@ -35,4 +39,24 @@ public class StorageMemory implements BlockStore {
 	return data.get(key);
     }
 
+    @Override
+    public void visit(BlockStoreVisitor visitor) {
+	final List<LocatorKey> keys = new ArrayList<LocatorKey>(data.keySet());
+	Collections.sort(keys, new Comparator<LocatorKey>() {
+	    @Override
+	    public int compare(LocatorKey o1, LocatorKey o2) {
+		int o = Base16.encode(o1.getHash()).compareTo(
+			Base16.encode(o2.getHash()));
+		if (o != 0) {
+		    return o;
+		}
+
+		return o1.getType().compareTo(o2.getType());
+	    }
+	});
+
+	for (LocatorKey key : keys) {
+	    visitor.accept(key);
+	}
+    }
 }
