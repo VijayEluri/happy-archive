@@ -5,7 +5,7 @@ import java.util.Arrays;
 /**
  * An immutable value object representing a byte array.
  */
-public final class Bytes {
+public final class Bytes implements Comparable<Bytes> {
     /**
      * The bytes.
      */
@@ -153,5 +153,16 @@ public final class Bytes {
      */
     public final int getSize() {
         return data.length;
+    }
+
+    @Override
+    public int compareTo(Bytes o) {
+        for (int i = 0; i < o.data.length && i < data.length; i++) {
+            int out = (data[i] & 0xff) - (o.data[i] & 0xff);
+            if (out != 0) {
+                return out;
+            }
+        }
+        return data.length - o.data.length;
     }
 }
