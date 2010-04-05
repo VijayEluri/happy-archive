@@ -14,7 +14,7 @@ public class BlobFullKey extends AbstractContentFullKey implements FullKey {
      * @param pass
      *            the encryption key part of the key.
      */
-    public BlobFullKey(Bytes hash, Bytes pass) {
+    public BlobFullKey(HashValue hash, Bytes pass) {
         super(hash, pass);
     }
 

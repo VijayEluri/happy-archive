@@ -1,6 +1,5 @@
 package org.yi.happy.archive.key;
 
-import org.yi.happy.archive.Bytes;
 
 /**
  * a content locator key
@@ -19,7 +18,7 @@ public final class ContentLocatorKey extends AbstractLocatorKey implements
      * @param hash
      *            the hash
      */
-    public ContentLocatorKey(Bytes hash) {
+    public ContentLocatorKey(HashValue hash) {
         super(hash);
     }
 

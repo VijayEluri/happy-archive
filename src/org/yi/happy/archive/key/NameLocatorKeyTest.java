@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
-import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
@@ -16,19 +15,10 @@ public class NameLocatorKeyTest {
      */
     @Test
     public void testGood2() {
-        Bytes hash = new Bytes(0x00);
+        HashValue hash = new HashValue(0x00);
         LocatorKey key = new NameLocatorKey(hash);
         assertEquals("name-hash", key.getType());
         assertEquals(hash, key.getHash());
-    }
-
-    /**
-     * a bad locator
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void testBad1() {
-        Bytes hash = new Bytes();
-        new NameLocatorKey(hash);
     }
 
     /**

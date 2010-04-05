@@ -11,7 +11,7 @@ public abstract class AbstractContentFullKey implements FullKey {
 
     public abstract String getType();
 
-    private final Bytes hash;
+    private final HashValue hash;
     private final Bytes pass;
 
     /**
@@ -22,9 +22,9 @@ public abstract class AbstractContentFullKey implements FullKey {
      * @param pass
      *            the encryption key part.
      */
-    protected AbstractContentFullKey(Bytes hash, Bytes pass) {
-        if (hash.getSize() < 1) {
-            throw new IllegalArgumentException("hash too short");
+    protected AbstractContentFullKey(HashValue hash, Bytes pass) {
+        if (hash == null) {
+            throw new IllegalArgumentException("hash is null");
         }
 
         if (pass == null) {
@@ -39,7 +39,7 @@ public abstract class AbstractContentFullKey implements FullKey {
      * 
      * @return the hash part of the key.
      */
-    public Bytes getHash() {
+    public HashValue getHash() {
         return hash;
     }
 
@@ -78,8 +78,7 @@ public abstract class AbstractContentFullKey implements FullKey {
 
     @Override
     public String toString() {
-        return getType() + ":" + Base16.encode(hash) + ":"
-                + Base16.encode(pass);
+        return getType() + ":" + hash + ":" + Base16.encode(pass);
     }
 
 }

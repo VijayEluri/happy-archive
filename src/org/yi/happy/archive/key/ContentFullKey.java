@@ -21,7 +21,7 @@ public final class ContentFullKey extends AbstractContentFullKey implements
      * @param pass
      *            the cipher key
      */
-    public ContentFullKey(Bytes hash, Bytes pass) {
+    public ContentFullKey(HashValue hash, Bytes pass) {
         super(hash, pass);
     }
 

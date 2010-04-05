@@ -1,14 +1,12 @@
 package org.yi.happy.archive.key;
 
-import org.yi.happy.archive.Base16;
-import org.yi.happy.archive.Bytes;
 
 /**
  * common function of locator keys
  */
 public abstract class AbstractLocatorKey implements LocatorKey {
 
-    private final Bytes hash;
+    private final HashValue hash;
 
     /**
      * create
@@ -16,7 +14,7 @@ public abstract class AbstractLocatorKey implements LocatorKey {
      * @param hash
      *            the hash
      */
-    public AbstractLocatorKey(Bytes hash) {
+    public AbstractLocatorKey(HashValue hash) {
         if (hash.getSize() < 1) {
             throw new IllegalArgumentException("hash too short");
         }
@@ -27,13 +25,13 @@ public abstract class AbstractLocatorKey implements LocatorKey {
      * 
      * @return the hash
      */
-    public Bytes getHash() {
+    public HashValue getHash() {
         return hash;
     }
 
     @Override
     public String toString() {
-        return getType() + ":" + Base16.encode(hash);
+        return getType() + ":" + hash;
     }
 
     /**

@@ -4,7 +4,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.yi.happy.annotate.ExternalName;
-import org.yi.happy.archive.Base16;
 import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.UnknownDigestAlgorithmException;
 import org.yi.happy.archive.block.parser.BlockParse;
@@ -15,6 +14,7 @@ import org.yi.happy.archive.crypto.Digests;
 import org.yi.happy.archive.key.ContentFullKey;
 import org.yi.happy.archive.key.ContentLocatorKey;
 import org.yi.happy.archive.key.FullKey;
+import org.yi.happy.archive.key.HashValue;
 
 /**
  * A content encoded block.
@@ -95,7 +95,7 @@ public final class ContentEncodedBlock extends AbstractBlock implements
 
         byte[] hash = getHash(digest, body);
 
-        this.key = new ContentLocatorKey(new Bytes(hash));
+        this.key = new ContentLocatorKey(new HashValue(hash));
         this.digest = digest;
         this.cipher = cipher;
         this.body = body;
@@ -123,7 +123,7 @@ public final class ContentEncodedBlock extends AbstractBlock implements
         Map<String, String> out = new LinkedHashMap<String, String>();
         out.put(VERSION_META, VERSION);
         out.put(KEY_TYPE_META, key.getType());
-        out.put(KEY_META, Base16.encode(key.getHash()));
+        out.put(KEY_META, key.getHash().toString());
         out.put(DIGEST_META, digest.getAlgorithm());
         out.put(CIPHER_META, cipher.getAlgorithm());
         out.put(SIZE_META, Integer.toString(body.getSize()));

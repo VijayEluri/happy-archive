@@ -1,6 +1,5 @@
 package org.yi.happy.archive.key;
 
-import org.yi.happy.archive.Bytes;
 
 /**
  * a locator key, a reference to a raw block. there are no more data parts than
@@ -11,7 +10,7 @@ public interface LocatorKey extends Key, Comparable<LocatorKey> {
      * 
      * @return the hash. must be at least one byte.
      */
-    public Bytes getHash();
+    public HashValue getHash();
 
     public int hashCode();
 

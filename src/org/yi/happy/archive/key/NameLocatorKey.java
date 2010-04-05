@@ -1,6 +1,5 @@
 package org.yi.happy.archive.key;
 
-import org.yi.happy.archive.Bytes;
 
 /**
  * a name locator key.
@@ -14,7 +13,7 @@ public final class NameLocatorKey extends AbstractLocatorKey implements
      * @param hash
      *            the hash
      */
-    public NameLocatorKey(Bytes hash) {
+    public NameLocatorKey(HashValue hash) {
         super(hash);
     }
 

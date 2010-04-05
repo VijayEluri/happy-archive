@@ -17,6 +17,9 @@ public final class HashValue implements Comparable<HashValue> {
      *            the Bytes for the value.
      */
     public HashValue(Bytes value) {
+        if (value.getSize() < 1) {
+            throw new IllegalArgumentException("hash must be at least one byte");
+        }
         this.value = value;
     }
 
@@ -59,6 +62,18 @@ public final class HashValue implements Comparable<HashValue> {
         this(new Bytes(value));
     }
 
+    /**
+     * Create from an integer array. This is to allow for easy creation of
+     * literals.
+     * 
+     * @param value
+     *            the contents, each entry will be chopped to the least
+     *            significant eight bits.
+     */
+    public HashValue(int... value) {
+        this(new Bytes(value));
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -88,4 +103,25 @@ public final class HashValue implements Comparable<HashValue> {
     public int compareTo(HashValue o) {
         return value.compareTo(o.value);
     }
+
+    /**
+     * Get the length of the hash.
+     * 
+     * @return the length of the hash.
+     */
+    public int getSize() {
+        return value.getSize();
+    }
+
+    /**
+     * Compare the bytes of this hash to a byte array.
+     * 
+     * @param other
+     *            the bytes to compare to.
+     * @return true if the hash and the bytes are equal.
+     */
+    public boolean equalBytes(byte[] other) {
+        return value.equalBytes(other);
+    }
+
 }

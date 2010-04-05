@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.yi.happy.annotate.ExternalName;
-import org.yi.happy.archive.Base16;
 import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.NameEncodedBlock;
@@ -15,6 +14,7 @@ import org.yi.happy.archive.crypto.CipherFactory;
 import org.yi.happy.archive.crypto.CipherProvider;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.crypto.DigestProvider;
+import org.yi.happy.archive.key.HashValue;
 import org.yi.happy.archive.key.KeyParse;
 import org.yi.happy.archive.key.KeyType;
 import org.yi.happy.archive.key.NameLocatorKey;
@@ -82,8 +82,7 @@ public class NameEncodedBlockParse {
                 .get(NameEncodedBlock.DIGEST_META));
         CipherProvider cipher = CipherFactory.getProvider(meta
                 .get(NameEncodedBlock.CIPHER_META));
-        Bytes hash = new Bytes(Base16.decode(meta
-                .get(NameEncodedBlock.HASH_META)));
+        HashValue hash = new HashValue(meta.get(NameEncodedBlock.HASH_META));
         int size = Integer.parseInt(meta.get(NameEncodedBlock.SIZE_META));
         Bytes body = block.getBody();
 
@@ -126,8 +125,7 @@ public class NameEncodedBlockParse {
                 .get(NameEncodedBlock.DIGEST_META));
         String cipher0 = meta.get(NameEncodedBlock.CIPHER_META);
         CipherProvider cipher = CipherFactory.getProvider(fixCipher(cipher0));
-        Bytes hash = new Bytes(Base16.decode(meta
-                .get(NameEncodedBlock.HASH_META)));
+        HashValue hash = new HashValue(meta.get(NameEncodedBlock.HASH_META));
         int size = Integer.parseInt(meta.get(NameEncodedBlock.SIZE_META));
         Bytes body = block.getBody();
 

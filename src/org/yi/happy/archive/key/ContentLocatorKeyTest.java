@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
-import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
@@ -16,7 +15,7 @@ public class ContentLocatorKeyTest {
      */
     @Test
     public void testGood1() {
-        Bytes hash = new Bytes(0);
+        HashValue hash = new HashValue(0);
         LocatorKey key = new ContentLocatorKey(hash);
         assertEquals("content-hash", key.getType());
         assertEquals(hash, key.getHash());

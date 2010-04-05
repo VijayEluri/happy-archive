@@ -6,7 +6,6 @@ import java.util.Map;
 import org.yi.happy.annotate.BrokenContract;
 import org.yi.happy.annotate.ExternalName;
 import org.yi.happy.archive.BadSignatureException;
-import org.yi.happy.archive.Base16;
 import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.block.parser.BlockParse;
@@ -15,6 +14,7 @@ import org.yi.happy.archive.crypto.CipherProvider;
 import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.crypto.Digests;
 import org.yi.happy.archive.key.FullKey;
+import org.yi.happy.archive.key.HashValue;
 import org.yi.happy.archive.key.NameFullKey;
 import org.yi.happy.archive.key.NameLocatorKey;
 
@@ -25,7 +25,7 @@ public final class NameEncodedBlock extends AbstractBlock implements
         EncodedBlock {
 
     private final NameLocatorKey key;
-    private final Bytes hash;
+    private final HashValue hash;
     private final DigestProvider digest;
     private final CipherProvider cipher;
     private final Bytes body;
@@ -46,7 +46,7 @@ public final class NameEncodedBlock extends AbstractBlock implements
      * @throws IllegalArgumentException
      *             if the details do not agree.
      */
-    public NameEncodedBlock(NameLocatorKey key, Bytes hash,
+    public NameEncodedBlock(NameLocatorKey key, HashValue hash,
             DigestProvider digest, CipherProvider cipher, Bytes body) {
         checkHeader(DIGEST_META, digest.getAlgorithm());
         checkHeader(CIPHER_META, cipher.getAlgorithm());
@@ -85,7 +85,7 @@ public final class NameEncodedBlock extends AbstractBlock implements
         byte[] hash = ContentEncodedBlock.getHash(digest, body);
 
         this.key = key;
-        this.hash = new Bytes(hash);
+        this.hash = new HashValue(hash);
         this.digest = digest;
         this.cipher = cipher;
         this.body = body;
@@ -100,7 +100,7 @@ public final class NameEncodedBlock extends AbstractBlock implements
      * 
      * @return the hash of the body.
      */
-    public Bytes getHash() {
+    public HashValue getHash() {
         return hash;
     }
 
@@ -140,8 +140,8 @@ public final class NameEncodedBlock extends AbstractBlock implements
         Map<String, String> out = new LinkedHashMap<String, String>();
         out.put(VERSION_META, VERSION);
         out.put(KEY_TYPE_META, key.getType());
-        out.put(KEY_META, Base16.encode(key.getHash()));
-        out.put(HASH_META, Base16.encode(hash));
+        out.put(KEY_META, key.getHash().toString());
+        out.put(HASH_META, hash.toString());
         out.put(DIGEST_META, digest.getAlgorithm());
         out.put(CIPHER_META, cipher.getAlgorithm());
         out.put(SIZE_META, Integer.toString(body.getSize()));

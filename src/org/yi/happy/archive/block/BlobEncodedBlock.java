@@ -7,7 +7,6 @@ import java.util.Map;
 import org.yi.happy.annotate.BrokenContract;
 import org.yi.happy.annotate.MagicLiteral;
 import org.yi.happy.archive.BadSignatureException;
-import org.yi.happy.archive.Base16;
 import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.UnknownDigestAlgorithmException;
@@ -18,6 +17,7 @@ import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.key.BlobFullKey;
 import org.yi.happy.archive.key.BlobLocatorKey;
 import org.yi.happy.archive.key.FullKey;
+import org.yi.happy.archive.key.HashValue;
 
 /**
  * A valid blob encoded block.
@@ -85,7 +85,7 @@ public final class BlobEncodedBlock extends AbstractBlock implements
 
         byte[] hash = getHash(digest, cipher, body);
 
-        this.key = new BlobLocatorKey(new Bytes(hash));
+        this.key = new BlobLocatorKey(new HashValue(hash));
         this.digest = digest;
         this.cipher = cipher;
         this.body = body;
@@ -112,7 +112,7 @@ public final class BlobEncodedBlock extends AbstractBlock implements
     public Map<String, String> getMeta() {
         Map<String, String> out = new LinkedHashMap<String, String>();
         out.put(KEY_TYPE_META, key.getType());
-        out.put(KEY_META, Base16.encode(key.getHash()));
+        out.put(KEY_META, key.getHash().toString());
         out.put(DIGEST_META, digest.getAlgorithm());
         out.put(CIPHER_META, cipher.getAlgorithm());
         out.put(SIZE_META, Integer.toString(body.getSize()));
