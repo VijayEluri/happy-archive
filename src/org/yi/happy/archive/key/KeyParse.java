@@ -4,8 +4,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.yi.happy.annotate.SmellsMessy;
-import org.yi.happy.archive.Base16;
-import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.crypto.DigestFactory;
 
 /**
@@ -88,14 +86,14 @@ public class KeyParse {
     public static FullKey parseFullKey(String key) {
         Matcher m = BLOB_KEY.matcher(key);
         if (m.matches()) {
-            return new BlobFullKey(new HashValue(m.group(1)),
-                    new Bytes(Base16.decode(m.group(2))));
+            return new BlobFullKey(new HashValue(m.group(1)), new PassValue(m
+                    .group(2)));
         }
 
         m = CONTENT_KEY.matcher(key);
         if (m.matches()) {
-            return new ContentFullKey(new HashValue(m.group(1)),
-                    new Bytes(Base16.decode(m.group(2))));
+            return new ContentFullKey(new HashValue(m.group(1)), new PassValue(
+                    m.group(2)));
         }
 
         m = NAME_KEY.matcher(key);

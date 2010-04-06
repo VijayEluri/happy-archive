@@ -9,6 +9,7 @@ import org.yi.happy.archive.crypto.CipherProvider;
 import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.crypto.Digests;
 import org.yi.happy.archive.key.BlobFullKey;
+import org.yi.happy.archive.key.PassValue;
 
 /**
  * A block encoder that makes blob encoded blocks.
@@ -53,7 +54,7 @@ public class BlockEncoderBlob implements BlockEncoder {
                 new Bytes(body));
 
         BlobFullKey fullKey = new BlobFullKey(out.getKey().getHash(),
-                new Bytes(key));
+                new PassValue(key));
 
         return new BlockEncoderResult(fullKey, out);
     }

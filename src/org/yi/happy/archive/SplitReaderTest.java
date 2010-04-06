@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.yi.happy.archive.key.ContentFullKey;
 import org.yi.happy.archive.key.FullKey;
+import org.yi.happy.archive.key.PassValue;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
@@ -293,7 +294,7 @@ public class SplitReaderTest {
         store.put(C1);
 
         ContentFullKey k = (ContentFullKey) C1.getFullKey();
-        k = new ContentFullKey(k.getHash(), new Bytes());
+        k = new ContentFullKey(k.getHash(), new PassValue());
 
         SplitReader r = new SplitReader(k, store);
 
@@ -313,7 +314,7 @@ public class SplitReaderTest {
         {
             byte[] b = k.getPass().toByteArray();
             b[0] ^= 0x01;
-            k = new ContentFullKey(k.getHash(), new Bytes(b));
+            k = new ContentFullKey(k.getHash(), new PassValue(b));
         }
 
         SplitReader r = new SplitReader(k, store);

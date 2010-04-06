@@ -1,7 +1,5 @@
 package org.yi.happy.archive.key;
 
-import org.yi.happy.archive.Base16;
-import org.yi.happy.archive.Bytes;
 
 /**
  * The common parts of the keys where the key is based on the content of the
@@ -12,7 +10,7 @@ public abstract class AbstractContentFullKey implements FullKey {
     public abstract String getType();
 
     private final HashValue hash;
-    private final Bytes pass;
+    private final PassValue pass;
 
     /**
      * create.
@@ -22,7 +20,7 @@ public abstract class AbstractContentFullKey implements FullKey {
      * @param pass
      *            the encryption key part.
      */
-    protected AbstractContentFullKey(HashValue hash, Bytes pass) {
+    protected AbstractContentFullKey(HashValue hash, PassValue pass) {
         if (hash == null) {
             throw new IllegalArgumentException("hash is null");
         }
@@ -47,7 +45,7 @@ public abstract class AbstractContentFullKey implements FullKey {
      * 
      * @return the encryption key part of the key.
      */
-    public Bytes getPass() {
+    public PassValue getPass() {
         return pass;
     }
 
@@ -78,7 +76,7 @@ public abstract class AbstractContentFullKey implements FullKey {
 
     @Override
     public String toString() {
-        return getType() + ":" + hash + ":" + Base16.encode(pass);
+        return getType() + ":" + hash + ":" + pass;
     }
 
 }

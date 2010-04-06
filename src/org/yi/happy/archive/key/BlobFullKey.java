@@ -1,6 +1,5 @@
 package org.yi.happy.archive.key;
 
-import org.yi.happy.archive.Bytes;
 
 /**
  * A full key for a blob encoded block.
@@ -14,7 +13,7 @@ public class BlobFullKey extends AbstractContentFullKey implements FullKey {
      * @param pass
      *            the encryption key part of the key.
      */
-    public BlobFullKey(HashValue hash, Bytes pass) {
+    public BlobFullKey(HashValue hash, PassValue pass) {
         super(hash, pass);
     }
 

@@ -9,6 +9,7 @@ import org.yi.happy.archive.crypto.CipherProvider;
 import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.crypto.Digests;
 import org.yi.happy.archive.key.ContentFullKey;
+import org.yi.happy.archive.key.PassValue;
 
 /**
  * A block encoder for content hash blocks.
@@ -60,7 +61,7 @@ public class BlockEncoderContent implements BlockEncoder {
                 new Bytes(body));
 
         ContentFullKey fullKey = new ContentFullKey(out.getKey().getHash(),
-                new Bytes(key));
+                new PassValue(key));
 
         return new BlockEncoderResult(fullKey, out);
     }
