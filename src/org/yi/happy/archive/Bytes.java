@@ -157,11 +157,12 @@ public final class Bytes implements Comparable<Bytes> {
 
     @Override
     public int compareTo(Bytes o) {
-        for (int i = 0; i < o.data.length && i < data.length; i++) {
-            int out = (data[i] & 0xff) - (o.data[i] & 0xff);
-            if (out != 0) {
-                return out;
+        int n = Math.min(data.length, o.data.length);
+        for (int i = 0; i < n; i++) {
+            if (data[i] == o.data[i]) {
+                continue;
             }
+            return (data[i] & 0xff) - (o.data[i] & 0xff);
         }
         return data.length - o.data.length;
     }
