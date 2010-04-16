@@ -54,7 +54,9 @@ public class Main {
 
             new Cmd("volume-get", VolumeGetMain.class),
 
-            new Cmd("store-list", FileStoreListMain.class)
+            new Cmd("store-list", FileStoreListMain.class),
+
+            new Cmd("build-image", BuildImageMain.class)
 
             ));
 
