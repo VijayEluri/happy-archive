@@ -15,8 +15,6 @@ public class DigestFactory {
      * @param algorithm
      *            the type of digest to create a provider for
      * @return the digest
-     * @throws UnknownAlgorithmException
-     *             if the algorithm is unknown
      */
     public static DigestProvider getProvider(String algorithm) {
         return new DigestProvider(algorithm) {

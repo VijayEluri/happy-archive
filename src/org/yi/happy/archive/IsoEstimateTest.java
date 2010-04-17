@@ -80,6 +80,9 @@ public class IsoEstimateTest {
         assertEquals(4193806336l, e.getSize());
     }
 
+    /**
+     * get the size in megabytes.
+     */
     @Test
     public void testMegaSize1() {
         IsoEstimate e = new IsoEstimate();
@@ -87,6 +90,9 @@ public class IsoEstimateTest {
         assertEquals(1, e.getMegaSize());
     }
 
+    /**
+     * get the size in megabytes.
+     */
     @Test
     public void testMegaSize2() {
         IsoEstimate e = new IsoEstimate();
@@ -97,10 +103,4 @@ public class IsoEstimateTest {
 
         assertEquals(4195, e.getMegaSize());
     }
-    /*
-     * with rock
-     * 
-     * 4000 x 1MiB = 4194930688
-     */
-
 }

@@ -56,7 +56,9 @@ public class Main {
 
             new Cmd("store-list", FileStoreListMain.class),
 
-            new Cmd("build-image", BuildImageMain.class)
+            new Cmd("build-image", BuildImageMain.class),
+
+            new Cmd("index-volume", IndexVolumeMain.class)
 
             ));
 
