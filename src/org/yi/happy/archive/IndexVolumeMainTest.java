@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 
 import org.junit.Test;
+import org.yi.happy.annotate.NeedFailureTest;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.crypto.Digests;
 import org.yi.happy.archive.file_system.FakeFileSystem;
@@ -15,6 +16,7 @@ import org.yi.happy.archive.test_data.TestData;
 /**
  * Tests for {@link IndexVolumeMain}.
  */
+@NeedFailureTest
 public class IndexVolumeMainTest {
     /**
      * A sample good run.

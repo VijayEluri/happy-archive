@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 
 import org.junit.Test;
+import org.yi.happy.annotate.NeedFailureTest;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.test_data.TestData;
@@ -13,6 +14,7 @@ import org.yi.happy.archive.test_data.TestData;
 /**
  * Tests for {@link IndexSearchMain}.
  */
+@NeedFailureTest
 public class IndexSearchMainTest {
     /**
      * search for one key with one index.
