@@ -58,7 +58,9 @@ public class Main {
 
             new Cmd("build-image", BuildImageMain.class),
 
-            new Cmd("index-volume", IndexVolumeMain.class)
+            new Cmd("index-volume", IndexVolumeMain.class),
+
+            new Cmd("store-remove", StoreRemoveMain.class)
 
             ));
 

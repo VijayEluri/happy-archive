@@ -42,4 +42,24 @@ public interface BlockStore {
      * @throws T
      */
     <T extends Throwable> void visit(BlockStoreVisitor<T> visitor) throws T;
+
+    /**
+     * Test if the store appears to contain the given key.
+     * 
+     * @param key
+     *            the key to test for.
+     * @return true if the store appears to contain key.
+     * @throws IOException
+     */
+    boolean contains(LocatorKey key) throws IOException;
+
+    /**
+     * Remove a key from the store.
+     * 
+     * @param key
+     *            the key to remove.
+     * @throws IOException
+     *             on error.
+     */
+    void remove(LocatorKey key) throws IOException;
 }

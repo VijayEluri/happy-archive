@@ -199,4 +199,14 @@ public class FakeFileSystem implements FileSystem {
     public boolean isDir(String path) {
         return files.get(path) == DIR;
     }
+
+    @Override
+    public boolean delete(String path) throws IOException {
+        if (files.get(path) == DIR) {
+            throw new IOException();
+        }
+        boolean out = files.containsKey(path);
+        files.remove(path);
+        return out;
+    }
 }

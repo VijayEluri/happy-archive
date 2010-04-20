@@ -98,4 +98,16 @@ public class RealFileSystem implements FileSystem {
     public boolean isDir(String path) {
         return new File(path).isDirectory();
     }
+
+    @Override
+    public boolean delete(String path) throws IOException {
+        File f = new File(path);
+        if (!f.exists()) {
+            return false;
+        }
+        if (f.delete()) {
+            return true;
+        }
+        throw new IOException();
+    }
 }

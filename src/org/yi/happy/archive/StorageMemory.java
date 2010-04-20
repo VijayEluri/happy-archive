@@ -48,4 +48,9 @@ public class StorageMemory implements BlockStore {
             visitor.accept(key);
         }
     }
+
+    @Override
+    public void remove(LocatorKey key) throws IOException {
+        data.remove(key);
+    }
 }

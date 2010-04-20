@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
+import org.yi.happy.annotate.DuplicatedLogic;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.file_system.FileSystem;
@@ -33,6 +34,7 @@ public class FileBlockStore implements BlockStore {
         this.base = base;
     }
 
+    @DuplicatedLogic("making the file name")
     public void put(EncodedBlock b) throws IOException {
         LocatorKey key = b.getKey();
         String name = key.getHash() + "-" + key.getType();
@@ -50,6 +52,7 @@ public class FileBlockStore implements BlockStore {
     }
 
     @Override
+    @DuplicatedLogic("making the file name")
     public EncodedBlock get(LocatorKey key) throws IOException {
         String name = key.getHash() + "-" + key.getType();
 
@@ -96,5 +99,30 @@ public class FileBlockStore implements BlockStore {
                 visit(visitor, name, levels - 1);
             }
         }
+    }
+
+    @Override
+    @DuplicatedLogic("making the file name")
+    public boolean contains(LocatorKey key) throws IOException {
+        String name = key.getHash() + "-" + key.getType();
+
+        String fileName = fs.join(base, name.substring(0, 1));
+        fileName = fs.join(fileName, name.substring(0, 2));
+        fileName = fs.join(fileName, name.substring(0, 3));
+        fileName = fs.join(fileName, name);
+
+        return fs.exists(fileName);
+    }
+
+    @Override
+    public void remove(LocatorKey key) throws IOException {
+        String name = key.getHash() + "-" + key.getType();
+
+        String fileName = fs.join(base, name.substring(0, 1));
+        fileName = fs.join(fileName, name.substring(0, 2));
+        fileName = fs.join(fileName, name.substring(0, 3));
+        fileName = fs.join(fileName, name);
+
+        fs.delete(fileName);
     }
 }

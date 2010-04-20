@@ -130,4 +130,15 @@ public interface FileSystem {
      * @return true if the path exists and is a directory.
      */
     boolean isDir(String path);
+
+    /**
+     * Delete a file.
+     * 
+     * @param path
+     *            the file to delete.
+     * @return true if the file was deleted.
+     * @throws IOException
+     *             if the file can not be deleted.
+     */
+    boolean delete(String path) throws IOException;
 }
