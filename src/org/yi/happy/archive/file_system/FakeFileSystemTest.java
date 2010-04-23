@@ -279,7 +279,7 @@ public class FakeFileSystemTest {
     @Test
     public void randomWrite() throws IOException {
         RandomOutputFile f = real.openRandomOutputFile("a");
-        f.write(new byte[] { 0, 1 });
+        f.writeAt(0, new byte[] { 0, 1 });
         f.close();
 
         assertArrayEquals(new byte[] { 0, 1 }, real.load("a"));
@@ -297,7 +297,7 @@ public class FakeFileSystemTest {
         real.save("a", new byte[] { 1, 2, 3 });
 
         RandomOutputFile f = real.openRandomOutputFile("a");
-        f.write(new byte[] { 0, 1 });
+        f.writeAt(0, new byte[] { 0, 1 });
         f.close();
 
         assertArrayEquals(new byte[] { 0, 1, 3 }, real.load("a"));

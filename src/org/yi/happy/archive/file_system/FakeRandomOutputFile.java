@@ -81,47 +81,17 @@ public class FakeRandomOutputFile implements RandomOutputFile {
 
     @Override
     public void write(byte[] b, int offset, int length) throws IOException {
-        if (closed) {
-            throw new ClosedException();
-        }
-
-        if (position + length > bytes.length) {
-            bytes = Arrays.copyOf(bytes, position + length);
-        }
-
-        System.arraycopy(b, offset, bytes, position, length);
-
-        position += length;
+        writeAt0(position, b, offset, length);
     }
 
     @Override
     public void write(byte[] b) throws IOException {
-        if (closed) {
-            throw new ClosedException();
-        }
-
-        if (position + b.length > bytes.length) {
-            bytes = Arrays.copyOf(bytes, position + b.length);
-        }
-
-        System.arraycopy(b, 0, bytes, position, b.length);
-
-        position += b.length;
+        writeAt0(position, b, 0, b.length);
     }
 
     @Override
     public void write(int b) throws IOException {
-        if (closed) {
-            throw new ClosedException();
-        }
-
-        if (position + 1 > bytes.length) {
-            bytes = Arrays.copyOf(bytes, position + 1);
-        }
-
-        bytes[position] = (byte) b;
-
-        position += 1;
+        writeAt0(position, new byte[] { (byte) b }, 0, 1);
     }
 
     /**
@@ -140,6 +110,26 @@ public class FakeRandomOutputFile implements RandomOutputFile {
         }
 
         return position;
+    }
+
+    @Override
+    public void writeAt(long position, byte[] b) throws IOException {
+        writeAt0((int) position, b, 0, b.length);
+    }
+
+    private void writeAt0(int position, byte[] b, int offset, int length)
+            throws IOException {
+        if (closed) {
+            throw new ClosedException();
+        }
+
+        if (position + length > bytes.length) {
+            bytes = Arrays.copyOf(bytes, position + length);
+        }
+
+        System.arraycopy(b, offset, bytes, position, length);
+
+        this.position = position + length;
     }
 
     /**

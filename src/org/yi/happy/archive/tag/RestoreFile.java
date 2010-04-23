@@ -3,6 +3,7 @@ package org.yi.happy.archive.tag;
 import java.io.IOException;
 import java.util.List;
 
+import org.yi.happy.annotate.Simplify;
 import org.yi.happy.archive.Fragment;
 import org.yi.happy.archive.SplitReader;
 import org.yi.happy.archive.file_system.FileSystem;
@@ -39,6 +40,7 @@ public class RestoreFile {
      * 
      * @throws IOException
      */
+    @Simplify("make a writeAt() method for RandomOutputFile")
     public void step() throws IOException {
         Fragment part = data.fetchAny();
         if (part == null) {
@@ -48,8 +50,7 @@ public class RestoreFile {
         RandomOutputFile f = fs.openRandomOutputFile(path);
         try {
             while (part != null) {
-                f.setPosition(part.getOffset());
-                f.write(part.getData().toByteArray());
+                f.writeAt(part.getOffset(), part.getData().toByteArray());
 
                 part = data.fetchAny();
             }

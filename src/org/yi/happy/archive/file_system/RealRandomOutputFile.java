@@ -49,4 +49,10 @@ public class RealRandomOutputFile implements RandomOutputFile {
     public void write(int b) throws IOException {
         f.write(b);
     }
+
+    @Override
+    public void writeAt(long position, byte[] b) throws IOException {
+        f.seek(position);
+        f.write(b);
+    }
 }

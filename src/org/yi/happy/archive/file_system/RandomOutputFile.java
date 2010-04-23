@@ -3,8 +3,7 @@ package org.yi.happy.archive.file_system;
 import java.io.IOException;
 
 /**
- * A file that may be read and written at arbitrary positions within the byte
- * stream.
+ * A file that may be written at arbitrary positions within the byte stream.
  */
 public interface RandomOutputFile {
     /**
@@ -19,6 +18,7 @@ public interface RandomOutputFile {
      * @throws IOException
      *             on error.
      */
+    @Deprecated
     void write(byte[] b, int offset, int length) throws IOException;
 
     /**
@@ -29,6 +29,7 @@ public interface RandomOutputFile {
      * @throws IOException
      *             on error.
      */
+    @Deprecated
     void write(byte[] b) throws IOException;
 
     /**
@@ -39,6 +40,7 @@ public interface RandomOutputFile {
      * @throws IOException
      *             on error.
      */
+    @Deprecated
     void write(int b) throws IOException;
 
     /**
@@ -56,6 +58,7 @@ public interface RandomOutputFile {
      * @throws IOException
      *             on error.
      */
+    @Deprecated
     long getPosition() throws IOException;
 
     /**
@@ -66,5 +69,17 @@ public interface RandomOutputFile {
      * @throws IOException
      *             on error.
      */
+    @Deprecated
     void setPosition(long position) throws IOException;
+
+    /**
+     * Write some bytes at a given position in the file.
+     * 
+     * @param position
+     *            the position to write at.
+     * @param b
+     *            the bytes to write.
+     * @throws IOException
+     */
+    void writeAt(long position, byte[] b) throws IOException;
 }
