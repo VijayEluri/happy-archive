@@ -1,8 +1,11 @@
 package org.yi.happy.archive;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.StringWriter;
 
 import org.junit.Test;
@@ -33,7 +36,7 @@ public class IndexVolumeMainTest {
 
         StringWriter out = new StringWriter();
 
-        new IndexVolumeMain(fs, out).run("image");
+        new IndexVolumeMain(fs, out, null).run("image");
 
         StringBuilder sb = new StringBuilder();
         sb.append("00.dat\tplain\t");
@@ -55,5 +58,39 @@ public class IndexVolumeMainTest {
         sb.append("\n");
 
         assertEquals(sb.toString(), out.toString());
+    }
+
+    /**
+     * A sample run with a blank block.
+     * 
+     * @throws IOException
+     */
+    @Test
+    public void test2() throws IOException {
+        FileSystem fs = new FakeFileSystem();
+
+        fs.mkdir("image");
+        fs.save("image/00.dat", TestData.FILE_EMPTY.getBytes());
+        fs.save("image/01.dat", TestData.KEY_CONTENT_1.getBytes());
+
+        StringWriter out = new StringWriter();
+
+        ByteArrayOutputStream err = new ByteArrayOutputStream();
+
+        new IndexVolumeMain(fs, out, new PrintStream(err)).run("image");
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("01.dat\tplain\t");
+        sb.append(TestData.KEY_CONTENT_1.getLocatorKey());
+        sb.append("\t");
+        sb.append(Base16.encode(Digests.digestData(DigestFactory
+                .getProvider("sha-256"), TestData.KEY_CONTENT_1.getBytes())));
+        sb.append("\t");
+        sb.append(Integer.toString(TestData.KEY_CONTENT_1.getBytes().length));
+        sb.append("\n");
+
+        assertEquals(sb.toString(), out.toString());
+
+        assertTrue(err.size() != 0);
     }
 }

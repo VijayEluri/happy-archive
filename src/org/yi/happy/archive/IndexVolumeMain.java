@@ -2,6 +2,7 @@ package org.yi.happy.archive;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.PrintStream;
 import java.io.Writer;
 import java.util.Collections;
 import java.util.List;
@@ -22,6 +23,7 @@ public class IndexVolumeMain {
     private final FileSystem fs;
     private final Writer out;
     private final DigestProvider digest;
+    private final PrintStream err;
 
     /**
      * create with a context.
@@ -30,10 +32,13 @@ public class IndexVolumeMain {
      *            the file system to use.
      * @param out
      *            the output stream.
+     * @param err
+     *            the error stream.
      */
-    public IndexVolumeMain(FileSystem fs, Writer out) {
+    public IndexVolumeMain(FileSystem fs, Writer out, PrintStream err) {
         this.fs = fs;
         this.out = out;
+        this.err = err;
 
         digest = DigestFactory.getProvider("sha-256");
     }
@@ -64,6 +69,7 @@ public class IndexVolumeMain {
             return;
         }
 
+        try {
         byte[] data = fs.load(path, Blocks.MAX_SIZE);
         EncodedBlock block = EncodedBlockParse.parse(data);
 
@@ -76,6 +82,9 @@ public class IndexVolumeMain {
 
         out.write(name + "\t" + "plain" + "\t" + key + "\t" + hash + "\t"
                 + size + "\n");
+        } catch (Exception e) {
+            e.printStackTrace(err);
+        }
     }
 
     private void processDir(String path, String base) throws IOException {
@@ -97,7 +106,7 @@ public class IndexVolumeMain {
         FileSystem fs = new RealFileSystem();
         Writer out = new OutputStreamWriter(System.out);
         try {
-            new IndexVolumeMain(fs, out).run(args);
+            new IndexVolumeMain(fs, out, System.err).run(args);
         } finally {
             out.flush();
         }
