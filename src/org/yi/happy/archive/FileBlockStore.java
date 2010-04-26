@@ -115,6 +115,7 @@ public class FileBlockStore implements BlockStore {
     }
 
     @Override
+    @DuplicatedLogic("making the file name")
     public void remove(LocatorKey key) throws IOException {
         String name = key.getHash() + "-" + key.getType();
 
