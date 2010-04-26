@@ -2,6 +2,8 @@ package org.yi.happy.archive;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 
 import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.archive.file_system.FileSystem;
@@ -20,6 +22,7 @@ public class FileStoreTagGetMain {
     private final WaitHandler waitHandler;
     private final InputStream in;
     private String pendingFile;
+    private final Writer out;
 
     /**
      * initialize.
@@ -30,12 +33,15 @@ public class FileStoreTagGetMain {
      *            what to do when waiting is needed.
      * @param in
      *            what to use for standard input.
+     * @param out
+     *            what to use for standard output.
      */
     public FileStoreTagGetMain(FileSystem fs, WaitHandler waitHandler,
-            InputStream in) {
+            InputStream in, Writer out) {
         this.fs = fs;
         this.waitHandler = waitHandler;
         this.in = in;
+        this.out = out;
     }
 
     /**
@@ -47,6 +53,10 @@ public class FileStoreTagGetMain {
      */
     @EntryPoint
     public void run(String... args) throws IOException {
+        if (args.length != 2) {
+            out.write("use: store need.lst < tags\n");
+            return;
+        }
         FileBlockStore store = new FileBlockStore(fs, args[0]);
         pendingFile = args[1];
         RestoreManager restore = new RestoreManager(fs,
@@ -116,6 +126,11 @@ public class FileStoreTagGetMain {
         WaitHandler waitHandler = new WaitHandlerProgressiveDelay();
         InputStream in = System.in;
 
-        new FileStoreTagGetMain(fs, waitHandler, in).run(args);
+        Writer out = new OutputStreamWriter(System.out, "UTF-8");
+        try {
+            new FileStoreTagGetMain(fs, waitHandler, in, out).run(args);
+        } finally {
+            out.flush();
+        }
     }
 }

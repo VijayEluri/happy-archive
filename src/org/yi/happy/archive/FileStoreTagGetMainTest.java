@@ -2,10 +2,12 @@ package org.yi.happy.archive;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.StringWriter;
 
 import org.junit.Test;
 import org.yi.happy.archive.file_system.FakeFileSystem;
@@ -37,7 +39,8 @@ public class FileStoreTagGetMainTest {
             }
         };
 
-        new FileStoreTagGetMain(fs, waitHandler, in).run("store", "request");
+        new FileStoreTagGetMain(fs, waitHandler, in, null).run("store",
+                "request");
 
         assertArrayEquals(TestData.FILE_CONTENT.getBytes(), fs
                 .load("hello.txt"));
@@ -88,11 +91,26 @@ public class FileStoreTagGetMainTest {
             };
         };
 
-        new FileStoreTagGetMain(fs, waitHandler, in).run("store", "request");
+        new FileStoreTagGetMain(fs, waitHandler, in, null).run("store",
+                "request");
 
         assertArrayEquals(TestData.FILE_CONTENT.getBytes(), fs
                 .load("hello.txt"));
         assertArrayEquals(TestData.FILE_CONTENT_40.getBytes(), fs
                 .load("test.dat"));
+    }
+
+    /**
+     * trigger printing of the command usage.
+     * 
+     * @throws IOException
+     */
+    @Test
+    public void test3() throws IOException {
+        StringWriter out = new StringWriter();
+
+        new FileStoreTagGetMain(null, null, null, out).run();
+
+        assertTrue(out.getBuffer().length() > 0);
     }
 }
