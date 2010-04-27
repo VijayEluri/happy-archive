@@ -85,5 +85,7 @@ public class VolumeGetMain {
         PrintStream err = System.err;
 
         new VolumeGetMain(fs, in, out, err).run(args);
+
+        out.flush();
     }
 }
