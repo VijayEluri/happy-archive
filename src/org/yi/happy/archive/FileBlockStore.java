@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-import org.yi.happy.annotate.DuplicatedLogic;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.file_system.FileSystem;
@@ -34,33 +33,16 @@ public class FileBlockStore implements BlockStore {
         this.base = base;
     }
 
-    @DuplicatedLogic("making the file name")
+    @Override
     public void put(EncodedBlock b) throws IOException {
         LocatorKey key = b.getKey();
-        String name = key.getHash() + "-" + key.getType();
-
-        fs.mkdir(base);
-        String fileName = fs.join(base, name.substring(0, 1));
-        fs.mkdir(fileName);
-        fileName = fs.join(fileName, name.substring(0, 2));
-        fs.mkdir(fileName);
-        fileName = fs.join(fileName, name.substring(0, 3));
-        fs.mkdir(fileName);
-        fileName = fs.join(fileName, name);
-
+        String fileName = makeFileName(key, true);
         fs.save(fileName, b.asBytes());
     }
 
     @Override
-    @DuplicatedLogic("making the file name")
     public EncodedBlock get(LocatorKey key) throws IOException {
-        String name = key.getHash() + "-" + key.getType();
-
-        String fileName = fs.join(base, name.substring(0, 1));
-        fileName = fs.join(fileName, name.substring(0, 2));
-        fileName = fs.join(fileName, name.substring(0, 3));
-        fileName = fs.join(fileName, name);
-
+        String fileName = makeFileName(key, false);
         try {
             return EncodedBlockParse.parse(fs.load(fileName));
         } catch (FileNotFoundException e) {
@@ -102,28 +84,49 @@ public class FileBlockStore implements BlockStore {
     }
 
     @Override
-    @DuplicatedLogic("making the file name")
     public boolean contains(LocatorKey key) throws IOException {
-        String name = key.getHash() + "-" + key.getType();
-
-        String fileName = fs.join(base, name.substring(0, 1));
-        fileName = fs.join(fileName, name.substring(0, 2));
-        fileName = fs.join(fileName, name.substring(0, 3));
-        fileName = fs.join(fileName, name);
-
+        String fileName = makeFileName(key, false);
         return fs.exists(fileName);
     }
 
-    @Override
-    @DuplicatedLogic("making the file name")
-    public void remove(LocatorKey key) throws IOException {
+    /**
+     * Make the file name that a key will be stored at.
+     * 
+     * @param key
+     *            the key to get the file name form.
+     * @param create
+     *            true to also create the directories.
+     * @return the file name that the key should be stored at.
+     * @throws IOException
+     *             if the directories can not be created.
+     */
+    private String makeFileName(LocatorKey key, boolean create)
+            throws IOException {
         String name = key.getHash() + "-" + key.getType();
 
+        if (create) {
+            fs.mkdir(base);
+        }
         String fileName = fs.join(base, name.substring(0, 1));
+        if (create) {
+            fs.mkdir(fileName);
+        }
         fileName = fs.join(fileName, name.substring(0, 2));
+        if (create) {
+            fs.mkdir(fileName);
+        }
         fileName = fs.join(fileName, name.substring(0, 3));
+        if (create) {
+            fs.mkdir(fileName);
+        }
         fileName = fs.join(fileName, name);
 
+        return fileName;
+    }
+
+    @Override
+    public void remove(LocatorKey key) throws IOException {
+        String fileName = makeFileName(key, false);
         fs.delete(fileName);
     }
 }
