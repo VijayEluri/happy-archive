@@ -1,13 +1,15 @@
 package org.yi.happy.archive.search;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
-public class SearchMain {
+import org.yi.happy.archive.Streams;
+
+public class SearchMain2 {
     public static void main(String[] args) throws IOException {
         /*
          * usage: search.lst file...
@@ -787,26 +789,22 @@ public class SearchMain {
          * do a binary search of a lexically sorted text file for lines that
          * start with the given prefixes.
          */
-        List<String> targets = loadTargetList(args[0]);
+        SortedSet<String> targets = loadTargetList(args[0]);
 
         long totalStartTime = System.currentTimeMillis();
+        byte[] buff = new byte[1024 * 1024];
 
         for (int i = 1; i < args.length; i++) {
             long startTime = System.currentTimeMillis();
 
-            RandomAccessFile file = new RandomAccessFile(args[i], "r");
-            RandomLineReader in = new RandomLineReader(file, new LineCache());
-
-            for (String target : targets) {
-                long position = searchBinary(in, target);
-                file.seek(position);
-                String result = file.readLine();
-                while (result != null && result.startsWith(target)) {
-                    System.out.println("result: " + result);
-                    result = file.readLine();
-                }
+            System.out.println("file: " + args[i]);
+            NullOutputStream out = new NullOutputStream();
+            FileInputStream in = new FileInputStream(args[i]);
+            try {
+                Streams.copy(in, out, buff);
+            } finally {
+                in.close();
             }
-            file.close();
 
             long endTime = System.currentTimeMillis();
             System.out.println("time: " + (endTime - startTime));
@@ -816,18 +814,19 @@ public class SearchMain {
         System.out.println("total time: " + (totalEndTime - totalStartTime));
     }
 
-    private static List<String> loadTargetList(String path) throws IOException {
+    private static SortedSet<String> loadTargetList(String path)
+            throws IOException {
         FileReader in0 = new FileReader(path);
         try {
             BufferedReader in = new BufferedReader(in0);
-            List<String> out = new ArrayList<String>();
+            SortedSet<String> out = new TreeSet<String>();
 
             while (true) {
                 String line = in.readLine();
                 if (line == null) {
                     break;
                 }
-                out.add(line + "\t");
+                out.add(line);
             }
 
             return out;
@@ -882,5 +881,4 @@ public class SearchMain {
 
         return file.getPosition(beg);
     }
-
 }

@@ -11,14 +11,25 @@ import java.io.RandomAccessFile;
 public class RandomLineReader {
 
     private final RandomAccessFile file;
+    private final LineCache cache;
 
-    public RandomLineReader(RandomAccessFile file) {
+    public RandomLineReader(RandomAccessFile file, LineCache cache) {
         this.file = file;
+        this.cache = cache;
     }
 
     public String getFirst() throws IOException {
+        String line = cache.getFirst();
+        if (line != null) {
+            return line;
+        }
+
         file.seek(0);
-        return file.readLine();
+        line = file.readLine();
+
+        cache.putFirst(line);
+
+        return line;
     }
 
     public long length() throws IOException {
@@ -26,9 +37,19 @@ public class RandomLineReader {
     }
 
     public String get(long position) throws IOException {
+        String line = cache.get(position);
+        if (line != null) {
+            return line;
+        }
+
         file.seek(position);
         file.readLine();
-        return file.readLine();
+        long found = file.getFilePointer();
+
+        line = file.readLine();
+
+        cache.put(position, found, line);
+        return line;
     }
 
     public long getPosition(long position) throws IOException {

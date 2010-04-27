@@ -1,6 +1,7 @@
 package org.yi.happy.archive.block.parser;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -94,5 +95,27 @@ public class RangeTest {
         Range b = new Range(5, 10);
 
         assertEquals(new Range(15, 5), a.after(b));
+    }
+
+    /**
+     * (10 .. 20) > (5 .. 15)
+     */
+    @Test
+    public void testCompare1() {
+        Range a = new Range(10, 10);
+        Range b = new Range(5, 10);
+
+        assertTrue(a.compareTo(b) > 0);
+    }
+
+    /**
+     * (5 .. 10) < (5 .. 15)
+     */
+    @Test
+    public void testCompare2() {
+        Range a = new Range(5, 5);
+        Range b = new Range(5, 10);
+
+        assertTrue(a.compareTo(b) < 0);
     }
 }

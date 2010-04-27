@@ -34,7 +34,7 @@ public class GenericBlockParse {
          * parse the headers
          */
         while (true) {
-            Range endOfLine = findEndOfLine(bytes, rest);
+            Range endOfLine = ByteParse.findEndOfLine(bytes, rest);
             Range line = rest.before(endOfLine);
             rest = rest.after(endOfLine);
 
@@ -101,37 +101,6 @@ public class GenericBlockParse {
         Bytes body = new Bytes(bytes, rest.getOffset(), rest.getLength());
 
         return new GenericBlock(meta, body);
-    }
-
-    /**
-     * find the line break byte at or after index.
-     * 
-     * @param bytes
-     *            the bytes.
-     * @param range
-     *            the range to search in.
-     * @return range that is the line break, or the end of the range if none
-     *         found. Before this range is the first line, after this range is
-     *         the start of the next line.
-     */
-    @MagicLiteral
-    private Range findEndOfLine(byte[] bytes, Range range) {
-        for (int i = range.getOffset(); i < range.getEnd(); i++) {
-            if (bytes[i] == '\r') {
-                if (i + 1 < range.getEnd() && bytes[i + 1] == '\n') {
-                    return new Range(i, 2);
-                }
-                return new Range(i, 1);
-            }
-            if (bytes[i] == '\n') {
-                if (i + 1 < range.getEnd() && bytes[i + 1] == '\r') {
-                    return new Range(i, 2);
-                }
-                return new Range(i, 1);
-            }
-        }
-
-        return new Range(range.getEnd(), 0);
     }
 
     /**

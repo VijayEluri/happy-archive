@@ -1,11 +1,11 @@
-package org.yi.happy.archive.block.parser;
+package org.yi.happy.archive.search;
 
 /**
  * A range.
  */
-public final class Range implements Comparable<Range> {
-    private final int offset;
-    private final int length;
+public final class LongRange implements Comparable<LongRange> {
+    private final long offset;
+    private final long length;
 
     /**
      * create a range.
@@ -15,7 +15,7 @@ public final class Range implements Comparable<Range> {
      * @param length
      *            the length of the range.
      */
-    public Range(int offset, int length) {
+    public LongRange(long offset, long length) {
         this.offset = offset;
         this.length = length;
     }
@@ -24,7 +24,7 @@ public final class Range implements Comparable<Range> {
      * 
      * @return the offset where the range starts.
      */
-    public int getOffset() {
+    public long getOffset() {
         return offset;
     }
 
@@ -32,7 +32,7 @@ public final class Range implements Comparable<Range> {
      * 
      * @return the length of the range.
      */
-    public int getLength() {
+    public long getLength() {
         return length;
     }
 
@@ -42,7 +42,7 @@ public final class Range implements Comparable<Range> {
      * 
      * @return index just past the end of the range.
      */
-    public int getEnd() {
+    public long getEnd() {
         return offset + length;
     }
 
@@ -50,8 +50,8 @@ public final class Range implements Comparable<Range> {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + length;
-        result = prime * result + offset;
+        result = prime * result + (int) (length ^ (length >>> 32));
+        result = prime * result + (int) (offset ^ (offset >>> 32));
         return result;
     }
 
@@ -63,7 +63,7 @@ public final class Range implements Comparable<Range> {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Range other = (Range) obj;
+        LongRange other = (LongRange) obj;
         if (length != other.length)
             return false;
         if (offset != other.offset)
@@ -80,16 +80,16 @@ public final class Range implements Comparable<Range> {
      *         other, and ends at the minimum of the end of this and the
      *         beginning of other.
      */
-    public Range before(Range other) {
+    public LongRange before(LongRange other) {
         if (this.getEnd() < other.getOffset()) {
             return this;
         }
 
         if (other.getOffset() < this.getOffset()) {
-            return new Range(other.getOffset(), 0);
+            return new LongRange(other.getOffset(), 0);
         }
 
-        return new Range(this.getOffset(), other.getOffset() - this.getOffset());
+        return new LongRange(this.getOffset(), other.getOffset() - this.getOffset());
     }
 
     /**
@@ -101,16 +101,16 @@ public final class Range implements Comparable<Range> {
      *         and the beginning of this range, and ends at the maximum of the
      *         end of the other range and the end of this range.
      */
-    public Range after(Range other) {
+    public LongRange after(LongRange other) {
         if (other.getEnd() < this.getOffset()) {
             return this;
         }
 
         if (other.getEnd() > this.getEnd()) {
-            return new Range(other.getEnd(), 0);
+            return new LongRange(other.getEnd(), 0);
         }
 
-        return new Range(other.getEnd(), this.getEnd() - other.getEnd());
+        return new LongRange(other.getEnd(), this.getEnd() - other.getEnd());
     }
 
     @Override
@@ -119,7 +119,7 @@ public final class Range implements Comparable<Range> {
     }
 
     @Override
-    public int compareTo(Range o) {
+    public int compareTo(LongRange o) {
         if (offset < o.offset) {
             return -1;
         }
