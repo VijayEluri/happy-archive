@@ -192,7 +192,7 @@ public class FakeFileSystemTest {
         real.rename("a", "b");
 
         assertArrayEquals(new byte[0], real.load("b"));
-        assertFalse(fake.exists("a"));
+        assertFalse(real.exists("a"));
     }
 
     /**
@@ -237,7 +237,7 @@ public class FakeFileSystemTest {
         real.rename("a", "b");
 
         assertArrayEquals(new byte[] { 1 }, real.load("b"));
-        assertFalse(fake.exists("a"));
+        assertFalse(real.exists("a"));
     }
 
     /**
@@ -267,7 +267,7 @@ public class FakeFileSystemTest {
         real.rename("a", "b/a");
 
         assertArrayEquals(new byte[] {}, real.load("b/a"));
-        assertFalse(fake.exists("a"));
+        assertFalse(real.exists("a"));
     }
 
     /**
