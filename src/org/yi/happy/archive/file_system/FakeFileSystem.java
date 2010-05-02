@@ -81,6 +81,9 @@ public class FakeFileSystem implements FileSystem {
 
     @Override
     public boolean mkdir(String path) throws IOException {
+        /*
+         * TODO extract parent check to a method
+         */
         if (path.contains("/")
                 && files.get(path.replaceAll("/[^/]*$", "")) != DIR) {
             throw new FileNotFoundException(
@@ -146,6 +149,9 @@ public class FakeFileSystem implements FileSystem {
     @Override
     public RandomOutputFile openRandomOutputFile(final String path)
             throws IOException {
+        /*
+         * TODO extract parent check to a method
+         */
         if (path.contains("/")
                 && files.get(path.replaceAll("/[^/]*$", "")) != DIR) {
             throw new FileNotFoundException("parent does not exist or is"
@@ -208,5 +214,19 @@ public class FakeFileSystem implements FileSystem {
         boolean out = files.containsKey(path);
         files.remove(path);
         return out;
+    }
+
+    @Override
+    public boolean isFile(String path) {
+        byte[] data = files.get(path);
+
+        if (data == null) {
+            return false;
+        }
+        if (data == DIR) {
+            return false;
+        }
+
+        return true;
     }
 }

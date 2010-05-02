@@ -110,4 +110,9 @@ public class RealFileSystem implements FileSystem {
         }
         throw new IOException();
     }
+
+    @Override
+    public boolean isFile(String path) {
+        return new File(path).isFile();
+    }
 }

@@ -141,4 +141,13 @@ public interface FileSystem {
      *             if the file can not be deleted.
      */
     boolean delete(String path) throws IOException;
+
+    /**
+     * check that a path exists and is a file.
+     * 
+     * @param path
+     *            the path to check.
+     * @return true if the path exists and is a file.
+     */
+    boolean isFile(String path);
 }

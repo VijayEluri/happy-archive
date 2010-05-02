@@ -391,4 +391,38 @@ public class FakeFileSystemTest {
     public void testIsDir3() throws IOException {
         assertFalse(real.isDir("a"));
     }
+
+    /**
+     * directory is not a file
+     * 
+     * @throws IOException
+     */
+    @Test
+    public void testIsFile1() throws IOException {
+        real.mkdir("a");
+
+        assertFalse(real.isFile("a"));
+    }
+
+    /**
+     * file is a file
+     * 
+     * @throws IOException
+     */
+    @Test
+    public void testIsFile2() throws IOException {
+        real.save("a", new byte[0]);
+
+        assertTrue(real.isFile("a"));
+    }
+
+    /**
+     * not exist is not a file
+     * 
+     * @throws IOException
+     */
+    @Test
+    public void testIsFile3() throws IOException {
+        assertFalse(real.isFile("a"));
+    }
 }
