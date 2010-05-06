@@ -5,7 +5,7 @@ import org.yi.happy.archive.Bytes;
 
 /**
  * A byte string that is the result of performing some message digest. This is
- * just a string of bytes.
+ * just a string of at least one byte.
  */
 public final class HashValue implements Comparable<HashValue> {
     private final Bytes value;

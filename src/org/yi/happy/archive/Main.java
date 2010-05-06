@@ -44,6 +44,8 @@ public class Main {
 
             new Cmd("tag-get", FileStoreTagGetMain.class),
 
+            new Cmd("tag-put", FileStoreTagPutMain.class),
+
             new Cmd("decode", DecodeBlockMain.class),
 
             new Cmd("encode", EncodeContentMain.class),
