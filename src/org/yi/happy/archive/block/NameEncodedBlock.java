@@ -3,7 +3,6 @@ package org.yi.happy.archive.block;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.yi.happy.annotate.BrokenContract;
 import org.yi.happy.annotate.ExternalName;
 import org.yi.happy.archive.BadSignatureException;
 import org.yi.happy.archive.ByteString;
@@ -178,50 +177,5 @@ public final class NameEncodedBlock extends AbstractBlock implements
         c.decrypt(out);
 
         return BlockParse.parse(out);
-    }
-
-    @Override
-    @BrokenContract(Block.class)
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + body.hashCode();
-        result = prime * result + ((cipher == null) ? 0 : cipher.hashCode());
-        result = prime * result + ((digest == null) ? 0 : digest.hashCode());
-        result = prime * result + hash.hashCode();
-        result = prime * result + ((key == null) ? 0 : key.hashCode());
-        return result;
-    }
-
-    @Override
-    @BrokenContract(Block.class)
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        NameEncodedBlock other = (NameEncodedBlock) obj;
-        if (!body.equals(other.body))
-            return false;
-        if (cipher == null) {
-            if (other.cipher != null)
-                return false;
-        } else if (!cipher.equals(other.cipher))
-            return false;
-        if (digest == null) {
-            if (other.digest != null)
-                return false;
-        } else if (!digest.equals(other.digest))
-            return false;
-        if (!hash.equals(other.hash))
-            return false;
-        if (key == null) {
-            if (other.key != null)
-                return false;
-        } else if (!key.equals(other.key))
-            return false;
-        return true;
     }
 }
