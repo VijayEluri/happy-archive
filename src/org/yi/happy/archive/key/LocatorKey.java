@@ -12,10 +12,6 @@ public interface LocatorKey extends Comparable<LocatorKey> {
      */
     public HashValue getHash();
 
-    public int hashCode();
-
-    public boolean equals(Object obj);
-
     /**
      * The rule for comparison of locator keys is, compare the hash, then
      * compare the key type.
@@ -29,14 +25,11 @@ public interface LocatorKey extends Comparable<LocatorKey> {
     public String getType();
 
     /**
-     * @return the string that parses into this key
+     * @return the string that parses into this locator key
      */
     public String toString();
 
-    /**
-     * Get the locator key for this key.
-     * 
-     * @return A locator key.
-     */
-    public LocatorKey toLocatorKey();
+    public int hashCode();
+
+    public boolean equals(Object obj);
 }

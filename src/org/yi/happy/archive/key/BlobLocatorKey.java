@@ -21,9 +21,4 @@ public final class BlobLocatorKey extends AbstractLocatorKey implements
     public String getType() {
         return KeyType.BLOB;
     }
-
-    @Override
-    public BlobLocatorKey toLocatorKey() {
-        return this;
-    }
 }

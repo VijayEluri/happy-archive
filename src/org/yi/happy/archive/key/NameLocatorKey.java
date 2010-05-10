@@ -21,9 +21,4 @@ public final class NameLocatorKey extends AbstractLocatorKey implements
     public String getType() {
         return KeyType.NAME_HASH;
     }
-
-    @Override
-    public NameLocatorKey toLocatorKey() {
-        return this;
-    }
 }

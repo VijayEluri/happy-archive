@@ -21,9 +21,4 @@ public final class ContentLocatorKey extends AbstractLocatorKey implements
     public ContentLocatorKey(HashValue hash) {
         super(hash);
     }
-
-    @Override
-    public ContentLocatorKey toLocatorKey() {
-        return this;
-    }
 }
