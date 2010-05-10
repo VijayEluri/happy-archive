@@ -22,7 +22,7 @@ public class KeyOutputStreamTest {
      */
     @Test
     public void testWrite() throws IOException {
-        BlockEncoder e = BlockEncoderFactory.getContentDefault();
+        BlockEncoder e = BlockEncoderFactory.getContentOldDefault();
         StorageMemory s = new StorageMemory();
         KeyOutputStream out = new KeyOutputStream(new StoreBlockStorage(e, s));
 
@@ -54,7 +54,7 @@ public class KeyOutputStreamTest {
         out.write("hello\n".getBytes());
         out.close();
 
-        TestData d = TestData.KEY_CONTENT;
+        TestData d = TestData.KEY_CONTENT_AES128;
         assertEquals(d.getFullKey(), out.getFullKey());
         assertTrue(s.contains(d.getLocatorKey()));
     }
@@ -91,7 +91,7 @@ public class KeyOutputStreamTest {
 
         out.close();
 
-        assertEquals(TestData.KEY_CONTENT.getFullKey(), out.getFullKey());
+        assertEquals(TestData.KEY_CONTENT_AES128.getFullKey(), out.getFullKey());
     }
 
     /**
@@ -101,7 +101,7 @@ public class KeyOutputStreamTest {
      */
     @Test
     public void testSetSplitSize() throws IOException {
-        BlockEncoder e = BlockEncoderFactory.getContentDefault();
+        BlockEncoder e = BlockEncoderFactory.getContentOldDefault();
         StorageMemory s = new StorageMemory();
         KeyOutputStream out = new KeyOutputStream(new StoreBlockStorage(e, s));
 

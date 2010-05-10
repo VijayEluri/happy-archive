@@ -30,10 +30,11 @@ public class FileStoreStreamPutMainTest {
 
         new FileStoreStreamPutMain(fs, in, out).run("store");
 
-        assertEquals(TestData.KEY_CONTENT.getFullKey() + "\n", out.toString());
+        assertEquals(TestData.KEY_CONTENT_AES128.getFullKey() + "\n", out
+                .toString());
 
-        assertArrayEquals(TestData.KEY_CONTENT.getBytes(), fs
-                .load("store/8/87/87c/87c5f6fe4ea801c8eb227b8b218a0659c18ece76"
-                        + "b7c200c645ab4364becf68d5-content-hash"));
+        assertArrayEquals(TestData.KEY_CONTENT_AES128.getBytes(), fs
+                .load("store/d/d7/d78/d7859e105484ff5af15fc35365043e92531402b"
+                        + "23168246b2cfca4932bf27d14-content-hash"));
     }
 }

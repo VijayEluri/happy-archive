@@ -27,8 +27,10 @@ public class EncodeContentMainTest {
         EncodeContentMain app = new EncodeContentMain(fs, out);
         app.run("in.dat", "out.dat");
 
-        assertEquals(TestData.KEY_CONTENT.getFullKey().toString() + "\n", out
+        assertEquals(
+                TestData.KEY_CONTENT_AES128.getFullKey().toString() + "\n", out
                 .toString());
-        assertArrayEquals(TestData.KEY_CONTENT.getBytes(), fs.load("out.dat"));
+        assertArrayEquals(TestData.KEY_CONTENT_AES128.getBytes(), fs
+                .load("out.dat"));
     }
 }

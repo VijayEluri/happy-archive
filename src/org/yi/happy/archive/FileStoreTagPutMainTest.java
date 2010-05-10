@@ -35,7 +35,8 @@ public class FileStoreTagPutMainTest {
         assertEquals(1, tags.size());
         assertEquals("test.txt", tags.get(0).get("name"));
         assertEquals("file", tags.get(0).get("type"));
-        assertEquals(TestData.KEY_CONTENT.getFullKey().toString(), tags.get(0)
+        assertEquals(TestData.KEY_CONTENT_AES128.getFullKey().toString(), tags
+                .get(0)
                 .get("data"));
     }
 
