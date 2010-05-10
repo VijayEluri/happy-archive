@@ -27,7 +27,7 @@ public class ContentLocatorKeyTest {
      */
     @Test
     public void testToLocatorKey5() {
-        Key key = TestData.KEY_CONTENT.getLocatorKey();
+        LocatorKey key = TestData.KEY_CONTENT.getLocatorKey();
 
         assertTrue(key instanceof ContentLocatorKey);
 

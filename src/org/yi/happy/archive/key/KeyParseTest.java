@@ -30,14 +30,11 @@ public class KeyParseTest {
      */
     @Test
     public void testParseNameLocator() {
-        Key k = KeyParse.parseKey("name-hash:001122");
+        LocatorKey k = KeyParse.parseLocatorKey("name-hash:001122");
 
         assertEquals("name-hash", k.getType());
-        assertTrue(k instanceof LocatorKey);
 
-        LocatorKey n = (LocatorKey) k;
-
-        assertEquals(new HashValue(0x00, 0x11, 0x22), n.getHash());
+        assertEquals(new HashValue(0x00, 0x11, 0x22), k.getHash());
     }
 
     /**
@@ -45,14 +42,11 @@ public class KeyParseTest {
      */
     @Test
     public void testParseContentLocator() {
-        Key k = KeyParse.parseKey("content-hash:001122");
+        LocatorKey k = KeyParse.parseLocatorKey("content-hash:001122");
 
         assertEquals("content-hash", k.getType());
-        assertTrue(k instanceof LocatorKey);
 
-        LocatorKey n = (LocatorKey) k;
-
-        assertEquals(new HashValue(0x00, 0x11, 0x22), n.getHash());
+        assertEquals(new HashValue(0x00, 0x11, 0x22), k.getHash());
     }
 
     /**
@@ -60,7 +54,7 @@ public class KeyParseTest {
      */
     @Test
     public void testParseFullContent() {
-        Key k = KeyParse.parseKey("content-hash:001122:334455");
+        FullKey k = KeyParse.parseFullKey("content-hash:001122:334455");
 
         assertEquals("content-hash", k.getType());
 
@@ -77,7 +71,7 @@ public class KeyParseTest {
      */
     @Test
     public void testParseFullContent2() {
-        Key k = KeyParse.parseKey("content-hash:001122:");
+        FullKey k = KeyParse.parseFullKey("content-hash:001122:");
 
         assertEquals("content-hash", k.getType());
 
@@ -94,14 +88,11 @@ public class KeyParseTest {
      */
     @Test
     public void testParseBlobLocator() {
-        Key k = KeyParse.parseKey("blob:001122");
+        LocatorKey k = KeyParse.parseLocatorKey("blob:001122");
 
         assertEquals("blob", k.getType());
-        assertTrue(k instanceof LocatorKey);
 
-        LocatorKey n = (LocatorKey) k;
-
-        assertEquals(new HashValue(0x00, 0x11, 0x22), n.getHash());
+        assertEquals(new HashValue(0x00, 0x11, 0x22), k.getHash());
     }
 
     /**
@@ -109,7 +100,7 @@ public class KeyParseTest {
      */
     @Test
     public void testParseFullBlob() {
-        Key k = KeyParse.parseKey("blob:001122:334455");
+        FullKey k = KeyParse.parseFullKey("blob:001122:334455");
 
         assertEquals("blob", k.getType());
 
@@ -126,7 +117,7 @@ public class KeyParseTest {
      */
     @Test
     public void testParseFullBlob2() {
-        Key k = KeyParse.parseKey("blob:001122:");
+        FullKey k = KeyParse.parseFullKey("blob:001122:");
 
         assertEquals("blob", k.getType());
 
@@ -142,16 +133,32 @@ public class KeyParseTest {
      * parse an invalid key
      */
     @Test(expected = IllegalArgumentException.class)
-    public void testBad() {
-        KeyParse.parseKey("content-hash");
+    public void testBad1() {
+        KeyParse.parseFullKey("content-hash");
+    }
+
+    /**
+     * parse an invalid key
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testBad2() {
+        KeyParse.parseLocatorKey("content-hash");
     }
 
     /**
      * parse content key with odd hex digits
      */
     @Test(expected = IllegalArgumentException.class)
-    public void testBadContentKey() {
-        KeyParse.parseKey("content-hash:0:0");
+    public void testBadContentKey1() {
+        KeyParse.parseFullKey("content-hash:0:0");
+    }
+
+    /**
+     * parse content key with odd hex digits
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testBadContentKey2() {
+        KeyParse.parseLocatorKey("content-hash:0:0");
     }
 
     /**
@@ -159,7 +166,7 @@ public class KeyParseTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testBadContentLocator() {
-        KeyParse.parseKey("content-hash:0");
+        KeyParse.parseLocatorKey("content-hash:0");
     }
 
     /**
@@ -167,15 +174,23 @@ public class KeyParseTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testBadNameLocator() {
-        KeyParse.parseKey("name-hash:0");
+        KeyParse.parseLocatorKey("name-hash:0");
     }
 
     /**
      * parse a locator key with an unknown type
      */
     @Test(expected = IllegalArgumentException.class)
-    public void testBadType() {
-        KeyParse.parseKey("bad:00");
+    public void testBadType1() {
+        KeyParse.parseFullKey("bad:00");
+    }
+
+    /**
+     * parse a locator key with an unknown type
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testBadType2() {
+        KeyParse.parseLocatorKey("bad:00");
     }
 
 }

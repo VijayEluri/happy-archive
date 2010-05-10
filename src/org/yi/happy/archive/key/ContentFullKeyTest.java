@@ -40,9 +40,9 @@ public class ContentFullKeyTest {
         ContentFullKey in = new ContentFullKey(new HashValue(0x00, 0x11, 0x22),
                 new PassValue(0x33, 0x44, 0x55));
 
-        Key have = in.toLocatorKey();
+        LocatorKey have = in.toLocatorKey();
 
-        Key want = new ContentLocatorKey(new HashValue(0x00, 0x11, 0x22));
+        LocatorKey want = new ContentLocatorKey(new HashValue(0x00, 0x11, 0x22));
         assertEquals(want, have);
     }
 }

@@ -26,7 +26,7 @@ public class NameLocatorKeyTest {
      */
     @Test
     public void testToLocatorKey3() {
-        Key key = TestData.KEY_NAME.getLocatorKey();
+        LocatorKey key = TestData.KEY_NAME.getLocatorKey();
         assertTrue(key instanceof NameLocatorKey);
 
         LocatorKey have = key.toLocatorKey();

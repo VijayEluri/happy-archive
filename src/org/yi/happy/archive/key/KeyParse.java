@@ -7,7 +7,7 @@ import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.crypto.DigestFactory;
 
 /**
- * parser for {@link Key}.
+ * parser for {@link LocatorKey}, and {@link FullKey}.
  */
 public class KeyParse {
     private KeyParse() {
@@ -49,29 +49,6 @@ public class KeyParse {
      */
     public static final Pattern NAME_KEY = Pattern
             .compile("name-hash:([^:]+):(.*)");
-
-    /**
-     * parse a string into whatever type of key it is.
-     * 
-     * @param key
-     *            the string
-     * @return the key (ContentKey, NameKey, LocatorKey)
-     */
-    public static Key parseKey(String key) {
-        try {
-            return parseFullKey(key);
-        } catch (IllegalArgumentException e) {
-            // try something else
-        }
-
-        try {
-            return parseLocatorKey(key);
-        } catch (IllegalArgumentException e) {
-            // try something else
-        }
-
-        throw new IllegalArgumentException("can not parse key");
-    }
 
     /**
      * parse a {@link FullKey}.
