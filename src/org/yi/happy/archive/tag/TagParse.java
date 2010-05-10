@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.yi.happy.annotate.MagicLiteral;
+import org.yi.happy.archive.ByteParse;
 import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.block.parser.GenericBlockParse;
 import org.yi.happy.archive.block.parser.Range;
@@ -48,22 +49,7 @@ public class TagParse {
      */
     @MagicLiteral
     private static Range findNewLine(byte[] bytes, Range range) {
-        for (int i = range.getOffset(); i < range.getEnd(); i++) {
-            if (bytes[i] == '\r') {
-                if (i + 1 < range.getEnd() && bytes[i + 1] == '\n') {
-                    return new Range(i, 2);
-                }
-                return new Range(i, 1);
-            }
-            if (bytes[i] == '\n') {
-                if (i + 1 < range.getEnd() && bytes[i + 1] == '\r') {
-                    return new Range(i, 2);
-                }
-                return new Range(i, 1);
-            }
-        }
-
-        return new Range(range.getEnd(), 0);
+        return ByteParse.findNewLine(bytes, range);
     }
 
     /**
