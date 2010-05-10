@@ -1,7 +1,5 @@
 package org.yi.happy.archive;
 
-import org.yi.happy.annotate.MagicLiteral;
-import org.yi.happy.archive.block.parser.GenericBlockParse;
 import org.yi.happy.archive.block.parser.Range;
 
 /**
@@ -9,9 +7,17 @@ import org.yi.happy.archive.block.parser.Range;
  */
 public class ByteParse {
     /**
-     * find the line break byte at or after index.
-     * 
-     * XXX duplicate of {@link GenericBlockParse#findEndOfLine(byte[],Range)}.
+     * A line feed character (0x0d).
+     */
+    public static final char LF = '\n';
+
+    /**
+     * A carrier-return character (0x0a).
+     */
+    public static final char CR = '\r';
+
+    /**
+     * find the first line break in the range.
      * 
      * @param bytes
      *            the bytes.
@@ -21,17 +27,16 @@ public class ByteParse {
      *         found. Before this range is the first line, after this range is
      *         the start of the next line.
      */
-    @MagicLiteral
     public static Range findNewLine(byte[] bytes, Range range) {
         for (int i = range.getOffset(); i < range.getEnd(); i++) {
-            if (bytes[i] == '\r') {
-                if (i + 1 < range.getEnd() && bytes[i + 1] == '\n') {
+            if (bytes[i] == CR) {
+                if (i + 1 < range.getEnd() && bytes[i + 1] == LF) {
                     return new Range(i, 2);
                 }
                 return new Range(i, 1);
             }
-            if (bytes[i] == '\n') {
-                if (i + 1 < range.getEnd() && bytes[i + 1] == '\r') {
+            if (bytes[i] == LF) {
+                if (i + 1 < range.getEnd() && bytes[i + 1] == CR) {
                     return new Range(i, 2);
                 }
                 return new Range(i, 1);

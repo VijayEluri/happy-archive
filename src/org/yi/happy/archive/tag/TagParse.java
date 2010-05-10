@@ -8,7 +8,6 @@ import java.util.Map;
 import org.yi.happy.annotate.MagicLiteral;
 import org.yi.happy.archive.ByteParse;
 import org.yi.happy.archive.ByteString;
-import org.yi.happy.archive.block.parser.GenericBlockParse;
 import org.yi.happy.archive.block.parser.Range;
 
 /**
@@ -35,25 +34,7 @@ public class TagParse {
     }
 
     /**
-     * find the line break byte at or after index.
-     * 
-     * XXX duplicate of {@link GenericBlockParse#findEndOfLine(byte[],Range)}.
-     * 
-     * @param bytes
-     *            the bytes.
-     * @param range
-     *            the range to search in.
-     * @return range that is the line break, or the end of the range if none
-     *         found. Before this range is the first line, after this range is
-     *         the start of the next line.
-     */
-    @MagicLiteral
-    private static Range findNewLine(byte[] bytes, Range range) {
-        return ByteParse.findNewLine(bytes, range);
-    }
-
-    /**
-     * Find a record separator (one or blank line) in the given range.
+     * Find a record separator (one blank line) in the given range.
      * 
      * @param d
      *            the data buffer.
@@ -63,7 +44,7 @@ public class TagParse {
      *         range is considered a record separator.
      */
     public static Range findRecordSeparator(byte[] d, Range r) {
-        Range l1 = findNewLine(d, r);
+        Range l1 = ByteParse.findNewLine(d, r);
 
         /*
          * the start of the range was the blank line
@@ -73,7 +54,7 @@ public class TagParse {
         }
 
         while (true) {
-            Range l2 = findNewLine(d, r.after(l1));
+            Range l2 = ByteParse.findNewLine(d, r.after(l1));
 
             /*
              * just found a blank line.
@@ -98,7 +79,7 @@ public class TagParse {
         List<Tag> out = new ArrayList<Tag>();
         Map<String, String> fields = new LinkedHashMap<String, String>();
         while (true) {
-            Range endOfLine = findNewLine(d, r);
+            Range endOfLine = ByteParse.findNewLine(d, r);
             Range line = r.before(endOfLine);
             r = r.after(endOfLine);
 
