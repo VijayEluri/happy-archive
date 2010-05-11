@@ -8,9 +8,9 @@ import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.crypto.DigestProvider;
 
 /**
- * tests for {@link FullKeyParse}.
+ * Tests for {@link FullKeyParse}.
  */
-public class KeyParseTest {
+public class FullKeyParseTest {
     /**
      * parse a full name key
      */
@@ -30,34 +30,6 @@ public class KeyParseTest {
     }
 
     /**
-     * parse a name locator
-     */
-    @Test
-    public void testParseNameLocator() {
-        LocatorKey k = LocatorKeyParse.parseLocatorKey("name-hash:001122");
-
-        assertEquals("name-hash", k.getType());
-
-        assertEquals(aHash(), k.getHash());
-    }
-
-    private HashValue aHash() {
-        return new HashValue(0x00, 0x11, 0x22);
-    }
-
-    /**
-     * parse a content locator
-     */
-    @Test
-    public void testParseContentLocator() {
-        LocatorKey k = LocatorKeyParse.parseLocatorKey("content-hash:001122");
-
-        assertEquals("content-hash", k.getType());
-
-        assertEquals(aHash(), k.getHash());
-    }
-
-    /**
      * parse a full content key
      */
     @Test
@@ -72,6 +44,10 @@ public class KeyParseTest {
 
         assertEquals(aHash(), n.getHash());
         assertEquals(aPass(), n.getPass());
+    }
+
+    private HashValue aHash() {
+        return new HashValue(0x00, 0x11, 0x22);
     }
 
     private PassValue aPass() {
@@ -93,18 +69,6 @@ public class KeyParseTest {
 
         assertEquals(aHash(), n.getHash());
         assertEquals(new PassValue(), n.getPass());
-    }
-
-    /**
-     * parse a content locator
-     */
-    @Test
-    public void testParseBlobLocator() {
-        LocatorKey k = LocatorKeyParse.parseLocatorKey("blob:001122");
-
-        assertEquals("blob", k.getType());
-
-        assertEquals(aHash(), k.getHash());
     }
 
     /**
@@ -150,43 +114,11 @@ public class KeyParseTest {
     }
 
     /**
-     * parse an invalid key
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void testBad2() {
-        LocatorKeyParse.parseLocatorKey("content-hash");
-    }
-
-    /**
      * parse content key with odd hex digits
      */
     @Test(expected = IllegalArgumentException.class)
     public void testBadContentKey1() {
         FullKeyParse.parseFullKey("content-hash:0:0");
-    }
-
-    /**
-     * parse content key with odd hex digits
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void testBadContentKey2() {
-        LocatorKeyParse.parseLocatorKey("content-hash:0:0");
-    }
-
-    /**
-     * parse content locator with odd hex digits
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void testBadContentLocator() {
-        LocatorKeyParse.parseLocatorKey("content-hash:0");
-    }
-
-    /**
-     * parse name locator with odd hex digits
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void testBadNameLocator() {
-        LocatorKeyParse.parseLocatorKey("name-hash:0");
     }
 
     /**
@@ -197,11 +129,4 @@ public class KeyParseTest {
         FullKeyParse.parseFullKey("bad:00");
     }
 
-    /**
-     * parse a locator key with an unknown type
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void testBadType2() {
-        LocatorKeyParse.parseLocatorKey("bad:00");
-    }
 }
