@@ -8,8 +8,8 @@ import java.util.List;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.file_system.FileSystem;
-import org.yi.happy.archive.key.KeyParse;
 import org.yi.happy.archive.key.LocatorKey;
+import org.yi.happy.archive.key.LocatorKeyParse;
 
 /**
  * A block store that uses a file system to store the blocks.
@@ -65,7 +65,7 @@ public class FileBlockStore implements BlockStore {
             Collections.sort(names);
             for (String name : names) {
                 String[] part = name.split("-", 2);
-                visitor.accept(KeyParse.parseLocatorKey(part[1], part[0]));
+                visitor.accept(LocatorKeyParse.parseLocatorKey(part[1], part[0]));
             }
         }
         if (fs.isDir(path)) {

@@ -9,7 +9,7 @@ import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.DataBlock;
 import org.yi.happy.archive.block.MapBlock;
 import org.yi.happy.archive.key.FullKey;
-import org.yi.happy.archive.key.KeyParse;
+import org.yi.happy.archive.key.FullKeyParse;
 
 /**
  * fetches the blocks for a split key of various kinds.
@@ -113,7 +113,7 @@ public class SplitReader {
             }
 
             if (type.equals("indirect")) {
-                item.key = KeyParse.parseFullKey(ByteString.toString(b
+                item.key = FullKeyParse.parseFullKey(ByteString.toString(b
                         .getBody()));
                 continue;
             }
@@ -162,7 +162,7 @@ public class SplitReader {
         List<Pending> add = new ArrayList<Pending>(count);
         String base = item.key + "/";
         for (int i = 0; i < count; i++) {
-            FullKey key = KeyParse.parseFullKey(base + i);
+            FullKey key = FullKeyParse.parseFullKey(base + i);
             add.add(new Pending(key, null));
         }
 
@@ -203,7 +203,7 @@ public class SplitReader {
         List<Pending> add = new ArrayList<Pending>(lines.length);
         for (String line : lines) {
             String[] cols = line.split("\t", 2);
-            FullKey key = KeyParse.parseFullKey(cols[0]);
+            FullKey key = FullKeyParse.parseFullKey(cols[0]);
             long offset = Long.parseLong(cols[1]) + base;
             add.add(new Pending(key, offset));
         }
@@ -227,7 +227,7 @@ public class SplitReader {
         String[] lines = map.split("\n");
         List<Pending> add = new ArrayList<Pending>(lines.length);
         for (String line : lines) {
-            FullKey key = KeyParse.parseFullKey(line);
+            FullKey key = FullKeyParse.parseFullKey(line);
             add.add(new Pending(key, null));
         }
 

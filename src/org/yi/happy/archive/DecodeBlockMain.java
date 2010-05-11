@@ -11,7 +11,7 @@ import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
 import org.yi.happy.archive.key.FullKey;
-import org.yi.happy.archive.key.KeyParse;
+import org.yi.happy.archive.key.FullKeyParse;
 
 /**
  * A command line tool to decode a single block. The block is read from the
@@ -66,7 +66,7 @@ public class DecodeBlockMain {
 
         EncodedBlock b = EncodedBlockParse.parse(fs.load(args[0],
                 Blocks.MAX_SIZE));
-        FullKey k = KeyParse.parseFullKey(args[1]);
+        FullKey k = FullKeyParse.parseFullKey(args[1]);
         Block d = b.decode(k);
         out.write(d.asBytes());
     }

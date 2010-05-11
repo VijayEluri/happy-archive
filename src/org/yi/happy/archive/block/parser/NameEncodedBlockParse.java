@@ -15,8 +15,8 @@ import org.yi.happy.archive.crypto.CipherProvider;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.key.HashValue;
-import org.yi.happy.archive.key.KeyParse;
 import org.yi.happy.archive.key.KeyType;
+import org.yi.happy.archive.key.LocatorKeyParse;
 import org.yi.happy.archive.key.NameLocatorKey;
 
 /**
@@ -76,7 +76,7 @@ public class NameEncodedBlockParse {
             throw new IllegalArgumentException("wrong block type");
         }
 
-        NameLocatorKey key = KeyParse.parseNameLocatorKey(meta
+        NameLocatorKey key = LocatorKeyParse.parseNameLocatorKey(meta
                 .get(NameEncodedBlock.KEY_META));
         DigestProvider digest = DigestFactory.getProvider(meta
                 .get(NameEncodedBlock.DIGEST_META));
@@ -119,7 +119,7 @@ public class NameEncodedBlockParse {
             throw new IllegalArgumentException("wrong block type");
         }
 
-        NameLocatorKey key = KeyParse.parseNameLocatorKey(meta
+        NameLocatorKey key = LocatorKeyParse.parseNameLocatorKey(meta
                 .get(NameEncodedBlock.KEY_META));
         DigestProvider digest = DigestFactory.getProvider(meta
                 .get(NameEncodedBlock.DIGEST_META));

@@ -13,8 +13,8 @@ import org.yi.happy.archive.crypto.CipherProvider;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.key.BlobLocatorKey;
-import org.yi.happy.archive.key.KeyParse;
 import org.yi.happy.archive.key.KeyType;
+import org.yi.happy.archive.key.LocatorKeyParse;
 
 /**
  * parser for a {@link BlobEncodedBlock}.
@@ -60,7 +60,7 @@ public class BlobEncodedBlockParse {
             throw new IllegalArgumentException("wrong key-type");
         }
 
-        BlobLocatorKey key = KeyParse.parseBlobLocatorKey(meta
+        BlobLocatorKey key = LocatorKeyParse.parseBlobLocatorKey(meta
                 .get(BlobEncodedBlock.KEY_META));
         DigestProvider digest = DigestFactory.getProvider(meta
                 .get(BlobEncodedBlock.DIGEST_META));

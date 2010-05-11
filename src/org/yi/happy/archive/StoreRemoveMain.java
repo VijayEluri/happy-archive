@@ -8,8 +8,8 @@ import java.io.Writer;
 import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
-import org.yi.happy.archive.key.KeyParse;
 import org.yi.happy.archive.key.LocatorKey;
+import org.yi.happy.archive.key.LocatorKeyParse;
 
 /**
  * Remove keys from the store.
@@ -50,7 +50,7 @@ public class StoreRemoveMain {
         try {
             LineCursor line = new LineCursor(in);
             while (line.next()) {
-                LocatorKey key = KeyParse.parseLocatorKey(line.get());
+                LocatorKey key = LocatorKeyParse.parseLocatorKey(line.get());
                 store.remove(key);
             }
         } finally {

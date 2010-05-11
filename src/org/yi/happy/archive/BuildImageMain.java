@@ -9,8 +9,8 @@ import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
-import org.yi.happy.archive.key.KeyParse;
 import org.yi.happy.archive.key.LocatorKey;
+import org.yi.happy.archive.key.LocatorKeyParse;
 
 /**
  * Build an image of a backup disk. The set of files that will be burned to a
@@ -57,7 +57,7 @@ public class BuildImageMain {
             LineCursor lines = new LineCursor(in0);
 
             while (lines.next()) {
-                LocatorKey key = KeyParse.parseLocatorKey(lines.get());
+                LocatorKey key = LocatorKeyParse.parseLocatorKey(lines.get());
                 EncodedBlock block = store.get(key);
                 byte[] data = block.asBytes();
                 size.add(data.length);

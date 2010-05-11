@@ -9,7 +9,7 @@ import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
 import org.yi.happy.archive.key.FullKey;
-import org.yi.happy.archive.key.KeyParse;
+import org.yi.happy.archive.key.FullKeyParse;
 import org.yi.happy.archive.tag.RestoreManager;
 import org.yi.happy.archive.tag.Tag;
 import org.yi.happy.archive.tag.TagParse;
@@ -79,7 +79,7 @@ public class FileStoreTagGetMain {
 
             FullKey k;
             try {
-                k = KeyParse.parseFullKey(data);
+                k = FullKeyParse.parseFullKey(data);
             } catch (IllegalArgumentException e) {
                 continue;
             }

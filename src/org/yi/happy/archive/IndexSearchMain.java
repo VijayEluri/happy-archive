@@ -14,8 +14,8 @@ import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
-import org.yi.happy.archive.key.KeyParse;
 import org.yi.happy.archive.key.LocatorKey;
+import org.yi.happy.archive.key.LocatorKeyParse;
 
 /**
  * search indexes for keys.
@@ -73,7 +73,7 @@ public class IndexSearchMain {
         try {
             LineCursor in = new LineCursor(in0);
             while (in.next()) {
-                want.add(KeyParse.parseLocatorKey(in.get()));
+                want.add(LocatorKeyParse.parseLocatorKey(in.get()));
             }
         } finally {
             in0.close();
@@ -96,7 +96,7 @@ public class IndexSearchMain {
                     LineCursor in = new LineCursor(in0);
                     while (in.next()) {
                         String[] line = in.get().split("\t", -1);
-                        if (want.contains(KeyParse.parseLocatorKey(line[2]))) {
+                        if (want.contains(LocatorKeyParse.parseLocatorKey(line[2]))) {
                             out.write(volumeSet + "\t" + volumeName + "\t"
                                     + line[0] + "\t" + line[2] + "\n");
                         }

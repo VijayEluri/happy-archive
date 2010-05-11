@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.yi.happy.annotate.MisplacedTest;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.key.FullKey;
-import org.yi.happy.archive.key.KeyParse;
+import org.yi.happy.archive.key.FullKeyParse;
 import org.yi.happy.archive.key.NameFullKey;
 import org.yi.happy.archive.test_data.TestData;
 
@@ -76,7 +76,7 @@ public class EncodedBlockTest {
     public void testContentDecodeBadKey() throws IOException {
         EncodedBlock b = TestData.KEY_CONTENT.getEncodedBlock();
 
-        FullKey key = KeyParse.parseFullKey("content-hash:87c5f6fe"
+        FullKey key = FullKeyParse.parseFullKey("content-hash:87c5f6fe"
                 + "4ea801c8eb227b8b218a0659c18ece76b7c200c645ab4364becf"
                 + "68d5:f6bd9f3b01b4ee40f60df2dc622f9d6f3aa38a5673a87e8"
                 + "20b40164e930edead");
@@ -95,7 +95,7 @@ public class EncodedBlockTest {
     @MisplacedTest(ContentEncodedBlockTest.class)
     public void testContentDecodeBadKey2() throws IOException {
         EncodedBlock b = TestData.KEY_CONTENT.getEncodedBlock();
-        FullKey key = KeyParse.parseFullKey("content-hash:87c5f6fe"
+        FullKey key = FullKeyParse.parseFullKey("content-hash:87c5f6fe"
                 + "4ea801c8eb227b8b218a0659c18ece76b7c200c645ab4364becf"
                 + "68d5:f6bd9f3b01b4ee40f60df2dc622f9d6f");
 
@@ -113,7 +113,7 @@ public class EncodedBlockTest {
     public void testContentDecodeBadLocator() throws IOException {
         EncodedBlock b = TestData.KEY_CONTENT.getEncodedBlock();
 
-        FullKey key = KeyParse.parseFullKey("content-hash:87c5f6fe"
+        FullKey key = FullKeyParse.parseFullKey("content-hash:87c5f6fe"
                 + "4ea801c8eb227b8b218a0659c18ece76b7c200c645ab4364becf"
                 + "68df:f6bd9f3b01b4ee40f60df2dc622f9d6f3aa38a5673a87e8"
                 + "20b40164e930edeac");

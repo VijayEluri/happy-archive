@@ -6,7 +6,7 @@ import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
 import org.yi.happy.archive.key.FullKey;
-import org.yi.happy.archive.key.KeyParse;
+import org.yi.happy.archive.key.FullKeyParse;
 import org.yi.happy.archive.tag.RestoreFile;
 
 /**
@@ -57,7 +57,7 @@ public class FileStoreFileGetMain {
          */
         FileBlockStore store = new FileBlockStore(fs, args[0]);
         pendingFile = args[1];
-        FullKey key = KeyParse.parseFullKey(args[2]);
+        FullKey key = FullKeyParse.parseFullKey(args[2]);
         String path = args[3];
 
         RestoreFile r = new RestoreFile(new SplitReader(key,

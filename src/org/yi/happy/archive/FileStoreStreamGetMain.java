@@ -6,7 +6,7 @@ import java.io.OutputStream;
 import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
-import org.yi.happy.archive.key.KeyParse;
+import org.yi.happy.archive.key.FullKeyParse;
 
 /**
  * Fetch a stream, the blocks may not all available in the file store, so the
@@ -64,7 +64,7 @@ public class FileStoreStreamGetMain {
         FileBlockStore store = new FileBlockStore(fs, args[0]);
         pendingFile = args[1];
 
-        KeyInputStream in = new KeyInputStream(KeyParse.parseFullKey(args[2]),
+        KeyInputStream in = new KeyInputStream(FullKeyParse.parseFullKey(args[2]),
                 new RetrieveBlockStorage(store), notReadyHandler);
 
         Streams.copy(in, out);

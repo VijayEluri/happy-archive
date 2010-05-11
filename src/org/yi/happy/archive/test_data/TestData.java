@@ -12,8 +12,9 @@ import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.BlockParse;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.key.FullKey;
-import org.yi.happy.archive.key.KeyParse;
+import org.yi.happy.archive.key.FullKeyParse;
 import org.yi.happy.archive.key.LocatorKey;
+import org.yi.happy.archive.key.LocatorKeyParse;
 
 /**
  * Various test data files, these represent the existing data formats in use and
@@ -413,7 +414,7 @@ public enum TestData {
     public FullKey getFullKey() throws UnsupportedOperationException {
         try {
             String raw = getAnnotation(Full.class).value();
-            return KeyParse.parseFullKey(raw);
+            return FullKeyParse.parseFullKey(raw);
         } catch (IllegalArgumentException e) {
             throw new UnsupportedOperationException(e);
         }
@@ -429,7 +430,7 @@ public enum TestData {
     public LocatorKey getLocatorKey() throws UnsupportedOperationException {
         try {
             String raw = getAnnotation(Locator.class).value();
-            return KeyParse.parseLocatorKey(raw);
+            return LocatorKeyParse.parseLocatorKey(raw);
         } catch (IllegalArgumentException e) {
             throw new UnsupportedOperationException(e);
         }

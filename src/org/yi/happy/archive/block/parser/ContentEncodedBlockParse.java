@@ -15,8 +15,8 @@ import org.yi.happy.archive.crypto.CipherProvider;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.key.ContentLocatorKey;
-import org.yi.happy.archive.key.KeyParse;
 import org.yi.happy.archive.key.KeyType;
+import org.yi.happy.archive.key.LocatorKeyParse;
 
 /**
  * parser for a content encoded block.
@@ -78,7 +78,7 @@ public class ContentEncodedBlockParse {
             throw new IllegalArgumentException("unknown version");
         }
 
-        ContentLocatorKey key = KeyParse.parseContentLocatorKey(meta
+        ContentLocatorKey key = LocatorKeyParse.parseContentLocatorKey(meta
                 .get(ContentEncodedBlock.KEY_META));
         DigestProvider digest = DigestFactory.getProvider(meta
                 .get(ContentEncodedBlock.DIGEST_META));
@@ -112,7 +112,7 @@ public class ContentEncodedBlockParse {
             throw new IllegalArgumentException("meta missmatch");
         }
 
-        ContentLocatorKey key = KeyParse.parseContentLocatorKey(meta
+        ContentLocatorKey key = LocatorKeyParse.parseContentLocatorKey(meta
                 .get(ContentEncodedBlock.KEY_META));
         DigestProvider digest = DigestFactory.getProvider(meta
                 .get(ContentEncodedBlock.DIGEST_META));
