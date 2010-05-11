@@ -12,24 +12,10 @@ public class ContentFullKeyTest {
      * create a good key
      */
     @Test
-    public void testGood() {
-        HashValue hash = new HashValue(0x00);
-        PassValue pass = new PassValue(0x11);
+    public void testString() {
+        String have = key_001122_334455().toString();
 
-        ContentFullKey key = new ContentFullKey(hash, pass);
-
-        assertEquals("content-hash:00:11", key.toString());
-    }
-
-    /**
-     * create a key with an empty pass
-     */
-    @Test
-    public void testGood2() {
-        HashValue hash = new HashValue(0x00);
-        PassValue pass = new PassValue();
-
-        new ContentFullKey(hash, pass);
+        assertEquals("content-hash:001122:334455", have);
     }
 
     /**
@@ -37,12 +23,20 @@ public class ContentFullKeyTest {
      */
     @Test
     public void testToLocatorKey1() {
-        ContentFullKey in = new ContentFullKey(new HashValue(0x00, 0x11, 0x22),
-                new PassValue(0x33, 0x44, 0x55));
+        LocatorKey have = key_001122_334455().toLocatorKey();
 
-        LocatorKey have = in.toLocatorKey();
+        assertEquals(new ContentLocatorKey(hash_001122()), have);
+    }
 
-        LocatorKey want = new ContentLocatorKey(new HashValue(0x00, 0x11, 0x22));
-        assertEquals(want, have);
+    private ContentFullKey key_001122_334455() {
+        return new ContentFullKey(hash_001122(), pass_334455());
+    }
+
+    private PassValue pass_334455() {
+        return new PassValue(0x33, 0x44, 0x55);
+    }
+
+    private HashValue hash_001122() {
+        return new HashValue(0x00, 0x11, 0x22);
     }
 }

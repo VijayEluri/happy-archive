@@ -14,7 +14,9 @@ public class ContentLocatorKeyTest {
     @Test
     public void testGood1() {
         HashValue hash = new HashValue(0);
+
         LocatorKey key = new ContentLocatorKey(hash);
+
         assertEquals("content-hash", key.getType());
         assertEquals(hash, key.getHash());
         assertEquals("content-hash:00", key.toString());

@@ -7,7 +7,8 @@ import org.junit.Test;
  */
 public class HashValueTest {
     /**
-     * create a key with an empty hash
+     * having nothing, when creating a hash value with no bytes, then an error
+     * is raised.
      */
     @Test(expected = IllegalArgumentException.class)
     public void testBad1() {

@@ -63,8 +63,7 @@ public class KeyParse {
     public static FullKey parseFullKey(String key) {
         Matcher m = BLOB_KEY.matcher(key);
         if (m.matches()) {
-            return new BlobFullKey(new HashValue(m.group(1)), new PassValue(m
-                    .group(2)));
+            return parseBlobFullKey(m.group(1), m.group(2));
         }
 
         m = CONTENT_KEY.matcher(key);
@@ -83,6 +82,45 @@ public class KeyParse {
     }
 
     /**
+     * finish the parsing of a {@link BlobFullKey}.
+     * 
+     * @param hash
+     *            the hash part.
+     * @param pass
+     *            the pass part.
+     * @return the parsed key.
+     */
+    public static BlobFullKey parseBlobFullKey(String hash, String pass) {
+        return new BlobFullKey(new HashValue(hash), new PassValue(pass));
+    }
+
+    /**
+     * finish the parsing of a {@link ContentFullKey}.
+     * 
+     * @param hash
+     *            the hash part.
+     * @param pass
+     *            the pass part.
+     * @return the parsed key.
+     */
+    public static ContentFullKey parseContentFullKey(String hash, String pass) {
+        return new ContentFullKey(new HashValue(hash), new PassValue(pass));
+    }
+
+    /**
+     * finish the parsing of a {@link NameFullKey}.
+     * 
+     * @param digest
+     *            the digest part.
+     * @param name
+     *            the name part.
+     * @return the parsed key.
+     */
+    public static NameFullKey parseNameFullKey(String digest, String name) {
+        return new NameFullKey(DigestFactory.getProvider(digest), name);
+    }
+
+    /**
      * parse a {@link LocatorKey}.
      * 
      * @param key
@@ -93,19 +131,20 @@ public class KeyParse {
      */
     public static LocatorKey parseLocatorKey(String key) {
         Matcher m;
+
         m = BLOB_LOCATOR.matcher(key);
         if (m.matches()) {
-            return new BlobLocatorKey(new HashValue(m.group(1)));
+            return parseBlobLocatorKey(m.group(1));
         }
 
         m = CONTENT_LOCATOR.matcher(key);
         if (m.matches()) {
-            return new ContentLocatorKey(new HashValue(m.group(1)));
+            return parseContentLocatorKey(m.group(1));
         }
 
         m = NAME_LOCATOR.matcher(key);
         if (m.matches()) {
-            return new NameLocatorKey(new HashValue(m.group(1)));
+            return parseNameLocatorKey(m.group(1));
         }
 
         throw new IllegalArgumentException("can not parse key");
@@ -121,67 +160,51 @@ public class KeyParse {
      * @return the locator key
      */
     public static LocatorKey parseLocatorKey(String type, String hash) {
-        return parseLocatorKey(type, new HashValue(hash));
-    }
-
-    /**
-     * make a locator key from the two logical parts.
-     * 
-     * @param type
-     *            the type of the key
-     * @param hash
-     *            the hash of the key
-     * @return the locator key
-     */
-    public static LocatorKey parseLocatorKey(String type, HashValue hash) {
         if (type.equals(KeyType.BLOB)) {
-            return new BlobLocatorKey(hash);
+            return parseBlobLocatorKey(hash);
         }
 
         if (type.equals(KeyType.CONTENT_HASH)) {
-            return new ContentLocatorKey(hash);
+            return parseContentLocatorKey(hash);
         }
 
         if (type.equals(KeyType.NAME_HASH)) {
-            return new NameLocatorKey(hash);
+            return parseNameLocatorKey(hash);
         }
 
         throw new IllegalArgumentException("unknown type: " + type);
     }
 
     /**
-     * make a blob locator key from the hash part of the key.
+     * finish the parsing of a blob locator key.
      * 
      * @param hash
      *            the hash part.
      * @return the key.
      */
     public static BlobLocatorKey parseBlobLocatorKey(String hash) {
-        // XXX this is a bad name.
         return new BlobLocatorKey(new HashValue(hash));
     }
 
     /**
-     * make a content locator key from the hash part of a key.
+     * finish the parsing of a content locator key.
      * 
      * @param hash
      *            the hash part.
      * @return the key.
      */
     public static ContentLocatorKey parseContentLocatorKey(String hash) {
-        // XXX this is a bad name.
         return new ContentLocatorKey(new HashValue(hash));
     }
 
     /**
-     * make a name locator key from the hash part of a key.
+     * finish the parsing of a name locator key.
      * 
      * @param hash
      *            the hash part.
      * @return the key.
      */
     public static NameLocatorKey parseNameLocatorKey(String hash) {
-        // XXX this is a bad name.
         return new NameLocatorKey(new HashValue(hash));
     }
 }
