@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.zip.GZIPInputStream;
 
 import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.annotate.SmellsMessy;
@@ -93,6 +94,11 @@ public class IndexSearchMain {
                         volumeName);
                 in0 = fs.openInputStream(fileName);
                 try {
+                    if (volumeName.endsWith(".gz")) {
+                        in0 = new GZIPInputStream(in0);
+                        volumeName = volumeName.substring(0, volumeName
+                                .length() - 3);
+                    }
                     LineCursor in = new LineCursor(in0);
                     while (in.next()) {
                         String[] line = in.get().split("\t", -1);

@@ -90,4 +90,32 @@ public class IndexSearchMainTest {
                 + "onsite\t01\t00.dat\t" + mapKey + "\n"
                 + "onsite\t01\t01.dat\t" + partKey + "\n", o);
     }
+
+    /**
+     * search for two keys with two compressed indexes.
+     * 
+     * @throws IOException
+     */
+    @Test
+    public void test4() throws IOException {
+        String mapKey = TestData.KEY_CONTENT_MAP.getLocatorKey().toString();
+        String partKey = TestData.KEY_CONTENT_1.getLocatorKey().toString();
+
+        FileSystem fs = new FakeFileSystem();
+        fs.mkdir("index");
+        fs.mkdir("index/onsite");
+        fs.save("index/onsite/01.gz", TestData.INDEX_MAP_GZ.getBytes());
+        fs.mkdir("index/offsite");
+        fs.save("index/offsite/02.gz", TestData.INDEX_MAP_GZ.getBytes());
+        fs.save("request", ByteString.toUtf8(mapKey + "\n" + partKey + "\n"));
+        StringWriter out = new StringWriter();
+
+        new IndexSearchMain(fs, out).run("index", "request");
+
+        String o = out.toString();
+        assertEquals("offsite\t02\t00.dat\t" + mapKey + "\n"
+                + "offsite\t02\t01.dat\t" + partKey + "\n"
+                + "onsite\t01\t00.dat\t" + mapKey + "\n"
+                + "onsite\t01\t01.dat\t" + partKey + "\n", o);
+    }
 }

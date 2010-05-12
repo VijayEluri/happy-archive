@@ -367,7 +367,14 @@ public enum TestData {
      * {@link #KEY_CONTENT_MAP}. '00.dat' => {@link #KEY_CONTENT_MAP}, '01.dat'
      * => {@link #KEY_CONTENT_1}, '02.dat' => {@link #KEY_CONTENT_2}.
      */
-    INDEX_MAP;
+    INDEX_MAP,
+
+    /**
+     * A compressed index for a volume that has the three blocks of
+     * {@link #KEY_CONTENT_MAP}. '00.dat' => {@link #KEY_CONTENT_MAP}, '01.dat'
+     * => {@link #KEY_CONTENT_1}, '02.dat' => {@link #KEY_CONTENT_2}.
+     */
+    INDEX_MAP_GZ;
 
     /**
      * get the file name for this enumeration constant, relative to the
