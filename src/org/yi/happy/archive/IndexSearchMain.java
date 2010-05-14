@@ -68,49 +68,101 @@ public class IndexSearchMain {
             return;
         }
 
-        Set<LocatorKey> want = new HashSet<LocatorKey>();
+        Set<LocatorKey> want = loadRequestSet(args[1]);
 
-        InputStream in0 = fs.openInputStream(args[1]);
+        /*
+         * scan each index in sequence listing matching entries.
+         */
+        List<List<SearchResult>> result = searchIndex(args[0], want);
+        for (List<SearchResult> r : result) {
+            for (SearchResult i : r) {
+                out.write(i.toString());
+                out.write("\n");
+            }
+        }
+    }
+
+    private List<List<SearchResult>> searchIndex(String path,
+            Set<LocatorKey> want)
+            throws IOException {
+        List<List<SearchResult>> out = new ArrayList<List<SearchResult>>();
+
+        List<String> volumeSets = new ArrayList<String>(fs.list(path));
+        Collections.sort(volumeSets);
+        for (String volumeSet : volumeSets) {
+            List<String> volumeNames = new ArrayList<String>(fs.list(fs.join(
+                    path, volumeSet)));
+            Collections.sort(volumeNames);
+            for (String volumeName : volumeNames) {
+                String fileName = fs.join(fs.join(path, volumeSet),
+                        volumeName);
+                List<SearchResult> result = searchVolume(fileName, volumeSet,
+                        volumeName, want);
+                out.add(result);
+            }
+        }
+        return out;
+    }
+
+    private List<SearchResult> searchVolume(String path, String volumeSet,
+            String volumeName, Set<LocatorKey> want) throws IOException {
+        List<SearchResult> out = new ArrayList<SearchResult>();
+
+        InputStream in0 = fs.openInputStream(path);
+        try {
+            if (volumeName.endsWith(".gz")) {
+                in0 = new GZIPInputStream(in0);
+                volumeName = volumeName.substring(0, volumeName.length() - 3);
+            }
+            LineCursor in = new LineCursor(in0);
+            while (in.next()) {
+                String[] line = in.get().split("\t", -1);
+                LocatorKey key = LocatorKeyParse.parseLocatorKey(line[2]);
+                if (want.contains(key)) {
+                    String fileName = line[0];
+                    out.add(new SearchResult(volumeSet, volumeName, fileName,
+                            key));
+                }
+            }
+        } finally {
+            in0.close();
+        }
+        return out;
+    }
+
+    private static class SearchResult {
+        private final String volumeSet;
+        private final String volumeName;
+        private final String fileName;
+        private final LocatorKey key;
+
+        public SearchResult(String volumeSet, String volumeName,
+                String fileName, LocatorKey key) {
+            this.volumeSet = volumeSet;
+            this.volumeName = volumeName;
+            this.fileName = fileName;
+            this.key = key;
+        }
+
+        @Override
+        public String toString() {
+            return volumeSet + "\t" + volumeName + "\t" + fileName + "\t" + key;
+        }
+    }
+
+    private Set<LocatorKey> loadRequestSet(String path) throws IOException {
+        Set<LocatorKey> out = new HashSet<LocatorKey>();
+
+        InputStream in0 = fs.openInputStream(path);
         try {
             LineCursor in = new LineCursor(in0);
             while (in.next()) {
-                want.add(LocatorKeyParse.parseLocatorKey(in.get()));
+                out.add(LocatorKeyParse.parseLocatorKey(in.get()));
             }
         } finally {
             in0.close();
         }
 
-        /*
-         * scan each index in sequence listing matching entries.
-         */
-        List<String> volumeSets = new ArrayList<String>(fs.list(args[0]));
-        Collections.sort(volumeSets);
-        for (String volumeSet : volumeSets) {
-            List<String> volumeNames = new ArrayList<String>(fs.list(fs.join(
-                    args[0], volumeSet)));
-            Collections.sort(volumeNames);
-            for (String volumeName : volumeNames) {
-                String fileName = fs.join(fs.join(args[0], volumeSet),
-                        volumeName);
-                in0 = fs.openInputStream(fileName);
-                try {
-                    if (volumeName.endsWith(".gz")) {
-                        in0 = new GZIPInputStream(in0);
-                        volumeName = volumeName.substring(0, volumeName
-                                .length() - 3);
-                    }
-                    LineCursor in = new LineCursor(in0);
-                    while (in.next()) {
-                        String[] line = in.get().split("\t", -1);
-                        if (want.contains(LocatorKeyParse.parseLocatorKey(line[2]))) {
-                            out.write(volumeSet + "\t" + volumeName + "\t"
-                                    + line[0] + "\t" + line[2] + "\n");
-                        }
-                    }
-                } finally {
-                    in0.close();
-                }
-            }
-        }
+        return out;
     }
 }
