@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.concurrent.ExecutionException;
 
 import org.junit.Test;
 import org.yi.happy.annotate.NeedFailureTest;
@@ -20,9 +21,12 @@ public class IndexSearchMainTest {
      * search for one key with one index.
      * 
      * @throws IOException
+     * @throws ExecutionException
+     * @throws InterruptedException
      */
     @Test
-    public void test1() throws IOException {
+    public void test1() throws IOException, InterruptedException,
+            ExecutionException {
         String mapKey = TestData.KEY_CONTENT_MAP.getLocatorKey().toString();
 
         FileSystem fs = new FakeFileSystem();
@@ -42,9 +46,12 @@ public class IndexSearchMainTest {
      * search for one key with two indexes.
      * 
      * @throws IOException
+     * @throws ExecutionException
+     * @throws InterruptedException
      */
     @Test
-    public void test2() throws IOException {
+    public void test2() throws IOException, InterruptedException,
+            ExecutionException {
         String mapKey = TestData.KEY_CONTENT_MAP.getLocatorKey().toString();
 
         FileSystem fs = new FakeFileSystem();
@@ -67,9 +74,12 @@ public class IndexSearchMainTest {
      * search for two keys with two indexes.
      * 
      * @throws IOException
+     * @throws ExecutionException
+     * @throws InterruptedException
      */
     @Test
-    public void test3() throws IOException {
+    public void test3() throws IOException, InterruptedException,
+            ExecutionException {
         String mapKey = TestData.KEY_CONTENT_MAP.getLocatorKey().toString();
         String partKey = TestData.KEY_CONTENT_1.getLocatorKey().toString();
 
@@ -95,9 +105,12 @@ public class IndexSearchMainTest {
      * search for two keys with two compressed indexes.
      * 
      * @throws IOException
+     * @throws ExecutionException
+     * @throws InterruptedException
      */
     @Test
-    public void test4() throws IOException {
+    public void test4() throws IOException, InterruptedException,
+            ExecutionException {
         String mapKey = TestData.KEY_CONTENT_MAP.getLocatorKey().toString();
         String partKey = TestData.KEY_CONTENT_1.getLocatorKey().toString();
 

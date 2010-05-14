@@ -9,6 +9,11 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.zip.GZIPInputStream;
 
 import org.yi.happy.annotate.EntryPoint;
@@ -43,9 +48,12 @@ public class IndexSearchMain {
      * 
      * @param args
      * @throws IOException
+     * @throws ExecutionException
+     * @throws InterruptedException
      */
     @EntryPoint
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException,
+            InterruptedException, ExecutionException {
         FileSystem fs = new RealFileSystem();
         Writer out = new OutputStreamWriter(System.out, "utf-8");
 
@@ -60,9 +68,12 @@ public class IndexSearchMain {
      * @param args
      *            the command line arguments.
      * @throws IOException
+     * @throws ExecutionException
+     * @throws InterruptedException
      */
     @SmellsMessy
-    public void run(String... args) throws IOException {
+    public void run(String... args) throws IOException, InterruptedException,
+            ExecutionException {
         if (args.length != 2) {
             out.write("use: index key-list\n");
             return;
@@ -70,35 +81,47 @@ public class IndexSearchMain {
 
         Set<LocatorKey> want = loadRequestSet(args[1]);
 
+        ExecutorService exec = Executors.newFixedThreadPool(2);
+
         /*
          * scan each index in sequence listing matching entries.
          */
-        List<List<SearchResult>> result = searchIndex(args[0], want);
-        for (List<SearchResult> r : result) {
-            for (SearchResult i : r) {
+        List<Future<List<SearchResult>>> result = searchIndex(args[0], want,
+                exec);
+        for (Future<List<SearchResult>> r : result) {
+            for (SearchResult i : r.get()) {
                 out.write(i.toString());
                 out.write("\n");
             }
         }
+
+        exec.shutdown();
     }
 
-    private List<List<SearchResult>> searchIndex(String path,
-            Set<LocatorKey> want)
+    private List<Future<List<SearchResult>>> searchIndex(String path,
+            final Set<LocatorKey> want, ExecutorService exec)
             throws IOException {
-        List<List<SearchResult>> out = new ArrayList<List<SearchResult>>();
+        List<Future<List<SearchResult>>> out = new ArrayList<Future<List<SearchResult>>>();
 
         List<String> volumeSets = new ArrayList<String>(fs.list(path));
         Collections.sort(volumeSets);
-        for (String volumeSet : volumeSets) {
+        for (final String volumeSet : volumeSets) {
             List<String> volumeNames = new ArrayList<String>(fs.list(fs.join(
                     path, volumeSet)));
             Collections.sort(volumeNames);
-            for (String volumeName : volumeNames) {
-                String fileName = fs.join(fs.join(path, volumeSet),
+            for (final String volumeName : volumeNames) {
+                final String fileName = fs.join(fs.join(path, volumeSet),
                         volumeName);
-                List<SearchResult> result = searchVolume(fileName, volumeSet,
-                        volumeName, want);
-                out.add(result);
+
+                Callable<List<SearchResult>> task = new Callable<List<SearchResult>>() {
+
+                    @Override
+                    public List<SearchResult> call() throws Exception {
+                        return searchVolume(fileName, volumeSet, volumeName,
+                                want);
+                    }
+                };
+                out.add(exec.submit(task));
             }
         }
         return out;
