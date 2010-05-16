@@ -4,10 +4,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -86,9 +88,10 @@ public class IndexSearchMain {
         /*
          * scan each index in sequence listing matching entries.
          */
-        List<Future<List<SearchResult>>> result = searchIndex(args[0], want,
+        Queue<Future<List<SearchResult>>> result = searchIndex(args[0], want,
                 exec);
-        for (Future<List<SearchResult>> r : result) {
+        while (result.isEmpty() == false) {
+            Future<List<SearchResult>> r = result.remove();
             for (SearchResult i : r.get()) {
                 out.write(i.toString());
                 out.write("\n");
@@ -98,10 +101,10 @@ public class IndexSearchMain {
         exec.shutdown();
     }
 
-    private List<Future<List<SearchResult>>> searchIndex(String path,
+    private Queue<Future<List<SearchResult>>> searchIndex(String path,
             final Set<LocatorKey> want, ExecutorService exec)
             throws IOException {
-        List<Future<List<SearchResult>>> out = new ArrayList<Future<List<SearchResult>>>();
+        Queue<Future<List<SearchResult>>> out = new ArrayDeque<Future<List<SearchResult>>>();
 
         List<String> volumeSets = new ArrayList<String>(fs.list(path));
         Collections.sort(volumeSets);
