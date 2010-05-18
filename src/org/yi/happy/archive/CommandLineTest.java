@@ -1,6 +1,7 @@
 package org.yi.happy.archive;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.GnuParser;
@@ -41,4 +42,21 @@ public class CommandLineTest {
         assertArrayEquals(new String[] { "--orange", "5" }, c.getArgs());
     }
 
+    /**
+     * An option that may be specified more than once.
+     * 
+     * @throws ParseException
+     */
+    @Test
+    public void testMultipleInstance() throws ParseException {
+        Options o = new Options().addOption("a", "apple", true, "Apples");
+
+        String[] args = { "-a", "one", "-a", "two" };
+        CommandLine c = new GnuParser().parse(o, args);
+
+        assertArrayEquals(new String[] { "one", "two" }, c
+                .getOptionValues("apple"));
+
+        assertEquals("one", c.getOptionValue("apple"));
+    }
 }
