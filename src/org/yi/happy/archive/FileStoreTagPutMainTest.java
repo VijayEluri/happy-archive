@@ -29,7 +29,7 @@ public class FileStoreTagPutMainTest {
 
         StringWriter out = new StringWriter();
 
-        new FileStoreTagPutMain(fs, out).run("store", "test.txt");
+        new FileStoreTagPutMain(fs, out).run("--store", "store", "test.txt");
 
         List<Tag> tags = TagParse.parse(ByteString.toUtf8(out.toString()));
         assertEquals(1, tags.size());
@@ -52,7 +52,7 @@ public class FileStoreTagPutMainTest {
 
         StringWriter out = new StringWriter();
 
-        new FileStoreTagPutMain(fs, out).run("store", "test.txt");
+        new FileStoreTagPutMain(fs, out).run("--store", "store", "test.txt");
 
         List<Tag> tags = TagParse.parse(ByteString.toUtf8(out.toString()));
         assertEquals(1, tags.size());

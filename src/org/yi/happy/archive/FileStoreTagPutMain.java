@@ -5,8 +5,14 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.annotate.MagicLiteral;
+import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.block.encoder.BlockEncoderFactory;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.file_system.FileSystem;
@@ -39,18 +45,38 @@ public class FileStoreTagPutMain {
      * @throws IOException
      */
     @MagicLiteral
+    @SmellsMessy
     public void run(String... args) throws IOException {
-        FileBlockStore store = new FileBlockStore(fs, args[0]);
+        Options options = new Options().addOption(null, "store", true,
+                "location of the store");
+        CommandLine cmd;
+        try {
+            cmd = new GnuParser().parse(options, args);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            HelpFormatter formatter = new HelpFormatter();
+            formatter.printHelp("tag-put --store store file...", options);
+            return;
+        }
+
+        if (cmd.getOptionValue("store") == null) {
+            HelpFormatter formatter = new HelpFormatter();
+            formatter.printHelp("tag-put --store store file...", options);
+            return;
+        }
+
+        FileBlockStore store = new FileBlockStore(fs, cmd
+                .getOptionValue("store"));
         StoreBlockStorage s = new StoreBlockStorage(BlockEncoderFactory
                 .getContentDefault(), store);
 
-        for (int i = 1; i < args.length; i++) {
-            if (fs.isFile(args[i])) {
+        for (String arg : cmd.getArgs()) {
+            if (fs.isFile(arg)) {
                 KeyOutputStream o1 = new KeyOutputStream(s);
                 DigestOutputStream o2 = new DigestOutputStream(DigestFactory
                         .getProvider("sha-256").get());
                 TeeOutputStream o = new TeeOutputStream(o1, o2);
-                InputStream in = fs.openInputStream(args[i]);
+                InputStream in = fs.openInputStream(arg);
                 try {
                     Streams.copy(in, o);
                 } finally {
@@ -58,7 +84,7 @@ public class FileStoreTagPutMain {
                 }
                 o.close();
 
-                out.write("name=" + args[i] + "\n");
+                out.write("name=" + arg + "\n");
                 out.write("type=file\n");
                 out.write("size=" + o2.getSize() + "\n");
                 out.write("data=" + o1.getFullKey() + "\n");
