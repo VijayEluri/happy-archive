@@ -101,6 +101,7 @@ public class IndexSearchMain {
         exec.shutdown();
     }
 
+    @SmellsMessy
     private Queue<Future<List<SearchResult>>> searchIndex(String path,
             final Set<LocatorKey> want, ExecutorService exec)
             throws IOException {

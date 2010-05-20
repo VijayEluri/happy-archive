@@ -3,6 +3,7 @@ package org.yi.happy.archive;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.Writer;
 
 import org.apache.commons.cli.CommandLine;
@@ -47,6 +48,10 @@ public class FileStoreTagPutMain {
     @MagicLiteral
     @SmellsMessy
     public void run(String... args) throws IOException {
+        /*
+         * parse command line
+         */
+
         Options options = new Options().addOption(null, "store", true,
                 "location of the store");
         CommandLine cmd;
@@ -54,19 +59,22 @@ public class FileStoreTagPutMain {
             cmd = new GnuParser().parse(options, args);
         } catch (ParseException e) {
             e.printStackTrace();
-            HelpFormatter formatter = new HelpFormatter();
-            formatter.printHelp("tag-put --store store file...", options);
+            showHelp(options);
             return;
         }
 
         if (cmd.getOptionValue("store") == null) {
-            HelpFormatter formatter = new HelpFormatter();
-            formatter.printHelp("tag-put --store store file...", options);
+            showHelp(options);
             return;
         }
 
         FileBlockStore store = new FileBlockStore(fs, cmd
                 .getOptionValue("store"));
+
+        /*
+         * do the work
+         */
+
         StoreBlockStorage s = new StoreBlockStorage(BlockEncoderFactory
                 .getContentDefault(), store);
 
@@ -91,6 +99,17 @@ public class FileStoreTagPutMain {
                 out.write("hash=sha-256:" + o2.getHash() + "\n");
                 out.write("\n");
             }
+        }
+    }
+
+    private void showHelp(Options options) {
+        PrintWriter o = new PrintWriter(out);
+        try {
+            HelpFormatter formatter = new HelpFormatter();
+            formatter.printUsage(o, 80, "tag-put --store store file...",
+                    options);
+        } finally {
+            o.flush();
         }
     }
 
