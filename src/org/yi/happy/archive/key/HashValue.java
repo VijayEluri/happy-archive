@@ -15,8 +15,12 @@ public final class HashValue implements Comparable<HashValue> {
      * 
      * @param value
      *            the Bytes for the value.
+     * @throws IllegalArgumentException
+     *             if value is less than one byte.
+     * @throws NullPointerException
+     *             if value is null.
      */
-    public HashValue(Bytes value) {
+    public HashValue(Bytes value) throws IllegalArgumentException {
         if (value.getSize() < 1) {
             throw new IllegalArgumentException("hash must be at least one byte");
         }
@@ -57,6 +61,10 @@ public final class HashValue implements Comparable<HashValue> {
      * 
      * @param value
      *            the byte array.
+     * @throws IllegalArgumentException
+     *             if value is less than one byte.
+     * @throws NullPointerException
+     *             if value is null.
      */
     public HashValue(byte[] value) {
         this(new Bytes(value));
@@ -69,6 +77,10 @@ public final class HashValue implements Comparable<HashValue> {
      * @param value
      *            the contents, each entry will be chopped to the least
      *            significant eight bits.
+     * @throws IllegalArgumentException
+     *             if value is less than one byte.
+     * @throws NullPointerException
+     *             if value is null.
      */
     public HashValue(int... value) {
         this(new Bytes(value));

@@ -64,10 +64,10 @@ public abstract class AbstractLocatorKey implements LocatorKey {
 
     @Override
     public int compareTo(LocatorKey o) {
-        int out = getHash().compareTo(o.getHash());
+        int out = getType().compareTo(o.getType());
         if (out != 0) {
             return out;
         }
-        return getType().compareTo(o.getType());
+        return getHash().compareTo(o.getHash());
     }
 }

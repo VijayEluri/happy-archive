@@ -16,6 +16,8 @@ public final class Bytes implements Comparable<Bytes> {
      * 
      * @param data
      *            the contents.
+     * @throws NullPointerException
+     *             if data is null.
      */
     public Bytes(byte... data) {
         this.data = data.clone();
