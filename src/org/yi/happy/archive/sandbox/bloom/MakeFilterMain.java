@@ -1,4 +1,4 @@
-package org.yi.happy.archive.bloom;
+package org.yi.happy.archive.sandbox.bloom;
 
 import java.io.FileInputStream;
 import java.io.IOException;
