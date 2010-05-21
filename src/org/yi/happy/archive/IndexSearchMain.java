@@ -92,9 +92,13 @@ public class IndexSearchMain {
                 exec);
         while (result.isEmpty() == false) {
             Future<List<SearchResult>> r = result.remove();
+            try {
             for (SearchResult i : r.get()) {
                 out.write(i.toString());
                 out.write("\n");
+            }
+            } catch (ExecutionException e) {
+                System.err.println(e.getMessage());
             }
         }
 
@@ -117,6 +121,9 @@ public class IndexSearchMain {
                     path, volumeSet)));
             Collections.sort(volumeNames);
             for (final String volumeName : volumeNames) {
+                if (volumeName.startsWith(".")) {
+                    continue;
+                }
                 final String fileName = fs.join(fs.join(path, volumeSet),
                         volumeName);
 
