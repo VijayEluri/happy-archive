@@ -46,4 +46,9 @@ public class SimpleTimer {
         }
         return stopTime - startTime;
     }
+
+    @Override
+    public String toString() {
+        return "[" + getClass().getName() + ": time=" + getTime() + " ms]";
+    }
 }
