@@ -131,4 +131,27 @@ public class IndexSearchMainTest {
                 + "onsite\t01\t00.dat\t" + mapKey + "\n"
                 + "onsite\t01\t01.dat\t" + partKey + "\n", o);
     }
+
+    /**
+     * If there is a stray file in the index, then it is ignored.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void skipFiles() throws Exception {
+        String mapKey = TestData.KEY_CONTENT_MAP.getLocatorKey().toString();
+
+        FileSystem fs = new FakeFileSystem();
+        fs.mkdir("index");
+        fs.save("index/strayfile", new byte[0]);
+        fs.mkdir("index/onsite");
+        fs.save("index/onsite/01", TestData.INDEX_MAP.getBytes());
+        fs.save("request", ByteString.toUtf8(mapKey + "\n"));
+        StringWriter out = new StringWriter();
+
+        new IndexSearchMain(fs, out).run("index", "request");
+
+        String o = out.toString();
+        assertEquals("onsite\t01\t00.dat\t" + mapKey + "\n", o);
+    }
 }

@@ -61,15 +61,28 @@ public class FileBlockStore implements BlockStore {
     private <T extends Throwable> void visit(BlockStoreVisitor<T> visitor,
             String path, int levels) throws T {
         if (levels == 0) {
-            List<String> names = fs.list(path);
+            List<String> names;
+            try {
+                names = fs.list(path);
+            } catch (IOException e) {
+                // no children because it was a file.
+                return;
+            }
             Collections.sort(names);
             for (String name : names) {
                 String[] part = name.split("-", 2);
                 visitor.accept(LocatorKeyParse.parseLocatorKey(part[1], part[0]));
             }
+            return;
         }
         if (fs.isDir(path)) {
-            List<String> names = fs.list(path);
+            List<String> names;
+            try {
+                names = fs.list(path);
+            } catch (IOException e) {
+                // shouldn't happen
+                return;
+            }
             Collections.sort(names);
             for (String name : names) {
                 name = fs.join(path, name);

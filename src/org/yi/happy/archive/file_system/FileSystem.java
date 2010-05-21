@@ -119,8 +119,10 @@ public interface FileSystem {
      * @param path
      *            the directory to get the list of names from.
      * @return the list of names.
+     * @throws IOException
+     *             if path is not a directory.
      */
-    List<String> list(String path);
+    List<String> list(String path) throws IOException;
 
     /**
      * check that a path exists and is a directory.

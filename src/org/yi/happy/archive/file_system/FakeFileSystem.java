@@ -179,7 +179,11 @@ public class FakeFileSystem implements FileSystem {
     }
 
     @Override
-    public List<String> list(String path) {
+    public List<String> list(String path) throws IOException {
+        if (!isDir(path)) {
+            throw new IOException();
+        }
+
         List<String> out = new ArrayList<String>();
 
         if (path.equals(".")) {
@@ -203,6 +207,12 @@ public class FakeFileSystem implements FileSystem {
 
     @Override
     public boolean isDir(String path) {
+        if (path.equals(".") || path.equals("/")) {
+            return true;
+        }
+        if (path.length() > 1 && path.endsWith("/")) {
+            path = path.substring(0, path.length() - 1);
+        }
         return files.get(path) == DIR;
     }
 

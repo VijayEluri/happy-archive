@@ -90,8 +90,12 @@ public class RealFileSystem implements FileSystem {
     }
 
     @Override
-    public List<String> list(String path) {
-        return Arrays.asList(new File(path).list());
+    public List<String> list(String path) throws IOException {
+        String[] names = new File(path).list();
+        if (names == null) {
+            throw new IOException();
+        }
+        return Arrays.asList(names);
     }
 
     @Override

@@ -349,6 +349,18 @@ public class FakeFileSystemTest {
     }
 
     /**
+     * Given a file, when I list children of the file, then an error is raised.
+     * 
+     * @throws IOException
+     */
+    @Test(expected = IOException.class)
+    public void listOnFile() throws IOException {
+        real.save("a", new byte[0]);
+
+        real.list("a");
+    }
+
+    /**
      * create an absolute directory.
      * 
      * @throws IOException
@@ -404,6 +416,18 @@ public class FakeFileSystemTest {
         real.mkdir("a");
 
         assertFalse(real.isFile("a"));
+    }
+
+    /**
+     * A path ending in a slash that is a directory is a directory.
+     * 
+     * @throws IOException
+     */
+    @Test
+    public void directoryWithSlashIsDirectory() throws IOException {
+        real.mkdir("a");
+
+        assertTrue(real.isDir("a/"));
     }
 
     /**

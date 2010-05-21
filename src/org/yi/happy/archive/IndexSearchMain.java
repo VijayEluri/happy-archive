@@ -110,6 +110,9 @@ public class IndexSearchMain {
         List<String> volumeSets = new ArrayList<String>(fs.list(path));
         Collections.sort(volumeSets);
         for (final String volumeSet : volumeSets) {
+            if (!fs.isDir(fs.join(path, volumeSet))) {
+                continue;
+            }
             List<String> volumeNames = new ArrayList<String>(fs.list(fs.join(
                     path, volumeSet)));
             Collections.sort(volumeNames);
