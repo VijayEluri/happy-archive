@@ -9,26 +9,39 @@ import org.yi.happy.archive.LineCursor;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.crypto.Digests;
+import org.yi.happy.metric.SimpleTimer;
 
+/**
+ * experiment with a bloom filter.
+ */
 public class MakeFilterMain {
-    public static final int SIZE = 8 * 64 * 1024; /* 2 ^ 19 */
-    // public static final int SIZE = 8 * 2048 * 1024; /* 2 ^ 24 */
 
+    /**
+     * experiment with a bloom filter searching the largest index for a large
+     * set of keys.
+     * 
+     * @param args
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException {
+        // int SIZE = 8 * 64 * 1024; /* 2 ^ 19 */
+        // int SIZE = 8 * 2048 * 1024; /* 2 ^ 24 */
+        int SIZE = 8 * 1024 * 1024; /* 2 ^ 23 */
+
         /*
          * make a bloom filter from an index
          */
 
         BitSet s = new BitSet(SIZE);
 
-        System.out.println(s.size());
 
         DigestProvider d = DigestFactory.getProvider("sha-256");
 
-        // FileInputStream in = new FileInputStream(
-        // "/Users/happy/archive.d/index/offsite/2007-03-02-0931");
+        SimpleTimer time = new SimpleTimer();
         FileInputStream in = new FileInputStream(
-                "/Users/happy/archive.d/index/onsite/2008-12-11-2103");
+                "/Users/happy/archive.d/index/offsite/2007-03-02-0931");
+        // FileInputStream in = new FileInputStream(
+        // "/Users/happy/archive.d/index/onsite/2008-12-11-2103");
 
         try {
             LineCursor l = new LineCursor(in);
@@ -41,8 +54,8 @@ public class MakeFilterMain {
                 h |= hash[0] & 0xff;
                 h <<= 8;
                 h |= hash[1] & 0xff;
-                h <<= 3;
-                h |= hash[2] & 0x8;
+                h <<= 7;
+                h |= hash[2] & 0x7f;
 
                 int h2 = 0;
                 h2 |= hash[3] & 0xff;
@@ -52,12 +65,18 @@ public class MakeFilterMain {
                 h2 |= hash[5] & 0x8;
 
                 s.set(h);
-                s.set(h2);
+                // s.set(h2);
             }
         } finally {
             in.close();
         }
 
+        System.out.println("create: " + time);
+        time = new SimpleTimer();
+
+        int found = 0;
+        int total = 0;
+        
         in = new FileInputStream("/Users/happy/tmp/store.lst");
         try {
             LineCursor l = new LineCursor(in);
@@ -71,8 +90,8 @@ public class MakeFilterMain {
                 h |= hash[0] & 0xff;
                 h <<= 8;
                 h |= hash[1] & 0xff;
-                h <<= 3;
-                h |= hash[2] & 0x8;
+                h <<= 7;
+                h |= hash[2] & 0x7f;
 
                 int h2 = 0;
                 h2 |= hash[3] & 0xff;
@@ -81,12 +100,15 @@ public class MakeFilterMain {
                 h2 <<= 3;
                 h2 |= hash[5] & 0x8;
 
-                if (s.get(h) && s.get(h2)) {
-                    System.out.println(l.get());
+                if (s.get(h) /* && s.get(h2) */) {
+                    found++;
                 }
+                total++;
             }
         } finally {
             in.close();
         }
+        System.out.println("found: " + found + "/" + total);
+        System.out.println("search: " + time);
     }
 }
