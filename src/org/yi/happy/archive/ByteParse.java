@@ -46,4 +46,32 @@ public class ByteParse {
         return new Range(range.getEnd(), 0);
     }
 
+    /**
+     * find the last line break in the range.
+     * 
+     * @param bytes
+     *            the bytes.
+     * @param range
+     *            the range to search in.
+     * @return range that is the line break, or the start of the range if none
+     *         found.
+     */
+    public static Range findLastNewLine(byte[] bytes, Range range) {
+        for (int i = range.getEnd() - 1; i >= range.getOffset(); i--) {
+            if (bytes[i] == CR) {
+                if (i - 1 >= range.getOffset() && bytes[i - 1] == LF) {
+                    return new Range(i - 1, 2);
+                }
+                return new Range(i, 1);
+            }
+            if (bytes[i] == LF) {
+                if (i - 1 >= range.getOffset() && bytes[i - 1] == CR) {
+                    return new Range(i - 1, 2);
+                }
+                return new Range(i, 1);
+            }
+        }
+
+        return new Range(range.getOffset(), 0);
+    }
 }
