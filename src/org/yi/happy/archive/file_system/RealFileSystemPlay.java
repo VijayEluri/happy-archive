@@ -1,5 +1,6 @@
 package org.yi.happy.archive.file_system;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -12,7 +13,7 @@ public class RealFileSystemPlay {
      * @param args
      * @throws IOException
      */
-    public static void main(String[] args) throws IOException {
+    public static void main1(String[] args) throws IOException {
         RealFileSystem fs = new RealFileSystem();
         fs.mkdir("a");
 
@@ -49,5 +50,15 @@ public class RealFileSystemPlay {
         fs.mkdir("a/b");
 
         fs.rename("a/a", "a/b");
+    }
+
+    /**
+     * 
+     * @param args
+     */
+    public static void main(String[] args) {
+        File f = new File("test/");
+
+        System.out.println(f);
     }
 }
