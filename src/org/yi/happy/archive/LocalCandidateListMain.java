@@ -2,8 +2,8 @@ package org.yi.happy.archive;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,6 +18,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.zip.GZIPInputStream;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.yi.happy.annotate.DuplicatedLogic;
 import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.annotate.SmellsMessy;
@@ -27,90 +32,123 @@ import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.key.LocatorKeyParse;
 
 /**
- * search indexes for keys.
+ * Make a candidate list from a local store and local index.
  */
-public class IndexSearchMain {
-    private final FileSystem fs;
-    private final Writer out;
-
+public class LocalCandidateListMain {
     /**
-     * create with context.
-     * 
-     * @param fs
-     *            the file system.
-     * @param out
-     *            the output.
-     */
-    public IndexSearchMain(FileSystem fs, Writer out) {
-        this.fs = fs;
-        this.out = out;
-    }
-
-    /**
-     * invoke from the command line.
+     * Make a candidate list from a local store and local index.
      * 
      * @param args
+     *            the command line.
      * @throws IOException
-     * @throws ExecutionException
      * @throws InterruptedException
      */
     @EntryPoint
+    @DuplicatedLogic("IndexSearchMain index search")
     public static void main(String[] args) throws IOException,
-            InterruptedException, ExecutionException {
+            InterruptedException {
         FileSystem fs = new RealFileSystem();
-        Writer out = new OutputStreamWriter(System.out, "utf-8");
 
-        new IndexSearchMain(fs, out).run(args);
+        Options options = new Options()
 
-        out.flush();
-    }
+        .addOption(null, "store", true, "location of the store")
 
-    /**
-     * run the index search.
-     * 
-     * @param args
-     *            the command line arguments.
-     * @throws IOException
-     * @throws ExecutionException
-     * @throws InterruptedException
-     */
-    @DuplicatedLogic("with LocalCandidateListMain index search")
-    @SmellsMessy
-    public void run(String... args) throws IOException, InterruptedException,
-            ExecutionException {
-        if (args.length != 2) {
-            out.write("use: index key-list\n");
+        .addOption(null, "index", true, "location of the indexes");
+
+        CommandLine cmd;
+        try {
+            cmd = new GnuParser().parse(options, args);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            showHelp(options, System.out);
             return;
         }
 
-        Set<LocatorKey> want = loadRequestSet(args[1]);
+        /*
+         * get store location.
+         */
+        if (cmd.getOptionValue("store") == null) {
+            showHelp(options, System.out);
+            return;
+        }
 
+        FileBlockStore store = new FileBlockStore(fs, cmd
+                .getOptionValue("store"));
+
+        /*
+         * get index location.
+         */
+        String indexBase = cmd.getOptionValue("index");
+
+        if (cmd.getArgs().length != 1) {
+            showHelp(options, System.out);
+            return;
+        }
+
+        final String volumeSet = cmd.getArgs()[0];
+
+        /*
+         * load list of keys in store.
+         */
+        final Set<LocatorKey> want = new HashSet<LocatorKey>();
+        store.visit(new BlockStoreVisitor<RuntimeException>() {
+            @Override
+            public void accept(LocatorKey key) throws RuntimeException {
+                want.add(key);
+            }
+        });
+
+        /*
+         * find keys in index.
+         */
         ExecutorService exec = Executors.newFixedThreadPool(2);
 
+        Set<LocatorKey> have = new HashSet<LocatorKey>();
+        Set<LocatorKey> exists = new HashSet<LocatorKey>();
         /*
          * scan each index in sequence listing matching entries.
          */
-        Queue<Future<List<SearchResult>>> result = searchIndex(args[0], want,
+        Queue<Future<List<SearchResult>>> result = searchIndex(indexBase, want,
                 exec);
         while (result.isEmpty() == false) {
             Future<List<SearchResult>> r = result.remove();
             try {
-            for (SearchResult i : r.get()) {
-                out.write(i.toString());
-                out.write("\n");
-            }
+                for (SearchResult i : r.get()) {
+                    exists.add(i.key);
+                    if (i.volumeSet.equals(volumeSet)) {
+                        have.add(i.key);
+                    }
+                }
             } catch (ExecutionException e) {
                 System.err.println(e.getMessage());
             }
         }
 
         exec.shutdown();
+
+        /*
+         * calculate candidates: first the keys that do not exist in the index,
+         * then the keys that do exist but not in this set.
+         */
+        Set<LocatorKey> nowhere = new HashSet<LocatorKey>(want);
+        nowhere.removeAll(exists);
+
+        exists.removeAll(have);
+
+        for (LocatorKey i : nowhere) {
+            System.out.println(i);
+        }
+        for (LocatorKey i : exists) {
+            System.out.println(i);
+        }
     }
 
     @SmellsMessy
-    private Queue<Future<List<SearchResult>>> searchIndex(String path,
+    @DuplicatedLogic("IndexSearchMain")
+    private static Queue<Future<List<SearchResult>>> searchIndex(String path,
             final Set<LocatorKey> want, ExecutorService exec)
             throws IOException {
+        RealFileSystem fs = new RealFileSystem();
         Queue<Future<List<SearchResult>>> out = new ArrayDeque<Future<List<SearchResult>>>();
 
         List<String> volumeSets = new ArrayList<String>(fs.list(path));
@@ -143,8 +181,12 @@ public class IndexSearchMain {
         return out;
     }
 
-    private List<SearchResult> searchVolume(String path, String volumeSet,
+    @DuplicatedLogic("IndexSearchMain")
+    private static List<SearchResult> searchVolume(String path,
+            String volumeSet,
             String volumeName, Set<LocatorKey> want) throws IOException {
+        RealFileSystem fs = new RealFileSystem();
+
         List<SearchResult> out = new ArrayList<SearchResult>();
 
         InputStream in0 = fs.openInputStream(path);
@@ -169,6 +211,7 @@ public class IndexSearchMain {
         return out;
     }
 
+    @DuplicatedLogic("IndexSearchMain")
     private static class SearchResult {
         private final String volumeSet;
         private final String volumeName;
@@ -189,19 +232,14 @@ public class IndexSearchMain {
         }
     }
 
-    private Set<LocatorKey> loadRequestSet(String path) throws IOException {
-        Set<LocatorKey> out = new HashSet<LocatorKey>();
-
-        InputStream in0 = fs.openInputStream(path);
+    private static void showHelp(Options options, PrintStream out) {
+        PrintWriter o = new PrintWriter(out);
         try {
-            LineCursor in = new LineCursor(in0);
-            while (in.next()) {
-                out.add(LocatorKeyParse.parseLocatorKey(in.get()));
-            }
+            HelpFormatter formatter = new HelpFormatter();
+            formatter.printUsage(o, 80, "backup-list volume-set",
+                    options);
         } finally {
-            in0.close();
+            o.flush();
         }
-
-        return out;
     }
 }

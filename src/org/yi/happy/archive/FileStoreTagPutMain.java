@@ -11,6 +11,7 @@ import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.yi.happy.annotate.DuplicatedLogic;
 import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.annotate.MagicLiteral;
 import org.yi.happy.annotate.SmellsMessy;
@@ -47,6 +48,7 @@ public class FileStoreTagPutMain {
      */
     @MagicLiteral
     @SmellsMessy
+    @DuplicatedLogic("getting options, with LocalCandidateList")
     public void run(String... args) throws IOException {
         /*
          * parse command line
@@ -102,6 +104,7 @@ public class FileStoreTagPutMain {
         }
     }
 
+    @DuplicatedLogic("with LocalCandidateList")
     private void showHelp(Options options) {
         PrintWriter o = new PrintWriter(out);
         try {

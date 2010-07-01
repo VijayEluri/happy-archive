@@ -9,8 +9,6 @@ import java.util.List;
 
 import org.yi.happy.archive.ByteParse;
 import org.yi.happy.archive.ByteString;
-import org.yi.happy.archive.Bytes;
-import org.yi.happy.archive.Fragment;
 import org.yi.happy.archive.LineCursor;
 import org.yi.happy.archive.block.parser.Range;
 import org.yi.happy.metric.SimpleTimer;
@@ -84,8 +82,9 @@ public class IndexFastSearchMain {
                     .getLength()));
         }
 
-        Fragment headEnd = new Fragment(rest.getOffset(), new Bytes(data, rest
-                .getOffset(), rest.getLength()));
+        // Fragment headEnd = new Fragment(rest.getOffset(), new Bytes(data,
+        // rest
+        // .getOffset(), rest.getLength()));
 
         /*
          * 

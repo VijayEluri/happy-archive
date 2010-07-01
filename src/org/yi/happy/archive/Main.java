@@ -62,8 +62,9 @@ public class Main {
 
             new Cmd("index-volume", IndexVolumeMain.class),
 
-            new Cmd("store-remove", StoreRemoveMain.class)
+            new Cmd("store-remove", StoreRemoveMain.class),
 
+            new Cmd("backup-list", LocalCandidateListMain.class)
             ));
 
     /**
