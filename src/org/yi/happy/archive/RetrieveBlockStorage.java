@@ -36,8 +36,10 @@ public class RetrieveBlockStorage implements RetrieveBlock {
                 return null;
             }
         } catch (IllegalArgumentException e) {
-            throw null;
+            return null;
         } catch (FileNotFoundException e) {
+            return null;
+        } catch (DecodeException e) {
             return null;
         }
 
