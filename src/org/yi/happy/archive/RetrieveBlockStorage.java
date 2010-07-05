@@ -29,17 +29,22 @@ public class RetrieveBlockStorage implements RetrieveBlock {
 
     @Override
     public Block retrieveBlock(FullKey key) throws IOException {
+        EncodedBlock b;
         try {
-            EncodedBlock b = storage.get(key.toLocatorKey());
+            b = storage.get(key.toLocatorKey());
             if (b == null) {
                 return null;
             }
+        } catch (IllegalArgumentException e) {
+            throw null;
+        } catch (FileNotFoundException e) {
+            return null;
+        }
 
+        try {
             return b.decode(key);
         } catch (IllegalArgumentException e) {
             throw new DecodeException(e);
-        } catch (FileNotFoundException e) {
-            return null;
         }
     }
 }
