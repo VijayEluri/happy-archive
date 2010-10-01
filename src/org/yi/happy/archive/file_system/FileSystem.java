@@ -152,4 +152,14 @@ public interface FileSystem {
      * @return true if the path exists and is a file.
      */
     boolean isFile(String path);
+
+    /**
+     * Get a file object for a path.
+     * 
+     * @param path
+     *            the path to get the file object for.
+     * @return the file object for the path.
+     * 
+     */
+    FileObject resolve(String path);
 }

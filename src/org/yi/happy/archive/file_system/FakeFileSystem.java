@@ -239,4 +239,9 @@ public class FakeFileSystem implements FileSystem {
 
         return true;
     }
+
+    @Override
+    public FileObject resolve(String path) {
+        return new FakeFileObject(this, path);
+    }
 }

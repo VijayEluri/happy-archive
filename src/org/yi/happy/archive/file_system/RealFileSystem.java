@@ -119,4 +119,9 @@ public class RealFileSystem implements FileSystem {
     public boolean isFile(String path) {
         return new File(path).isFile();
     }
+
+    @Override
+    public FileObject resolve(String path) {
+        return new RealFileObject(this, path);
+    }
 }
