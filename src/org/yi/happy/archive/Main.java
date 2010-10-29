@@ -64,7 +64,9 @@ public class Main {
 
             new Cmd("store-remove", StoreRemoveMain.class),
 
-            new Cmd("backup-list", LocalCandidateListMain.class)
+            new Cmd("backup-list", LocalCandidateListMain.class),
+
+            new Cmd("make-index-db", MakeIndexDatabaseMain.class)
             ));
 
     /**

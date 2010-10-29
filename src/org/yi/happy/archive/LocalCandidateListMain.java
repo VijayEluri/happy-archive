@@ -6,7 +6,6 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Queue;
@@ -146,29 +145,17 @@ public class LocalCandidateListMain {
     @SmellsMessy
     @DuplicatedLogic("IndexSearchMain")
     private static Queue<Future<List<SearchResult>>> searchIndex(String path,
-            final Set<LocatorKey> want, ExecutorService exec)
+            final Set<LocatorKey> want, final ExecutorService exec)
             throws IOException {
         RealFileSystem fs = new RealFileSystem();
-        Queue<Future<List<SearchResult>>> out = new ArrayDeque<Future<List<SearchResult>>>();
+        final Queue<Future<List<SearchResult>>> out = new ArrayDeque<Future<List<SearchResult>>>();
 
-        List<String> volumeSets = new ArrayList<String>(fs.list(path));
-        Collections.sort(volumeSets);
-        for (final String volumeSet : volumeSets) {
-            if (!fs.isDir(fs.join(path, volumeSet))) {
-                continue;
-            }
-            List<String> volumeNames = new ArrayList<String>(fs.list(fs.join(
-                    path, volumeSet)));
-            Collections.sort(volumeNames);
-            for (final String volumeName : volumeNames) {
-                if (volumeName.startsWith(".")) {
-                    continue;
-                }
-                final String fileName = fs.join(fs.join(path, volumeSet),
-                        volumeName);
-
+        new IndexFileTree(fs, path).accept(new IndexFileTree.Visitor() {
+            @Override
+            public void visit(FileSystem fs, final String fileName,
+                    final String volumeSet, final String volumeName)
+                    throws IOException {
                 Callable<List<SearchResult>> task = new Callable<List<SearchResult>>() {
-
                     @Override
                     public List<SearchResult> call() throws Exception {
                         return searchVolume(fileName, volumeSet, volumeName,
@@ -177,7 +164,7 @@ public class LocalCandidateListMain {
                 };
                 out.add(exec.submit(task));
             }
-        }
+        });
         return out;
     }
 

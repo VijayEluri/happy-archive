@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
-import org.yi.happy.annotate.DuplicatedLogic;
 import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.IndexSearch.SearchResult;
@@ -66,7 +65,6 @@ public class IndexSearchMain {
      * @throws ExecutionException
      * @throws InterruptedException
      */
-    @DuplicatedLogic("with LocalCandidateListMain index search")
     @SmellsMessy
     public void run(String... args) throws IOException, InterruptedException,
             ExecutionException {

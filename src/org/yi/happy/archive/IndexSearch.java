@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
@@ -86,30 +85,18 @@ public class IndexSearch {
     }
 
     private List<Callable<List<SearchResult>>> getSearchTasks(String path,
-            Set<LocatorKey> want) throws IOException {
-        List<Callable<List<SearchResult>>> out = new ArrayList<Callable<List<SearchResult>>>();
+            final Set<LocatorKey> want) throws IOException {
+        final List<Callable<List<SearchResult>>> out = new ArrayList<Callable<List<SearchResult>>>();
 
-        List<String> volumeSets = new ArrayList<String>(fs.list(path));
-        Collections.sort(volumeSets);
-        for (final String volumeSet : volumeSets) {
-            if (!fs.isDir(fs.join(path, volumeSet))) {
-                continue;
-            }
-            List<String> volumeNames = new ArrayList<String>(fs.list(fs.join(
-                    path, volumeSet)));
-            Collections.sort(volumeNames);
-            for (final String volumeName : volumeNames) {
-                if (volumeName.startsWith(".")) {
-                    continue;
-                }
-                final String fileName = fs.join(fs.join(path, volumeSet),
-                        volumeName);
-
+        new IndexFileTree(fs, path).accept(new IndexFileTree.Visitor() {
+            @Override
+            public void visit(FileSystem fs, String fileName, String volumeSet,
+                    String volumeName) throws IOException {
                 SearchVolume task = new SearchVolume(fileName, volumeSet,
                         volumeName, want);
                 out.add(task);
             }
-        }
+        });
 
         return out;
     }
@@ -135,10 +122,8 @@ public class IndexSearch {
 
             InputStream in0 = fs.openInputStream(fileName);
             try {
-                if (volumeName.endsWith(".gz")) {
+                if (fileName.endsWith(".gz")) {
                     in0 = new GZIPInputStream(in0);
-                    volumeName = volumeName.substring(0,
-                            volumeName.length() - 3);
                 }
                 LineCursor in = new LineCursor(in0);
                 while (in.next()) {
