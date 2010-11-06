@@ -16,6 +16,16 @@ import org.yi.happy.archive.file_system.RealFileSystem;
  * Experimental command to populate a HSQL database with indexes.
  */
 public class MakeIndexDatabaseMain {
+    /**
+     * make a database from all the indexes in /Users/happy/archive.d/. this
+     * takes a very long time to run because of updating indexes so I think
+     * another strategy should be tried.
+     * 
+     * @param args
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     * @throws IOException
+     */
     public static void main(String[] args) throws ClassNotFoundException,
             SQLException, IOException {
         /*
@@ -67,9 +77,8 @@ public class MakeIndexDatabaseMain {
 
         InputStream in0 = fs.openInputStream(fileName);
         try {
-            if (volumeName.endsWith(".gz")) {
+            if (fileName.endsWith(".gz")) {
                 in0 = new GZIPInputStream(in0);
-                volumeName = volumeName.substring(0, volumeName.length() - 3);
             }
             LineCursor in = new LineCursor(in0);
             while (in.next()) {
@@ -101,5 +110,8 @@ public class MakeIndexDatabaseMain {
         conn.commit();
     }
 
+    /**
+     * The number of records inserted so far.
+     */
     public static volatile int count = 0;
 }
