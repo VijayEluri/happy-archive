@@ -6,16 +6,15 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
 import org.yi.happy.annotate.DuplicatedLogic;
 import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.annotate.MagicLiteral;
 import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.block.encoder.BlockEncoderFactory;
+import org.yi.happy.archive.commandLine.MyArgs;
+import org.yi.happy.archive.commandLine.MyArgs.CommandLineException;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
@@ -53,25 +52,20 @@ public class FileStoreTagPutMain {
         /*
          * parse command line
          */
-
-        Options options = new Options().addOption(null, "store", true,
-                "location of the store");
-        CommandLine cmd;
+        MyArgs cmd;
         try {
-            cmd = new GnuParser().parse(options, args);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            showHelp(options);
+            cmd = MyArgs.parse(args);
+        } catch (CommandLineException e) {
+            e.showHelp(out);
             return;
         }
 
-        if (cmd.getOptionValue("store") == null) {
-            showHelp(options);
+        if (cmd.getStore() == null) {
+            cmd.showHelp(out);
             return;
         }
 
-        FileBlockStore store = new FileBlockStore(fs, cmd
-                .getOptionValue("store"));
+        FileBlockStore store = new FileBlockStore(fs, cmd.getStore());
 
         /*
          * do the work
@@ -80,7 +74,7 @@ public class FileStoreTagPutMain {
         StoreBlockStorage s = new StoreBlockStorage(BlockEncoderFactory
                 .getContentDefault(), store);
 
-        for (String arg : cmd.getArgs()) {
+        for (String arg : cmd.getFiles()) {
             if (fs.isFile(arg)) {
                 KeyOutputStream o1 = new KeyOutputStream(s);
                 DigestOutputStream o2 = new DigestOutputStream(DigestFactory
