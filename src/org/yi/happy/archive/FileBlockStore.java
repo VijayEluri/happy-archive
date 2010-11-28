@@ -140,4 +140,9 @@ public class FileBlockStore implements BlockStore {
         String fileName = makeFileName(key, false);
         fs.delete(fileName);
     }
+
+    public long getTime(LocatorKey key) throws IOException {
+        String fileName = makeFileName(key, false);
+        return fs.getModificationTime(fileName);
+    }
 }

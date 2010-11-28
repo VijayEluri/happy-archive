@@ -162,4 +162,13 @@ public interface FileSystem {
      * 
      */
     FileObject resolve(String path);
+
+    /**
+     * Get the modification time for a file.
+     * 
+     * @param fileName
+     *            the file to get the modification time of.
+     * @return the modification time for a file in milliseconds since epoch.
+     */
+    long getModificationTime(String fileName);
 }

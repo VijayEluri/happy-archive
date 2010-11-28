@@ -124,4 +124,9 @@ public class RealFileSystem implements FileSystem {
     public FileObject resolve(String path) {
         return new RealFileObject(this, path);
     }
+
+    @Override
+    public long getModificationTime(String fileName) {
+        return new File(fileName).lastModified();
+    }
 }

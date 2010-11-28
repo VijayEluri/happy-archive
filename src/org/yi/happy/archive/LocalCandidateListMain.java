@@ -6,8 +6,12 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -134,11 +138,45 @@ public class LocalCandidateListMain {
 
         exists.removeAll(have);
 
-        for (LocatorKey i : nowhere) {
-            System.out.println(i);
+        /*
+         * sort the lists by creation time, and print them out.
+         */
+        {
+            final Map<LocatorKey, Long> order = new HashMap<LocatorKey, Long>();
+            for (LocatorKey i : nowhere) {
+                order.put(i, store.getTime(i));
+            }
+
+            List<LocatorKey> out = new ArrayList<LocatorKey>(nowhere);
+            Collections.sort(out, new Comparator<LocatorKey>() {
+                @Override
+                public int compare(LocatorKey o1, LocatorKey o2) {
+                    return order.get(o1).compareTo(order.get(o2));
+                }
+            });
+
+            for (LocatorKey i : out) {
+                System.out.println(i);
+            }
         }
-        for (LocatorKey i : exists) {
-            System.out.println(i);
+
+        {
+            final Map<LocatorKey, Long> order = new HashMap<LocatorKey, Long>();
+            for (LocatorKey i : exists) {
+                order.put(i, store.getTime(i));
+            }
+
+            List<LocatorKey> out = new ArrayList<LocatorKey>(exists);
+            Collections.sort(out, new Comparator<LocatorKey>() {
+                @Override
+                public int compare(LocatorKey o1, LocatorKey o2) {
+                    return order.get(o1).compareTo(order.get(o2));
+                }
+            });
+
+            for (LocatorKey i : out) {
+                System.out.println(i);
+            }
         }
     }
 
@@ -170,8 +208,8 @@ public class LocalCandidateListMain {
 
     @DuplicatedLogic("IndexSearchMain")
     private static List<SearchResult> searchVolume(String path,
-            String volumeSet,
-            String volumeName, Set<LocatorKey> want) throws IOException {
+            String volumeSet, String volumeName, Set<LocatorKey> want)
+            throws IOException {
         RealFileSystem fs = new RealFileSystem();
 
         List<SearchResult> out = new ArrayList<SearchResult>();
@@ -223,8 +261,7 @@ public class LocalCandidateListMain {
         PrintWriter o = new PrintWriter(out);
         try {
             HelpFormatter formatter = new HelpFormatter();
-            formatter.printUsage(o, 80, "backup-list volume-set",
-                    options);
+            formatter.printUsage(o, 80, "backup-list volume-set", options);
         } finally {
             o.flush();
         }

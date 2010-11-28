@@ -244,4 +244,10 @@ public class FakeFileSystem implements FileSystem {
     public FileObject resolve(String path) {
         return new FakeFileObject(this, path);
     }
+
+    @Override
+    public long getModificationTime(String fileName) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 }
