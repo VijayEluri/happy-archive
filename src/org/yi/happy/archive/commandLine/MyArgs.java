@@ -12,9 +12,13 @@ import org.apache.commons.cli.ParseException;
 public class MyArgs {
     private static final String STORE = "store";
 
+    private static final String NEED_LIST = "need-list";
+
     private static final Options options = new Options()
 
-    .addOption(null, STORE, true, "location of the file store");
+    .addOption(null, STORE, true, "location of the file store")
+
+    .addOption(null, NEED_LIST, true, "location of the request list");
 
     private final CommandLine cmd;
 
@@ -26,6 +30,10 @@ public class MyArgs {
         return cmd.getOptionValue(STORE);
     }
     
+    public String getNeedList() {
+        return cmd.getOptionValue(NEED_LIST);
+    }
+
     public static MyArgs parse(String[] args) throws CommandLineException {
 
         CommandLine cmd;
