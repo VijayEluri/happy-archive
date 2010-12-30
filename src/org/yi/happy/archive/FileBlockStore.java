@@ -141,6 +141,15 @@ public class FileBlockStore implements BlockStore {
         fs.delete(fileName);
     }
 
+    /**
+     * get the modification time for a key in the store.
+     * 
+     * @param key
+     *            the key to query.
+     * @return the modification time.
+     * @throws IOException
+     *             on error.
+     */
     public long getTime(LocatorKey key) throws IOException {
         String fileName = makeFileName(key, false);
         return fs.getModificationTime(fileName);

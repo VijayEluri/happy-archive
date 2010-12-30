@@ -9,6 +9,9 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+/**
+ * The command line arguments for the main entry point.
+ */
 public class MyArgs {
     private static final String STORE = "store";
 
@@ -22,18 +25,44 @@ public class MyArgs {
 
     private final CommandLine cmd;
 
+    /**
+     * set up the command line arguments for the main entry point, called from
+     * parse.
+     * 
+     * @param cmd
+     *            the parsed command line.
+     */
     public MyArgs(CommandLine cmd) {
         this.cmd = cmd;
     }
 
+    /**
+     * get the store option.
+     * 
+     * @return the store option.
+     */
     public String getStore() {
         return cmd.getOptionValue(STORE);
     }
-    
+
+    /**
+     * get the need list option value.
+     * 
+     * @return the need list option value.
+     */
     public String getNeedList() {
         return cmd.getOptionValue(NEED_LIST);
     }
 
+    /**
+     * parse the command line.
+     * 
+     * @param args
+     *            the command line.
+     * @return the parsed command line.
+     * @throws CommandLineException
+     *             on error.
+     */
     public static MyArgs parse(String[] args) throws CommandLineException {
 
         CommandLine cmd;
@@ -46,6 +75,12 @@ public class MyArgs {
         return new MyArgs(cmd);
     }
 
+    /**
+     * print out the command line help.
+     * 
+     * @param out
+     *            the writer to print on.
+     */
     public static void showHelp(Writer out) {
         PrintWriter o = new PrintWriter(out);
         try {
@@ -60,14 +95,34 @@ public class MyArgs {
         formatter.printUsage(out, 80, "command", options);
     }
 
+    /**
+     * an error from parsing the command line.
+     */
     public static class CommandLineException extends Exception {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 5586604964781859405L;
         private final ParseException cause;
 
+        /**
+         * make an error from parsing the command line, from a parse exception
+         * cause.
+         * 
+         * @param cause
+         *            the parse exception.
+         */
         public CommandLineException(ParseException cause) {
             super(cause);
             this.cause = cause;
         }
 
+        /**
+         * show the command line help for this error.
+         * 
+         * @param out
+         *            where to display the help.
+         */
         public void showHelp(Writer out) {
             PrintWriter o = new PrintWriter(out);
             try {
@@ -79,6 +134,11 @@ public class MyArgs {
         }
     }
 
+    /**
+     * get the file arguments from the command line.
+     * 
+     * @return the file arguments.
+     */
     public String[] getFiles() {
         return cmd.getArgs();
     }

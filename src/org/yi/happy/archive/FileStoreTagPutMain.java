@@ -58,7 +58,7 @@ public class FileStoreTagPutMain {
         }
 
         if (cmd.getStore() == null) {
-            cmd.showHelp(out);
+            MyArgs.showHelp(out);
             return;
         }
 
