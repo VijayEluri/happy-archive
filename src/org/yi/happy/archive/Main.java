@@ -12,7 +12,7 @@ import org.yi.happy.annotate.EntryPoint;
  */
 @EntryPoint
 public class Main {
-    private static final class Cmd {
+    private static class Cmd {
 
         private final String name;
         private final Class<?> cls;
@@ -22,6 +22,10 @@ public class Main {
             this.cls = cls;
         }
 
+        public Cmd(String name) {
+            this(name, null);
+        }
+
         public String getName() {
             return name;
         }
@@ -29,12 +33,22 @@ public class Main {
         public Class<?> getCls() {
             return cls;
         }
+
+        public void run(String[] args) throws Exception {
+            Method m = getCls().getMethod("main", args.getClass());
+            m.invoke(null, (Object) args);
+        }
     }
 
     private static final List<Cmd> cmds = Collections.unmodifiableList(Arrays
             .asList(
 
-            new Cmd("file-get", FileStoreFileGetMain.class),
+            new Cmd("file-get") {
+                @Override
+                public void run(String[] args) throws Exception {
+                    FileStoreFileGetMain.main(args);
+                }
+            },
 
             new Cmd("block-put", FileStoreBlockPutMain.class),
 
@@ -84,9 +98,8 @@ public class Main {
 
         for (Cmd cmd : cmds) {
             if (cmd.getName().equals(args[0])) {
-                Method m = cmd.getCls().getMethod("main", args.getClass());
                 String[] a = Arrays.copyOfRange(args, 1, args.length);
-                m.invoke(null, (Object) a);
+                cmd.run(a);
                 return;
             }
         }
