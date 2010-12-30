@@ -54,7 +54,7 @@ public class LineCursor {
     }
 
     /**
-     * fetch the current line.
+     * fetch the current line, not including the line terminating characters.
      * 
      * @return the current line.
      * @throws IllegalStateException
