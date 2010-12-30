@@ -3,11 +3,8 @@ package org.yi.happy.archive;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.io.Writer;
 
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Options;
 import org.yi.happy.annotate.DuplicatedLogic;
 import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.annotate.MagicLiteral;
@@ -95,18 +92,6 @@ public class FileStoreTagPutMain {
                 out.write("hash=sha-256:" + o2.getHash() + "\n");
                 out.write("\n");
             }
-        }
-    }
-
-    @DuplicatedLogic("with LocalCandidateList")
-    private void showHelp(Options options) {
-        PrintWriter o = new PrintWriter(out);
-        try {
-            HelpFormatter formatter = new HelpFormatter();
-            formatter.printUsage(o, 80, "tag-put --store store file...",
-                    options);
-        } finally {
-            o.flush();
         }
     }
 
