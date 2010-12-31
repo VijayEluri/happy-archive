@@ -15,13 +15,17 @@ import org.apache.commons.cli.ParseException;
 public class MyArgs {
     private static final String STORE = "store";
 
-    private static final String NEED_LIST = "need-list";
+    private static final String PENDING = "pending";
+
+    private static final String INDEX = "index";
 
     private static final Options options = new Options()
 
     .addOption(null, STORE, true, "location of the file store")
 
-    .addOption(null, NEED_LIST, true, "location of the request list");
+    .addOption(null, PENDING, true, "location of the needed block list")
+
+    .addOption(null, INDEX, true, "location of the indexes");
 
     private final CommandLine cmd;
 
@@ -50,8 +54,17 @@ public class MyArgs {
      * 
      * @return the need list option value.
      */
-    public String getNeedList() {
-        return cmd.getOptionValue(NEED_LIST);
+    public String getPending() {
+        return cmd.getOptionValue(PENDING);
+    }
+
+    /**
+     * get the location of the index files option value.
+     * 
+     * @return the location of the index files option value.
+     */
+    public String getIndex() {
+        return cmd.getOptionValue(INDEX);
     }
 
     /**

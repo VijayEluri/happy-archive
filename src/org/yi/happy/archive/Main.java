@@ -1,6 +1,5 @@
 package org.yi.happy.archive;
 
-import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -12,32 +11,19 @@ import org.yi.happy.annotate.EntryPoint;
  */
 @EntryPoint
 public class Main {
-    private static class Cmd {
+    private abstract static class Cmd {
 
         private final String name;
-        private final Class<?> cls;
-
-        public Cmd(String name, Class<?> cls) {
-            this.name = name;
-            this.cls = cls;
-        }
 
         public Cmd(String name) {
-            this(name, null);
+            this.name = name;
         }
 
         public String getName() {
             return name;
         }
 
-        public Class<?> getCls() {
-            return cls;
-        }
-
-        public void run(String[] args) throws Exception {
-            Method m = getCls().getMethod("main", args.getClass());
-            m.invoke(null, (Object) args);
-        }
+        public abstract void run(String[] args) throws Exception;
     }
 
     private static final List<Cmd> cmds = Collections.unmodifiableList(Arrays
@@ -50,37 +36,117 @@ public class Main {
                 }
             },
 
-            new Cmd("block-put", FileStoreBlockPutMain.class),
+            new Cmd("block-put") {
+                @Override
+                public void run(String[] args) throws Exception {
+                    FileStoreBlockPutMain.main(args);
+                }
+            },
 
-            new Cmd("stream-get", FileStoreStreamGetMain.class),
+            new Cmd("stream-get") {
+                @Override
+                public void run(String[] args) throws Exception {
+                    FileStoreStreamGetMain.main(args);
+                }
+            },
 
-            new Cmd("stream-put", FileStoreStreamPutMain.class),
+            new Cmd("stream-put") {
+                @Override
+                public void run(String[] args) throws Exception {
+                    FileStoreStreamPutMain.main(args);
+                }
+            },
 
-            new Cmd("tag-get", FileStoreTagGetMain.class),
+            new Cmd("tag-get") {
+                @Override
+                public void run(String[] args) throws Exception {
+                    FileStoreTagGetMain.main(args);
+                }
+            },
 
-            new Cmd("tag-put", FileStoreTagPutMain.class),
+            new Cmd("tag-put") {
+                @Override
+                public void run(String[] args) throws Exception {
+                    FileStoreTagPutMain.main(args);
+                }
+            },
 
-            new Cmd("decode", DecodeBlockMain.class),
+            new Cmd("decode") {
+                @Override
+                public void run(String[] args) throws Exception {
+                    DecodeBlockMain.main(args);
+                }
+            },
 
-            new Cmd("encode", EncodeContentMain.class),
+            new Cmd("encode") {
+                @Override
+                public void run(String[] args) throws Exception {
+                    EncodeContentMain.main(args);
+                }
+            },
 
-            new Cmd("verify", VerifyMain.class),
+            new Cmd("verify") {
+                @Override
+                public void run(String[] args) throws Exception {
+                    VerifyMain.main(args);
+                }
+            },
 
-            new Cmd("index-search", IndexSearchMain.class),
+            new Cmd("index-search") {
+                @Override
+                public void run(String[] args) throws Exception {
+                    IndexSearchMain.main(args);
+                }
+            },
 
-            new Cmd("volume-get", VolumeGetMain.class),
+            new Cmd("volume-get") {
+                @Override
+                public void run(String[] args) throws Exception {
+                    VolumeGetMain.main(args);
+                }
+            },
 
-            new Cmd("store-list", FileStoreListMain.class),
+            new Cmd("store-list") {
+                @Override
+                public void run(String[] args) throws Exception {
+                    FileStoreListMain.main(args);
+                }
+            },
 
-            new Cmd("build-image", BuildImageMain.class),
+            new Cmd("build-image") {
+                @Override
+                public void run(String[] args) throws Exception {
+                    BuildImageMain.main(args);
+                }
+            },
 
-            new Cmd("index-volume", IndexVolumeMain.class),
+            new Cmd("index-volume") {
+                @Override
+                public void run(String[] args) throws Exception {
+                    IndexVolumeMain.main(args);
+                }
+            },
 
-            new Cmd("store-remove", StoreRemoveMain.class),
+            new Cmd("store-remove") {
+                @Override
+                public void run(String[] args) throws Exception {
+                    StoreRemoveMain.main(args);
+                }
+            },
 
-            new Cmd("backup-list", LocalCandidateListMain.class),
+            new Cmd("backup-list") {
+                @Override
+                public void run(String[] args) throws Exception {
+                    LocalCandidateListMain.main(args);
+                }
+            },
 
-            new Cmd("make-index-db", MakeIndexDatabaseMain.class)
+            new Cmd("make-index-db") {
+                @Override
+                public void run(String[] args) throws Exception {
+                    MakeIndexDatabaseMain.main(args);
+                }
+            }
             ));
 
     /**
