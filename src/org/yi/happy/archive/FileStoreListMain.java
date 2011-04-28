@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
+import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
 import org.yi.happy.archive.key.LocatorKey;
@@ -57,6 +58,7 @@ public class FileStoreListMain {
      * @param args
      * @throws IOException
      */
+    @EntryPoint
     public static void main(String[] args) throws IOException {
         FileSystem fs = new RealFileSystem();
         Writer out = new OutputStreamWriter(System.out);
