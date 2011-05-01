@@ -89,7 +89,8 @@ public class TagParse {
                 String value = ByteString.fromUtf8(d, line.after(s));
                 if (fields.containsKey(key)) {
                     /*
-                     * what should be done if the key is repeated?
+                     * what should be done if the key is repeated? At the moment
+                     * the first found value is kept.
                      */
                 } else {
                     fields.put(key, value);
@@ -130,15 +131,15 @@ public class TagParse {
     }
 
     /**
-     * find the line break byte at or after index.
+     * find the last line break byte in the range.
      * 
      * @param bytes
      *            the bytes.
      * @param range
      *            the range to search in.
      * @return range that is the line break, or the end of the range if none
-     *         found. Before this range is the first line, after this range is
-     *         the start of the next line.
+     *         found. Before this range is everything except the last line,
+     *         after this range is the start of the last line.
      */
     @MagicLiteral
     private static Range findLastNewLine(byte[] bytes, Range range) {

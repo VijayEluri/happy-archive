@@ -24,10 +24,26 @@ public class ByteString {
      * @return an 8 bit string
      */
     public static String toString(byte[] data) {
-        char[] out = new char[data.length];
+        return toString(data, 0, data.length);
+    }
 
-        for (int i = 0; i < data.length; i++) {
-            out[i] = (char) (data[i] & 0xff);
+    /**
+     * convert bytes to a string, the string is made of characters with the low
+     * 8 bits set to the bytes.
+     * 
+     * @param data
+     *            the bytes.
+     * @param offset
+     *            where in the data array the string starts.
+     * @param length
+     *            how long the string is in the data array.
+     * @return an 8 bit string.
+     */
+    public static String toString(byte[] data, int offset, int length) {
+        char[] out = new char[length];
+
+        for (int i = 0; i < length; i++) {
+            out[i] = (char) (data[offset++] & 0xff);
         }
 
         return new String(out);
