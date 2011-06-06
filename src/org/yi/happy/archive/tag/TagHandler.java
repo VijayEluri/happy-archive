@@ -1,27 +1,25 @@
 package org.yi.happy.archive.tag;
 
 /**
- * Take a binary stream with line markings and add the regions for the parts of
- * a tag. Emits events for tag(field(key(#text), value(#text))).
+ * Re-mark a binary stream from lines to tags. Expects ( line, newline ). Emits
+ * ( tag ( field ( key, value ) ) ).
+ * 
+ * The syntax of a tag is simple, key=value pairs divided by newlines, and
+ * groups divided by blank lines.
  */
-public class TagPartHandler implements BinaryHandler {
+public class TagHandler implements BinaryHandler {
     /*
-     * The syntax of a tag is simple, key=value pairs divided by newlines, and
-     * groups divided by blank lines.
-     */
-
-    /*
-     * ignore (newline .. /newline), ignore (line)
+     * ignore (newline .. /newline, line), pass on ignored bytes.
      * 
-     * states
+     * states:
      * 
-     * 0 - between records (data -> 1) (/line -> 0) (end -> 0)
+     * 0 - between records ('=' -> 2) (. -> 1) (/line -> 0) (end -> 0)
      * 
      * 1 - key part ('=' -> 2) (/line -> 3)
      * 
      * 2 - value part (/line -> 3)
      * 
-     * 3 - between fields (data -> 1) (/line -> 0) (end -> 0)
+     * 3 - between fields ('=' -> 2) (. -> 1) (/line -> 0) (end -> 0)
      */
 
     private final BinaryHandler handler;
@@ -32,29 +30,27 @@ public class TagPartHandler implements BinaryHandler {
      * @param handler
      *            the handler to receive the tag parsing events.
      */
-    public TagPartHandler(BinaryHandler handler) {
+    public TagHandler(BinaryHandler handler) {
         this.handler = handler;
     }
 
-    int inNewline = 0;
-    int state = 0;
+    private boolean inLine = false;
+    private int state = 0;
 
     @Override
     public void startStream() {
-        handler.startStream();
+        if (state == 0) {
+            handler.startStream();
+            return;
+        }
+
+        throw new IllegalStateException();
     }
 
     @Override
     public void startRegion(String name) {
-        if (name.equals("newline")) {
-            inNewline++;
-            return;
-        }
-        if (inNewline > 0) {
-            return;
-        }
-
-        if (name.equals("line")) {
+        if (!inLine && name.equals("line")) {
+            inLine = true;
             return;
         }
 
@@ -63,7 +59,8 @@ public class TagPartHandler implements BinaryHandler {
 
     @Override
     public void bytes(byte[] buff, int offset, int length) {
-        if (inNewline > 0) {
+        if (!inLine) {
+            handler.bytes(buff, offset, length);
             return;
         }
 
@@ -75,8 +72,9 @@ public class TagPartHandler implements BinaryHandler {
                     handler.startRegion("field");
                     handler.startRegion("key");
                     handler.endRegion("key");
-                    handler.startRegion("value");
+                    handler.bytes(buff, i, 1);
                     s = i + 1;
+                    handler.startRegion("value");
                     state = 2;
                 }
 
@@ -94,8 +92,9 @@ public class TagPartHandler implements BinaryHandler {
                         handler.bytes(buff, s, i - s);
                     }
                     handler.endRegion("key");
-                    handler.startRegion("value");
+                    handler.bytes(buff, i, 1);
                     s = i + 1;
+                    handler.startRegion("value");
                     state = 2;
                 }
             }
@@ -105,8 +104,9 @@ public class TagPartHandler implements BinaryHandler {
                     handler.startRegion("field");
                     handler.startRegion("key");
                     handler.endRegion("key");
-                    handler.startRegion("value");
+                    handler.bytes(buff, i, 1);
                     s = i + 1;
+                    handler.startRegion("value");
                     state = 2;
                 }
 
@@ -125,19 +125,13 @@ public class TagPartHandler implements BinaryHandler {
 
     @Override
     public void endRegion(String name) {
-        if (name.equals("newline")) {
-            inNewline--;
-            return;
-        }
-        if (inNewline > 0) {
-            return;
-        }
-
         if (state == 0 && name.equals("line")) {
+            inLine = false;
             return;
         }
 
         if (state == 1 && name.equals("line")) {
+            inLine = false;
             handler.endRegion("key");
             handler.startRegion("value");
             handler.endRegion("value");
@@ -148,6 +142,7 @@ public class TagPartHandler implements BinaryHandler {
         }
 
         if (state == 2 && name.equals("line")) {
+            inLine = false;
             handler.endRegion("value");
             handler.endRegion("field");
 
@@ -156,6 +151,7 @@ public class TagPartHandler implements BinaryHandler {
         }
 
         if (state == 3 && name.equals("line")) {
+            inLine = false;
             handler.endRegion("tag");
 
             state = 0;
@@ -167,30 +163,18 @@ public class TagPartHandler implements BinaryHandler {
 
     @Override
     public void endStream() {
-        if (state == 1) {
-            handler.endRegion("key");
-            handler.startRegion("value");
-            handler.endRegion("value");
-            handler.endRegion("field");
-            handler.endRegion("tag");
-
-            state = 0;
+        if (state == 0) {
+            handler.endStream();
+            return;
         }
 
-        else if (state == 2) {
-            handler.endRegion("value");
-            handler.endRegion("field");
+        if (state == 3) {
             handler.endRegion("tag");
-
+            handler.endStream();
             state = 0;
+            return;
         }
 
-        else if (state == 3) {
-            handler.endRegion("tag");
-
-            state = 0;
-        }
-
-        handler.endStream();
+        throw new IllegalStateException();
     }
 }

@@ -3,15 +3,22 @@ package org.yi.happy.archive.tag;
 /**
  * Mark lines inside the stream or regions.
  * 
- * Alternating regions labeled line and newline. There is always a line before
- * any newline. After the final newline does not count as a line unless there is
- * something on it.
+ * Regions labeled line, with the newline characters between them. There is
+ * always a line before any newline. After the final newline does not count as a
+ * line unless there is something on it. Between pairs of newlines there are
+ * empty lines marked.
  */
 public class LineHandler implements BinaryHandler {
     private int state;
     
     private final BinaryHandler handler;
 
+    /**
+     * set up {@link LineHandler} with a handler to accept the events.
+     * 
+     * @param handler
+     *            the handler that accepts the events.
+     */
     public LineHandler(BinaryHandler handler) {
         this.handler = handler;
     }
@@ -31,7 +38,6 @@ public class LineHandler implements BinaryHandler {
         }
 
         else if (state == 2 || state == 3) {
-            handler.endRegion("newline");
             state = 0;
         }
 
@@ -60,7 +66,6 @@ public class LineHandler implements BinaryHandler {
                     s = flush(buff, s, i);
                     handler.startRegion("line");
                     handler.endRegion("line");
-                    handler.startRegion("newline");
                     state = 2;
                 }
 
@@ -68,7 +73,6 @@ public class LineHandler implements BinaryHandler {
                     s = flush(buff, s, i);
                     handler.startRegion("line");
                     handler.endRegion("line");
-                    handler.startRegion("newline");
                     state = 3;
                 }
 
@@ -86,14 +90,12 @@ public class LineHandler implements BinaryHandler {
                 if (buff[i] == '\r') {
                     s = flush(buff, s, i);
                     handler.endRegion("line");
-                    handler.startRegion("newline");
                     state = 2;
                 }
 
                 else if (buff[i] == '\n') {
                     s = flush(buff, s, i);
                     handler.endRegion("line");
-                    handler.startRegion("newline");
                     state = 3;
                 }
             }
@@ -104,22 +106,18 @@ public class LineHandler implements BinaryHandler {
                  */
                 if (buff[i] == '\r') {
                     s = flush(buff, s, i);
-                    handler.endRegion("newline");
                     handler.startRegion("line");
                     handler.endRegion("line");
-                    handler.startRegion("newline");
                     state = 2;
                 }
 
                 else if (buff[i] == '\n') {
                     s = flush(buff, s, i + 1);
-                    handler.endRegion("newline");
                     state = 0;
                 }
 
                 else {
                     s = flush(buff, s, i);
-                    handler.endRegion("newline");
                     handler.startRegion("line");
                     state = 1;
                 }
@@ -131,22 +129,18 @@ public class LineHandler implements BinaryHandler {
                  */
                 if (buff[i] == '\r') {
                     s = flush(buff, s, i + 1);
-                    handler.endRegion("newline");
                     state = 0;
                 }
 
                 else if (buff[i] == '\n') {
                     s = flush(buff, s, i);
-                    handler.endRegion("newline");
                     handler.startRegion("line");
                     handler.endRegion("line");
-                    handler.startRegion("newline");
                     state = 3;
                 }
 
                 else {
                     s = flush(buff, s, i);
-                    handler.endRegion("newline");
                     handler.startRegion("line");
                     state = 1;
                 }
@@ -164,7 +158,6 @@ public class LineHandler implements BinaryHandler {
         }
 
         else if (state == 2 || state == 3) {
-            handler.endRegion("newline");
             state = 0;
         }
 
@@ -179,7 +172,6 @@ public class LineHandler implements BinaryHandler {
         }
 
         else if (state == 2 || state == 3) {
-            handler.endRegion("newline");
             state = 0;
         }
 

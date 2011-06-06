@@ -3,84 +3,74 @@ package org.yi.happy.archive.tag;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-import org.yi.happy.archive.ByteString;
-
+/**
+ * A push-pull parser for tags from a stream of bytes.
+ */
 public class TagParser {
+    /**
+     * The waiting parsed tags.
+     */
     private Queue<Tag> out = new ArrayDeque<Tag>();
 
-    private BinaryHandler capture = new DefaultBinaryHandler() {
-        private BytesBuilder data = null;
-        private String key;
-        private String value;
-        private TagBuilder tag;
-
+    /**
+     * Captures the parsed tags from the end of the parsing pipeline.
+     */
+    private TagStreamVisitor capture = new TagStreamVisitor() {
         @Override
-        public void startRegion(String name) {
-            if (name.equals("tag")) {
-                tag = new TagBuilder();
-            }
-
-            if (tag != null && (name.equals("key") || name.equals("value"))) {
-                data = new BytesBuilder();
-            }
-        }
-
-        @Override
-        public void bytes(byte[] buff, int offset, int length) {
-            if (data == null) {
-                return;
-            }
-            data = data.add(buff, offset, length);
-        }
-
-        @Override
-        public void endRegion(String name) {
-            if (data != null && name.equals("key")) {
-                key = ByteString.fromUtf8(data.createByteArray());
-                data = null;
-                return;
-            }
-
-            if (data != null && name.equals("value")) {
-                value = ByteString.fromUtf8(data.createByteArray());
-                data = null;
-                return;
-            }
-
-            if (tag != null && name.equals("field")) {
-                tag = tag.add(key, value);
-                key = null;
-                value = null;
-                return;
-            }
-
-            if (tag != null && name.equals("tag")) {
-                out.add(tag.create());
-                tag = null;
-                return;
-            }
-
-            throw new IllegalStateException((tag == null ? "" : "[tag]")
-                    + (data == null ? "" : "[data]") + name);
+        public void accept(Tag tag) {
+            out.add(tag);
         }
     };
+    
+    /**
+     * The parsing pipeline.
+     */
+    private BinaryHandler parse = new LineHandler(new TagHandler(
+            new TagCapture(capture)));
 
-    BinaryHandler parse = new LineHandler(new TagPartHandler(capture));
+    /**
+     * Create and start the pipeline.
+     */
+    public TagParser() {
+        parse.startStream();
+    }
 
+    /**
+     * parse some data.
+     * 
+     * @param buff
+     *            the data buffer.
+     * @param offset
+     *            the offset in the buffer where the data is.
+     * @param length
+     *            the length of the data in the buffer.
+     */
     public void bytes(byte[] buff, int offset, int length) {
         parse.bytes(buff, offset, length);
     }
 
+    /**
+     * Finish the pipeline, signal that there is no more data.
+     */
     public void finish() {
         parse.endStream();
     }
 
+    /**
+     * find if there is a tag completely parsed.
+     * 
+     * @return true if there is a completely parsed tag ready.
+     */
     public boolean isReady() {
         return out.isEmpty() == false;
     }
 
+    /**
+     * get the waiting parsed tag.
+     * 
+     * @return the parsed tag.
+     */
     public Tag get() {
         return out.remove();
     }
-
 }

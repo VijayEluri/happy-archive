@@ -8,9 +8,9 @@ import org.junit.Test;
 import org.yi.happy.archive.ByteString;
 
 /**
- * Tests for {@link TagPartHandler}.
+ * Tests for {@link TagHandler}.
  */
-public class TagPartHandlerTest {
+public class TagHandlerTest {
     /**
      * Parse a single field single tag.
      */
@@ -18,14 +18,15 @@ public class TagPartHandlerTest {
     public void testParseOne() {
         LogHandler log = new LogHandler();
 
-        LineHandler p = new LineHandler(new TagPartHandler(log));
+        LineHandler p = new LineHandler(new TagHandler(log));
         p.startStream();
         p.bytes(ByteString.toBytes("a=b\n\n\n"), 0, 6);
         p.endStream();
 
         assertEquals(Arrays.asList("start", "start tag", "start field",
-                "start key", "bytes a", "end key", "start value", "bytes b",
-                "end value", "end field", "end tag", "end"), log.fetchLog());
+                "start key", "bytes a", "end key", "bytes =", "start value",
+                "bytes b", "end value", "end field", "bytes \n", "end tag",
+                "bytes \n\n", "end"), log.fetchLog());
     }
 
     /**
@@ -35,16 +36,17 @@ public class TagPartHandlerTest {
     public void testParseTwoFields() {
         LogHandler log = new LogHandler();
 
-        LineHandler p = new LineHandler(new TagPartHandler(log));
+        LineHandler p = new LineHandler(new TagHandler(log));
         p.startStream();
         p.bytes(ByteString.toBytes("a=b\nb=c\n\n"), 0, 9);
         p.endStream();
 
         assertEquals(Arrays.asList("start", "start tag", "start field",
-                "start key", "bytes a", "end key", "start value", "bytes b",
-                "end value", "end field", "start field", "start key",
-                "bytes b", "end key", "start value", "bytes c", "end value",
-                "end field", "end tag", "end"), log.fetchLog());
+                "start key", "bytes a", "end key", "bytes =", "start value",
+                "bytes b", "end value", "end field", "bytes \n", "start field",
+                "start key", "bytes b", "end key", "bytes =", "start value",
+                "bytes c", "end value", "end field", "bytes \n", "end tag",
+                "bytes \n", "end"), log.fetchLog());
     }
 
     /**
@@ -54,14 +56,15 @@ public class TagPartHandlerTest {
     public void testParseBlankValue() {
         LogHandler log = new LogHandler();
 
-        LineHandler p = new LineHandler(new TagPartHandler(log));
+        LineHandler p = new LineHandler(new TagHandler(log));
         p.startStream();
         p.bytes(ByteString.toBytes("a\n\n\n"), 0, 4);
         p.endStream();
 
         assertEquals(Arrays.asList("start", "start tag", "start field",
                 "start key", "bytes a", "end key", "start value", "end value",
-                "end field", "end tag", "end"), log.fetchLog());
+                "end field", "bytes \n", "end tag", "bytes \n\n", "end"),
+                log.fetchLog());
     }
 
     /**
@@ -71,11 +74,12 @@ public class TagPartHandlerTest {
     public void testParseNoTags() {
         LogHandler log = new LogHandler();
 
-        LineHandler p = new LineHandler(new TagPartHandler(log));
+        LineHandler p = new LineHandler(new TagHandler(log));
         p.startStream();
         p.bytes(ByteString.toBytes("\n\n\n"), 0, 3);
         p.endStream();
 
-        assertEquals(Arrays.asList("start", "end"), log.fetchLog());
+        assertEquals(Arrays.asList("start", "bytes \n\n\n", "end"),
+                log.fetchLog());
     }
 }

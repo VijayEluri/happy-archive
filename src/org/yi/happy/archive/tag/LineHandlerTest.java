@@ -18,9 +18,8 @@ public class LineHandlerTest {
         h.endStream();
 
         assertEquals(Arrays.asList("start", "start line", "bytes ab",
-                "end line", "start newline", "bytes \r", "end newline",
-                "start line", "end line", "start newline", "bytes \r\n",
-                "end newline", "start line", "bytes cd", "end line", "end"),
+                "end line", "bytes \r", "start line", "end line", "bytes \r\n",
+                "start line", "bytes cd", "end line", "end"),
                 log.fetchLog());
     }
 
@@ -34,7 +33,7 @@ public class LineHandlerTest {
         h.endStream();
 
         assertEquals(Arrays.asList("start", "start line", "bytes a",
-                "end line", "start newline", "bytes \n", "end newline", "end"),
+                "end line", "bytes \n", "end"),
                 log.fetchLog());
     }
 
@@ -49,10 +48,8 @@ public class LineHandlerTest {
         h.endStream();
 
         assertEquals(Arrays.asList("start", "start line", "bytes a",
-                "end line", "start newline", "bytes \n", "end newline",
-                "start line", "bytes b", "end line", "start newline",
-                "bytes \n", "end newline", "start line", "end line",
-                "start newline", "bytes \n", "end newline", "end"),
+                "end line", "bytes \n", "start line", "bytes b", "end line",
+                "bytes \n", "start line", "end line", "bytes \n", "end"),
                 log.fetchLog());
     }
 
