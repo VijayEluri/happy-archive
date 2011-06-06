@@ -12,7 +12,7 @@ import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.FullKeyParse;
 import org.yi.happy.archive.tag.RestoreManager;
 import org.yi.happy.archive.tag.Tag;
-import org.yi.happy.archive.tag.TagParser;
+import org.yi.happy.archive.tag.TagStreamIterator;
 
 /**
  * A program to restore tags.
@@ -62,13 +62,7 @@ public class FileStoreTagGetMain {
         RestoreManager restore = new RestoreManager(fs,
                 new RetrieveBlockStorage(store));
 
-        byte[] buff = Streams.load(in);
-        TagParser tags = new TagParser();
-        tags.bytes(buff, 0, buff.length);
-        tags.finish();
-        while (tags.isReady()) {
-            Tag i = tags.get();
-
+        for (Tag i : new TagStreamIterator(in)) {
             String name = i.get("name");
             if (name == null) {
                 continue;
