@@ -70,6 +70,13 @@ public class Main {
                     FileStoreTagPutMain.main(args);
                 }
             },
+            
+            new Cmd("tag-add") {
+                @Override
+                public void run(String[] args) throws Exception {
+                    FileStoreTagAddMain.main(args);
+                }
+            },
 
             new Cmd("decode") {
                 @Override

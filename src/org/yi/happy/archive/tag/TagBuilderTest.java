@@ -106,4 +106,21 @@ public class TagBuilderTest {
         assertEquals(want, have);
     }
 
+    /**
+     * the field name can not have an equal sign in it (this may change in the
+     * future with escaping).
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testNoEqualInFieldName() {
+        new TagBuilder().add("a=b", "c");
+    }
+
+    /**
+     * the field name can not have an equal sign in it (this may change in the
+     * future with escaping).
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testNoEqualInFieldName2() {
+        new TagBuilder().put("a=b", "c");
+    }
 }

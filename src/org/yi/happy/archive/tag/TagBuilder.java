@@ -7,6 +7,8 @@ import java.util.Map;
  * A builder for {@link Tag} objects.
  */
 public class TagBuilder {
+    private final Tag tag;
+
     private final class TagBuilderAdd extends TagBuilder {
         private final String key;
         private final String value;
@@ -44,6 +46,23 @@ public class TagBuilder {
     }
 
     /**
+     * Start with blank.
+     */
+    public TagBuilder() {
+        this.tag = null;
+    }
+
+    /**
+     * Start with a value.
+     * 
+     * @param tag
+     *            the initial value.
+     */
+    public TagBuilder(Tag tag) {
+        this.tag = tag;
+    }
+
+    /**
      * Add a field to the tag being built. If the field is already in the tag it
      * is ignored.
      * 
@@ -54,6 +73,9 @@ public class TagBuilder {
      * @return a builder that adds the given field.
      */
     public TagBuilder add(final String key, final String value) {
+        if (key.contains("=")) {
+            throw new IllegalArgumentException();
+        }
         return new TagBuilderAdd(key, value);
     }
 
@@ -68,6 +90,9 @@ public class TagBuilder {
      * @return a builder that stores the given field.
      */
     public TagBuilder put(final String key, final String value) {
+        if (key.contains("=")) {
+            throw new IllegalArgumentException();
+        }
         return new TagBuilderPut(key, value);
     }
 
@@ -86,6 +111,14 @@ public class TagBuilder {
      * @return the map for the tag.
      */
     public Map<String, String> createMap() {
-        return new LinkedHashMap<String, String>();
+        LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
+        if (tag == null) {
+            return map;
+        }
+
+        for (String field : tag.getFields()) {
+            map.put(field, tag.get(field));
+        }
+        return map;
     }
 }

@@ -1,5 +1,6 @@
 package org.yi.happy.archive.commandLine;
 
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.Writer;
 
@@ -145,6 +146,11 @@ public class MyArgs {
                 o.flush();
             }
         }
+
+        public void showHelp(PrintStream out) {
+            cause.printStackTrace(out);
+            MyArgs.showHelp(out);
+        }
     }
 
     /**
@@ -154,6 +160,15 @@ public class MyArgs {
      */
     public String[] getFiles() {
         return cmd.getArgs();
+    }
+
+    public static void showHelp(PrintStream out) {
+        PrintWriter o = new PrintWriter(out);
+        try {
+            showHelp0(o);
+        } finally {
+            o.flush();
+        }
     }
 
 }

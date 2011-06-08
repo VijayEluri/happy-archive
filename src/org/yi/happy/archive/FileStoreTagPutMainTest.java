@@ -2,8 +2,9 @@ package org.yi.happy.archive;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.StringWriter;
+import java.io.PrintStream;
 import java.util.List;
 
 import org.junit.Test;
@@ -27,11 +28,14 @@ public class FileStoreTagPutMainTest {
         FileSystem fs = new FakeFileSystem();
         fs.save("test.txt", TestData.FILE_CONTENT.getBytes());
 
-        StringWriter out = new StringWriter();
+        ByteArrayOutputStream out0 = new ByteArrayOutputStream();
+        PrintStream out = new PrintStream(out0);
 
         new FileStoreTagPutMain(fs, out).run("--store", "store", "test.txt");
 
-        List<Tag> tags = TagParse.parse(ByteString.toUtf8(out.toString()));
+        out.flush();
+
+        List<Tag> tags = TagParse.parse(out0.toByteArray());
         assertEquals(1, tags.size());
         assertEquals("test.txt", tags.get(0).get("name"));
         assertEquals("file", tags.get(0).get("type"));
@@ -50,11 +54,14 @@ public class FileStoreTagPutMainTest {
         FileSystem fs = new FakeFileSystem();
         fs.save("test.txt", TestData.FILE_CONTENT.getBytes());
 
-        StringWriter out = new StringWriter();
+        ByteArrayOutputStream out0 = new ByteArrayOutputStream();
+        PrintStream out = new PrintStream(out0);
 
         new FileStoreTagPutMain(fs, out).run("--store", "store", "test.txt");
 
-        List<Tag> tags = TagParse.parse(ByteString.toUtf8(out.toString()));
+        out.flush();
+
+        List<Tag> tags = TagParse.parse(out0.toByteArray());
         assertEquals(1, tags.size());
         assertEquals("6", tags.get(0).get("size"));
         assertEquals(

@@ -1,7 +1,9 @@
 package org.yi.happy.archive.tag;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * A file tag, these are the meta-data for files and directories in the archive.
@@ -56,5 +58,9 @@ public class Tag {
     @Override
     public String toString() {
         return "Tag [fields=" + fields + "]";
+    }
+
+    public Set<String> getFields() {
+        return Collections.unmodifiableSet(fields.keySet());
     }
 }

@@ -2,8 +2,7 @@ package org.yi.happy.archive;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.PrintStream;
 
 import org.yi.happy.annotate.DuplicatedLogic;
 import org.yi.happy.annotate.EntryPoint;
@@ -15,6 +14,8 @@ import org.yi.happy.archive.commandLine.MyArgs.CommandLineException;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
+import org.yi.happy.archive.tag.TagBuilder;
+import org.yi.happy.archive.tag.TagOutputStream;
 
 /**
  * Store files in a file store, printing out tags.
@@ -22,7 +23,7 @@ import org.yi.happy.archive.file_system.RealFileSystem;
 public class FileStoreTagPutMain {
 
     private final FileSystem fs;
-    private final Writer out;
+    private final PrintStream out;
 
     /**
      * create with context.
@@ -30,7 +31,7 @@ public class FileStoreTagPutMain {
      * @param fs
      * @param out
      */
-    public FileStoreTagPutMain(FileSystem fs, Writer out) {
+    public FileStoreTagPutMain(FileSystem fs, PrintStream out) {
         this.fs = fs;
         this.out = out;
     }
@@ -68,8 +69,10 @@ public class FileStoreTagPutMain {
          * do the work
          */
 
-        StoreBlockStorage s = new StoreBlockStorage(BlockEncoderFactory
-                .getContentDefault(), store);
+        StoreBlockStorage s = new StoreBlockStorage(
+                BlockEncoderFactory.getContentDefault(), store);
+
+        TagOutputStream out = new TagOutputStream(this.out);
 
         for (String arg : cmd.getFiles()) {
             if (fs.isFile(arg)) {
@@ -85,12 +88,10 @@ public class FileStoreTagPutMain {
                 }
                 o.close();
 
-                out.write("name=" + arg + "\n");
-                out.write("type=file\n");
-                out.write("size=" + o2.getSize() + "\n");
-                out.write("data=" + o1.getFullKey() + "\n");
-                out.write("hash=sha-256:" + o2.getHash() + "\n");
-                out.write("\n");
+                out.write(new TagBuilder().put("name", arg).put("type", "file")
+                        .put("size", Long.toString(o2.getSize()))
+                        .put("data", o1.getFullKey().toString())
+                        .put("hash", "sha-256:" + o2.getHash()).create());
             }
         }
     }
@@ -104,11 +105,10 @@ public class FileStoreTagPutMain {
     @EntryPoint
     public static void main(String[] args) throws IOException {
         FileSystem fs = new RealFileSystem();
-        Writer out = new OutputStreamWriter(System.out, "UTF-8");
         try {
-            new FileStoreTagPutMain(fs, out).run(args);
+            new FileStoreTagPutMain(fs, System.out).run(args);
         } finally {
-            out.flush();
+            System.out.flush();
         }
     }
 }
