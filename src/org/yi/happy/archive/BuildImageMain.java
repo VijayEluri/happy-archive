@@ -3,9 +3,11 @@ package org.yi.happy.archive;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.io.PrintStream;
 import java.io.Writer;
 
 import org.yi.happy.annotate.EntryPoint;
+import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
@@ -20,6 +22,7 @@ public class BuildImageMain {
 
     private final FileSystem fs;
     private final Writer out;
+    private final PrintStream err;
 
     /**
      * create with context.
@@ -29,9 +32,10 @@ public class BuildImageMain {
      * @param out
      *            where to send output.
      */
-    public BuildImageMain(FileSystem fs, Writer out) {
+    public BuildImageMain(FileSystem fs, Writer out, PrintStream err) {
         this.fs = fs;
         this.out = out;
+        this.err = err;
     }
 
     /**
@@ -41,6 +45,7 @@ public class BuildImageMain {
      *            the command line arguments.
      * @throws IOException
      */
+    @SmellsMessy
     public void run(String... args) throws IOException {
         if (args.length < 4) {
             out.write("use: store outstanding-list image-directory"
@@ -58,7 +63,14 @@ public class BuildImageMain {
 
             while (lines.next()) {
                 LocatorKey key = LocatorKeyParse.parseLocatorKey(lines.get());
-                EncodedBlock block = store.get(key);
+                EncodedBlock block;
+                try {
+                    block = store.get(key);
+                } catch (DecodeException e) {
+                    err.println("error loading block: " + key);
+                    e.printStackTrace(err);
+                    continue;
+                }
                 byte[] data = block.asBytes();
                 size.add(data.length);
                 if (size.getMegaSize() > limit) {
@@ -92,7 +104,8 @@ public class BuildImageMain {
     public static void main(String[] args) throws IOException {
         FileSystem fs = new RealFileSystem();
         Writer out = new OutputStreamWriter(System.out);
-        new BuildImageMain(fs, out).run(args);
+        PrintStream err = System.err;
+        new BuildImageMain(fs, out, err).run(args);
         out.flush();
     }
 
