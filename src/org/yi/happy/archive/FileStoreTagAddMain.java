@@ -73,6 +73,11 @@ public class FileStoreTagAddMain {
             return tag;
         }
 
+        String type = tag.get("type");
+        if (type != null && !type.equals("file")) {
+            return tag;
+        }
+
         if (!fs.isFile(name)) {
             return tag;
         }
