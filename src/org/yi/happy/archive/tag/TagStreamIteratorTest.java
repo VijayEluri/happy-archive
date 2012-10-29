@@ -4,15 +4,23 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.Iterator;
 
 import org.junit.Test;
 
+/**
+ * Tests for {@link TagStreamIterator}.
+ */
 public class TagStreamIteratorTest {
+    /**
+     * Check the basic usage.
+     * 
+     * @throws Exception
+     */
     @Test
     public void testBasicUsage() throws Exception {
-        ByteArrayInputStream in = new BytesBuilder("a=b\n\nb=c\n\n")
+        InputStream in = new BytesBuilder("a=b\n\nb=c\n\n")
                 .createInputStream();
 
         TagStreamIterator it = new TagStreamIterator(in);

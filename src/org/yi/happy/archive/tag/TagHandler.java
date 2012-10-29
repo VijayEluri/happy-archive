@@ -9,7 +9,7 @@ package org.yi.happy.archive.tag;
  */
 public class TagHandler implements BinaryHandler {
     /*
-     * ignore (newline .. /newline, line), pass on ignored bytes.
+     * ignore (newline .. /newline), pass on ignored bytes.
      * 
      * states:
      * 
@@ -35,11 +35,15 @@ public class TagHandler implements BinaryHandler {
     }
 
     private boolean inLine = false;
-    private int state = 0;
+    private static final int BETWEEN_RECORD = 0;
+    private static final int FIELD_KEY = 1;
+    private static final int FIELD_VALUE = 2;
+    private static final int BETWEEN_FIELD = 3;
+    private int state = BETWEEN_RECORD;
 
     @Override
     public void startStream() {
-        if (state == 0) {
+        if (inLine == false && state == BETWEEN_RECORD) {
             handler.startStream();
             return;
         }
@@ -49,7 +53,7 @@ public class TagHandler implements BinaryHandler {
 
     @Override
     public void startRegion(String name) {
-        if (!inLine && name.equals("line")) {
+        if (inLine == false && name.equals("line")) {
             inLine = true;
             return;
         }
@@ -59,62 +63,37 @@ public class TagHandler implements BinaryHandler {
 
     @Override
     public void bytes(byte[] buff, int offset, int length) {
-        if (!inLine) {
+        if (inLine == false) {
             handler.bytes(buff, offset, length);
             return;
         }
 
+        if (length > 0) {
+            if (state == BETWEEN_RECORD) {
+                handler.startRegion("tag");
+                handler.startRegion("field");
+                handler.startRegion("key");
+                state = FIELD_KEY;
+            }
+
+            if (state == BETWEEN_FIELD) {
+                handler.startRegion("field");
+                handler.startRegion("key");
+                state = FIELD_KEY;
+            }
+        }
+
         int s = offset;
         for (int i = offset; i < offset + length; i++) {
-            if (state == 0) {
-                if (buff[i] == '=') {
-                    handler.startRegion("tag");
-                    handler.startRegion("field");
-                    handler.startRegion("key");
-                    handler.endRegion("key");
-                    handler.bytes(buff, i, 1);
-                    s = i + 1;
-                    handler.startRegion("value");
-                    state = 2;
+            if (state == FIELD_KEY && buff[i] == '=') {
+                if (s != i) {
+                    handler.bytes(buff, s, i - s);
                 }
-
-                else {
-                    handler.startRegion("tag");
-                    handler.startRegion("field");
-                    handler.startRegion("key");
-                    state = 1;
-                }
-            }
-
-            else if (state == 1) {
-                if (buff[i] == '=') {
-                    if (s != i) {
-                        handler.bytes(buff, s, i - s);
-                    }
-                    handler.endRegion("key");
-                    handler.bytes(buff, i, 1);
-                    s = i + 1;
-                    handler.startRegion("value");
-                    state = 2;
-                }
-            }
-
-            else if (state == 3) {
-                if (buff[i] == '=') {
-                    handler.startRegion("field");
-                    handler.startRegion("key");
-                    handler.endRegion("key");
-                    handler.bytes(buff, i, 1);
-                    s = i + 1;
-                    handler.startRegion("value");
-                    state = 2;
-                }
-
-                else {
-                    handler.startRegion("field");
-                    handler.startRegion("key");
-                    state = 1;
-                }
+                handler.endRegion("key");
+                handler.bytes(buff, i, 1);
+                s = i + 1;
+                handler.startRegion("value");
+                state = FIELD_VALUE;
             }
         }
 
@@ -125,36 +104,38 @@ public class TagHandler implements BinaryHandler {
 
     @Override
     public void endRegion(String name) {
-        if (state == 0 && name.equals("line")) {
+        if (state == BETWEEN_RECORD && name.equals("line")) {
             inLine = false;
+
+            state = BETWEEN_RECORD;
             return;
         }
 
-        if (state == 1 && name.equals("line")) {
+        if (state == FIELD_KEY && name.equals("line")) {
             inLine = false;
             handler.endRegion("key");
             handler.startRegion("value");
             handler.endRegion("value");
             handler.endRegion("field");
 
-            state = 3;
+            state = BETWEEN_FIELD;
             return;
         }
 
-        if (state == 2 && name.equals("line")) {
+        if (state == FIELD_VALUE && name.equals("line")) {
             inLine = false;
             handler.endRegion("value");
             handler.endRegion("field");
 
-            state = 3;
+            state = BETWEEN_FIELD;
             return;
         }
 
-        if (state == 3 && name.equals("line")) {
+        if (state == BETWEEN_FIELD && name.equals("line")) {
             inLine = false;
             handler.endRegion("tag");
 
-            state = 0;
+            state = BETWEEN_RECORD;
             return;
         }
 
@@ -163,15 +144,18 @@ public class TagHandler implements BinaryHandler {
 
     @Override
     public void endStream() {
-        if (state == 0) {
+        if (state == BETWEEN_FIELD) {
+            handler.endRegion("tag");
             handler.endStream();
+
+            state = BETWEEN_RECORD;
             return;
         }
 
-        if (state == 3) {
-            handler.endRegion("tag");
+        if (state == BETWEEN_RECORD) {
             handler.endStream();
-            state = 0;
+
+            state = BETWEEN_RECORD;
             return;
         }
 

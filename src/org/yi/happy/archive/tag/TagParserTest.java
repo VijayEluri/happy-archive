@@ -20,7 +20,7 @@ public class TagParserTest {
 
         assertFalse(p.isReady());
 
-        byte[] data = ByteString.toBytes("a=b\nb=c\n\n");
+        byte[] data = ByteString.toBytes("a=b\n" + "b=c\n" + "\n");
         p.bytes(data, 0, data.length);
 
         assertTrue(p.isReady());
@@ -34,7 +34,8 @@ public class TagParserTest {
     }
 
     /**
-     * parse one and a half tags.
+     * parse one and a half tags, also and finish the stream to get the final
+     * one.
      */
     @Test
     public void testParseOneAndAHalf() {
@@ -42,7 +43,7 @@ public class TagParserTest {
 
         assertFalse(p.isReady());
 
-        byte[] data = ByteString.toBytes("a=b\nb=c\n\na=c\n");
+        byte[] data = ByteString.toBytes("a=b\n" + "b=c\n" + "\n" + "a=c\n");
         p.bytes(data, 0, data.length);
 
         assertTrue(p.isReady());
@@ -53,5 +54,14 @@ public class TagParserTest {
         assertEquals(want, have);
 
         assertFalse(p.isReady());
+
+        p.finish();
+
+        assertTrue(p.isReady());
+
+        have = p.get();
+        want = new TagBuilder().add("a", "c").create();
+
+        assertEquals(want, have);
     }
 }

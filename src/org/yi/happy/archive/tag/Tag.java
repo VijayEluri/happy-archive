@@ -60,6 +60,9 @@ public class Tag {
         return "Tag [fields=" + fields + "]";
     }
 
+    /**
+     * @return the fields in the tag.
+     */
     public Set<String> getFields() {
         return Collections.unmodifiableSet(fields.keySet());
     }

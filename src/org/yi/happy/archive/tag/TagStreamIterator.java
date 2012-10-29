@@ -5,18 +5,34 @@ import java.io.InputStream;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/**
+ * iterate over the tags in a stream.
+ * 
+ * <pre>
+ * for (Tag tag : new TagStreamIterator(in)) {
+ *     // do stuff
+ * }
+ * </pre>
+ */
 public class TagStreamIterator implements Iterable<Tag>, Iterator<Tag> {
 
     private final InputStream in;
     private final TagParser parser;
     private boolean eof;
 
+    /**
+     * Create a tag stream parser from an input stream.
+     * 
+     * @param in
+     *            the input stream to read from.
+     */
     public TagStreamIterator(InputStream in) {
         this.in = in;
         this.parser = new TagParser();
         this.eof = false;
     }
 
+    @Override
     public Iterator<Tag> iterator() {
         return this;
     }

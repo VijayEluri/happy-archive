@@ -7,7 +7,7 @@ import org.yi.happy.archive.ByteString;
  * key, value ) ) ). Emits {@link Tag} objects.
  */
 public class TagCapture extends DefaultBinaryHandler {
-    private final TagStreamVisitor handler;
+    private final TagVisitor handler;
 
     /**
      * set up the tag capture.
@@ -15,7 +15,7 @@ public class TagCapture extends DefaultBinaryHandler {
      * @param handler
      *            where to send the captured tags.
      */
-    public TagCapture(TagStreamVisitor handler) {
+    public TagCapture(TagVisitor handler) {
         this.handler = handler;
     }
 
@@ -58,7 +58,7 @@ public class TagCapture extends DefaultBinaryHandler {
         }
 
         if (tag != null && name.equals("field")) {
-            tag = tag.add(key, value);
+            tag.add(key, value);
             key = null;
             value = null;
             return;

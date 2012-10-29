@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.tag.Tag;
-import org.yi.happy.archive.tag.TagParse;
+import org.yi.happy.archive.tag.TagParser;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
@@ -35,7 +35,7 @@ public class FileStoreTagPutMainTest {
 
         out.flush();
 
-        List<Tag> tags = TagParse.parse(out0.toByteArray());
+        List<Tag> tags = new TagParser().parse(out0.toByteArray());
         assertEquals(1, tags.size());
         assertEquals("test.txt", tags.get(0).get("name"));
         assertEquals("file", tags.get(0).get("type"));
@@ -61,7 +61,7 @@ public class FileStoreTagPutMainTest {
 
         out.flush();
 
-        List<Tag> tags = TagParse.parse(out0.toByteArray());
+        List<Tag> tags = new TagParser().parse(out0.toByteArray());
         assertEquals(1, tags.size());
         assertEquals("6", tags.get(0).get("size"));
         assertEquals(

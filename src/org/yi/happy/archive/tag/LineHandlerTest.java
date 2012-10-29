@@ -7,7 +7,14 @@ import java.util.Arrays;
 import org.junit.Test;
 import org.yi.happy.archive.ByteString;
 
+/**
+ * Tests for {@link LineHandler}.
+ */
 public class LineHandlerTest {
+
+    /**
+     * A line, a blank line, a two character newline, and a line
+     */
     @Test
     public void testBasicRun() {
         LogHandler log = new LogHandler();
@@ -23,6 +30,9 @@ public class LineHandlerTest {
                 log.fetchLog());
     }
 
+    /**
+     * a single terminated line.
+     */
     @Test
     public void testShortNewlineAtEnd() {
         LogHandler log = new LogHandler();
@@ -37,6 +47,9 @@ public class LineHandlerTest {
                 log.fetchLog());
     }
 
+    /**
+     * two lines and a blank.
+     */
     @Test
     public void testTwoLinesAndBlank() {
         LogHandler log = new LogHandler();
