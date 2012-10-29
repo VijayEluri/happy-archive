@@ -2,7 +2,7 @@ package org.yi.happy.archive.tag;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.junit.Test;
@@ -15,11 +15,10 @@ public class TagBuilderTest {
      * Make an empty map.
      */
     @Test
-    public void testEmptyMap() {
-        Map<String, String> want = new HashMap<String, String>();
+    public void testEmpty() {
+        Tag have = new TagBuilder().create();
 
-        Map<String, String> have = new TagBuilder().createMap();
-
+        Tag want = makeTag();
         assertEquals(want, have);
     }
 
@@ -27,12 +26,10 @@ public class TagBuilderTest {
      * Make a one element map.
      */
     @Test
-    public void testOneMap() {
-        Map<String, String> want = new HashMap<String, String>();
-        want.put("a", "b");
+    public void testOne() {
+        Tag have = new TagBuilder().add("a", "b").create();
 
-        Map<String, String> have = new TagBuilder().add("a", "b").createMap();
-
+        Tag want = makeTag("a", "b");
         assertEquals(want, have);
     }
 
@@ -40,14 +37,10 @@ public class TagBuilderTest {
      * Make a two element map.
      */
     @Test
-    public void testTwoMap() {
-        Map<String, String> want = new HashMap<String, String>();
-        want.put("a", "b");
-        want.put("b", "c");
+    public void testTwo() {
+        Tag have = new TagBuilder().add("a", "b").add("b", "c").create();
 
-        Map<String, String> have = new TagBuilder().add("a", "b").add("b", "c")
-                .createMap();
-
+        Tag want = makeTag("a", "b", "b", "c");
         assertEquals(want, have);
     }
 
@@ -59,30 +52,11 @@ public class TagBuilderTest {
      * Then the most recent version of the element is put in the map.
      */
     @Test
-    public void testRepeatMap() {
+    public void testRepeat() {
+        Tag have = new TagBuilder().add("a", "b").add("b", "c").add("a", "d")
+                .create();
 
-        Map<String, String> have = new TagBuilder().add("a", "b").add("b", "c")
-                .add("a", "d").createMap();
-
-        Map<String, String> want = new HashMap<String, String>();
-        want.put("a", "b");
-        want.put("b", "c");
-
-        assertEquals(want, have);
-    }
-
-    /**
-     * When a tag is made, it has the contents wanted.
-     */
-    @Test
-    public void testMakeTag() {
-        Tag have = new TagBuilder().add("a", "d").add("b", "c").create();
-
-        Map<String, String> wantMap = new HashMap<String, String>();
-        wantMap.put("a", "d");
-        wantMap.put("b", "c");
-        Tag want = new Tag(wantMap);
-
+        Tag want = makeTag("a", "b", "b", "c");
         assertEquals(want, have);
     }
 
@@ -95,14 +69,10 @@ public class TagBuilderTest {
      */
     @Test
     public void testRepeatChange() {
+        Tag have = new TagBuilder().put("a", "b").put("b", "c").put("a", "d")
+                .create();
 
-        Map<String, String> have = new TagBuilder().put("a", "b").put("b", "c")
-                .put("a", "d").createMap();
-
-        Map<String, String> want = new HashMap<String, String>();
-        want.put("a", "d");
-        want.put("b", "c");
-
+        Tag want = makeTag("a", "d", "b", "c");
         assertEquals(want, have);
     }
 
@@ -122,5 +92,18 @@ public class TagBuilderTest {
     @Test(expected = IllegalArgumentException.class)
     public void testNoEqualInFieldName2() {
         new TagBuilder().put("a=b", "c");
+    }
+
+    private static Tag makeTag(String... values) {
+        if (values.length % 2 != 0) {
+            throw new IllegalArgumentException();
+        }
+
+        Map<String, String> map = new LinkedHashMap<String, String>();
+        for (int i = 0; i < values.length; i += 2) {
+            map.put(values[i], values[i + 1]);
+        }
+
+        return new Tag(map);
     }
 }

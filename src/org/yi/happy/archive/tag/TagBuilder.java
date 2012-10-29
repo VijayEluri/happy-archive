@@ -6,50 +6,14 @@ import java.util.Map;
 /**
  * A builder for {@link Tag} objects.
  */
-public class TagBuilder {
-    private final Tag tag;
-
-    private final class TagBuilderAdd extends TagBuilder {
-        private final String key;
-        private final String value;
-
-        private TagBuilderAdd(String key, String value) {
-            this.key = key;
-            this.value = value;
-        }
-
-        @Override
-        public Map<String, String> createMap() {
-            Map<String, String> map = TagBuilder.this.createMap();
-            if (!map.containsKey(key)) {
-                map.put(key, value);
-            }
-            return map;
-        }
-    }
-
-    private final class TagBuilderPut extends TagBuilder {
-        private final String key;
-        private final String value;
-
-        private TagBuilderPut(String key, String value) {
-            this.key = key;
-            this.value = value;
-        }
-
-        @Override
-        public Map<String, String> createMap() {
-            Map<String, String> map = TagBuilder.this.createMap();
-            map.put(key, value);
-            return map;
-        }
-    }
+public final class TagBuilder {
+    private final Map<String, String> map;
 
     /**
      * Start with blank.
      */
     public TagBuilder() {
-        this.tag = null;
+        this(null);
     }
 
     /**
@@ -59,7 +23,15 @@ public class TagBuilder {
      *            the initial value.
      */
     public TagBuilder(Tag tag) {
-        this.tag = tag;
+        this.map = new LinkedHashMap<String, String>();
+
+        if (tag == null) {
+            return;
+        }
+
+        for (String field : tag.getFields()) {
+            map.put(field, tag.get(field));
+        }
     }
 
     /**
@@ -72,11 +44,14 @@ public class TagBuilder {
      *            the value of the field.
      * @return a builder that adds the given field.
      */
-    public TagBuilder add(final String key, final String value) {
+    public final TagBuilder add(String key, String value) {
         if (key.contains("=")) {
             throw new IllegalArgumentException();
         }
-        return new TagBuilderAdd(key, value);
+        if (!map.containsKey(key)) {
+            map.put(key, value);
+        }
+        return this;
     }
 
     /**
@@ -89,11 +64,12 @@ public class TagBuilder {
      *            the value of the field.
      * @return a builder that stores the given field.
      */
-    public TagBuilder put(final String key, final String value) {
+    public final TagBuilder put(final String key, final String value) {
         if (key.contains("=")) {
             throw new IllegalArgumentException();
         }
-        return new TagBuilderPut(key, value);
+        map.put(key, value);
+        return this;
     }
 
     /**
@@ -101,24 +77,7 @@ public class TagBuilder {
      * 
      * @return the specified tag.
      */
-    public Tag create() {
-        return new Tag(createMap());
-    }
-
-    /**
-     * Create the map for the tag.
-     * 
-     * @return the map for the tag.
-     */
-    public Map<String, String> createMap() {
-        LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
-        if (tag == null) {
-            return map;
-        }
-
-        for (String field : tag.getFields()) {
-            map.put(field, tag.get(field));
-        }
-        return map;
+    public final Tag create() {
+        return new Tag(map);
     }
 }
