@@ -9,8 +9,12 @@ package org.yi.happy.archive.tag;
  * empty lines marked.
  */
 public class LineHandler implements BinaryHandler {
-    private int state;
-    
+    private static final int OUTSIDE = 0;
+    private static final int INSIDE = 1;
+    private static final int NL_CR = 2;
+    private static final int NL_LF = 3;
+    private int state = OUTSIDE;
+
     private final BinaryHandler handler;
 
     /**
@@ -25,20 +29,20 @@ public class LineHandler implements BinaryHandler {
 
     @Override
     public void startStream() {
-        state = 0;
+        state = OUTSIDE;
 
         handler.startStream();
     }
 
     @Override
     public void startRegion(String name) {
-        if (state == 1) {
+        if (state == INSIDE) {
             handler.endRegion("line");
-            state = 0;
+            state = OUTSIDE;
         }
 
-        else if (state == 2 || state == 3) {
-            state = 0;
+        else if (state == NL_CR || state == NL_LF) {
+            state = OUTSIDE;
         }
 
         handler.startRegion(name);
@@ -58,91 +62,79 @@ public class LineHandler implements BinaryHandler {
         int s = offset;
 
         for (int i = offset; i < offset + length; i++) {
-            if (state == 0) {
-                /*
-                 * before line
-                 */
+            if (state == OUTSIDE) {
                 if (buff[i] == '\r') {
                     s = flush(buff, s, i);
                     handler.startRegion("line");
                     handler.endRegion("line");
-                    state = 2;
+                    state = NL_CR;
                 }
 
                 else if (buff[i] == '\n') {
                     s = flush(buff, s, i);
                     handler.startRegion("line");
                     handler.endRegion("line");
-                    state = 3;
+                    state = NL_LF;
                 }
 
                 else {
                     s = flush(buff, s, i);
                     handler.startRegion("line");
-                    state = 1;
+                    state = INSIDE;
                 }
             }
 
-            else if (state == 1) {
-                /*
-                 * in line
-                 */
+            else if (state == INSIDE) {
                 if (buff[i] == '\r') {
                     s = flush(buff, s, i);
                     handler.endRegion("line");
-                    state = 2;
+                    state = NL_CR;
                 }
 
                 else if (buff[i] == '\n') {
                     s = flush(buff, s, i);
                     handler.endRegion("line");
-                    state = 3;
+                    state = NL_LF;
                 }
             }
 
-            else if (state == 2) {
-                /*
-                 * in newline \r
-                 */
+            else if (state == NL_CR) {
                 if (buff[i] == '\r') {
                     s = flush(buff, s, i);
                     handler.startRegion("line");
                     handler.endRegion("line");
-                    state = 2;
+                    state = NL_CR;
                 }
 
                 else if (buff[i] == '\n') {
                     s = flush(buff, s, i + 1);
-                    state = 0;
+                    state = OUTSIDE;
                 }
 
                 else {
                     s = flush(buff, s, i);
                     handler.startRegion("line");
-                    state = 1;
+                    state = INSIDE;
                 }
             }
 
-            else if (state == 3) {
-                /*
-                 * in newline \n
-                 */
+            else if (state == NL_LF) {
                 if (buff[i] == '\r') {
                     s = flush(buff, s, i + 1);
-                    state = 0;
+                    state = OUTSIDE;
                 }
 
                 else if (buff[i] == '\n') {
                     s = flush(buff, s, i);
                     handler.startRegion("line");
                     handler.endRegion("line");
-                    state = 3;
+                    state = NL_LF;
                 }
 
                 else {
                     s = flush(buff, s, i);
                     handler.startRegion("line");
-                    state = 1;
+                    state = INSIDE;
                 }
             }
         }
@@ -152,13 +144,13 @@ public class LineHandler implements BinaryHandler {
 
     @Override
     public void endRegion(String name) {
-        if (state == 1) {
+        if (state == INSIDE) {
             handler.endRegion("line");
-            state = 0;
+            state = OUTSIDE;
         }
 
-        else if (state == 2 || state == 3) {
-            state = 0;
+        else if (state == NL_CR || state == NL_LF) {
+            state = OUTSIDE;
         }
 
         handler.endRegion(name);
@@ -166,13 +158,13 @@ public class LineHandler implements BinaryHandler {
 
     @Override
     public void endStream() {
-        if (state == 1) {
+        if (state == INSIDE) {
             handler.endRegion("line");
-            state = 0;
+            state = OUTSIDE;
         }
 
-        else if (state == 2 || state == 3) {
-            state = 0;
+        else if (state == NL_CR || state == NL_LF) {
+            state = OUTSIDE;
         }
 
         handler.endStream();
