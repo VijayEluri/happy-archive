@@ -38,6 +38,7 @@ public class BlockEncoderBlob implements BlockEncoder {
      *            the block to encode
      * @return the resulting block
      */
+    @Override
     public BlockEncoderResult encode(Block block) {
         byte[] body = block.asBytes();
 

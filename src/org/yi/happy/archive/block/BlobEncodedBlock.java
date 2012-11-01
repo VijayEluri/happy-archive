@@ -90,14 +90,17 @@ public final class BlobEncodedBlock extends AbstractBlock implements
         this.body = body;
     }
 
+    @Override
     public BlobLocatorKey getKey() {
         return key;
     }
 
+    @Override
     public DigestProvider getDigest() {
         return digest;
     }
 
+    @Override
     public CipherProvider getCipher() {
         return cipher;
     }
@@ -144,6 +147,7 @@ public final class BlobEncodedBlock extends AbstractBlock implements
         return d.digest();
     }
 
+    @Override
     public Block decode(FullKey fullKey) {
         if (!fullKey.toLocatorKey().equals(key)) {
             throw new IllegalArgumentException("the key is not for this block");

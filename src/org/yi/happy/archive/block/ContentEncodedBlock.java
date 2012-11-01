@@ -101,14 +101,17 @@ public final class ContentEncodedBlock extends AbstractBlock implements
         this.body = body;
     }
 
+    @Override
     public ContentLocatorKey getKey() {
         return key;
     }
 
+    @Override
     public DigestProvider getDigest() {
         return digest;
     }
 
+    @Override
     public CipherProvider getCipher() {
         return cipher;
     }
@@ -148,6 +151,7 @@ public final class ContentEncodedBlock extends AbstractBlock implements
         return Digests.digestData(digest, body);
     }
 
+    @Override
     public Block decode(FullKey fullKey) {
         if (!fullKey.toLocatorKey().equals(key)) {
             throw new IllegalArgumentException("the key is not for this block");
