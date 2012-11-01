@@ -7,7 +7,7 @@ import java.lang.annotation.RetentionPolicy;
  * Places where there is a switch like structure based on types. Consider
  * re-working these into instances of the visitor pattern.
  */
-@Retention(RetentionPolicy.RUNTIME)
+@Retention(RetentionPolicy.SOURCE)
 public @interface TypeSwitch {
 
 }
