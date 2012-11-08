@@ -47,9 +47,23 @@ public class CommandParse {
      *            the command line.
      */
     public void parse(String[] args) {
-        new ParseEngine(new ParseEngine.Visitor() {
+        new ParseEngine(new ParseEngine.Handler() {
             @Override
-            public void option(String name, String value) {
+            public void onCommand(String command) {
+                if (!commands.contains(command)) {
+                    throw new IllegalArgumentException();
+                }
+
+                CommandParse.this.command = command;
+            }
+
+            @Override
+            public void onArgument(String argument) {
+                files.add(argument);
+            }
+
+            @Override
+            public void onOption(String name, String value) {
                 if (name.equals("store")) {
                     store = value;
                     return;
@@ -69,22 +83,13 @@ public class CommandParse {
             }
 
             @Override
-            public void file(String arg) {
-                files.add(arg);
-            }
-
-            @Override
-            public void command(String arg) {
-                if (!commands.contains(arg)) {
-                    throw new IllegalArgumentException();
-                }
-
-                cmd = arg;
+            public void onFinished() {
+                // nothing
             }
         }).parse(args);
     }
 
-    private String cmd;
+    private String command;
     private String store;
     private String index;
     private String need;
@@ -96,7 +101,7 @@ public class CommandParse {
      * @return the command on the command line.
      */
     public String getCmd() {
-        return cmd;
+        return command;
     }
 
     /**

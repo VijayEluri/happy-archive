@@ -8,22 +8,22 @@ public class ParseEngine {
     /**
      * The events that are emitted as the command line is parsed.
      */
-    public interface Visitor {
+    public interface Handler {
         /**
          * emitted when the initial command is found on the command line.
          * 
-         * @param arg
+         * @param command
          *            the command that was found on the command line.
          */
-        void command(String arg);
+        void onCommand(String command);
 
         /**
          * emitted when a non-option is found on the command line.
          * 
-         * @param arg
+         * @param argument
          *            the non-option.
          */
-        void file(String arg);
+        void onArgument(String argument);
 
         /**
          * emitted when a complete option is found on the command line.
@@ -33,26 +33,38 @@ public class ParseEngine {
          * @param value
          *            the value of the argument to the option.
          */
-        void option(String name, String value);
+        void onOption(String name, String value);
 
+        /**
+         * emitted when the command line is done being parsed.
+         */
+        void onFinished();
     }
 
-    private State state;
-    private String optionName;
-    private final Visitor visitor;
+    /**
+     * the name of the option currently being parsed.
+     */
+    private String name;
+
+    /**
+     * where to emit events to.
+     */
+    private final Handler handler;
 
     private enum State {
         START, FILE, OPTION, OPTION2, NAME, VALUE, DONE
     };
 
+    private State state;
+
     /**
      * Set up the parsing engine.
      * 
-     * @param visitor
+     * @param handler
      *            where to emit events to.
      */
-    public ParseEngine(Visitor visitor) {
-        this.visitor = visitor;
+    public ParseEngine(Handler handler) {
+        this.handler = handler;
 
         state = State.START;
     }
@@ -88,13 +100,15 @@ public class ParseEngine {
         }
 
         if (state == State.VALUE) {
-            visitor.option(optionName, arg);
+            handler.onOption(name, arg);
+
             state = State.FILE;
             return;
         }
 
         if (state == State.DONE) {
-            visitor.file(arg);
+            handler.onArgument(arg);
+
             return;
         }
 
@@ -109,7 +123,8 @@ public class ParseEngine {
                     throw new IllegalArgumentException();
                 }
 
-                visitor.command(arg);
+                handler.onCommand(arg);
+
                 state = State.FILE;
                 return;
             }
@@ -120,7 +135,9 @@ public class ParseEngine {
                     continue;
                 }
 
-                visitor.file(arg);
+                handler.onArgument(arg);
+
+                state = State.FILE;
                 return;
             }
 
@@ -135,6 +152,7 @@ public class ParseEngine {
                 }
 
                 start = i;
+
                 state = State.NAME;
                 continue;
             }
@@ -149,22 +167,21 @@ public class ParseEngine {
                 }
 
                 start = i;
+
                 state = State.NAME;
                 continue;
             }
 
             if (state == State.NAME) {
                 if (arg.charAt(i) == '=') {
-                    optionName = arg.substring(start, i);
+                    name = arg.substring(start, i);
                     start = i + 1;
+
                     state = State.VALUE;
-                    continue;
+                    break;
                 }
 
-                continue;
-            }
-
-            if (state == State.VALUE) {
+                state = State.NAME;
                 continue;
             }
 
@@ -176,13 +193,15 @@ public class ParseEngine {
          */
 
         if (state == State.FILE) {
-            visitor.file(arg);
+            handler.onArgument(arg);
+
             state = State.FILE;
             return;
         }
 
         if (state == State.OPTION) {
-            visitor.file(arg);
+            handler.onArgument(arg);
+
             state = State.FILE;
             return;
         }
@@ -193,15 +212,17 @@ public class ParseEngine {
         }
 
         if (state == State.NAME) {
-            optionName = arg.substring(start);
+            name = arg.substring(start);
+
             state = State.VALUE;
             return;
         }
 
         if (state == State.VALUE) {
-            String optionValue = arg.substring(start);
-            visitor.option(optionName, optionValue);
-            optionName = null;
+            String value = arg.substring(start);
+            handler.onOption(name, value);
+            name = null;
+
             state = State.FILE;
             return;
         }
@@ -211,11 +232,16 @@ public class ParseEngine {
 
     private void end() {
         if (state == State.FILE) {
+            handler.onFinished();
+
             state = State.DONE;
             return;
         }
 
         if (state == State.DONE) {
+            handler.onFinished();
+
+            state = State.DONE;
             return;
         }
 
