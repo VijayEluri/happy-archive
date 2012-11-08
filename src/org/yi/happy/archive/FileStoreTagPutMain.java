@@ -52,14 +52,9 @@ public class FileStoreTagPutMain {
          */
         MyArgs cmd;
         try {
-            cmd = MyArgs.parse(args);
+            cmd = MyArgs.parse(args).needStore();
         } catch (CommandLineException e) {
             e.showHelp(out);
-            return;
-        }
-
-        if (cmd.getStore() == null) {
-            MyArgs.showHelp(out);
             return;
         }
 

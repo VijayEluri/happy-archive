@@ -171,4 +171,12 @@ public class MyArgs {
         }
     }
 
+    public MyArgs needStore() throws CommandLineException {
+        if (getStore() == null) {
+            throw new CommandLineException(new ParseException(
+                    "Require store argument"));
+        }
+        return this;
+    }
+
 }
