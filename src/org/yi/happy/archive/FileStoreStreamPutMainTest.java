@@ -9,6 +9,8 @@ import java.io.InputStream;
 import java.io.StringWriter;
 
 import org.junit.Test;
+import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.commandLine.EnvBuilder;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.test_data.TestData;
@@ -28,7 +30,8 @@ public class FileStoreStreamPutMainTest {
         InputStream in = new ByteArrayInputStream(ByteString.toBytes("hello\n"));
         StringWriter out = new StringWriter();
 
-        new FileStoreStreamPutMain(fs, in, out).run("store");
+        Env env = new EnvBuilder().withStore("store").create();
+        new FileStoreStreamPutMain(fs, in, out).run(env);
 
         assertEquals(TestData.KEY_CONTENT_AES128.getFullKey() + "\n", out
                 .toString());

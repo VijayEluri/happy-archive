@@ -65,13 +65,6 @@ public class Main {
                 public void run(String[] args) throws Exception {
                     FileStoreStreamGetMain.main(args);
                 }
-            },
-
-            new Cmd("stream-put") {
-                @Override
-                public void run(String[] args) throws Exception {
-                    FileStoreStreamPutMain.main(args);
-                }
             }
 
             ));
@@ -83,6 +76,13 @@ public class Main {
                 @Override
                 public void run(Env env) throws Exception {
                     MakeIndexDatabaseMain.launch(env);
+                }
+            },
+
+            new NewCmd("stream-put") {
+                @Override
+                public void run(Env env) throws Exception {
+                    FileStoreStreamPutMain.main(env);
                 }
             },
 
