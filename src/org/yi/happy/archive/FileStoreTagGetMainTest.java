@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.StringWriter;
 
 import org.junit.Test;
+import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.commandLine.EnvBuilder;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.test_data.TestData;
@@ -39,8 +41,9 @@ public class FileStoreTagGetMainTest {
             }
         };
 
-        new FileStoreTagGetMain(fs, waitHandler, in, null).run("store",
-                "request");
+        Env env = new EnvBuilder().withStore("store").withNeed("request")
+                .create();
+        new FileStoreTagGetMain(fs, waitHandler, in, null).run(env);
 
         assertArrayEquals(TestData.FILE_CONTENT.getBytes(), fs
                 .load("hello.txt"));
@@ -91,8 +94,9 @@ public class FileStoreTagGetMainTest {
             };
         };
 
-        new FileStoreTagGetMain(fs, waitHandler, in, null).run("store",
-                "request");
+        Env env = new EnvBuilder().withStore("store").withNeed("request")
+                .create();
+        new FileStoreTagGetMain(fs, waitHandler, in, null).run(env);
 
         assertArrayEquals(TestData.FILE_CONTENT.getBytes(), fs
                 .load("hello.txt"));
@@ -108,8 +112,9 @@ public class FileStoreTagGetMainTest {
     @Test
     public void test3() throws IOException {
         StringWriter out = new StringWriter();
+        Env env = new EnvBuilder().create();
 
-        new FileStoreTagGetMain(null, null, null, out).run();
+        new FileStoreTagGetMain(null, null, null, out).run(env);
 
         assertTrue(out.getBuffer().length() > 0);
     }

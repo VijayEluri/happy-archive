@@ -243,7 +243,14 @@ public class ParseEngine {
             return;
         }
 
-        throw new IllegalStateException();
+        if (state == State.START) {
+            handler.onCommand(arg);
+
+            state = State.FILE;
+            return;
+        }
+
+        throw new IllegalStateException("" + state);
     }
 
     private void end() throws CommandLineException {

@@ -74,4 +74,20 @@ public class Env {
                 + ", need=" + need + ", command=" + command + ", arguments="
                 + arguments + "]";
     }
+
+    public boolean hasArguments() {
+        return !arguments.isEmpty();
+    }
+
+    public boolean hasNoStore() {
+        return store == null;
+    }
+
+    public boolean hasNoNeed() {
+        return need == null;
+    }
+
+    public boolean hasNoArguments() {
+        return arguments.isEmpty();
+    }
 }

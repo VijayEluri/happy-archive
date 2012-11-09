@@ -6,6 +6,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import org.yi.happy.annotate.EntryPoint;
+import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
 import org.yi.happy.archive.key.FullKey;
@@ -52,13 +53,14 @@ public class FileStoreTagGetMain {
      * @throws IOException
      */
     @EntryPoint
-    public void run(String... args) throws IOException {
-        if (args.length != 2) {
-            out.write("use: store need.lst < tags\n");
+    public void run(Env env) throws IOException {
+        if (env.hasArguments() || env.hasNoStore() || env.hasNoNeed()) {
+            out.write("use: --store store --need need.lst < tags\n");
             return;
         }
-        FileBlockStore store = new FileBlockStore(fs, args[0]);
-        pendingFile = args[1];
+
+        FileBlockStore store = new FileBlockStore(fs, env.getStore());
+        pendingFile = env.getNeed();
         RestoreManager restore = new RestoreManager(fs,
                 new RetrieveBlockStorage(store));
 
@@ -116,18 +118,18 @@ public class FileStoreTagGetMain {
     /**
      * invoke fetching file tags from standard in.
      * 
-     * @param args
-     *            the store; the request list.
+     * @param env
+     *            The environment.
      * @throws IOException
      */
-    public static void main(String[] args) throws IOException {
+    public static void launch(Env env) throws IOException {
         FileSystem fs = new RealFileSystem();
         WaitHandler waitHandler = new WaitHandlerProgressiveDelay();
         InputStream in = System.in;
 
         Writer out = new OutputStreamWriter(System.out, "UTF-8");
         try {
-            new FileStoreTagGetMain(fs, waitHandler, in, out).run(args);
+            new FileStoreTagGetMain(fs, waitHandler, in, out).run(env);
         } finally {
             out.flush();
         }

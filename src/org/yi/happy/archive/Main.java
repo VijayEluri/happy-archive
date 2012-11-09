@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.yi.happy.annotate.EntryPoint;
+import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.commandLine.MyEnv;
 
 /**
  * The top level entry point that dispatches to the sub-commands.
@@ -24,6 +26,21 @@ public class Main {
         }
 
         public abstract void run(String[] args) throws Exception;
+    }
+
+    private abstract static class NewCmd {
+
+        private final String name;
+
+        public NewCmd(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public abstract void run(Env env) throws Exception;
     }
 
     private static final List<Cmd> cmds = Collections.unmodifiableList(Arrays
@@ -57,20 +74,6 @@ public class Main {
                 }
             },
 
-            new Cmd("tag-get") {
-                @Override
-                public void run(String[] args) throws Exception {
-                    FileStoreTagGetMain.main(args);
-                }
-            },
-
-            new Cmd("tag-put") {
-                @Override
-                public void run(String[] args) throws Exception {
-                    FileStoreTagPutMain.main(args);
-                }
-            },
-            
             new Cmd("tag-add") {
                 @Override
                 public void run(String[] args) throws Exception {
@@ -153,7 +156,25 @@ public class Main {
                 public void run(String[] args) throws Exception {
                     MakeIndexDatabaseMain.main(args);
                 }
+            }));
+
+    private static final List<NewCmd> newCmds = Collections
+            .unmodifiableList(Arrays.asList(
+
+            new NewCmd("tag-get") {
+                @Override
+                public void run(Env env) throws Exception {
+                    FileStoreTagGetMain.launch(env);
+                }
+            },
+            
+            new NewCmd("tag-put") {
+                @Override
+                public void run(Env env) throws Exception {
+                    FileStoreTagPutMain.launch(env);
+                }
             }
+
             ));
 
     /**
@@ -177,11 +198,23 @@ public class Main {
             }
         }
 
+        Env env = MyEnv.init(args);
+        String command = env.getCommand();
+        for (NewCmd cmd : newCmds) {
+            if (cmd.getName().equals(command)) {
+                cmd.run(env);
+                return;
+            }
+        }
+
         help();
     }
 
     private static void help() {
         for (Cmd cmd : cmds) {
+            System.out.println(cmd.getName());
+        }
+        for (NewCmd cmd : newCmds) {
             System.out.println(cmd.getName());
         }
     }

@@ -4,13 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 
-import org.yi.happy.annotate.DuplicatedLogic;
-import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.annotate.MagicLiteral;
 import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.block.encoder.BlockEncoderFactory;
-import org.yi.happy.archive.commandLine.MyArgs;
-import org.yi.happy.archive.commandLine.MyArgs.CommandLineException;
+import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
@@ -39,26 +36,19 @@ public class FileStoreTagPutMain {
     /**
      * the main logic to store a set of files.
      * 
-     * @param args
-     *            store, file...
+     * @param env
+     *            The environment.
      * @throws IOException
      */
     @MagicLiteral
     @SmellsMessy
-    @DuplicatedLogic("getting options, with LocalCandidateList")
-    public void run(String... args) throws IOException {
-        /*
-         * parse command line
-         */
-        MyArgs cmd;
-        try {
-            cmd = MyArgs.parse(args).needStore();
-        } catch (CommandLineException e) {
-            e.showHelp(out);
+    public void run(Env env) throws IOException {
+        if (env.hasNoStore() || env.hasNoArguments()) {
+            out.println("use: --store store file...");
             return;
         }
 
-        FileBlockStore store = new FileBlockStore(fs, cmd.getStore());
+        FileBlockStore store = new FileBlockStore(fs, env.getStore());
 
         /*
          * do the work
@@ -69,7 +59,7 @@ public class FileStoreTagPutMain {
 
         TagOutputStream out = new TagOutputStream(this.out);
 
-        for (String arg : cmd.getFiles()) {
+        for (String arg : env.getArguments()) {
             if (fs.isFile(arg)) {
                 KeyOutputStream o1 = new KeyOutputStream(s);
                 DigestOutputStream o2 = new DigestOutputStream(DigestFactory
@@ -97,13 +87,13 @@ public class FileStoreTagPutMain {
      * @param args
      * @throws IOException
      */
-    @EntryPoint
-    public static void main(String[] args) throws IOException {
-        FileSystem fs = new RealFileSystem();
-        try {
-            new FileStoreTagPutMain(fs, System.out).run(args);
-        } finally {
-            System.out.flush();
-        }
+    public static void launch(Env env)
+        throws IOException {
+            FileSystem fs = new RealFileSystem();
+            try {
+                new FileStoreTagPutMain(fs, System.out).run(env);
+            } finally {
+                System.out.flush();
+            }
     }
 }
