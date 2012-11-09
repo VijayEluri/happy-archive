@@ -52,7 +52,7 @@ public final class Fragment {
     }
 
     @Override
-    public int hashCode() {
+    public final int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((data == null) ? 0 : data.hashCode());
@@ -61,7 +61,7 @@ public final class Fragment {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public final boolean equals(Object obj) {
         if (this == obj)
             return true;
         if (obj == null)
@@ -97,7 +97,7 @@ public final class Fragment {
      * @throws IndexOutOfBoundsException
      *             if the index is not within the fragment.
      */
-    public byte getAbsolute(long offset) {
+    public final byte getAbsolute(long offset) {
         if (offset < this.offset || offset >= this.offset + data.getSize()) {
             throw new IndexOutOfBoundsException();
         }
