@@ -13,8 +13,9 @@ public class CommandParse {
      * the sample playground.
      * 
      * @param args
+     * @throws CommandLineException
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws CommandLineException {
         args = new String[] { "tag-put", "--store", "archive.d/store",
                 "file.txt", "--index=archive.d/index" };
 
@@ -45,8 +46,9 @@ public class CommandParse {
      * 
      * @param args
      *            the command line.
+     * @throws CommandLineException
      */
-    public void parse(String[] args) {
+    public void parse(String[] args) throws CommandLineException {
         new ParseEngine(new ParseEngine.Handler() {
             @Override
             public void onCommand(String command) {

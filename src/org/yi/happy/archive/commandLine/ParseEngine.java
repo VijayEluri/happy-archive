@@ -2,7 +2,8 @@ package org.yi.happy.archive.commandLine;
 
 /**
  * A parsing engine for command lines. This one handles named options that take
- * values only. As the options are parsed they are emitted as events.
+ * values only. As the options are parsed they are emitted as events. This
+ * parser requires that the first item on the command line is a command name.
  */
 public class ParseEngine {
     /**
@@ -14,16 +15,20 @@ public class ParseEngine {
          * 
          * @param command
          *            the command that was found on the command line.
+         * @throws CommandLineException
+         *             if the command line is invalid.
          */
-        void onCommand(String command);
+        void onCommand(String command) throws CommandLineException;
 
         /**
          * emitted when a non-option is found on the command line.
          * 
          * @param argument
          *            the non-option.
+         * @throws CommandLineException
+         *             if the command line is invalid.
          */
-        void onArgument(String argument);
+        void onArgument(String argument) throws CommandLineException;
 
         /**
          * emitted when a complete option is found on the command line.
@@ -32,13 +37,18 @@ public class ParseEngine {
          *            the name of the option.
          * @param value
          *            the value of the argument to the option.
+         * @throws CommandLineException
+         *             if the command line is invalid.
          */
-        void onOption(String name, String value);
+        void onOption(String name, String value) throws CommandLineException;
 
         /**
          * emitted when the command line is done being parsed.
+         * 
+         * @throws CommandLineException
+         *             if the command line is invalid.
          */
-        void onFinished();
+        void onFinished() throws CommandLineException;
     }
 
     /**
@@ -74,15 +84,17 @@ public class ParseEngine {
      * 
      * @param args
      *            the arguments.
+     * @throws CommandLineException
+     *             if the command line is invalid.
      */
-    public void parse(String[] args) {
+    public void parse(String[] args) throws CommandLineException {
         for (String arg : args) {
             arg(arg);
         }
         end();
     }
 
-    private void arg(String arg) {
+    private void arg(String arg) throws CommandLineException {
         /*
          * start of argument
          */
@@ -120,7 +132,8 @@ public class ParseEngine {
         for (int i = 0; i < arg.length(); i++) {
             if (state == State.START) {
                 if (arg.charAt(i) == '-') {
-                    throw new IllegalArgumentException();
+                    throw new CommandLineException(
+                            "the first argument must be a command name");
                 }
 
                 handler.onCommand(arg);
@@ -148,7 +161,8 @@ public class ParseEngine {
                 }
 
                 if (arg.charAt(i) == '=') {
-                    throw new IllegalArgumentException();
+                    throw new CommandLineException(
+                            "The option must have a name");
                 }
 
                 start = i;
@@ -159,11 +173,13 @@ public class ParseEngine {
 
             if (state == State.OPTION2) {
                 if (arg.charAt(i) == '-') {
-                    throw new IllegalArgumentException();
+                    throw new CommandLineException(
+                            "The option can not begin with three dashes");
                 }
 
                 if (arg.charAt(i) == '=') {
-                    throw new IllegalArgumentException();
+                    throw new CommandLineException(
+                            "The option must have a name");
                 }
 
                 start = i;
@@ -185,7 +201,7 @@ public class ParseEngine {
                 continue;
             }
 
-            throw new IllegalArgumentException();
+            throw new IllegalStateException();
         }
 
         /*
@@ -227,10 +243,10 @@ public class ParseEngine {
             return;
         }
 
-        throw new IllegalArgumentException();
+        throw new IllegalStateException();
     }
 
-    private void end() {
+    private void end() throws CommandLineException {
         if (state == State.FILE) {
             handler.onFinished();
 
@@ -245,6 +261,15 @@ public class ParseEngine {
             return;
         }
 
-        throw new IllegalArgumentException();
+        if (state == State.VALUE) {
+            throw new CommandLineException("The option must have a value");
+        }
+
+        if(state == State.START) {
+            throw new CommandLineException(
+                    "The first argument must be a command name");
+        }
+        
+        throw new IllegalStateException();
     }
 }
