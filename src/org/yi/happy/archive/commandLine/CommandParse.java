@@ -49,7 +49,7 @@ public class CommandParse {
      * @throws CommandLineException
      */
     public void parse(String[] args) throws CommandLineException {
-        new ParseEngine(new ParseEngine.Handler() {
+        new CommandParseEngine(new CommandParseEngine.CommandParseHandler() {
             boolean needCommand = true;
 
             @Override

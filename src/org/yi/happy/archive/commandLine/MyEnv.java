@@ -15,7 +15,7 @@ public class MyEnv {
             }
         }
 
-        new ParseEngine(new ParseEngine.Handler() {
+        new CommandParseEngine(new CommandParseEngine.CommandParseHandler() {
             private boolean needCommand = true;
 
             @Override

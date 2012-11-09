@@ -5,11 +5,11 @@ package org.yi.happy.archive.commandLine;
  * values only. As the options are parsed they are emitted as events. This
  * parser requires that the first item on the command line is a command name.
  */
-public class ParseEngine {
+public class CommandParseEngine {
     /**
      * The events that are emitted as the command line is parsed.
      */
-    public interface Handler {
+    public interface CommandParseHandler {
         /**
          * emitted when a non-option is found on the command line.
          * 
@@ -49,7 +49,7 @@ public class ParseEngine {
     /**
      * where to emit events to.
      */
-    private final Handler handler;
+    private final CommandParseHandler handler;
 
     private enum State {
         FILE, OPTION, OPTION2, NAME, VALUE, DONE
@@ -63,7 +63,7 @@ public class ParseEngine {
      * @param handler
      *            where to emit events to.
      */
-    public ParseEngine(Handler handler) {
+    public CommandParseEngine(CommandParseHandler handler) {
         this.handler = handler;
 
         state = State.FILE;
