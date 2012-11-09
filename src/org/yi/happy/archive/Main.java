@@ -25,84 +25,69 @@ public class Main {
             return name;
         }
 
-        public abstract void run(String[] args) throws Exception;
-    }
-
-    private abstract static class NewCmd {
-
-        private final String name;
-
-        public NewCmd(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
-
         public abstract void run(Env env) throws Exception;
     }
 
-    private static final List<NewCmd> newCmds = Collections
+    private static final List<Cmd> cmds = Collections
             .unmodifiableList(Arrays.asList(
 
-            new NewCmd("file-get") {
+            new Cmd("file-get") {
                 @Override
                 public void run(Env env) throws Exception {
                     FileStoreFileGetMain.main(env);
                 }
             },
 
-            new NewCmd("make-index-db") {
+            new Cmd("make-index-db") {
                 @Override
                 public void run(Env env) throws Exception {
                     MakeIndexDatabaseMain.launch(env);
                 }
             },
 
-            new NewCmd("block-put") {
+            new Cmd("block-put") {
                 @Override
                 public void run(Env env) throws Exception {
                     FileStoreBlockPutMain.main(env);
                 }
             },
 
-            new NewCmd("stream-get") {
+            new Cmd("stream-get") {
                 @Override
                 public void run(Env env) throws Exception {
                     FileStoreStreamGetMain.main(env);
                 }
             },
 
-            new NewCmd("stream-put") {
+            new Cmd("stream-put") {
                 @Override
                 public void run(Env env) throws Exception {
                     FileStoreStreamPutMain.main(env);
                 }
             },
 
-            new NewCmd("tag-add") {
+            new Cmd("tag-add") {
                 @Override
                 public void run(Env env) throws Exception {
                     FileStoreTagAddMain.main(env);
                 }
             },
 
-            new NewCmd("decode") {
+            new Cmd("decode") {
                 @Override
                 public void run(Env env) throws Exception {
                     DecodeBlockMain.main(env);
                 }
             },
 
-            new NewCmd("encode") {
+            new Cmd("encode") {
                 @Override
                 public void run(Env env) throws Exception {
                     EncodeContentMain.main(env);
                 }
             },
 
-            new NewCmd("verify") {
+            new Cmd("verify") {
                 @Override
                 public void run(Env env) throws Exception {
                     VerifyMain.main(env);
@@ -110,14 +95,14 @@ public class Main {
 
             },
 
-            new NewCmd("index-search") {
+            new Cmd("index-search") {
                 @Override
                 public void run(Env env) throws Exception {
                     IndexSearchMain.main(env);
                 }
             },
 
-            new NewCmd("volume-get") {
+            new Cmd("volume-get") {
                 @Override
                 public void run(Env env) throws Exception {
                     VolumeGetMain.main(env);
@@ -125,28 +110,28 @@ public class Main {
 
             },
 
-            new NewCmd("store-list") {
+            new Cmd("store-list") {
                 @Override
                 public void run(Env env) throws Exception {
                     FileStoreListMain.main(env);
                 }
             },
 
-            new NewCmd("build-image") {
+            new Cmd("build-image") {
                 @Override
                 public void run(Env env) throws Exception {
                     BuildImageMain.main(env);
                 }
             },
 
-            new NewCmd("index-volume") {
+            new Cmd("index-volume") {
                 @Override
                 public void run(Env env) throws Exception {
                     IndexVolumeMain.main(env);
                 }
             },
             
-            new NewCmd("store-remove") {
+            new Cmd("store-remove") {
                 @Override
                 public void run(Env env) throws Exception {
                     StoreRemoveMain.launch(env);
@@ -154,28 +139,28 @@ public class Main {
 
             },
 
-            new NewCmd("backup-list") {
+            new Cmd("backup-list") {
                 @Override
                 public void run(Env env) throws Exception {
                     LocalCandidateListMain.launch(env);
                 }
             },
 
-            new NewCmd("show-env") {
+            new Cmd("show-env") {
                 @Override
                 public void run(Env env) throws Exception {
                     ShowEnvMain.launch(env);
                 }
             },
 
-            new NewCmd("tag-get") {
+            new Cmd("tag-get") {
                 @Override
                 public void run(Env env) throws Exception {
                     FileStoreTagGetMain.launch(env);
                 }
             },
             
-            new NewCmd("tag-put") {
+            new Cmd("tag-put") {
                 @Override
                 public void run(Env env) throws Exception {
                     FileStoreTagPutMain.launch(env);
@@ -199,7 +184,7 @@ public class Main {
 
         Env env = MyEnv.init(args);
         String command = env.getCommand();
-        for (NewCmd cmd : newCmds) {
+        for (Cmd cmd : cmds) {
             if (cmd.getName().equals(command)) {
                 cmd.run(env);
                 return;
@@ -210,7 +195,7 @@ public class Main {
     }
 
     private static void help() {
-        for (NewCmd cmd : newCmds) {
+        for (Cmd cmd : cmds) {
             System.out.println(cmd.getName());
         }
     }
