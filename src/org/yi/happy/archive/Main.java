@@ -93,13 +93,6 @@ public class Main {
                 public void run(String[] args) throws Exception {
                     EncodeContentMain.main(args);
                 }
-            },
-
-            new Cmd("verify") {
-                @Override
-                public void run(String[] args) throws Exception {
-                    VerifyMain.main(args);
-                }
             }
 
             ));
@@ -112,6 +105,14 @@ public class Main {
                 public void run(Env env) throws Exception {
                     MakeIndexDatabaseMain.launch(env);
                 }
+            },
+
+            new NewCmd("verify") {
+                @Override
+                public void run(Env env) throws Exception {
+                    VerifyMain.main(env);
+                }
+
             },
 
             new NewCmd("index-search") {

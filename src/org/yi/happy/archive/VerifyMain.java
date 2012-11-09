@@ -8,6 +8,7 @@ import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.BlockParse;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
+import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
 
@@ -35,12 +36,12 @@ public class VerifyMain {
     /**
      * verify that a set of blocks in files load, parse, and validate.
      * 
-     * @param args
+     * @param env
      *            the list of files to verify.
      * @throws Exception
      */
-    public void run(String... args) throws Exception {
-        for (String arg : args) {
+    public void run(Env env) throws Exception {
+        for (String arg : env.getArguments()) {
             String line;
 
             try {
@@ -77,15 +78,15 @@ public class VerifyMain {
     /**
      * launch the command using the real resources.
      * 
-     * @param args
+     * @param env
      * @throws Exception
      */
     @EntryPoint
-    public static void main(String[] args) throws Exception {
+    public static void main(Env env) throws Exception {
         FileSystem fs = new RealFileSystem();
         Writer out = new PrintWriter(System.out, true);
 
-        new VerifyMain(fs, out).run(args);
+        new VerifyMain(fs, out).run(env);
 
         out.flush();
     }

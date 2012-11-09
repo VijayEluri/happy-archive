@@ -5,6 +5,8 @@ import static org.junit.Assert.assertEquals;
 import java.io.StringWriter;
 
 import org.junit.Test;
+import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.commandLine.EnvBuilder;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.test_data.TestData;
 
@@ -25,7 +27,9 @@ public class VerifyMainTest {
                 .getBytes());
         VerifyMain app = new VerifyMain(fs, out);
 
-        app.run(TestData.KEY_CONTENT.getFileName());
+        Env env = new EnvBuilder().addArgument(
+                TestData.KEY_CONTENT.getFileName()).create();
+        app.run(env);
 
         assertEquals("ok " + TestData.KEY_CONTENT.getLocatorKey() + " "
                 + TestData.KEY_CONTENT.getFileName() + "\n", out.toString());
@@ -42,7 +46,8 @@ public class VerifyMainTest {
         FakeFileSystem fs = new FakeFileSystem();
         VerifyMain app = new VerifyMain(fs, out);
 
-        app.run("file.dat");
+        Env env = new EnvBuilder().addArgument("file.dat").create();
+        app.run(env);
 
         assertEquals("fail file.dat\n", out.toString());
     }
