@@ -8,6 +8,7 @@ import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
+import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
 import org.yi.happy.archive.key.FullKey;
@@ -38,15 +39,15 @@ public class DecodeBlockMain {
     /**
      * decode a single block.
      * 
-     * @param args
+     * @param env
      * @throws Exception
      */
     @EntryPoint
-    public static void main(String[] args) throws Exception {
+    public static void main(Env env) throws Exception {
         FileSystem fs = new RealFileSystem();
         OutputStream out = System.out;
 
-        new DecodeBlockMain(fs, out).run(args);
+        new DecodeBlockMain(fs, out).run(env);
 
         out.flush();
     }
@@ -54,19 +55,20 @@ public class DecodeBlockMain {
     /**
      * decode a single block.
      * 
-     * @param args
+     * @param env
      *            file name of the block to decode, full key of the block.
      * @throws IOException
      */
     @SmellsMessy
-    public void run(String... args) throws IOException {
-        /*
-         * TODO check arguments and display help if needed
-         */
+    public void run(Env env) throws IOException {
+        if (env.hasArgumentCount() != 2) {
+            System.err.println("use: input key");
+            return;
+        }
 
-        EncodedBlock b = EncodedBlockParse.parse(fs.load(args[0],
+        EncodedBlock b = EncodedBlockParse.parse(fs.load(env.getArgument(0),
                 Blocks.MAX_SIZE));
-        FullKey k = FullKeyParse.parseFullKey(args[1]);
+        FullKey k = FullKeyParse.parseFullKey(env.getArgument(1));
         Block d = b.decode(k);
         out.write(d.asBytes());
     }

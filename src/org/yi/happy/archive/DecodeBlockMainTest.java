@@ -6,6 +6,8 @@ import java.io.ByteArrayOutputStream;
 
 import org.junit.Test;
 import org.yi.happy.annotate.SmellsMessy;
+import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.commandLine.EnvBuilder;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.test_data.TestData;
 
@@ -25,8 +27,10 @@ public class DecodeBlockMainTest {
         fs.save("test.dat", TestData.KEY_BLOB.getBytes());
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        new DecodeBlockMain(fs, out).run("test.dat", TestData.KEY_BLOB
-                .getFullKey().toString());
+        Env env = new EnvBuilder().addArgument("test.dat")
+                .addArgument(TestData.KEY_BLOB.getFullKey().toString())
+                .create();
+        new DecodeBlockMain(fs, out).run(env);
 
         assertArrayEquals(TestData.CLEAR_CONTENT.getBytes(), out.toByteArray());
     }

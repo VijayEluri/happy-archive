@@ -79,15 +79,7 @@ public class Main {
                 public void run(String[] args) throws Exception {
                     FileStoreTagAddMain.main(args);
                 }
-            },
-
-            new Cmd("decode") {
-                @Override
-                public void run(String[] args) throws Exception {
-                    DecodeBlockMain.main(args);
-                }
             }
-
 
             ));
 
@@ -98,6 +90,13 @@ public class Main {
                 @Override
                 public void run(Env env) throws Exception {
                     MakeIndexDatabaseMain.launch(env);
+                }
+            },
+
+            new NewCmd("decode") {
+                @Override
+                public void run(Env env) throws Exception {
+                    DecodeBlockMain.main(env);
                 }
             },
 
