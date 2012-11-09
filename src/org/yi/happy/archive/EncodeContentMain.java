@@ -10,6 +10,7 @@ import org.yi.happy.archive.block.encoder.BlockEncoder;
 import org.yi.happy.archive.block.encoder.BlockEncoderFactory;
 import org.yi.happy.archive.block.encoder.BlockEncoderResult;
 import org.yi.happy.archive.block.parser.BlockParse;
+import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
 
@@ -24,14 +25,14 @@ public class EncodeContentMain {
     private final Writer out;
 
     /**
-     * @param args
+     * @param env
      * @throws Exception
      */
-    public static void main(String[] args) throws Exception {
+    public static void main(Env env) throws Exception {
         FileSystem fs = new RealFileSystem();
         Writer out = new OutputStreamWriter(System.out);
 
-        new EncodeContentMain(fs, out).run(args);
+        new EncodeContentMain(fs, out).run(env);
 
         out.flush();
     }
@@ -51,17 +52,23 @@ public class EncodeContentMain {
     /**
      * encode a block.
      * 
-     * @param args
+     * @param env
      *            the file name of the block.
      * @throws IOException
      */
     @EntryPoint
-    public void run(String... args) throws IOException {
+    public void run(Env env) throws IOException {
+        if (env.hasArgumentCount() != 2) {
+            out.write("use: input output\n");
+            return;
+        }
+
         BlockEncoder encoder = BlockEncoderFactory.getContentDefault();
 
-        Block block = BlockParse.parse(fs.load(args[0], Blocks.MAX_SIZE));
+        Block block = BlockParse.parse(fs.load(env.getArgument(0),
+                Blocks.MAX_SIZE));
         BlockEncoderResult e = encoder.encode(block);
-        fs.save(args[1], e.getBlock().asBytes());
+        fs.save(env.getArgument(1), e.getBlock().asBytes());
 
         out.write(e.getKey() + "\n");
     }

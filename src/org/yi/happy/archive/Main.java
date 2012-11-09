@@ -86,14 +86,8 @@ public class Main {
                 public void run(String[] args) throws Exception {
                     DecodeBlockMain.main(args);
                 }
-            },
-
-            new Cmd("encode") {
-                @Override
-                public void run(String[] args) throws Exception {
-                    EncodeContentMain.main(args);
-                }
             }
+
 
             ));
 
@@ -104,6 +98,13 @@ public class Main {
                 @Override
                 public void run(Env env) throws Exception {
                     MakeIndexDatabaseMain.launch(env);
+                }
+            },
+
+            new NewCmd("encode") {
+                @Override
+                public void run(Env env) throws Exception {
+                    EncodeContentMain.main(env);
                 }
             },
 

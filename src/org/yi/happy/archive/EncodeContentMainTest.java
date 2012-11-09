@@ -6,6 +6,8 @@ import static org.junit.Assert.assertEquals;
 import java.io.StringWriter;
 
 import org.junit.Test;
+import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.commandLine.EnvBuilder;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.test_data.TestData;
 
@@ -25,7 +27,9 @@ public class EncodeContentMainTest {
         StringWriter out = new StringWriter();
 
         EncodeContentMain app = new EncodeContentMain(fs, out);
-        app.run("in.dat", "out.dat");
+        Env env = new EnvBuilder().addArgument("in.dat").addArgument("out.dat")
+                .create();
+        app.run(env);
 
         assertEquals(
                 TestData.KEY_CONTENT_AES128.getFullKey().toString() + "\n", out
