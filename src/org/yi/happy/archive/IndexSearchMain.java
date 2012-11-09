@@ -12,6 +12,7 @@ import java.util.concurrent.ExecutionException;
 import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.IndexSearch.SearchResult;
+import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
 import org.yi.happy.archive.key.LocatorKey;
@@ -40,18 +41,18 @@ public class IndexSearchMain {
     /**
      * invoke from the command line.
      * 
-     * @param args
+     * @param env
      * @throws IOException
      * @throws ExecutionException
      * @throws InterruptedException
      */
     @EntryPoint
-    public static void main(String[] args) throws IOException,
+    public static void main(Env env) throws IOException,
             InterruptedException, ExecutionException {
         FileSystem fs = new RealFileSystem();
         Writer out = new OutputStreamWriter(System.out, "utf-8");
 
-        new IndexSearchMain(fs, out).run(args);
+        new IndexSearchMain(fs, out).run(env);
 
         out.flush();
     }
@@ -59,23 +60,23 @@ public class IndexSearchMain {
     /**
      * run the index search.
      * 
-     * @param args
+     * @param env
      *            the command line arguments.
      * @throws IOException
      * @throws ExecutionException
      * @throws InterruptedException
      */
     @SmellsMessy
-    public void run(String... args) throws IOException, InterruptedException,
+    public void run(Env env) throws IOException, InterruptedException,
             ExecutionException {
-        if (args.length != 2) {
-            out.write("use: index key-list\n");
+        if (env.hasNoIndex() || env.hasArgumentCount() != 1) {
+            out.write("use: --index index key-list\n");
             return;
         }
 
-        Set<LocatorKey> want = loadRequestSet(args[1]);
+        Set<LocatorKey> want = loadRequestSet(env.getArgument(0));
 
-        IndexSearch search = new IndexSearch(fs, args[0]);
+        IndexSearch search = new IndexSearch(fs, env.getIndex());
         search.search(want, new IndexSearch.Handler() {
             @Override
             public void gotResult(SearchResult result) {

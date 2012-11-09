@@ -100,13 +100,6 @@ public class Main {
                 public void run(String[] args) throws Exception {
                     VerifyMain.main(args);
                 }
-            },
-
-            new Cmd("index-search") {
-                @Override
-                public void run(String[] args) throws Exception {
-                    IndexSearchMain.main(args);
-                }
             }
 
             ));
@@ -118,6 +111,13 @@ public class Main {
                 @Override
                 public void run(Env env) throws Exception {
                     MakeIndexDatabaseMain.launch(env);
+                }
+            },
+
+            new NewCmd("index-search") {
+                @Override
+                public void run(Env env) throws Exception {
+                    IndexSearchMain.main(env);
                 }
             },
 

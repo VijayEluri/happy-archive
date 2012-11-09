@@ -8,6 +8,8 @@ import java.util.concurrent.ExecutionException;
 
 import org.junit.Test;
 import org.yi.happy.annotate.NeedFailureTest;
+import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.commandLine.EnvBuilder;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.test_data.TestData;
@@ -36,7 +38,9 @@ public class IndexSearchMainTest {
         fs.save("request", ByteString.toUtf8(mapKey + "\n"));
         StringWriter out = new StringWriter();
 
-        new IndexSearchMain(fs, out).run("index", "request");
+        Env env = new EnvBuilder().withIndex("index").addArgument("request")
+                .create();
+        new IndexSearchMain(fs, out).run(env);
 
         String o = out.toString();
         assertEquals("onsite\t01\t00.dat\t" + mapKey + "\n", o);
@@ -63,7 +67,9 @@ public class IndexSearchMainTest {
         fs.save("request", ByteString.toUtf8(mapKey + "\n"));
         StringWriter out = new StringWriter();
 
-        new IndexSearchMain(fs, out).run("index", "request");
+        Env env = new EnvBuilder().withIndex("index").addArgument("request")
+                .create();
+        new IndexSearchMain(fs, out).run(env);
 
         String o = out.toString();
         assertEquals("offsite\t02\t00.dat\t" + mapKey + "\n"
@@ -92,7 +98,9 @@ public class IndexSearchMainTest {
         fs.save("request", ByteString.toUtf8(mapKey + "\n" + partKey + "\n"));
         StringWriter out = new StringWriter();
 
-        new IndexSearchMain(fs, out).run("index", "request");
+        Env env = new EnvBuilder().withIndex("index").addArgument("request")
+                .create();
+        new IndexSearchMain(fs, out).run(env);
 
         String o = out.toString();
         assertEquals("offsite\t02\t00.dat\t" + mapKey + "\n"
@@ -123,7 +131,9 @@ public class IndexSearchMainTest {
         fs.save("request", ByteString.toUtf8(mapKey + "\n" + partKey + "\n"));
         StringWriter out = new StringWriter();
 
-        new IndexSearchMain(fs, out).run("index", "request");
+        Env env = new EnvBuilder().withIndex("index").addArgument("request")
+                .create();
+        new IndexSearchMain(fs, out).run(env);
 
         String o = out.toString();
         assertEquals("offsite\t02\t00.dat\t" + mapKey + "\n"
@@ -149,7 +159,9 @@ public class IndexSearchMainTest {
         fs.save("request", ByteString.toUtf8(mapKey + "\n"));
         StringWriter out = new StringWriter();
 
-        new IndexSearchMain(fs, out).run("index", "request");
+        Env env = new EnvBuilder().withIndex("index").addArgument("request")
+                .create();
+        new IndexSearchMain(fs, out).run(env);
 
         String o = out.toString();
         assertEquals("onsite\t01\t00.dat\t" + mapKey + "\n", o);
