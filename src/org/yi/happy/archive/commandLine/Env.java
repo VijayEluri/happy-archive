@@ -90,4 +90,16 @@ public class Env {
     public boolean hasNoArguments() {
         return arguments.isEmpty();
     }
+
+    public int hasArgumentCount() {
+        return arguments.size();
+    }
+
+    public boolean hasNoIndex() {
+        return index == null;
+    }
+
+    public String getArgument(int index) {
+        return arguments.get(index);
+    }
 }

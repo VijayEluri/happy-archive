@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
-import org.yi.happy.annotate.EntryPoint;
+import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
 import org.yi.happy.archive.key.LocatorKey;
@@ -39,14 +39,14 @@ public class StoreRemoveMain {
      *            store, remove list
      * @throws IOException
      */
-    public void run(String... args) throws IOException {
-        if (args.length != 2) {
-            out.write("use: store remove.lst\n");
+    public void run(Env env) throws IOException {
+        if (env.hasNoStore() || env.hasArgumentCount() != 1) {
+            out.write("use: --store store remove.lst\n");
             return;
         }
 
-        BlockStore store = new FileBlockStore(fs, args[0]);
-        InputStream in = fs.openInputStream(args[1]);
+        BlockStore store = new FileBlockStore(fs, env.getStore());
+        InputStream in = fs.openInputStream(env.getArgument(0));
         try {
             LineCursor line = new LineCursor(in);
             while (line.next()) {
@@ -64,15 +64,15 @@ public class StoreRemoveMain {
      * @param args
      * @throws IOException
      */
-    @EntryPoint
-    public static void main(String[] args) throws IOException {
+    public static void launch(Env env) throws IOException {
         FileSystem fs = new RealFileSystem();
         Writer out = new OutputStreamWriter(System.out, "UTF-8");
         try {
-            new StoreRemoveMain(fs, out).run(args);
+            new StoreRemoveMain(fs, out).run(env);
         } finally {
             out.flush();
         }
 
     }
+
 }

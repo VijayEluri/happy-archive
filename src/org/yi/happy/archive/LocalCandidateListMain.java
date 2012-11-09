@@ -21,14 +21,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.zip.GZIPInputStream;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
 import org.yi.happy.annotate.DuplicatedLogic;
-import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.annotate.SmellsMessy;
+import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
 import org.yi.happy.archive.key.LocatorKey;
@@ -46,49 +43,20 @@ public class LocalCandidateListMain {
      * @throws IOException
      * @throws InterruptedException
      */
-    @EntryPoint
-    @DuplicatedLogic("IndexSearchMain index search")
-    public static void main(String[] args) throws IOException,
+    public static void launch(Env env) throws IOException,
             InterruptedException {
+        if (env.hasNoStore() || env.hasNoIndex() || env.hasArgumentCount() != 1) {
+            System.out.println("use: --store store --index index volume-set");
+            return;
+        }
+
         FileSystem fs = new RealFileSystem();
 
-        Options options = new Options()
+        FileBlockStore store = new FileBlockStore(fs, env.getStore());
 
-        .addOption(null, "store", true, "location of the store")
+        String indexBase = env.getIndex();
 
-        .addOption(null, "index", true, "location of the indexes");
-
-        CommandLine cmd;
-        try {
-            cmd = new GnuParser().parse(options, args);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            showHelp(options, System.out);
-            return;
-        }
-
-        /*
-         * get store location.
-         */
-        if (cmd.getOptionValue("store") == null) {
-            showHelp(options, System.out);
-            return;
-        }
-
-        FileBlockStore store = new FileBlockStore(fs, cmd
-                .getOptionValue("store"));
-
-        /*
-         * get index location.
-         */
-        String indexBase = cmd.getOptionValue("index");
-
-        if (cmd.getArgs().length != 1) {
-            showHelp(options, System.out);
-            return;
-        }
-
-        final String volumeSet = cmd.getArgs()[0];
+        final String volumeSet = env.getArgument(0);
 
         /*
          * load list of keys in store.
@@ -266,4 +234,5 @@ public class LocalCandidateListMain {
             o.flush();
         }
     }
+
 }

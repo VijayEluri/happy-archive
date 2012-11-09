@@ -135,20 +135,6 @@ public class Main {
                 public void run(String[] args) throws Exception {
                     IndexVolumeMain.main(args);
                 }
-            },
-
-            new Cmd("store-remove") {
-                @Override
-                public void run(String[] args) throws Exception {
-                    StoreRemoveMain.main(args);
-                }
-            },
-
-            new Cmd("backup-list") {
-                @Override
-                public void run(String[] args) throws Exception {
-                    LocalCandidateListMain.main(args);
-                }
             }
 
             ));
@@ -157,12 +143,29 @@ public class Main {
             .unmodifiableList(Arrays.asList(
 
             new NewCmd("make-index-db") {
+                @Override
                 public void run(Env env) throws Exception {
                     MakeIndexDatabaseMain.launch(env);
                 }
             },
 
+            new NewCmd("store-remove") {
+                @Override
+                public void run(Env env) throws Exception {
+                    StoreRemoveMain.launch(env);
+                }
+
+            },
+
+            new NewCmd("backup-list") {
+                @Override
+                public void run(Env env) throws Exception {
+                    LocalCandidateListMain.launch(env);
+                }
+            },
+
             new NewCmd("show-env") {
+                @Override
                 public void run(Env env) throws Exception {
                     ShowEnvMain.launch(env);
                 }
