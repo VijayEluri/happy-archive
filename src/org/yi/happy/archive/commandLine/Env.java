@@ -70,7 +70,7 @@ public class Env {
 
     @Override
     public String toString() {
-        return "Args [home=" + home + ", store=" + store + ", index=" + index
+        return "Env [home=" + home + ", store=" + store + ", index=" + index
                 + ", need=" + need + ", command=" + command + ", arguments="
                 + arguments + "]";
     }

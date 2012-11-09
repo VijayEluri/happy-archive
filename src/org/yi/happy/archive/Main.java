@@ -149,17 +149,24 @@ public class Main {
                 public void run(String[] args) throws Exception {
                     LocalCandidateListMain.main(args);
                 }
-            },
+            }
 
-            new Cmd("make-index-db") {
-                @Override
-                public void run(String[] args) throws Exception {
-                    MakeIndexDatabaseMain.main(args);
-                }
-            }));
+            ));
 
     private static final List<NewCmd> newCmds = Collections
             .unmodifiableList(Arrays.asList(
+
+            new NewCmd("make-index-db") {
+                public void run(Env env) throws Exception {
+                    MakeIndexDatabaseMain.launch(env);
+                }
+            },
+
+            new NewCmd("show-env") {
+                public void run(Env env) throws Exception {
+                    ShowEnvMain.launch(env);
+                }
+            },
 
             new NewCmd("tag-get") {
                 @Override
