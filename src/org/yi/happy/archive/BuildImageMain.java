@@ -2,16 +2,13 @@ package org.yi.happy.archive;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.Writer;
 
-import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.file_system.FileSystem;
-import org.yi.happy.archive.file_system.RealFileSystem;
 import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.key.LocatorKeyParse;
 
@@ -19,7 +16,7 @@ import org.yi.happy.archive.key.LocatorKeyParse;
  * Build an image of a backup disk. The set of files that will be burned to a
  * backup disk.
  */
-public class BuildImageMain {
+public class BuildImageMain implements MainCommand {
 
     private final FileSystem fs;
     private final Writer out;
@@ -51,6 +48,7 @@ public class BuildImageMain {
         if (env.hasNoStore() || env.hasArgumentCount() != 3) {
             out.write("use: --store store outstanding-list image-directory"
                     + " image-size-in-mb\n");
+            out.flush();
             return;
         }
 
@@ -93,22 +91,6 @@ public class BuildImageMain {
         }
 
         out.write(size.getCount() + "\t" + size.getMegaSize() + full + "\n");
-    }
-
-    /**
-     * Invoke from the command line.
-     * 
-     * @param args
-     *            the command line arguments.
-     * @throws IOException
-     */
-    @EntryPoint
-    public static void main(Env env) throws IOException {
-        FileSystem fs = new RealFileSystem();
-        Writer out = new OutputStreamWriter(System.out);
-        PrintStream err = System.err;
-        new BuildImageMain(fs, out, err).run(env);
         out.flush();
     }
-
 }

@@ -18,7 +18,7 @@ import org.yi.happy.archive.tag.TagStreamIterator;
 /**
  * A program to restore tags.
  */
-public class FileStoreTagGetMain {
+public class FileStoreTagGetMain implements MainCommand {
     private final FileSystem fs;
     private final WaitHandler waitHandler;
     private final InputStream in;

@@ -1,7 +1,6 @@
 package org.yi.happy.archive;
 
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.Writer;
 import java.util.Collections;
@@ -14,12 +13,11 @@ import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.crypto.Digests;
 import org.yi.happy.archive.file_system.FileSystem;
-import org.yi.happy.archive.file_system.RealFileSystem;
 
 /**
  * Index a volume that has been burned.
  */
-public class IndexVolumeMain {
+public class IndexVolumeMain implements MainCommand {
 
     private final FileSystem fs;
     private final Writer out;
@@ -54,13 +52,18 @@ public class IndexVolumeMain {
     public void run(Env env) throws IOException {
         if (env.hasArgumentCount() != 1) {
             out.write("use: image\n");
+            out.flush();
             return;
         }
 
-        List<String> names = fs.list(env.getArgument(0));
-        Collections.sort(names);
-        for (String name : names) {
-            process(fs.join(env.getArgument(0), name), name);
+        try {
+            List<String> names = fs.list(env.getArgument(0));
+            Collections.sort(names);
+            for (String name : names) {
+                process(fs.join(env.getArgument(0), name), name);
+            }
+        } finally {
+            out.flush();
         }
     }
 
@@ -71,18 +74,18 @@ public class IndexVolumeMain {
         }
 
         try {
-        byte[] data = fs.load(path, Blocks.MAX_SIZE);
-        EncodedBlock block = EncodedBlockParse.parse(data);
+            byte[] data = fs.load(path, Blocks.MAX_SIZE);
+            EncodedBlock block = EncodedBlockParse.parse(data);
 
-        String key = block.getKey().toString();
+            String key = block.getKey().toString();
 
-        data = block.asBytes();
+            data = block.asBytes();
 
-        String hash = Base16.encode(Digests.digestData(digest, data));
-        String size = Integer.toString(data.length);
+            String hash = Base16.encode(Digests.digestData(digest, data));
+            String size = Integer.toString(data.length);
 
-        out.write(name + "\t" + "plain" + "\t" + key + "\t" + hash + "\t"
-                + size + "\n");
+            out.write(name + "\t" + "plain" + "\t" + key + "\t" + hash + "\t"
+                    + size + "\n");
         } catch (Exception e) {
             e.printStackTrace(err);
         }
@@ -93,23 +96,6 @@ public class IndexVolumeMain {
         Collections.sort(names);
         for (String name : names) {
             process(fs.join(path, name), base + "/" + name);
-        }
-    }
-
-    /**
-     * invoke from the command line.
-     * 
-     * @param args
-     *            the command line arguments.
-     * @throws IOException
-     */
-    public static void main(Env env) throws IOException {
-        FileSystem fs = new RealFileSystem();
-        Writer out = new OutputStreamWriter(System.out);
-        try {
-            new IndexVolumeMain(fs, out, System.err).run(env);
-        } finally {
-            out.flush();
         }
     }
 }

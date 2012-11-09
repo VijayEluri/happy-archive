@@ -16,18 +16,19 @@ import org.yi.happy.archive.file_system.RealFileSystem;
 /**
  * Experimental command to populate a HSQL database with indexes.
  */
-public class MakeIndexDatabaseMain {
+public class MakeIndexDatabaseMain implements MainCommand {
     /**
      * make a database from all the indexes in /Users/happy/archive.d/. this
      * takes a very long time to run because of updating indexes so I think
      * another strategy should be tried.
      * 
-     * @param args
+     * @param env
      * @throws ClassNotFoundException
      * @throws SQLException
      * @throws IOException
      */
-    public static void main(Env env) throws ClassNotFoundException,
+    @Override
+    public void run(Env env) throws ClassNotFoundException,
             SQLException, IOException {
         /*
          * XXX hacked together, needs to be cleaned

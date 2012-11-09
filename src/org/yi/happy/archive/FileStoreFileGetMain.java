@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.file_system.FileSystem;
-import org.yi.happy.archive.file_system.RealFileSystem;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.FullKeyParse;
 import org.yi.happy.archive.tag.RestoreFile;
@@ -14,21 +13,7 @@ import org.yi.happy.archive.tag.RestoreFile;
  * get a file from a file store.
  */
 @EntryPoint
-public class FileStoreFileGetMain {
-    /**
-     * get a file from a file store.
-     * 
-     * @param env
-     * @throws IOException
-     */
-    public static void main(Env env) throws IOException {
-        new FileStoreFileGetMain().run(env);
-    }
-
-    public FileStoreFileGetMain() {
-        this(new RealFileSystem(), new WaitHandlerProgressiveDelay());
-    }
-
+public class FileStoreFileGetMain implements MainCommand {
     /**
      * create.
      * 
@@ -53,6 +38,7 @@ public class FileStoreFileGetMain {
      *            fetch, the output file name.
      * @throws IOException
      */
+    @Override
     public void run(Env env) throws IOException {
         if (env.hasNoStore() || env.hasNoNeed() || env.hasArgumentCount() != 2) {
             System.err.println("use: --store store --need need key output");

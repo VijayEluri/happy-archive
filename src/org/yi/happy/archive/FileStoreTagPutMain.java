@@ -10,14 +10,13 @@ import org.yi.happy.archive.block.encoder.BlockEncoderFactory;
 import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.file_system.FileSystem;
-import org.yi.happy.archive.file_system.RealFileSystem;
 import org.yi.happy.archive.tag.TagBuilder;
 import org.yi.happy.archive.tag.TagOutputStream;
 
 /**
  * Store files in a file store, printing out tags.
  */
-public class FileStoreTagPutMain {
+public class FileStoreTagPutMain implements MainCommand {
 
     private final FileSystem fs;
     private final PrintStream out;
@@ -45,55 +44,45 @@ public class FileStoreTagPutMain {
     public void run(Env env) throws IOException {
         if (env.hasNoStore() || env.hasNoArguments()) {
             out.println("use: --store store file...");
+            out.flush();
             return;
         }
 
-        FileBlockStore store = new FileBlockStore(fs, env.getStore());
+        try {
+            FileBlockStore store = new FileBlockStore(fs, env.getStore());
 
-        /*
-         * do the work
-         */
+            /*
+             * do the work
+             */
 
-        StoreBlockStorage s = new StoreBlockStorage(
-                BlockEncoderFactory.getContentDefault(), store);
+            StoreBlockStorage s = new StoreBlockStorage(
+                    BlockEncoderFactory.getContentDefault(), store);
 
-        TagOutputStream out = new TagOutputStream(this.out);
+            TagOutputStream out = new TagOutputStream(this.out);
 
-        for (String arg : env.getArguments()) {
-            if (fs.isFile(arg)) {
-                KeyOutputStream o1 = new KeyOutputStream(s);
-                DigestOutputStream o2 = new DigestOutputStream(DigestFactory
-                        .getProvider("sha-256").get());
-                TeeOutputStream o = new TeeOutputStream(o1, o2);
-                InputStream in = fs.openInputStream(arg);
-                try {
-                    Streams.copy(in, o);
-                } finally {
-                    in.close();
+            for (String arg : env.getArguments()) {
+                if (fs.isFile(arg)) {
+                    KeyOutputStream o1 = new KeyOutputStream(s);
+                    DigestOutputStream o2 = new DigestOutputStream(
+                            DigestFactory.getProvider("sha-256").get());
+                    TeeOutputStream o = new TeeOutputStream(o1, o2);
+                    InputStream in = fs.openInputStream(arg);
+                    try {
+                        Streams.copy(in, o);
+                    } finally {
+                        in.close();
+                    }
+                    o.close();
+
+                    out.write(new TagBuilder().put("name", arg)
+                            .put("type", "file")
+                            .put("size", Long.toString(o2.getSize()))
+                            .put("data", o1.getFullKey().toString())
+                            .put("hash", "sha-256:" + o2.getHash()).create());
                 }
-                o.close();
-
-                out.write(new TagBuilder().put("name", arg).put("type", "file")
-                        .put("size", Long.toString(o2.getSize()))
-                        .put("data", o1.getFullKey().toString())
-                        .put("hash", "sha-256:" + o2.getHash()).create());
             }
+        } finally {
+            System.out.flush();
         }
-    }
-
-    /**
-     * The command line entry point.
-     * 
-     * @param args
-     * @throws IOException
-     */
-    public static void main(Env env)
-        throws IOException {
-            FileSystem fs = new RealFileSystem();
-            try {
-                new FileStoreTagPutMain(fs, System.out).run(env);
-            } finally {
-                System.out.flush();
-            }
     }
 }

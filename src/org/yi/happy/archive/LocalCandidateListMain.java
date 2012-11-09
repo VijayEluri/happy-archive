@@ -34,7 +34,7 @@ import org.yi.happy.archive.key.LocatorKeyParse;
 /**
  * Make a candidate list from a local store and local index.
  */
-public class LocalCandidateListMain {
+public class LocalCandidateListMain implements MainCommand {
     /**
      * Make a candidate list from a local store and local index.
      * 
@@ -43,7 +43,7 @@ public class LocalCandidateListMain {
      * @throws IOException
      * @throws InterruptedException
      */
-    public static void main(Env env) throws IOException,
+    public void run(Env env) throws IOException,
             InterruptedException {
         if (env.hasNoStore() || env.hasNoIndex() || env.hasArgumentCount() != 1) {
             System.out.println("use: --store store --index index volume-set");

@@ -2,19 +2,17 @@ package org.yi.happy.archive;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.file_system.FileSystem;
-import org.yi.happy.archive.file_system.RealFileSystem;
 import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.key.LocatorKeyParse;
 
 /**
  * Remove keys from the store.
  */
-public class StoreRemoveMain {
+public class StoreRemoveMain implements MainCommand {
 
     private final FileSystem fs;
     private final Writer out;
@@ -42,6 +40,7 @@ public class StoreRemoveMain {
     public void run(Env env) throws IOException {
         if (env.hasNoStore() || env.hasArgumentCount() != 1) {
             out.write("use: --store store remove.lst\n");
+            out.flush();
             return;
         }
 
@@ -57,22 +56,4 @@ public class StoreRemoveMain {
             in.close();
         }
     }
-
-    /**
-     * invoke from the command line.
-     * 
-     * @param args
-     * @throws IOException
-     */
-    public static void main(Env env) throws IOException {
-        FileSystem fs = new RealFileSystem();
-        Writer out = new OutputStreamWriter(System.out, "UTF-8");
-        try {
-            new StoreRemoveMain(fs, out).run(env);
-        } finally {
-            out.flush();
-        }
-
-    }
-
 }

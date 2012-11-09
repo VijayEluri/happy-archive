@@ -1,5 +1,8 @@
 package org.yi.happy.archive;
 
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -7,6 +10,7 @@ import java.util.List;
 import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.commandLine.MyEnv;
+import org.yi.happy.archive.file_system.RealFileSystem;
 
 /**
  * The top level entry point that dispatches to the sub-commands.
@@ -34,107 +38,124 @@ public class Main {
             new Cmd("file-get") {
                 @Override
                 public void run(Env env) throws Exception {
-                    FileStoreFileGetMain.main(env);
+                    new FileStoreFileGetMain(new RealFileSystem(),
+                            new WaitHandlerProgressiveDelay()).run(env);
                 }
             },
 
             new Cmd("make-index-db") {
                 @Override
                 public void run(Env env) throws Exception {
-                    MakeIndexDatabaseMain.main(env);
+                    new MakeIndexDatabaseMain().run(env);
                 }
             },
 
             new Cmd("block-put") {
                 @Override
                 public void run(Env env) throws Exception {
-                    FileStoreBlockPutMain.main(env);
+                    new FileStoreBlockPutMain(new RealFileSystem()).run(env);
                 }
             },
 
             new Cmd("stream-get") {
                 @Override
                 public void run(Env env) throws Exception {
-                    FileStoreStreamGetMain.main(env);
+                    new FileStoreStreamGetMain(new RealFileSystem(),
+                            System.out, new WaitHandlerProgressiveDelay())
+                            .run(env);
                 }
             },
 
             new Cmd("stream-put") {
                 @Override
                 public void run(Env env) throws Exception {
-                    FileStoreStreamPutMain.main(env);
+                    new FileStoreStreamPutMain(new RealFileSystem(), System.in,
+                            new OutputStreamWriter(System.out, "UTF-8"))
+                            .run(env);
                 }
             },
 
             new Cmd("tag-add") {
                 @Override
                 public void run(Env env) throws Exception {
-                    FileStoreTagAddMain.main(env);
+                    new FileStoreTagAddMain().run(env);
                 }
             },
 
             new Cmd("decode") {
                 @Override
                 public void run(Env env) throws Exception {
-                    DecodeBlockMain.main(env);
+                    new DecodeBlockMain(new RealFileSystem(), System.out).run(env);
                 }
             },
 
             new Cmd("encode") {
                 @Override
                 public void run(Env env) throws Exception {
-                    EncodeContentMain.main(env);
+                    new EncodeContentMain(new RealFileSystem(),
+                            new OutputStreamWriter(System.out)).run(env);
                 }
             },
 
             new Cmd("verify") {
                 @Override
                 public void run(Env env) throws Exception {
-                    VerifyMain.main(env);
+                    new VerifyMain(new RealFileSystem(), new PrintWriter(
+                            System.out, true)).run(env);
                 }
-
             },
 
             new Cmd("index-search") {
                 @Override
                 public void run(Env env) throws Exception {
-                    IndexSearchMain.main(env);
+                    new IndexSearchMain(new RealFileSystem(),
+                            new OutputStreamWriter(System.out, "utf-8"))
+                            .run(env);
                 }
             },
 
             new Cmd("volume-get") {
                 @Override
                 public void run(Env env) throws Exception {
-                    VolumeGetMain.main(env);
+                    new VolumeGetMain(new RealFileSystem(),
+                            new InputStreamReader(System.in, "UTF-8"),
+                            new OutputStreamWriter(System.out, "UTF-8"),
+                            System.err).run(env);
                 }
-
             },
 
             new Cmd("store-list") {
                 @Override
                 public void run(Env env) throws Exception {
-                    FileStoreListMain.main(env);
+                    new FileStoreListMain(new RealFileSystem(),
+                            new OutputStreamWriter(System.out)).run(env);
                 }
             },
 
             new Cmd("build-image") {
                 @Override
                 public void run(Env env) throws Exception {
-                    BuildImageMain.main(env);
+                    new BuildImageMain(new RealFileSystem(),
+                            new OutputStreamWriter(System.out), System.err)
+                            .run(env);
                 }
             },
 
             new Cmd("index-volume") {
                 @Override
                 public void run(Env env) throws Exception {
-                    IndexVolumeMain.main(env);
+                    new IndexVolumeMain(new RealFileSystem(),
+                            new OutputStreamWriter(System.out), System.err)
+                            .run(env);
                 }
             },
             
             new Cmd("store-remove") {
                 @Override
                 public void run(Env env) throws Exception {
-                    StoreRemoveMain.main(env);
+                    new StoreRemoveMain(new RealFileSystem(),
+                            new OutputStreamWriter(System.out, "UTF-8"))
+                            .run(env);
                 }
 
             },
@@ -142,14 +163,14 @@ public class Main {
             new Cmd("backup-list") {
                 @Override
                 public void run(Env env) throws Exception {
-                    LocalCandidateListMain.main(env);
+                    new LocalCandidateListMain().run(env);
                 }
             },
 
             new Cmd("show-env") {
                 @Override
                 public void run(Env env) throws Exception {
-                    ShowEnvMain.main(env);
+                    new ShowEnvMain().run(env);
                 }
             },
 
@@ -163,7 +184,8 @@ public class Main {
             new Cmd("tag-put") {
                 @Override
                 public void run(Env env) throws Exception {
-                    FileStoreTagPutMain.main(env);
+                    new FileStoreTagPutMain(new RealFileSystem(), System.out)
+                            .run(env);
                 }
             }
 

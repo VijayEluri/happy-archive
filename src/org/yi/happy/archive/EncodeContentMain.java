@@ -1,7 +1,6 @@
 package org.yi.happy.archive;
 
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import org.yi.happy.annotate.EntryPoint;
@@ -12,7 +11,6 @@ import org.yi.happy.archive.block.encoder.BlockEncoderResult;
 import org.yi.happy.archive.block.parser.BlockParse;
 import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.file_system.FileSystem;
-import org.yi.happy.archive.file_system.RealFileSystem;
 
 /**
  * command line tool to encode a content block. The clear data is read from the
@@ -20,22 +18,9 @@ import org.yi.happy.archive.file_system.RealFileSystem;
  * named in the second argument, the full key for decoding is printed on
  * standard output.
  */
-public class EncodeContentMain {
+public class EncodeContentMain implements MainCommand {
     private final FileSystem fs;
     private final Writer out;
-
-    /**
-     * @param env
-     * @throws Exception
-     */
-    public static void main(Env env) throws Exception {
-        FileSystem fs = new RealFileSystem();
-        Writer out = new OutputStreamWriter(System.out);
-
-        new EncodeContentMain(fs, out).run(env);
-
-        out.flush();
-    }
 
     /**
      * 
@@ -60,6 +45,7 @@ public class EncodeContentMain {
     public void run(Env env) throws IOException {
         if (env.hasArgumentCount() != 2) {
             out.write("use: input output\n");
+            out.flush();
             return;
         }
 
@@ -71,5 +57,6 @@ public class EncodeContentMain {
         fs.save(env.getArgument(1), e.getBlock().asBytes());
 
         out.write(e.getKey() + "\n");
+        out.flush();
     }
 }

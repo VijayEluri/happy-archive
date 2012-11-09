@@ -2,9 +2,10 @@ package org.yi.happy.archive;
 
 import org.yi.happy.archive.commandLine.Env;
 
-public class ShowEnvMain {
+public class ShowEnvMain implements MainCommand {
 
-    public static void main(Env env) {
+    @Override
+    public void run(Env env) {
         System.out.println(env);
     }
 

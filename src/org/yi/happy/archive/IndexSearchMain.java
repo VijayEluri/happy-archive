@@ -3,25 +3,22 @@ package org.yi.happy.archive;
 import java.io.IOError;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
-import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.IndexSearch.SearchResult;
 import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.file_system.FileSystem;
-import org.yi.happy.archive.file_system.RealFileSystem;
 import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.key.LocatorKeyParse;
 
 /**
  * search indexes for keys.
  */
-public class IndexSearchMain {
+public class IndexSearchMain implements MainCommand {
     private final FileSystem fs;
     private final Writer out;
 
@@ -39,25 +36,6 @@ public class IndexSearchMain {
     }
 
     /**
-     * invoke from the command line.
-     * 
-     * @param env
-     * @throws IOException
-     * @throws ExecutionException
-     * @throws InterruptedException
-     */
-    @EntryPoint
-    public static void main(Env env) throws IOException,
-            InterruptedException, ExecutionException {
-        FileSystem fs = new RealFileSystem();
-        Writer out = new OutputStreamWriter(System.out, "utf-8");
-
-        new IndexSearchMain(fs, out).run(env);
-
-        out.flush();
-    }
-
-    /**
      * run the index search.
      * 
      * @param env
@@ -71,6 +49,7 @@ public class IndexSearchMain {
             ExecutionException {
         if (env.hasNoIndex() || env.hasArgumentCount() != 1) {
             out.write("use: --index index key-list\n");
+            out.flush();
             return;
         }
 
@@ -93,6 +72,8 @@ public class IndexSearchMain {
                 System.err.println(cause.getMessage());
             }
         });
+
+        out.flush();
     }
 
     private Set<LocatorKey> loadRequestSet(String path) throws IOException {

@@ -3,7 +3,6 @@ package org.yi.happy.archive;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.archive.block.encoder.BlockEncoderFactory;
 import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.crypto.DigestFactory;
@@ -14,9 +13,9 @@ import org.yi.happy.archive.tag.TagBuilder;
 import org.yi.happy.archive.tag.TagOutputStream;
 import org.yi.happy.archive.tag.TagStreamIterator;
 
-public class FileStoreTagAddMain {
-    @EntryPoint
-    public static void main(Env env) throws IOException {
+public class FileStoreTagAddMain implements MainCommand {
+    @Override
+    public void run(Env env) throws IOException {
         /*
          * read a stream of tags of standard input, for the file tags that lack
          * a data attribute, store the file and fill in the data and hash

@@ -3,14 +3,12 @@ package org.yi.happy.archive;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.file_system.FileSystem;
-import org.yi.happy.archive.file_system.RealFileSystem;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.FullKeyParse;
 
@@ -19,7 +17,7 @@ import org.yi.happy.archive.key.FullKeyParse;
  * named file and the given full key is used to decode it. The decoded block is
  * sent to standard output.
  */
-public class DecodeBlockMain {
+public class DecodeBlockMain implements MainCommand {
     private final FileSystem fs;
     private final OutputStream out;
 
@@ -34,22 +32,6 @@ public class DecodeBlockMain {
     public DecodeBlockMain(FileSystem fs, OutputStream out) {
         this.fs = fs;
         this.out = out;
-    }
-
-    /**
-     * decode a single block.
-     * 
-     * @param env
-     * @throws Exception
-     */
-    @EntryPoint
-    public static void main(Env env) throws Exception {
-        FileSystem fs = new RealFileSystem();
-        OutputStream out = System.out;
-
-        new DecodeBlockMain(fs, out).run(env);
-
-        out.flush();
     }
 
     /**
@@ -71,5 +53,6 @@ public class DecodeBlockMain {
         FullKey k = FullKeyParse.parseFullKey(env.getArgument(1));
         Block d = b.decode(k);
         out.write(d.asBytes());
+        out.flush();
     }
 }
