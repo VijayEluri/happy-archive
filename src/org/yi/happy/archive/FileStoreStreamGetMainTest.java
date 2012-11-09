@@ -10,6 +10,8 @@ import java.io.IOException;
 
 import org.junit.Test;
 import org.yi.happy.annotate.SmellsMessy;
+import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.commandLine.EnvBuilder;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.test_data.TestData;
@@ -111,8 +113,10 @@ public class FileStoreStreamGetMainTest {
 
         };
 
-        new FileStoreStreamGetMain(fs, out, waitHandler).run("store",
-                "request", TestData.KEY_CONTENT_MAP.getFullKey().toString());
+        Env env = new EnvBuilder().withStore("store").withNeed("request")
+                .addArgument(TestData.KEY_CONTENT_MAP.getFullKey().toString())
+                .create();
+        new FileStoreStreamGetMain(fs, out, waitHandler).run(env);
 
         assertArrayEquals(ByteString.toUtf8("0123456789"), out.toByteArray());
     }

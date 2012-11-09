@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.yi.happy.annotate.EntryPoint;
+import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
 import org.yi.happy.archive.key.FullKeyParse;
@@ -37,34 +38,39 @@ public class FileStoreStreamGetMain {
     }
 
     /**
-     * @param args
+     * @param env
      *            file store base, request list, key to fetch
      * @throws IOException
      */
     @EntryPoint
-    public static void main(String[] args) throws IOException {
+    public static void main(Env env) throws IOException {
         WaitHandler waitHandler = new WaitHandlerProgressiveDelay();
 
         FileSystem fs = new RealFileSystem();
 
         OutputStream out = System.out;
 
-        new FileStoreStreamGetMain(fs, out, waitHandler).run(args);
+        new FileStoreStreamGetMain(fs, out, waitHandler).run(env);
     }
 
     /**
      * restore a stream.
      * 
-     * @param args
+     * @param env
      *            the block store, where to write the pending block list, the
      *            full key to fetch.
      * @throws IOException
      */
-    public void run(String... args) throws IOException {
-        FileBlockStore store = new FileBlockStore(fs, args[0]);
-        pendingFile = args[1];
+    public void run(Env env) throws IOException {
+        if (env.hasNoStore() || env.hasNoNeed() || env.hasArgumentCount() != 1) {
+            System.err.println("use: --store store --need need key");
+            return;
+        }
+        FileBlockStore store = new FileBlockStore(fs, env.getStore());
+        pendingFile = env.getNeed();
 
-        KeyInputStream in = new KeyInputStream(FullKeyParse.parseFullKey(args[2]),
+        KeyInputStream in = new KeyInputStream(FullKeyParse.parseFullKey(env
+                .getArgument(0)),
                 new RetrieveBlockStorage(store), notReadyHandler);
 
         Streams.copy(in, out);
