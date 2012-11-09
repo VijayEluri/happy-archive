@@ -29,6 +29,7 @@ public class StorageMemory implements BlockStore {
      *            the key to check for.
      * @return true if the store contains the key.
      */
+    @Override
     public boolean contains(LocatorKey key) {
         return data.containsKey(key);
     }

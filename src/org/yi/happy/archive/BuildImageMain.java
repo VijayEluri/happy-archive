@@ -42,6 +42,7 @@ public class BuildImageMain implements MainCommand {
      *            the command line arguments.
      * @throws IOException
      */
+    @Override
     @SmellsMessy
     public void run(Env env) throws IOException {
         if (env.hasNoStore() || env.hasArgumentCount() != 3) {

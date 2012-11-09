@@ -27,9 +27,12 @@ public interface LocatorKey extends Comparable<LocatorKey> {
     /**
      * @return the string that parses into this locator key
      */
+    @Override
     public String toString();
 
+    @Override
     public int hashCode();
 
+    @Override
     public boolean equals(Object obj);
 }

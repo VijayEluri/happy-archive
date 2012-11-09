@@ -43,6 +43,7 @@ public class IndexSearchMain implements MainCommand {
      * @throws ExecutionException
      * @throws InterruptedException
      */
+    @Override
     @SmellsMessy
     public void run(Env env) throws IOException, InterruptedException,
             ExecutionException {

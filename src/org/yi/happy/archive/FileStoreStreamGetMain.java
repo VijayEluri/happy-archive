@@ -42,6 +42,7 @@ public class FileStoreStreamGetMain implements MainCommand {
      *            full key to fetch.
      * @throws IOException
      */
+    @Override
     public void run(Env env) throws IOException {
         if (env.hasNoStore() || env.hasNoNeed() || env.hasArgumentCount() != 1) {
             System.err.println("use: --store store --need need key");

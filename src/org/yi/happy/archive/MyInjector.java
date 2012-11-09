@@ -159,7 +159,7 @@ public class MyInjector {
 
     public static MainCommand injectVolumeGetMain() {
         return new VolumeGetMain(injectFileSystem(), injectInput(),
-                injectOutput(), injectError());
+                injectError());
     }
 
     public static Provider<MainCommand> providerVerifyMain() {

@@ -9,6 +9,7 @@ import org.yi.happy.archive.crypto.Digests;
  */
 public final class NameFullKey implements FullKey {
 
+    @Override
     public String getType() {
         return KeyType.NAME_HASH;
     }

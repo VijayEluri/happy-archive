@@ -7,6 +7,7 @@ import java.io.IOException;
  */
 public class NotReadyError implements NotReadyHandler {
 
+    @Override
     public void notReady(SplitReader reader) throws IOException {
         throw new IONotReadyException();
     }

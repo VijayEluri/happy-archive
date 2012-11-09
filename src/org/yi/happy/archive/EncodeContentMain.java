@@ -41,6 +41,7 @@ public class EncodeContentMain implements MainCommand {
      *            the file name of the block.
      * @throws IOException
      */
+    @Override
     @EntryPoint
     public void run(Env env) throws IOException {
         if (env.hasArgumentCount() != 2) {

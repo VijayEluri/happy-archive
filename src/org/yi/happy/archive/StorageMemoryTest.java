@@ -29,6 +29,7 @@ public class StorageMemoryTest {
 
         final List<LocatorKey> keys = new ArrayList<LocatorKey>();
         BlockStoreVisitor<RuntimeException> visitor = new BlockStoreVisitor<RuntimeException>() {
+            @Override
             public void accept(LocatorKey key) {
                 keys.add(key);
             }

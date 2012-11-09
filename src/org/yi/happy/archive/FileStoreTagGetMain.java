@@ -50,6 +50,7 @@ public class FileStoreTagGetMain implements MainCommand {
      *            store base path; request list.
      * @throws IOException
      */
+    @Override
     @EntryPoint
     public void run(Env env) throws IOException {
         if (env.hasArguments() || env.hasNoStore() || env.hasNoNeed()) {

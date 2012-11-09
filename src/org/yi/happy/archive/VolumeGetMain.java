@@ -16,7 +16,6 @@ public class VolumeGetMain implements MainCommand {
 
     private final FileSystem fs;
     private final InputStream in;
-    private final PrintStream out;
     private final PrintStream err;
 
     /**
@@ -31,11 +30,9 @@ public class VolumeGetMain implements MainCommand {
      * @param err
      *            the standard error.
      */
-    public VolumeGetMain(FileSystem fs, InputStream in, PrintStream out,
-            PrintStream err) {
+    public VolumeGetMain(FileSystem fs, InputStream in, PrintStream err) {
         this.fs = fs;
         this.in = in;
-        this.out = out;
         this.err = err;
     }
 
@@ -46,6 +43,7 @@ public class VolumeGetMain implements MainCommand {
      *            the command line.
      * @throws IOException
      */
+    @Override
     public void run(Env env) throws IOException {
         if (env.hasNoStore() || env.hasArgumentCount() != 1) {
             err.println("use: store base < list");

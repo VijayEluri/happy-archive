@@ -39,6 +39,7 @@ public class LocalCandidateListMain implements MainCommand {
      * @throws IOException
      * @throws InterruptedException
      */
+    @Override
     public void run(Env env) throws IOException,
             InterruptedException {
         if (env.hasNoStore() || env.hasNoIndex() || env.hasArgumentCount() != 1) {

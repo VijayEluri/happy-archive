@@ -37,6 +37,7 @@ public class VerifyMain implements MainCommand {
      *            the list of files to verify.
      * @throws Exception
      */
+    @Override
     public void run(Env env) throws Exception {
         for (String arg : env.getArguments()) {
             String line;

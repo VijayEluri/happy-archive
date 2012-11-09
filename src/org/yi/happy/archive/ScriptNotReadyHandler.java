@@ -38,6 +38,7 @@ public class ScriptNotReadyHandler implements NotReadyHandler {
      * load the next item from the script. if the item is null do not load a
      * block, if there are no blocks left then throw {@link IONotReadyException}
      */
+    @Override
     public void notReady(SplitReader reader) throws IOException {
         if (script.size() == 0) {
             throw new IONotReadyException();

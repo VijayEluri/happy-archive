@@ -7,6 +7,7 @@ package org.yi.happy.archive.key;
  */
 public abstract class AbstractContentFullKey implements FullKey {
 
+    @Override
     public abstract String getType();
 
     private final HashValue hash;

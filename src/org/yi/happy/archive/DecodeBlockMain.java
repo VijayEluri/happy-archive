@@ -41,6 +41,7 @@ public class DecodeBlockMain implements MainCommand {
      *            file name of the block to decode, full key of the block.
      * @throws IOException
      */
+    @Override
     @SmellsMessy
     public void run(Env env) throws IOException {
         if (env.hasArgumentCount() != 2) {

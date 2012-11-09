@@ -11,6 +11,7 @@ import java.sql.Statement;
  * @author sarah dot a dot happy at gmail dot com
  */
 public abstract class StatementTemplate implements DBAction {
+    @Override
     public final void run(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
         try {

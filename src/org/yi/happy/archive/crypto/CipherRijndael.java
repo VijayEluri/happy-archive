@@ -28,23 +28,28 @@ public class CipherRijndael implements Cipher {
         instance = new Rijndael(bs, ks);
     }
 
+    @Override
     public void decrypt(byte[] out) {
         instance.decryptCbc(out, iv);
     }
 
+    @Override
     public int getBlockSize() {
         return bs;
     }
 
+    @Override
     public int getKeySize() {
         return ks;
     }
 
+    @Override
     public void setKey(byte[] pass) {
         instance.setKey(pass);
         iv = new byte[bs];
     }
 
+    @Override
     public void encrypt(byte[] data) {
         instance.encryptCbc(data, iv);
     }

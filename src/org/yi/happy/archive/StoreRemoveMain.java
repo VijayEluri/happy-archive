@@ -37,6 +37,7 @@ public class StoreRemoveMain implements MainCommand {
      *            store, remove list
      * @throws IOException
      */
+    @Override
     public void run(Env env) throws IOException {
         if (env.hasNoStore() || env.hasArgumentCount() != 1) {
             err.println("use: --store store remove.lst");

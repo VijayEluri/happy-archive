@@ -38,11 +38,13 @@ public class FileStoreStreamGetMainTest {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
         WaitHandler waitHandler = new WaitHandler() {
+            @Override
             public void doWait(boolean progress) throws IOException {
                 state.doWait(progress);
             }
 
             private WaitHandler state = new WaitHandler() {
+                @Override
                 public void doWait(boolean progress) throws IOException {
                     assertFalse(progress);
 
@@ -64,6 +66,7 @@ public class FileStoreStreamGetMainTest {
             };
 
             private final WaitHandler state2 = new WaitHandler() {
+                @Override
                 public void doWait(boolean progress) throws IOException {
                     assertTrue(progress);
 
@@ -85,6 +88,7 @@ public class FileStoreStreamGetMainTest {
             };
 
             private final WaitHandler state3 = new WaitHandler() {
+                @Override
                 public void doWait(boolean progress) throws IOException {
                     assertFalse(progress);
 
@@ -106,6 +110,7 @@ public class FileStoreStreamGetMainTest {
             };
 
             private final WaitHandler state4 = new WaitHandler() {
+                @Override
                 public void doWait(boolean progress) {
                     fail();
                 }

@@ -12,6 +12,7 @@ public interface FullKey {
     /**
      * @return the string that parses into this key
      */
+    @Override
     public String toString();
 
     /**
@@ -21,7 +22,9 @@ public interface FullKey {
      */
     public LocatorKey toLocatorKey();
 
+    @Override
     public int hashCode();
 
+    @Override
     public boolean equals(Object obj);
 }

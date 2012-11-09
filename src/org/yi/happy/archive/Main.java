@@ -13,21 +13,6 @@ import org.yi.happy.archive.commandLine.MyEnv;
  */
 @EntryPoint
 public class Main {
-    private abstract static class Cmd {
-
-        private final String name;
-
-        public Cmd(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public abstract void run(Env env) throws Exception;
-    }
-
     private static final Map<String, Provider<MainCommand>> commands;
     static {
         Map<String, Provider<MainCommand>> c;

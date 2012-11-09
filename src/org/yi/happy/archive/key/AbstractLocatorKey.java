@@ -25,6 +25,7 @@ public abstract class AbstractLocatorKey implements LocatorKey {
      * 
      * @return the hash
      */
+    @Override
     public HashValue getHash() {
         return hash;
     }
@@ -37,6 +38,7 @@ public abstract class AbstractLocatorKey implements LocatorKey {
     /**
      * @return the type of the locator key
      */
+    @Override
     public abstract String getType();
 
     @Override

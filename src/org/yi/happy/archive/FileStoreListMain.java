@@ -37,6 +37,7 @@ public class FileStoreListMain implements MainCommand {
      *            the launch environment.
      * @throws IOException
      */
+    @Override
     public void run(Env env) throws IOException {
         if (env.hasNoStore() || env.hasArguments()) {
             err.println("use: --store store");

@@ -41,6 +41,7 @@ public class FileStoreStreamPutMain implements MainCommand {
      *            the file store path.
      * @throws IOException
      */
+    @Override
     public void run(Env env) throws IOException {
         if (env.hasNoStore()) {
             out.println("use: --store store");

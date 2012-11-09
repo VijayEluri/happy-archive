@@ -32,7 +32,7 @@ public class VolumeGetMainTest {
 
         Env env = new EnvBuilder().withStore("store").addArgument("/media")
                 .create();
-        new VolumeGetMain(fs, in, null, null).run(env);
+        new VolumeGetMain(fs, in, null).run(env);
 
         FileBlockStore s = new FileBlockStore(fs, "store");
         assertEquals(TestData.KEY_CONTENT_MAP.getEncodedBlock(), s

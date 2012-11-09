@@ -103,6 +103,7 @@ public class FakeFileSystem implements FileSystem {
         return true;
     }
 
+    @Override
     public void rename(String from, String to) throws IOException {
         /*
          * if the source does not exist, throw
@@ -142,6 +143,7 @@ public class FakeFileSystem implements FileSystem {
         files.put(to, files.remove(from));
     }
 
+    @Override
     public boolean exists(String path) {
         return files.containsKey(path);
     }
@@ -170,6 +172,7 @@ public class FakeFileSystem implements FileSystem {
         FakeRandomOutputFile f = new FakeRandomOutputFile(bytes);
 
         f.setCloseListener(new FakeRandomOutputFile.CloseListener() {
+            @Override
             public void onClose(byte[] data) {
                 files.put(path, data);
             }

@@ -48,6 +48,7 @@ public class IndexVolumeMain implements MainCommand {
      *            the command line ( image-path )
      * @throws IOException
      */
+    @Override
     public void run(Env env) throws IOException {
         if (env.hasArgumentCount() != 1) {
             out.println("use: image");
