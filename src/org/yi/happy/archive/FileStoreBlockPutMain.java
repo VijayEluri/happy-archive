@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
+import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
 
@@ -18,13 +19,13 @@ public class FileStoreBlockPutMain {
     /**
      * store a block in a file store.
      * 
-     * @param args
+     * @param env
      * @throws IOException
      */
     @EntryPoint
-    public static void main(String[] args) throws IOException {
+    public static void main(Env env) throws IOException {
         RealFileSystem fs = new RealFileSystem();
-        new FileStoreBlockPutMain(fs).run(args);
+        new FileStoreBlockPutMain(fs).run(env);
     }
 
     /**
@@ -40,14 +41,19 @@ public class FileStoreBlockPutMain {
     /**
      * store a block in the store.
      * 
-     * @param args
+     * @param env
      *            the store, the block.
      * @throws IOException
      */
-    public void run(String... args) throws IOException {
-        FileBlockStore store = new FileBlockStore(fs, args[0]);
+    public void run(Env env) throws IOException {
+        if (env.hasNoStore() || env.hasArgumentCount() != 1) {
+            System.err.println("use: --store store block");
+            return;
+        }
 
-        EncodedBlock b = EncodedBlockParse.parse(fs.load(args[1],
+        FileBlockStore store = new FileBlockStore(fs, env.getStore());
+
+        EncodedBlock b = EncodedBlockParse.parse(fs.load(env.getArgument(0),
                 Blocks.MAX_SIZE));
 
         store.put(b);

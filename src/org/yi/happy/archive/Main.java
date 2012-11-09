@@ -46,17 +46,10 @@ public class Main {
     private static final List<Cmd> cmds = Collections.unmodifiableList(Arrays
             .asList(
 
-            new Cmd("file-get") {
+            (Cmd) new Cmd("file-get") {
                 @Override
                 public void run(String[] args) throws Exception {
                     FileStoreFileGetMain.main(args);
-                }
-            },
-
-            new Cmd("block-put") {
-                @Override
-                public void run(String[] args) throws Exception {
-                    FileStoreBlockPutMain.main(args);
                 }
             }
 
@@ -69,6 +62,13 @@ public class Main {
                 @Override
                 public void run(Env env) throws Exception {
                     MakeIndexDatabaseMain.launch(env);
+                }
+            },
+
+            new NewCmd("block-put") {
+                @Override
+                public void run(Env env) throws Exception {
+                    FileStoreBlockPutMain.main(env);
                 }
             },
 

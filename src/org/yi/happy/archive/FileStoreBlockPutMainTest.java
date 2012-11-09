@@ -6,6 +6,8 @@ import java.io.IOException;
 
 import org.junit.Test;
 import org.yi.happy.annotate.NeedFailureTest;
+import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.commandLine.EnvBuilder;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.test_data.TestData;
 
@@ -25,7 +27,9 @@ public class FileStoreBlockPutMainTest {
         fs.save("block.dat", TestData.KEY_CONTENT.getBytes());
         FileStoreBlockPutMain main = new FileStoreBlockPutMain(fs);
 
-        main.run("store", "block.dat");
+        Env env = new EnvBuilder().withStore("store").addArgument("block.dat")
+                .create();
+        main.run(env);
 
         assertArrayEquals(TestData.KEY_CONTENT.getBytes(), fs
                 .load("store/8/87/87c/87c5f6fe4ea801c8eb227b8b218a0659"
