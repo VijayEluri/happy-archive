@@ -2,8 +2,6 @@ package org.yi.happy.archive;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,8 +19,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.zip.GZIPInputStream;
 
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Options;
 import org.yi.happy.annotate.DuplicatedLogic;
 import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.commandLine.Env;
@@ -38,7 +34,7 @@ public class LocalCandidateListMain implements MainCommand {
     /**
      * Make a candidate list from a local store and local index.
      * 
-     * @param args
+     * @param env
      *            the command line.
      * @throws IOException
      * @throws InterruptedException
@@ -224,15 +220,4 @@ public class LocalCandidateListMain implements MainCommand {
             return volumeSet + "\t" + volumeName + "\t" + fileName + "\t" + key;
         }
     }
-
-    private static void showHelp(Options options, PrintStream out) {
-        PrintWriter o = new PrintWriter(out);
-        try {
-            HelpFormatter formatter = new HelpFormatter();
-            formatter.printUsage(o, 80, "backup-list volume-set", options);
-        } finally {
-            o.flush();
-        }
-    }
-
 }
