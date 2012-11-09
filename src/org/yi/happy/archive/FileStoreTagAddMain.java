@@ -5,8 +5,7 @@ import java.io.InputStream;
 
 import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.archive.block.encoder.BlockEncoderFactory;
-import org.yi.happy.archive.commandLine.MyArgs;
-import org.yi.happy.archive.commandLine.MyArgs.CommandLineException;
+import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
@@ -17,7 +16,7 @@ import org.yi.happy.archive.tag.TagStreamIterator;
 
 public class FileStoreTagAddMain {
     @EntryPoint
-    public static void main(String[] args) throws IOException {
+    public static void main(Env env) throws IOException {
         /*
          * read a stream of tags of standard input, for the file tags that lack
          * a data attribute, store the file and fill in the data and hash
@@ -25,23 +24,12 @@ public class FileStoreTagAddMain {
          */
         FileSystem fs = new RealFileSystem();
         try {
-            /*
-             * parse command line
-             */
-            MyArgs cmd;
-            try {
-                cmd = MyArgs.parse(args);
-            } catch (CommandLineException e) {
-                e.showHelp(System.out);
+            if (env.hasNoStore()) {
+                System.err.println("use: --store store");
                 return;
             }
 
-            if (cmd.getStore() == null) {
-                MyArgs.showHelp(System.out);
-                return;
-            }
-
-            FileBlockStore store = new FileBlockStore(fs, cmd.getStore());
+            FileBlockStore store = new FileBlockStore(fs, env.getStore());
 
             /*
              * do the work

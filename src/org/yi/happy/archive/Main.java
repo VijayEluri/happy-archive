@@ -72,13 +72,6 @@ public class Main {
                 public void run(String[] args) throws Exception {
                     FileStoreStreamPutMain.main(args);
                 }
-            },
-
-            new Cmd("tag-add") {
-                @Override
-                public void run(String[] args) throws Exception {
-                    FileStoreTagAddMain.main(args);
-                }
             }
 
             ));
@@ -90,6 +83,13 @@ public class Main {
                 @Override
                 public void run(Env env) throws Exception {
                     MakeIndexDatabaseMain.launch(env);
+                }
+            },
+
+            new NewCmd("tag-add") {
+                @Override
+                public void run(Env env) throws Exception {
+                    FileStoreTagAddMain.main(env);
                 }
             },
 
