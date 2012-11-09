@@ -2,8 +2,7 @@ package org.yi.happy.archive.commandLine;
 
 /**
  * A parsing engine for command lines. This one handles named options that take
- * values only. As the options are parsed they are emitted as events. This
- * parser requires that the first item on the command line is a command name.
+ * values only. As the options are parsed they are emitted as events.
  */
 public class CommandParseEngine {
     /**
