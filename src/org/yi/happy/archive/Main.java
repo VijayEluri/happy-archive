@@ -114,13 +114,6 @@ public class Main {
                 public void run(String[] args) throws Exception {
                     VolumeGetMain.main(args);
                 }
-            },
-
-            new Cmd("store-list") {
-                @Override
-                public void run(String[] args) throws Exception {
-                    FileStoreListMain.main(args);
-                }
             }
 
             ));
@@ -132,6 +125,13 @@ public class Main {
                 @Override
                 public void run(Env env) throws Exception {
                     MakeIndexDatabaseMain.launch(env);
+                }
+            },
+
+            new NewCmd("store-list") {
+                @Override
+                public void run(Env env) throws Exception {
+                    FileStoreListMain.main(env);
                 }
             },
 

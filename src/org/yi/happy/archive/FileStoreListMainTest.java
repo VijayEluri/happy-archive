@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.StringWriter;
 
 import org.junit.Test;
+import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.commandLine.EnvBuilder;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.test_data.TestData;
@@ -30,7 +32,8 @@ public class FileStoreListMainTest {
 
         StringWriter out = new StringWriter();
 
-        new FileStoreListMain(fs, out).run("store");
+        Env env = new EnvBuilder().withStore("store").create();
+        new FileStoreListMain(fs, out).run(env);
 
         String want = TestData.KEY_CONTENT.getLocatorKey() + "\n"
                 + TestData.KEY_CONTENT_2.getLocatorKey() + "\n"
