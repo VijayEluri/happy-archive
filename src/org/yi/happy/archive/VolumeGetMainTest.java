@@ -7,6 +7,8 @@ import java.io.Reader;
 import java.io.StringReader;
 
 import org.junit.Test;
+import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.commandLine.EnvBuilder;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.test_data.TestData;
@@ -28,7 +30,9 @@ public class VolumeGetMainTest {
         fs.save("/media/00.dat", TestData.KEY_CONTENT_MAP.getBytes());
         Reader in = new StringReader("00.dat\n");
 
-        new VolumeGetMain(fs, in, null, null).run("store", "/media");
+        Env env = new EnvBuilder().withStore("store").addArgument("/media")
+                .create();
+        new VolumeGetMain(fs, in, null, null).run(env);
 
         FileBlockStore s = new FileBlockStore(fs, "store");
         assertEquals(TestData.KEY_CONTENT_MAP.getEncodedBlock(), s

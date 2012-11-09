@@ -107,13 +107,6 @@ public class Main {
                 public void run(String[] args) throws Exception {
                     IndexSearchMain.main(args);
                 }
-            },
-
-            new Cmd("volume-get") {
-                @Override
-                public void run(String[] args) throws Exception {
-                    VolumeGetMain.main(args);
-                }
             }
 
             ));
@@ -126,6 +119,14 @@ public class Main {
                 public void run(Env env) throws Exception {
                     MakeIndexDatabaseMain.launch(env);
                 }
+            },
+
+            new NewCmd("volume-get") {
+                @Override
+                public void run(Env env) throws Exception {
+                    VolumeGetMain.main(env);
+                }
+
             },
 
             new NewCmd("store-list") {
