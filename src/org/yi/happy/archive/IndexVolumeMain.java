@@ -2,7 +2,6 @@ package org.yi.happy.archive;
 
 import java.io.IOException;
 import java.io.PrintStream;
-import java.io.Writer;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,7 +19,7 @@ import org.yi.happy.archive.file_system.FileSystem;
 public class IndexVolumeMain implements MainCommand {
 
     private final FileSystem fs;
-    private final Writer out;
+    private final PrintStream out;
     private final DigestProvider digest;
     private final PrintStream err;
 
@@ -34,7 +33,7 @@ public class IndexVolumeMain implements MainCommand {
      * @param err
      *            the error stream.
      */
-    public IndexVolumeMain(FileSystem fs, Writer out, PrintStream err) {
+    public IndexVolumeMain(FileSystem fs, PrintStream out, PrintStream err) {
         this.fs = fs;
         this.out = out;
         this.err = err;
@@ -51,8 +50,7 @@ public class IndexVolumeMain implements MainCommand {
      */
     public void run(Env env) throws IOException {
         if (env.hasArgumentCount() != 1) {
-            out.write("use: image\n");
-            out.flush();
+            out.println("use: image");
             return;
         }
 
@@ -84,8 +82,8 @@ public class IndexVolumeMain implements MainCommand {
             String hash = Base16.encode(Digests.digestData(digest, data));
             String size = Integer.toString(data.length);
 
-            out.write(name + "\t" + "plain" + "\t" + key + "\t" + hash + "\t"
-                    + size + "\n");
+            out.println(name + "\t" + "plain" + "\t" + key + "\t" + hash + "\t"
+                    + size);
         } catch (Exception e) {
             e.printStackTrace(err);
         }

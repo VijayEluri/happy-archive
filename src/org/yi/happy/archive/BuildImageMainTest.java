@@ -4,7 +4,6 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
-import java.io.StringWriter;
 
 import org.junit.Test;
 import org.yi.happy.archive.commandLine.Env;
@@ -27,7 +26,7 @@ public class BuildImageMainTest {
         FileSystem fs = new FakeFileSystem();
         FileBlockStore store = new FileBlockStore(fs, "store");
         store.put(TestData.KEY_CONTENT.getEncodedBlock());
-        StringWriter out = new StringWriter();
+        CapturePrintStream out = CapturePrintStream.create();
         fs.save("outstanding",
                 ByteString.toUtf8(TestData.KEY_CONTENT.getLocatorKey()
                         .toString() + "\n"));
@@ -54,7 +53,7 @@ public class BuildImageMainTest {
         FileBlockStore store = new FileBlockStore(fs, "store");
         store.put(TestData.KEY_CONTENT.getEncodedBlock());
         store.put(TestData.KEY_CONTENT_1.getEncodedBlock());
-        StringWriter out = new StringWriter();
+        CapturePrintStream out = CapturePrintStream.create();
         fs.save("outstanding",
                 ByteString.toUtf8(TestData.KEY_CONTENT.getLocatorKey() + "\n"
                         + TestData.KEY_CONTENT_1.getLocatorKey() + "\n"));
@@ -91,7 +90,7 @@ public class BuildImageMainTest {
         fs.save("store/0/00/000/00000000-content-hash",
                 TestData.FILE_EMPTY.getBytes());
 
-        StringWriter out = new StringWriter();
+        CapturePrintStream out = CapturePrintStream.create();
         fs.save("outstanding",
                 ByteString.toUtf8(TestData.KEY_CONTENT.getLocatorKey() + "\n"
                         + TestData.KEY_CONTENT_1.getLocatorKey() + "\n"

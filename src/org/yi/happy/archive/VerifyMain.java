@@ -1,6 +1,6 @@
 package org.yi.happy.archive;
 
-import java.io.Writer;
+import java.io.PrintStream;
 
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.EncodedBlock;
@@ -15,7 +15,7 @@ import org.yi.happy.archive.file_system.FileSystem;
 public class VerifyMain implements MainCommand {
 
     private final FileSystem fileSystem;
-    private final Writer out;
+    private final PrintStream out;
 
     /**
      * create, injecting the dependencies.
@@ -25,7 +25,7 @@ public class VerifyMain implements MainCommand {
      * @param out
      *            where to send the output.
      */
-    public VerifyMain(FileSystem fileSystem, Writer out) {
+    public VerifyMain(FileSystem fileSystem, PrintStream out) {
         this.fileSystem = fileSystem;
         this.out = out;
     }
@@ -68,7 +68,7 @@ public class VerifyMain implements MainCommand {
                 line = "fail " + arg + "\n";
             }
 
-            out.write(line);
+            out.print(line);
         }
 
         out.flush();

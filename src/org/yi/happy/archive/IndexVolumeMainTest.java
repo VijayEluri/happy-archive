@@ -3,10 +3,7 @@ package org.yi.happy.archive;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.io.StringWriter;
 
 import org.junit.Test;
 import org.yi.happy.annotate.NeedFailureTest;
@@ -36,7 +33,7 @@ public class IndexVolumeMainTest {
         fs.save("image/00.dat", TestData.KEY_CONTENT.getBytes());
         fs.save("image/01.dat", TestData.KEY_CONTENT_1.getBytes());
 
-        StringWriter out = new StringWriter();
+        CapturePrintStream out = CapturePrintStream.create();
 
         Env env = new EnvBuilder().addArgument("image").create();
         new IndexVolumeMain(fs, out, null).run(env);
@@ -76,12 +73,11 @@ public class IndexVolumeMainTest {
         fs.save("image/00.dat", TestData.FILE_EMPTY.getBytes());
         fs.save("image/01.dat", TestData.KEY_CONTENT_1.getBytes());
 
-        StringWriter out = new StringWriter();
-
-        ByteArrayOutputStream err = new ByteArrayOutputStream();
+        CapturePrintStream out = CapturePrintStream.create();
+        CapturePrintStream err = CapturePrintStream.create();
 
         Env env = new EnvBuilder().addArgument("image").create();
-        new IndexVolumeMain(fs, out, new PrintStream(err)).run(env);
+        new IndexVolumeMain(fs, out, err).run(env);
 
         StringBuilder sb = new StringBuilder();
         sb.append("01.dat\tplain\t");

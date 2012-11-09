@@ -120,4 +120,159 @@ public class MyInjector {
         return new IndexSearchMain(injectFileSystem(), injectOutput());
     }
 
+    public static Provider<MainCommand> providerIndexVolumeMain() {
+        return new Provider<MainCommand>() {
+            @Override
+            public MainCommand get() {
+                return injectIndexVolumeMain();
+            }
+        };
+    }
+
+    public static MainCommand injectIndexVolumeMain() {
+        return new IndexVolumeMain(injectFileSystem(), injectOutput(),
+                injectError());
+    }
+
+    public static Provider<MainCommand> providerBuildImageMain() {
+        return new Provider<MainCommand>() {
+            @Override
+            public MainCommand get() {
+                return injectBuildImageMain();
+            }
+        };
+    }
+
+    public static MainCommand injectBuildImageMain() {
+        return new BuildImageMain(injectFileSystem(), injectOutput(),
+                injectError());
+    }
+
+    public static Provider<MainCommand> providerVolumeGetMain() {
+        return new Provider<MainCommand>() {
+            @Override
+            public MainCommand get() {
+                return injectVolumeGetMain();
+            }
+        };
+    }
+
+    public static MainCommand injectVolumeGetMain() {
+        return new VolumeGetMain(injectFileSystem(), injectInput(),
+                injectOutput(), injectError());
+    }
+
+    public static Provider<MainCommand> providerVerifyMain() {
+        return new Provider<MainCommand>() {
+            @Override
+            public MainCommand get() {
+                return injectVerifyMain();
+            }
+        };
+    }
+
+    public static MainCommand injectVerifyMain() {
+        return new VerifyMain(injectFileSystem(), injectOutput());
+    }
+
+    public static Provider<MainCommand> providerEncodeContentMain() {
+        return null;
+    }
+
+    public static MainCommand injectEncodeContentMain() {
+        return new EncodeContentMain(injectFileSystem(), injectOutput());
+    }
+
+    public static Provider<MainCommand> providerDecodeBlockMain() {
+        return new Provider<MainCommand>() {
+            @Override
+            public MainCommand get() {
+                return injectDecodeBlockMain();
+            }
+        };
+    }
+
+    public static MainCommand injectDecodeBlockMain() {
+        return new DecodeBlockMain(injectFileSystem(), injectOutput());
+    }
+
+    public static Provider<MainCommand> providerFileStoreTagAddMain() {
+        return new Provider<MainCommand>() {
+            @Override
+            public MainCommand get() {
+                return injectFileStoreTagAddMain();
+            }
+        };
+    }
+
+    public static MainCommand injectFileStoreTagAddMain() {
+        return new FileStoreTagAddMain();
+    }
+
+    public static Provider<MainCommand> providerFileStoreStreamPutMain() {
+        return new Provider<MainCommand>() {
+            @Override
+            public MainCommand get() {
+                return injectFileStoreStreamPutMain();
+            }
+        };
+    }
+
+    public static MainCommand injectFileStoreStreamPutMain() {
+        return new FileStoreStreamPutMain(injectFileSystem(), injectInput(),
+                injectOutput());
+    }
+
+    public static Provider<MainCommand> providerFileStoreStreamGetMain() {
+        return new Provider<MainCommand>() {
+            @Override
+            public MainCommand get() {
+                return injectFileStoreStreamGetMain();
+            }
+        };
+    }
+
+    public static MainCommand injectFileStoreStreamGetMain() {
+        return new FileStoreStreamGetMain(injectFileSystem(), injectOutput(),
+                injectWaitHandler());
+    }
+
+    public static Provider<MainCommand> providerFileStoreBlockPutMain() {
+        return new Provider<MainCommand>() {
+            @Override
+            public MainCommand get() {
+                return injectFileStoreBlockPutMain();
+            }
+        };
+    }
+
+    public static MainCommand injectFileStoreBlockPutMain() {
+        return new FileStoreBlockPutMain(injectFileSystem());
+    }
+
+    public static Provider<MainCommand> providerMakeIndexDatabaseMain() {
+        return new Provider<MainCommand>() {
+            @Override
+            public MainCommand get() {
+                return injectMakeIndexDatabaseMain();
+            }
+        };
+    }
+
+    public static MainCommand injectMakeIndexDatabaseMain() {
+        return new MakeIndexDatabaseMain();
+    }
+
+    public static Provider<MainCommand> providerFileStoreFileGetMain() {
+        return new Provider<MainCommand>() {
+            @Override
+            public MainCommand get() {
+                return injectFileStoreFileGetMain();
+            }
+        };
+    }
+
+    public static MainCommand injectFileStoreFileGetMain() {
+        return new FileStoreFileGetMain(injectFileSystem(), injectWaitHandler());
+    }
 }

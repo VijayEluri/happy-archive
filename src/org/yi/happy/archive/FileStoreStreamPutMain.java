@@ -2,7 +2,7 @@ package org.yi.happy.archive;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Writer;
+import java.io.PrintStream;
 
 import org.yi.happy.archive.block.encoder.BlockEncoder;
 import org.yi.happy.archive.block.encoder.BlockEncoderFactory;
@@ -16,7 +16,7 @@ import org.yi.happy.archive.file_system.FileSystem;
 public class FileStoreStreamPutMain implements MainCommand {
     private FileSystem fs;
     private InputStream in;
-    private Writer out;
+    private PrintStream out;
 
     /**
      * create.
@@ -28,7 +28,7 @@ public class FileStoreStreamPutMain implements MainCommand {
      * @param out
      *            the stream to write the result.
      */
-    public FileStoreStreamPutMain(FileSystem fs, InputStream in, Writer out) {
+    public FileStoreStreamPutMain(FileSystem fs, InputStream in, PrintStream out) {
         this.fs = fs;
         this.in = in;
         this.out = out;
@@ -43,8 +43,7 @@ public class FileStoreStreamPutMain implements MainCommand {
      */
     public void run(Env env) throws IOException {
         if (env.hasNoStore()) {
-            out.write("use: --store store\n");
-            out.flush();
+            out.println("use: --store store");
             return;
         }
 
@@ -57,7 +56,6 @@ public class FileStoreStreamPutMain implements MainCommand {
         Streams.copy(in, s);
         s.close();
 
-        out.write(s.getFullKey() + "\n");
-        out.flush();
+        out.println(s.getFullKey());
     }
 }

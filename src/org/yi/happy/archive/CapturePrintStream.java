@@ -34,4 +34,8 @@ public class CapturePrintStream extends PrintStream {
             throw new IOError(e);
         }
     }
+
+    public int size() {
+        return buffer.size();
+    }
 }

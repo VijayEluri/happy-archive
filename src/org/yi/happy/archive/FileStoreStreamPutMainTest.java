@@ -6,7 +6,6 @@ import static org.junit.Assert.assertEquals;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
 
 import org.junit.Test;
 import org.yi.happy.archive.commandLine.Env;
@@ -28,7 +27,7 @@ public class FileStoreStreamPutMainTest {
     public void test1() throws IOException {
         FileSystem fs = new FakeFileSystem();
         InputStream in = new ByteArrayInputStream(ByteString.toBytes("hello\n"));
-        StringWriter out = new StringWriter();
+        CapturePrintStream out = CapturePrintStream.create();
 
         Env env = new EnvBuilder().withStore("store").create();
         new FileStoreStreamPutMain(fs, in, out).run(env);

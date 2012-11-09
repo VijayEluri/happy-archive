@@ -3,7 +3,6 @@ package org.yi.happy.archive;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.io.Writer;
 
 import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.block.EncodedBlock;
@@ -19,7 +18,7 @@ import org.yi.happy.archive.key.LocatorKeyParse;
 public class BuildImageMain implements MainCommand {
 
     private final FileSystem fs;
-    private final Writer out;
+    private final PrintStream out;
     private final PrintStream err;
 
     /**
@@ -30,7 +29,7 @@ public class BuildImageMain implements MainCommand {
      * @param out
      *            where to send output.
      */
-    public BuildImageMain(FileSystem fs, Writer out, PrintStream err) {
+    public BuildImageMain(FileSystem fs, PrintStream out, PrintStream err) {
         this.fs = fs;
         this.out = out;
         this.err = err;
@@ -46,9 +45,8 @@ public class BuildImageMain implements MainCommand {
     @SmellsMessy
     public void run(Env env) throws IOException {
         if (env.hasNoStore() || env.hasArgumentCount() != 3) {
-            out.write("use: --store store outstanding-list image-directory"
+            err.println("use: --store store outstanding-list image-directory"
                     + " image-size-in-mb\n");
-            out.flush();
             return;
         }
 
@@ -90,7 +88,6 @@ public class BuildImageMain implements MainCommand {
             full = "\tfull";
         }
 
-        out.write(size.getCount() + "\t" + size.getMegaSize() + full + "\n");
-        out.flush();
+        out.println(size.getCount() + "\t" + size.getMegaSize() + full);
     }
 }

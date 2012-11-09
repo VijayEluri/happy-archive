@@ -1,7 +1,7 @@
 package org.yi.happy.archive;
 
 import java.io.IOException;
-import java.io.Writer;
+import java.io.PrintStream;
 
 import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.archive.block.Block;
@@ -20,7 +20,7 @@ import org.yi.happy.archive.file_system.FileSystem;
  */
 public class EncodeContentMain implements MainCommand {
     private final FileSystem fs;
-    private final Writer out;
+    private final PrintStream out;
 
     /**
      * 
@@ -29,7 +29,7 @@ public class EncodeContentMain implements MainCommand {
      * @param out
      *            where to send output.
      */
-    public EncodeContentMain(FileSystem fs, Writer out) {
+    public EncodeContentMain(FileSystem fs, PrintStream out) {
         this.fs = fs;
         this.out = out;
     }
@@ -44,8 +44,7 @@ public class EncodeContentMain implements MainCommand {
     @EntryPoint
     public void run(Env env) throws IOException {
         if (env.hasArgumentCount() != 2) {
-            out.write("use: input output\n");
-            out.flush();
+            out.println("use: input output");
             return;
         }
 
@@ -56,7 +55,6 @@ public class EncodeContentMain implements MainCommand {
         BlockEncoderResult e = encoder.encode(block);
         fs.save(env.getArgument(1), e.getBlock().asBytes());
 
-        out.write(e.getKey() + "\n");
-        out.flush();
+        out.println(e.getKey());
     }
 }

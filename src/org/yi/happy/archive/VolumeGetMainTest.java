@@ -2,9 +2,9 @@ package org.yi.happy.archive;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
+import java.io.InputStream;
 
 import org.junit.Test;
 import org.yi.happy.archive.commandLine.Env;
@@ -28,7 +28,7 @@ public class VolumeGetMainTest {
         FileSystem fs = new FakeFileSystem();
         fs.mkdir("/media");
         fs.save("/media/00.dat", TestData.KEY_CONTENT_MAP.getBytes());
-        Reader in = new StringReader("00.dat\n");
+        InputStream in = new ByteArrayInputStream("00.dat\n".getBytes("UTF-8"));
 
         Env env = new EnvBuilder().withStore("store").addArgument("/media")
                 .create();

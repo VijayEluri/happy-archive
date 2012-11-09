@@ -1,9 +1,8 @@
 package org.yi.happy.archive;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
-import java.io.Reader;
-import java.io.Writer;
 
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
@@ -16,8 +15,8 @@ import org.yi.happy.archive.file_system.FileSystem;
 public class VolumeGetMain implements MainCommand {
 
     private final FileSystem fs;
-    private final Reader in;
-    private final Writer out;
+    private final InputStream in;
+    private final PrintStream out;
     private final PrintStream err;
 
     /**
@@ -32,7 +31,8 @@ public class VolumeGetMain implements MainCommand {
      * @param err
      *            the standard error.
      */
-    public VolumeGetMain(FileSystem fs, Reader in, Writer out, PrintStream err) {
+    public VolumeGetMain(FileSystem fs, InputStream in, PrintStream out,
+            PrintStream err) {
         this.fs = fs;
         this.in = in;
         this.out = out;
@@ -48,8 +48,7 @@ public class VolumeGetMain implements MainCommand {
      */
     public void run(Env env) throws IOException {
         if (env.hasNoStore() || env.hasArgumentCount() != 1) {
-            out.write("use: store base < list\n");
-            out.flush();
+            err.println("use: store base < list");
             return;
         }
 
