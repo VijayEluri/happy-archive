@@ -1,9 +1,8 @@
 package org.yi.happy.archive;
 
-import java.io.IOError;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Writer;
+import java.io.PrintStream;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
@@ -20,7 +19,7 @@ import org.yi.happy.archive.key.LocatorKeyParse;
  */
 public class IndexSearchMain implements MainCommand {
     private final FileSystem fs;
-    private final Writer out;
+    private final PrintStream out;
 
     /**
      * create with context.
@@ -30,7 +29,7 @@ public class IndexSearchMain implements MainCommand {
      * @param out
      *            the output.
      */
-    public IndexSearchMain(FileSystem fs, Writer out) {
+    public IndexSearchMain(FileSystem fs, PrintStream out) {
         this.fs = fs;
         this.out = out;
     }
@@ -48,8 +47,7 @@ public class IndexSearchMain implements MainCommand {
     public void run(Env env) throws IOException, InterruptedException,
             ExecutionException {
         if (env.hasNoIndex() || env.hasArgumentCount() != 1) {
-            out.write("use: --index index key-list\n");
-            out.flush();
+            out.println("use: --index index key-list\n");
             return;
         }
 
@@ -59,12 +57,7 @@ public class IndexSearchMain implements MainCommand {
         search.search(want, new IndexSearch.Handler() {
             @Override
             public void gotResult(SearchResult result) {
-                try {
-                    out.write(result.toString());
-                    out.write("\n");
-                } catch (IOException e) {
-                    throw new IOError(e);
-                }
+                out.println(result);
             }
 
             @Override

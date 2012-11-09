@@ -2,8 +2,9 @@ package org.yi.happy.archive;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.StringWriter;
+import java.io.PrintStream;
 import java.util.concurrent.ExecutionException;
 
 import org.junit.Test;
@@ -36,13 +37,15 @@ public class IndexSearchMainTest {
         fs.mkdir("index/onsite");
         fs.save("index/onsite/01", TestData.INDEX_MAP.getBytes());
         fs.save("request", ByteString.toUtf8(mapKey + "\n"));
-        StringWriter out = new StringWriter();
+
+        ByteArrayOutputStream out0 = new ByteArrayOutputStream();
+        PrintStream out = new PrintStream(out0, true, "UTF-8");
 
         Env env = new EnvBuilder().withIndex("index").addArgument("request")
                 .create();
         new IndexSearchMain(fs, out).run(env);
 
-        String o = out.toString();
+        String o = out0.toString("UTF-8");
         assertEquals("onsite\t01\t00.dat\t" + mapKey + "\n", o);
     }
 
@@ -65,13 +68,14 @@ public class IndexSearchMainTest {
         fs.mkdir("index/offsite");
         fs.save("index/offsite/02", TestData.INDEX_MAP.getBytes());
         fs.save("request", ByteString.toUtf8(mapKey + "\n"));
-        StringWriter out = new StringWriter();
+        ByteArrayOutputStream out0 = new ByteArrayOutputStream();
+        PrintStream out = new PrintStream(out0, true, "UTF-8");
 
         Env env = new EnvBuilder().withIndex("index").addArgument("request")
                 .create();
         new IndexSearchMain(fs, out).run(env);
 
-        String o = out.toString();
+        String o = out0.toString("UTF-8");
         assertEquals("offsite\t02\t00.dat\t" + mapKey + "\n"
                 + "onsite\t01\t00.dat\t" + mapKey + "\n", o);
     }
@@ -96,13 +100,14 @@ public class IndexSearchMainTest {
         fs.mkdir("index/offsite");
         fs.save("index/offsite/02", TestData.INDEX_MAP.getBytes());
         fs.save("request", ByteString.toUtf8(mapKey + "\n" + partKey + "\n"));
-        StringWriter out = new StringWriter();
+        ByteArrayOutputStream out0 = new ByteArrayOutputStream();
+        PrintStream out = new PrintStream(out0, true, "UTF-8");
 
         Env env = new EnvBuilder().withIndex("index").addArgument("request")
                 .create();
         new IndexSearchMain(fs, out).run(env);
 
-        String o = out.toString();
+        String o = out0.toString("UTF-8");
         assertEquals("offsite\t02\t00.dat\t" + mapKey + "\n"
                 + "offsite\t02\t01.dat\t" + partKey + "\n"
                 + "onsite\t01\t00.dat\t" + mapKey + "\n"
@@ -129,13 +134,14 @@ public class IndexSearchMainTest {
         fs.mkdir("index/offsite");
         fs.save("index/offsite/02.gz", TestData.INDEX_MAP_GZ.getBytes());
         fs.save("request", ByteString.toUtf8(mapKey + "\n" + partKey + "\n"));
-        StringWriter out = new StringWriter();
+        ByteArrayOutputStream out0 = new ByteArrayOutputStream();
+        PrintStream out = new PrintStream(out0, true, "UTF-8");
 
         Env env = new EnvBuilder().withIndex("index").addArgument("request")
                 .create();
         new IndexSearchMain(fs, out).run(env);
 
-        String o = out.toString();
+        String o = out0.toString("UTF-8");
         assertEquals("offsite\t02\t00.dat\t" + mapKey + "\n"
                 + "offsite\t02\t01.dat\t" + partKey + "\n"
                 + "onsite\t01\t00.dat\t" + mapKey + "\n"
@@ -157,13 +163,14 @@ public class IndexSearchMainTest {
         fs.mkdir("index/onsite");
         fs.save("index/onsite/01", TestData.INDEX_MAP.getBytes());
         fs.save("request", ByteString.toUtf8(mapKey + "\n"));
-        StringWriter out = new StringWriter();
+        ByteArrayOutputStream out0 = new ByteArrayOutputStream();
+        PrintStream out = new PrintStream(out0, true, "UTF-8");
 
         Env env = new EnvBuilder().withIndex("index").addArgument("request")
                 .create();
         new IndexSearchMain(fs, out).run(env);
 
-        String o = out.toString();
+        String o = out0.toString("UTF-8");
         assertEquals("onsite\t01\t00.dat\t" + mapKey + "\n", o);
     }
 }

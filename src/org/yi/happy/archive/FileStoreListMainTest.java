@@ -2,8 +2,9 @@ package org.yi.happy.archive;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.StringWriter;
+import java.io.PrintStream;
 
 import org.junit.Test;
 import org.yi.happy.archive.commandLine.Env;
@@ -30,16 +31,17 @@ public class FileStoreListMainTest {
         store.put(TestData.KEY_CONTENT_1.getEncodedBlock());
         store.put(TestData.KEY_CONTENT_2.getEncodedBlock());
 
-        StringWriter out = new StringWriter();
+        ByteArrayOutputStream out0 = new ByteArrayOutputStream();
+        PrintStream out = new PrintStream(out0, true);
 
         Env env = new EnvBuilder().withStore("store").create();
-        new FileStoreListMain(fs, out).run(env);
+        new FileStoreListMain(fs, out, null).run(env);
 
         String want = TestData.KEY_CONTENT.getLocatorKey() + "\n"
                 + TestData.KEY_CONTENT_2.getLocatorKey() + "\n"
                 + TestData.KEY_CONTENT_1.getLocatorKey() + "\n";
 
-        assertEquals(want, out.toString());
+        assertEquals(want, out0.toString("UTF-8"));
     }
 
 }

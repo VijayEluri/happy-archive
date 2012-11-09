@@ -2,7 +2,7 @@ package org.yi.happy.archive;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Writer;
+import java.io.PrintStream;
 
 import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.file_system.FileSystem;
@@ -15,7 +15,7 @@ import org.yi.happy.archive.key.LocatorKeyParse;
 public class StoreRemoveMain implements MainCommand {
 
     private final FileSystem fs;
-    private final Writer out;
+    private final PrintStream err;
 
     /**
      * create with context.
@@ -25,9 +25,9 @@ public class StoreRemoveMain implements MainCommand {
      * @param out
      *            standard output.
      */
-    public StoreRemoveMain(FileSystem fs, Writer out) {
+    public StoreRemoveMain(FileSystem fs, PrintStream err) {
         this.fs = fs;
-        this.out = out;
+        this.err = err;
     }
 
     /**
@@ -39,8 +39,7 @@ public class StoreRemoveMain implements MainCommand {
      */
     public void run(Env env) throws IOException {
         if (env.hasNoStore() || env.hasArgumentCount() != 1) {
-            out.write("use: --store store remove.lst\n");
-            out.flush();
+            err.println("use: --store store remove.lst");
             return;
         }
 

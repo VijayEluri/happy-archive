@@ -6,8 +6,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.StringWriter;
+import java.io.PrintStream;
 
 import org.junit.Test;
 import org.yi.happy.archive.commandLine.Env;
@@ -111,11 +112,12 @@ public class FileStoreTagGetMainTest {
      */
     @Test
     public void test3() throws IOException {
-        StringWriter out = new StringWriter();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
         Env env = new EnvBuilder().create();
 
-        new FileStoreTagGetMain(null, null, null, out).run(env);
+        new FileStoreTagGetMain(null, null, null, new PrintStream(out, true))
+                .run(env);
 
-        assertTrue(out.getBuffer().length() > 0);
+        assertTrue(out.size() > 0);
     }
 }

@@ -5,7 +5,9 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.archive.commandLine.Env;
@@ -32,8 +34,8 @@ public class Main {
         public abstract void run(Env env) throws Exception;
     }
 
-    private static final List<Cmd> cmds = Collections
-            .unmodifiableList(Arrays.asList(
+    private static final List<Cmd> cmds = Collections.unmodifiableList(Arrays
+            .asList(
 
             new Cmd("file-get") {
                 @Override
@@ -85,7 +87,8 @@ public class Main {
             new Cmd("decode") {
                 @Override
                 public void run(Env env) throws Exception {
-                    new DecodeBlockMain(new RealFileSystem(), System.out).run(env);
+                    new DecodeBlockMain(new RealFileSystem(), System.out)
+                            .run(env);
                 }
             },
 
@@ -105,15 +108,6 @@ public class Main {
                 }
             },
 
-            new Cmd("index-search") {
-                @Override
-                public void run(Env env) throws Exception {
-                    new IndexSearchMain(new RealFileSystem(),
-                            new OutputStreamWriter(System.out, "utf-8"))
-                            .run(env);
-                }
-            },
-
             new Cmd("volume-get") {
                 @Override
                 public void run(Env env) throws Exception {
@@ -121,14 +115,6 @@ public class Main {
                             new InputStreamReader(System.in, "UTF-8"),
                             new OutputStreamWriter(System.out, "UTF-8"),
                             System.err).run(env);
-                }
-            },
-
-            new Cmd("store-list") {
-                @Override
-                public void run(Env env) throws Exception {
-                    new FileStoreListMain(new RealFileSystem(),
-                            new OutputStreamWriter(System.out)).run(env);
                 }
             },
 
@@ -148,48 +134,25 @@ public class Main {
                             new OutputStreamWriter(System.out), System.err)
                             .run(env);
                 }
-            },
-            
-            new Cmd("store-remove") {
-                @Override
-                public void run(Env env) throws Exception {
-                    new StoreRemoveMain(new RealFileSystem(),
-                            new OutputStreamWriter(System.out, "UTF-8"))
-                            .run(env);
-                }
-
-            },
-
-            new Cmd("backup-list") {
-                @Override
-                public void run(Env env) throws Exception {
-                    new LocalCandidateListMain().run(env);
-                }
-            },
-
-            new Cmd("show-env") {
-                @Override
-                public void run(Env env) throws Exception {
-                    new ShowEnvMain().run(env);
-                }
-            },
-
-            new Cmd("tag-get") {
-                @Override
-                public void run(Env env) throws Exception {
-                    FileStoreTagGetMain.main(env);
-                }
-            },
-            
-            new Cmd("tag-put") {
-                @Override
-                public void run(Env env) throws Exception {
-                    new FileStoreTagPutMain(new RealFileSystem(), System.out)
-                            .run(env);
-                }
             }
 
             ));
+
+    private static final Map<String, Provider<MainCommand>> commands;
+    static {
+        Map<String, Provider<MainCommand>> c;
+        c = new LinkedHashMap<String, Provider<MainCommand>>();
+
+        c.put("tag-put", MyInjector.providerFileStoreTagPutMain());
+        c.put("tag-get", MyInjector.providerFileStoreTagGetMain());
+        c.put("show-env", MyInjector.providerShowEnvMain());
+        c.put("backup-list", MyInjector.providerLocalCandidateListMain());
+        c.put("store-list", MyInjector.providerStoreListMain());
+        c.put("store-remove", MyInjector.providerStoreRemoveMain());
+        c.put("index-search", MyInjector.providerIndexSearchMain());
+
+        commands = c;
+    }
 
     /**
      * Run the given sub command, from the command line.
@@ -213,12 +176,21 @@ public class Main {
             }
         }
 
+        Provider<MainCommand> c = commands.get(command);
+        if (c != null) {
+            c.get().run(env);
+            return;
+        }
+
         help();
     }
 
     private static void help() {
         for (Cmd cmd : cmds) {
             System.out.println(cmd.getName());
+        }
+        for (String name : commands.keySet()) {
+            System.out.println(name);
         }
     }
 }

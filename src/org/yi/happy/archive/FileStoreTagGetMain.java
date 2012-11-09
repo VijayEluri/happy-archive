@@ -2,13 +2,11 @@ package org.yi.happy.archive;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.PrintStream;
 
 import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.file_system.FileSystem;
-import org.yi.happy.archive.file_system.RealFileSystem;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.FullKeyParse;
 import org.yi.happy.archive.tag.RestoreManager;
@@ -23,7 +21,7 @@ public class FileStoreTagGetMain implements MainCommand {
     private final WaitHandler waitHandler;
     private final InputStream in;
     private String pendingFile;
-    private final Writer out;
+    private final PrintStream err;
 
     /**
      * initialize.
@@ -38,11 +36,11 @@ public class FileStoreTagGetMain implements MainCommand {
      *            what to use for standard output.
      */
     public FileStoreTagGetMain(FileSystem fs, WaitHandler waitHandler,
-            InputStream in, Writer out) {
+            InputStream in, PrintStream err) {
         this.fs = fs;
         this.waitHandler = waitHandler;
         this.in = in;
-        this.out = out;
+        this.err = err;
     }
 
     /**
@@ -55,7 +53,7 @@ public class FileStoreTagGetMain implements MainCommand {
     @EntryPoint
     public void run(Env env) throws IOException {
         if (env.hasArguments() || env.hasNoStore() || env.hasNoNeed()) {
-            out.write("use: --store store --need need.lst < tags\n");
+            err.println("use: --store store --need need.lst < tags");
             return;
         }
 
@@ -114,24 +112,4 @@ public class FileStoreTagGetMain implements MainCommand {
     }
 
     private int progress;
-
-    /**
-     * invoke fetching file tags from standard in.
-     * 
-     * @param env
-     *            The environment.
-     * @throws IOException
-     */
-    public static void main(Env env) throws IOException {
-        FileSystem fs = new RealFileSystem();
-        WaitHandler waitHandler = new WaitHandlerProgressiveDelay();
-        InputStream in = System.in;
-
-        Writer out = new OutputStreamWriter(System.out, "UTF-8");
-        try {
-            new FileStoreTagGetMain(fs, waitHandler, in, out).run(env);
-        } finally {
-            out.flush();
-        }
-    }
 }
