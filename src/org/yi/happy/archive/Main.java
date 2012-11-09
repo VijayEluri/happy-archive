@@ -56,8 +56,8 @@ public class Main {
         }
 
         Env env = MyEnv.init(args);
-        String command = env.getCommand();
-        Provider<MainCommand> c = commands.get(command);
+
+        Provider<MainCommand> c = commands.get(env.getCommand());
         if (c != null) {
             c.get().run(env);
             return;
