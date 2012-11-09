@@ -39,17 +39,17 @@ public class CommandParseEngine {
      * 
      * @param args
      *            the arguments.
-     * @throws CommandLineException
+     * @throws CommandParseException
      *             if the command line is invalid.
      */
-    public void parse(String[] args) throws CommandLineException {
+    public void parse(String[] args) throws CommandParseException {
         for (String arg : args) {
             arg(arg);
         }
         end();
     }
 
-    private void arg(String arg) throws CommandLineException {
+    private void arg(String arg) throws CommandParseException {
         /*
          * start of argument
          */
@@ -104,7 +104,7 @@ public class CommandParseEngine {
                 }
 
                 if (arg.charAt(i) == '=') {
-                    throw new CommandLineException(
+                    throw new CommandParseException(
                             "The option must have a name");
                 }
 
@@ -116,12 +116,12 @@ public class CommandParseEngine {
 
             if (state == State.OPTION2) {
                 if (arg.charAt(i) == '-') {
-                    throw new CommandLineException(
+                    throw new CommandParseException(
                             "The option can not begin with three dashes");
                 }
 
                 if (arg.charAt(i) == '=') {
-                    throw new CommandLineException(
+                    throw new CommandParseException(
                             "The option must have a name");
                 }
 
@@ -189,7 +189,7 @@ public class CommandParseEngine {
         throw new IllegalStateException("" + state);
     }
 
-    private void end() throws CommandLineException {
+    private void end() throws CommandParseException {
         if (state == State.FILE) {
             handler.onFinished();
 
@@ -205,7 +205,7 @@ public class CommandParseEngine {
         }
 
         if (state == State.VALUE) {
-            throw new CommandLineException("The option must have a value");
+            throw new CommandParseException("The option must have a value");
         }
 
         throw new IllegalStateException();

@@ -3,7 +3,7 @@ package org.yi.happy.archive.commandLine;
 import java.io.File;
 
 public class MyEnv {
-    public static Env init(String[] args) throws CommandLineException {
+    public static Env init(String[] args) throws CommandParseException {
         final EnvBuilder env = new EnvBuilder();
 
         env.withHome(System.getenv("ARCHIVE_HOME"));
@@ -30,9 +30,9 @@ public class MyEnv {
 
             @Override
             public void onOption(String name, String value)
-                    throws CommandLineException {
+                    throws CommandParseException {
                 if (needCommand) {
-                    throw new CommandLineException(
+                    throw new CommandParseException(
                             "the first argument must be a command");
                 }
 
@@ -56,13 +56,13 @@ public class MyEnv {
                     return;
                 }
 
-                throw new CommandLineException("unrecognized option: " + name);
+                throw new CommandParseException("unrecognized option: " + name);
             }
 
             @Override
-            public void onFinished() throws CommandLineException {
+            public void onFinished() throws CommandParseException {
                 if (needCommand) {
-                    throw new CommandLineException(
+                    throw new CommandParseException(
                             "the first argument must be a command");
                 }
             }

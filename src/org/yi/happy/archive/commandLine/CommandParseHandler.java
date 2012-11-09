@@ -9,10 +9,10 @@ public interface CommandParseHandler {
      * 
      * @param argument
      *            the non-option.
-     * @throws CommandLineException
+     * @throws CommandParseException
      *             if the command line is invalid.
      */
-    void onArgument(String argument) throws CommandLineException;
+    void onArgument(String argument) throws CommandParseException;
 
     /**
      * emitted when a complete option is found on the command line.
@@ -21,16 +21,16 @@ public interface CommandParseHandler {
      *            the name of the option.
      * @param value
      *            the value of the argument to the option.
-     * @throws CommandLineException
+     * @throws CommandParseException
      *             if the command line is invalid.
      */
-    void onOption(String name, String value) throws CommandLineException;
+    void onOption(String name, String value) throws CommandParseException;
 
     /**
      * emitted when the command line is done being parsed.
      * 
-     * @throws CommandLineException
+     * @throws CommandParseException
      *             if the command line is invalid.
      */
-    void onFinished() throws CommandLineException;
+    void onFinished() throws CommandParseException;
 }
