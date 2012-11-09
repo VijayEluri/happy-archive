@@ -29,58 +29,7 @@ public class MyEnv {
             }
         }
 
-        new CommandParseEngine(new CommandParseHandler() {
-            private boolean needCommand = true;
-
-            @Override
-            public void onArgument(String argument) {
-                if (needCommand) {
-                    env.withCommand(argument);
-                    needCommand = false;
-                    return;
-                }
-                env.addArgument(argument);
-            }
-
-            @Override
-            public void onOption(String name, String value)
-                    throws CommandParseException {
-                if (needCommand) {
-                    throw new CommandParseException(
-                            "the first argument must be a command");
-                }
-
-                if (name.equals("archive-home")) {
-                    env.withHome(value);
-                    return;
-                }
-
-                if (name.equals("store")) {
-                    env.withStore(value);
-                    return;
-                }
-
-                if (name.equals("index")) {
-                    env.withIndex(value);
-                    return;
-                }
-
-                if (name.equals("need")) {
-                    env.withNeed(value);
-                    return;
-                }
-
-                throw new CommandParseException("unrecognized option: " + name);
-            }
-
-            @Override
-            public void onFinished() throws CommandParseException {
-                if (needCommand) {
-                    throw new CommandParseException(
-                            "the first argument must be a command");
-                }
-            }
-        }).parse(args);
+        new CommandParseEngine(new EnvHandler(env)).parse(args);
 
         if (env.hasNoStore() && env.hasHome()) {
             env.withStore(env.getHome() + File.separator + "store");

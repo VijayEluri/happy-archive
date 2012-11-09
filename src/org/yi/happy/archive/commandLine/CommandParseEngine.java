@@ -41,7 +41,7 @@ public class CommandParseEngine {
      * @throws CommandParseException
      *             if the command line is invalid.
      */
-    public void parse(String[] args) throws CommandParseException {
+    public void parse(String... args) throws CommandParseException {
         for (String arg : args) {
             arg(arg);
         }

@@ -32,9 +32,16 @@ public class TagOutputStream {
     public void write(Tag tag) throws IOException {
         Set<String> fields = tag.getFields();
         for (String field : fields) {
-            out.write(ByteString.toUtf8(field + "=" + tag.get(field)
-                    + "\n"));
+            writeLine(field + "=" + tag.get(field));
         }
+        writeLine();
+    }
+
+    private void writeLine(String line) throws IOException {
+        out.write(ByteString.toUtf8(line + "\n"));
+    }
+
+    private void writeLine() throws IOException {
         out.write(ByteString.toUtf8("\n"));
     }
 }
