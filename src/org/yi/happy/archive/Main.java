@@ -41,7 +41,7 @@ public class Main {
             new Cmd("make-index-db") {
                 @Override
                 public void run(Env env) throws Exception {
-                    MakeIndexDatabaseMain.launch(env);
+                    MakeIndexDatabaseMain.main(env);
                 }
             },
 
@@ -134,7 +134,7 @@ public class Main {
             new Cmd("store-remove") {
                 @Override
                 public void run(Env env) throws Exception {
-                    StoreRemoveMain.launch(env);
+                    StoreRemoveMain.main(env);
                 }
 
             },
@@ -142,28 +142,28 @@ public class Main {
             new Cmd("backup-list") {
                 @Override
                 public void run(Env env) throws Exception {
-                    LocalCandidateListMain.launch(env);
+                    LocalCandidateListMain.main(env);
                 }
             },
 
             new Cmd("show-env") {
                 @Override
                 public void run(Env env) throws Exception {
-                    ShowEnvMain.launch(env);
+                    ShowEnvMain.main(env);
                 }
             },
 
             new Cmd("tag-get") {
                 @Override
                 public void run(Env env) throws Exception {
-                    FileStoreTagGetMain.launch(env);
+                    FileStoreTagGetMain.main(env);
                 }
             },
             
             new Cmd("tag-put") {
                 @Override
                 public void run(Env env) throws Exception {
-                    FileStoreTagPutMain.launch(env);
+                    FileStoreTagPutMain.main(env);
                 }
             }
 

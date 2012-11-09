@@ -64,7 +64,7 @@ public class StoreRemoveMain {
      * @param args
      * @throws IOException
      */
-    public static void launch(Env env) throws IOException {
+    public static void main(Env env) throws IOException {
         FileSystem fs = new RealFileSystem();
         Writer out = new OutputStreamWriter(System.out, "UTF-8");
         try {

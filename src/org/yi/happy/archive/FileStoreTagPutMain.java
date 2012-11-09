@@ -87,7 +87,7 @@ public class FileStoreTagPutMain {
      * @param args
      * @throws IOException
      */
-    public static void launch(Env env)
+    public static void main(Env env)
         throws IOException {
             FileSystem fs = new RealFileSystem();
             try {

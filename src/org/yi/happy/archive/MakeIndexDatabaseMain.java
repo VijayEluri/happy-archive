@@ -27,7 +27,7 @@ public class MakeIndexDatabaseMain {
      * @throws SQLException
      * @throws IOException
      */
-    public static void launch(Env env) throws ClassNotFoundException,
+    public static void main(Env env) throws ClassNotFoundException,
             SQLException, IOException {
         /*
          * XXX hacked together, needs to be cleaned

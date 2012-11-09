@@ -122,7 +122,7 @@ public class FileStoreTagGetMain {
      *            The environment.
      * @throws IOException
      */
-    public static void launch(Env env) throws IOException {
+    public static void main(Env env) throws IOException {
         FileSystem fs = new RealFileSystem();
         WaitHandler waitHandler = new WaitHandlerProgressiveDelay();
         InputStream in = System.in;

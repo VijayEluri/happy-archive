@@ -43,7 +43,7 @@ public class LocalCandidateListMain {
      * @throws IOException
      * @throws InterruptedException
      */
-    public static void launch(Env env) throws IOException,
+    public static void main(Env env) throws IOException,
             InterruptedException {
         if (env.hasNoStore() || env.hasNoIndex() || env.hasArgumentCount() != 1) {
             System.out.println("use: --store store --index index volume-set");

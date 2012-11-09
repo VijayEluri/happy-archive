@@ -22,10 +22,11 @@ public class FileStoreFileGetMain {
      * @throws IOException
      */
     public static void main(Env env) throws IOException {
-        FileSystem fs = new RealFileSystem();
-        WaitHandler waitHandler = new WaitHandlerProgressiveDelay();
+        new FileStoreFileGetMain().run(env);
+    }
 
-        new FileStoreFileGetMain(fs, waitHandler).run(env);
+    public FileStoreFileGetMain() {
+        this(new RealFileSystem(), new WaitHandlerProgressiveDelay());
     }
 
     /**

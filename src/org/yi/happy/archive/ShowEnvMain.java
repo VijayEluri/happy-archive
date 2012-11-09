@@ -4,7 +4,7 @@ import org.yi.happy.archive.commandLine.Env;
 
 public class ShowEnvMain {
 
-    public static void launch(Env env) {
+    public static void main(Env env) {
         System.out.println(env);
     }
 
