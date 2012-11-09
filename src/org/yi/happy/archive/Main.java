@@ -43,20 +43,15 @@ public class Main {
         public abstract void run(Env env) throws Exception;
     }
 
-    private static final List<Cmd> cmds = Collections.unmodifiableList(Arrays
-            .asList(
-
-            (Cmd) new Cmd("file-get") {
-                @Override
-                public void run(String[] args) throws Exception {
-                    FileStoreFileGetMain.main(args);
-                }
-            }
-
-            ));
-
     private static final List<NewCmd> newCmds = Collections
             .unmodifiableList(Arrays.asList(
+
+            new NewCmd("file-get") {
+                @Override
+                public void run(Env env) throws Exception {
+                    FileStoreFileGetMain.main(env);
+                }
+            },
 
             new NewCmd("make-index-db") {
                 @Override
@@ -202,14 +197,6 @@ public class Main {
             return;
         }
 
-        for (Cmd cmd : cmds) {
-            if (cmd.getName().equals(args[0])) {
-                String[] a = Arrays.copyOfRange(args, 1, args.length);
-                cmd.run(a);
-                return;
-            }
-        }
-
         Env env = MyEnv.init(args);
         String command = env.getCommand();
         for (NewCmd cmd : newCmds) {
@@ -223,9 +210,6 @@ public class Main {
     }
 
     private static void help() {
-        for (Cmd cmd : cmds) {
-            System.out.println(cmd.getName());
-        }
         for (NewCmd cmd : newCmds) {
             System.out.println(cmd.getName());
         }

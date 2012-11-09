@@ -3,6 +3,7 @@ package org.yi.happy.archive;
 import java.io.IOException;
 
 import org.yi.happy.annotate.EntryPoint;
+import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
 import org.yi.happy.archive.key.FullKey;
@@ -17,14 +18,14 @@ public class FileStoreFileGetMain {
     /**
      * get a file from a file store.
      * 
-     * @param args
+     * @param env
      * @throws IOException
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(Env env) throws IOException {
         FileSystem fs = new RealFileSystem();
         WaitHandler waitHandler = new WaitHandlerProgressiveDelay();
 
-        new FileStoreFileGetMain(fs, waitHandler).run(args);
+        new FileStoreFileGetMain(fs, waitHandler).run(env);
     }
 
     /**
@@ -46,19 +47,20 @@ public class FileStoreFileGetMain {
     /**
      * get a file from a file store.
      * 
-     * @param args
+     * @param env
      *            the file store, where to write the pending list, the key to
      *            fetch, the output file name.
      * @throws IOException
      */
-    public void run(String... args) throws IOException {
-        /*
-         * arguments: store, request, key, output
-         */
-        FileBlockStore store = new FileBlockStore(fs, args[0]);
-        pendingFile = args[1];
-        FullKey key = FullKeyParse.parseFullKey(args[2]);
-        String path = args[3];
+    public void run(Env env) throws IOException {
+        if (env.hasNoStore() || env.hasNoNeed() || env.hasArgumentCount() != 2) {
+            System.err.println("use: --store store --need need key output");
+            return;
+        }
+        FileBlockStore store = new FileBlockStore(fs, env.getStore());
+        pendingFile = env.getNeed();
+        FullKey key = FullKeyParse.parseFullKey(env.getArgument(0));
+        String path = env.getArgument(1);
 
         RestoreFile r = new RestoreFile(new SplitReader(key,
                 new RetrieveBlockStorage(store)), path, fs);
