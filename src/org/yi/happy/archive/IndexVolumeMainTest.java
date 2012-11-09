@@ -10,6 +10,8 @@ import java.io.StringWriter;
 
 import org.junit.Test;
 import org.yi.happy.annotate.NeedFailureTest;
+import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.commandLine.EnvBuilder;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.crypto.Digests;
 import org.yi.happy.archive.file_system.FakeFileSystem;
@@ -36,7 +38,8 @@ public class IndexVolumeMainTest {
 
         StringWriter out = new StringWriter();
 
-        new IndexVolumeMain(fs, out, null).run("image");
+        Env env = new EnvBuilder().addArgument("image").create();
+        new IndexVolumeMain(fs, out, null).run(env);
 
         StringBuilder sb = new StringBuilder();
         sb.append("00.dat\tplain\t");
@@ -77,7 +80,8 @@ public class IndexVolumeMainTest {
 
         ByteArrayOutputStream err = new ByteArrayOutputStream();
 
-        new IndexVolumeMain(fs, out, new PrintStream(err)).run("image");
+        Env env = new EnvBuilder().addArgument("image").create();
+        new IndexVolumeMain(fs, out, new PrintStream(err)).run(env);
 
         StringBuilder sb = new StringBuilder();
         sb.append("01.dat\tplain\t");

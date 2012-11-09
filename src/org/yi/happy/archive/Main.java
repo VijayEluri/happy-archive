@@ -128,13 +128,6 @@ public class Main {
                 public void run(String[] args) throws Exception {
                     BuildImageMain.main(args);
                 }
-            },
-
-            new Cmd("index-volume") {
-                @Override
-                public void run(String[] args) throws Exception {
-                    IndexVolumeMain.main(args);
-                }
             }
 
             ));
@@ -149,6 +142,13 @@ public class Main {
                 }
             },
 
+            new NewCmd("index-volume") {
+                @Override
+                public void run(Env env) throws Exception {
+                    IndexVolumeMain.main(env);
+                }
+            },
+            
             new NewCmd("store-remove") {
                 @Override
                 public void run(Env env) throws Exception {

@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
+import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.crypto.Digests;
@@ -50,16 +51,16 @@ public class IndexVolumeMain {
      *            the command line ( image-path )
      * @throws IOException
      */
-    public void run(String... args) throws IOException {
-        if (args.length < 1) {
+    public void run(Env env) throws IOException {
+        if (env.hasArgumentCount() != 1) {
             out.write("use: image\n");
             return;
         }
 
-        List<String> names = fs.list(args[0]);
+        List<String> names = fs.list(env.getArgument(0));
         Collections.sort(names);
         for (String name : names) {
-            process(fs.join(args[0], name), name);
+            process(fs.join(env.getArgument(0), name), name);
         }
     }
 
@@ -102,11 +103,11 @@ public class IndexVolumeMain {
      *            the command line arguments.
      * @throws IOException
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(Env env) throws IOException {
         FileSystem fs = new RealFileSystem();
         Writer out = new OutputStreamWriter(System.out);
         try {
-            new IndexVolumeMain(fs, out, System.err).run(args);
+            new IndexVolumeMain(fs, out, System.err).run(env);
         } finally {
             out.flush();
         }
