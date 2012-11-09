@@ -9,6 +9,7 @@ import java.io.Writer;
 import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.block.EncodedBlock;
+import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
 import org.yi.happy.archive.key.LocatorKey;
@@ -46,16 +47,16 @@ public class BuildImageMain {
      * @throws IOException
      */
     @SmellsMessy
-    public void run(String... args) throws IOException {
-        if (args.length < 4) {
-            out.write("use: store outstanding-list image-directory"
+    public void run(Env env) throws IOException {
+        if (env.hasNoStore() || env.hasArgumentCount() != 3) {
+            out.write("use: --store store outstanding-list image-directory"
                     + " image-size-in-mb\n");
             return;
         }
 
-        FileBlockStore store = new FileBlockStore(fs, args[0]);
-        InputStream in0 = fs.openInputStream(args[1]);
-        int limit = Integer.parseInt(args[3]);
+        FileBlockStore store = new FileBlockStore(fs, env.getStore());
+        InputStream in0 = fs.openInputStream(env.getArgument(0));
+        int limit = Integer.parseInt(env.getArgument(2));
         IsoEstimate size = new IsoEstimate();
         int count = 0;
         try {
@@ -77,7 +78,8 @@ public class BuildImageMain {
                     size.remove(data.length);
                     break;
                 }
-                fs.save(args[2] + "/" + String.format("%08x.dat", count), data);
+                fs.save(env.getArgument(1) + "/"
+                        + String.format("%08x.dat", count), data);
                 count++;
             }
 
@@ -101,11 +103,11 @@ public class BuildImageMain {
      * @throws IOException
      */
     @EntryPoint
-    public static void main(String[] args) throws IOException {
+    public static void main(Env env) throws IOException {
         FileSystem fs = new RealFileSystem();
         Writer out = new OutputStreamWriter(System.out);
         PrintStream err = System.err;
-        new BuildImageMain(fs, out, err).run(args);
+        new BuildImageMain(fs, out, err).run(env);
         out.flush();
     }
 

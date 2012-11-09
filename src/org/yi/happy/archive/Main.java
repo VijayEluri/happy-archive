@@ -121,13 +121,6 @@ public class Main {
                 public void run(String[] args) throws Exception {
                     FileStoreListMain.main(args);
                 }
-            },
-
-            new Cmd("build-image") {
-                @Override
-                public void run(String[] args) throws Exception {
-                    BuildImageMain.main(args);
-                }
             }
 
             ));
@@ -139,6 +132,13 @@ public class Main {
                 @Override
                 public void run(Env env) throws Exception {
                     MakeIndexDatabaseMain.launch(env);
+                }
+            },
+
+            new NewCmd("build-image") {
+                @Override
+                public void run(Env env) throws Exception {
+                    BuildImageMain.main(env);
                 }
             },
 

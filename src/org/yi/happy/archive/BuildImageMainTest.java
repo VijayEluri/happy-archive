@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.StringWriter;
 
 import org.junit.Test;
+import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.commandLine.EnvBuilder;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.test_data.TestData;
@@ -31,8 +33,10 @@ public class BuildImageMainTest {
                         .toString() + "\n"));
         fs.mkdir("output");
 
-        new BuildImageMain(fs, out, null).run("store", "outstanding", "output",
-                "4700");
+        Env env = new EnvBuilder().withStore("store")
+                .addArgument("outstanding").addArgument("output")
+                .addArgument("4700").create();
+        new BuildImageMain(fs, out, null).run(env);
 
         assertArrayEquals(TestData.KEY_CONTENT.getBytes(),
                 fs.load("output/00000000.dat"));
@@ -56,8 +60,10 @@ public class BuildImageMainTest {
                         + TestData.KEY_CONTENT_1.getLocatorKey() + "\n"));
         fs.mkdir("output");
 
-        new BuildImageMain(fs, out, null).run("store", "outstanding", "output",
-                "4700");
+        Env env = new EnvBuilder().withStore("store")
+                .addArgument("outstanding").addArgument("output")
+                .addArgument("4700").create();
+        new BuildImageMain(fs, out, null).run(env);
 
         assertArrayEquals(TestData.KEY_CONTENT.getBytes(),
                 fs.load("output/00000000.dat"));
@@ -92,8 +98,10 @@ public class BuildImageMainTest {
                         + "content-hash:00000000\n"));
         fs.mkdir("output");
 
-        new BuildImageMain(fs, out, new NullPrintStream()).run("store",
-                "outstanding", "output", "4700");
+        Env env = new EnvBuilder().withStore("store")
+                .addArgument("outstanding").addArgument("output")
+                .addArgument("4700").create();
+        new BuildImageMain(fs, out, new NullPrintStream()).run(env);
 
         assertArrayEquals(TestData.KEY_CONTENT.getBytes(),
                 fs.load("output/00000000.dat"));
