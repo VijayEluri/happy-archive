@@ -3,8 +3,7 @@ package org.yi.happy.archive.commandLine;
 import java.io.File;
 
 public class MyEnv {
-    public static Env init(String[] args)
-            throws CommandLineException {
+    public static Env init(String[] args) throws CommandLineException {
         final EnvBuilder env = new EnvBuilder();
 
         env.withHome(System.getenv("ARCHIVE_HOME"));
@@ -17,18 +16,26 @@ public class MyEnv {
         }
 
         new ParseEngine(new ParseEngine.Handler() {
-            @Override
-            public void onCommand(String command) {
-                env.withCommand(command);
-            }
+            private boolean needCommand = true;
 
             @Override
             public void onArgument(String argument) {
+                if (needCommand) {
+                    env.withCommand(argument);
+                    needCommand = false;
+                    return;
+                }
                 env.addArgument(argument);
             }
 
             @Override
-            public void onOption(String name, String value) {
+            public void onOption(String name, String value)
+                    throws CommandLineException {
+                if (needCommand) {
+                    throw new CommandLineException(
+                            "the first argument must be a command");
+                }
+
                 if (name.equals("archive-home")) {
                     env.withHome(value);
                     return;
@@ -39,7 +46,7 @@ public class MyEnv {
                     return;
                 }
 
-        if (name.equals("index")) {
+                if (name.equals("index")) {
                     env.withIndex(value);
                     return;
                 }
@@ -49,12 +56,15 @@ public class MyEnv {
                     return;
                 }
 
-                throw new IllegalArgumentException();
+                throw new CommandLineException("unrecognized option: " + name);
             }
 
             @Override
-            public void onFinished() {
-                // nothing
+            public void onFinished() throws CommandLineException {
+                if (needCommand) {
+                    throw new CommandLineException(
+                            "the first argument must be a command");
+                }
             }
         }).parse(args);
 

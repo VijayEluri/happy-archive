@@ -11,16 +11,6 @@ public class ParseEngine {
      */
     public interface Handler {
         /**
-         * emitted when the initial command is found on the command line.
-         * 
-         * @param command
-         *            the command that was found on the command line.
-         * @throws CommandLineException
-         *             if the command line is invalid.
-         */
-        void onCommand(String command) throws CommandLineException;
-
-        /**
          * emitted when a non-option is found on the command line.
          * 
          * @param argument
@@ -62,7 +52,7 @@ public class ParseEngine {
     private final Handler handler;
 
     private enum State {
-        START, FILE, OPTION, OPTION2, NAME, VALUE, DONE
+        FILE, OPTION, OPTION2, NAME, VALUE, DONE
     };
 
     private State state;
@@ -76,7 +66,7 @@ public class ParseEngine {
     public ParseEngine(Handler handler) {
         this.handler = handler;
 
-        state = State.START;
+        state = State.FILE;
     }
 
     /**
@@ -130,18 +120,6 @@ public class ParseEngine {
 
         int start = 0;
         for (int i = 0; i < arg.length(); i++) {
-            if (state == State.START) {
-                if (arg.charAt(i) == '-') {
-                    throw new CommandLineException(
-                            "the first argument must be a command name");
-                }
-
-                handler.onCommand(arg);
-
-                state = State.FILE;
-                return;
-            }
-
             if (state == State.FILE) {
                 if (arg.charAt(i) == '-') {
                     state = State.OPTION;
@@ -243,13 +221,6 @@ public class ParseEngine {
             return;
         }
 
-        if (state == State.START) {
-            handler.onCommand(arg);
-
-            state = State.FILE;
-            return;
-        }
-
         throw new IllegalStateException("" + state);
     }
 
@@ -272,11 +243,6 @@ public class ParseEngine {
             throw new CommandLineException("The option must have a value");
         }
 
-        if(state == State.START) {
-            throw new CommandLineException(
-                    "The first argument must be a command name");
-        }
-        
         throw new IllegalStateException();
     }
 }

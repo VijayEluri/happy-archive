@@ -50,17 +50,20 @@ public class CommandParse {
      */
     public void parse(String[] args) throws CommandLineException {
         new ParseEngine(new ParseEngine.Handler() {
-            @Override
-            public void onCommand(String command) {
-                if (!commands.contains(command)) {
-                    throw new IllegalArgumentException();
-                }
-
-                CommandParse.this.command = command;
-            }
+            boolean needCommand = true;
 
             @Override
             public void onArgument(String argument) {
+                if (needCommand) {
+                    if (!commands.contains(argument)) {
+                        throw new IllegalArgumentException();
+                    }
+
+                    CommandParse.this.command = argument;
+                    needCommand = false;
+                    return;
+                }
+
                 files.add(argument);
             }
 
