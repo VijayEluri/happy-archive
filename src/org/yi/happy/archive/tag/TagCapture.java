@@ -40,7 +40,7 @@ public class TagCapture extends DefaultBinaryHandler {
         if (data == null) {
             return;
         }
-        data = data.add(buff, offset, length);
+        data.add(buff, offset, length);
     }
 
     @Override

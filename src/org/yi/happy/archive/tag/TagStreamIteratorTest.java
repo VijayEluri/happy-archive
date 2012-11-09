@@ -20,7 +20,7 @@ public class TagStreamIteratorTest {
      */
     @Test
     public void testBasicUsage() throws Exception {
-        InputStream in = new BytesBuilder("a=b\n\nb=c\n\n")
+        InputStream in = new BytesBuilder("a=b\n" + "\n" + "b=c\n" + "\n")
                 .createInputStream();
 
         TagStreamIterator it = new TagStreamIterator(in);

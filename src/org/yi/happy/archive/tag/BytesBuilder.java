@@ -1,6 +1,8 @@
 package org.yi.happy.archive.tag;
 
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.Bytes;
@@ -9,46 +11,12 @@ import org.yi.happy.archive.Bytes;
  * A builder for making Bytes objects and byte arrays.
  */
 public class BytesBuilder {
-
-    private class AddAction extends BytesBuilder {
-        public AddAction(Bytes bytes) {
-            super(bytes);
-        }
-
-        @Override
-        public Bytes create() {
-            byte[] out = createByteArray();
-            return new Bytes(out);
-        }
-
-        @Override
-        public byte[] createByteArray() {
-            int size = getSize();
-            byte[] out = new byte[size];
-            getBytes(out);
-            return out;
-        }
-
-        @Override
-        public int getBytes(byte[] out) {
-            int end = BytesBuilder.this.getBytes(out);
-            bytes.getBytes(0, out, end, bytes.getSize());
-            return end + bytes.getSize();
-        }
-
-        @Override
-        public int getSize() {
-            return BytesBuilder.this.getSize() + bytes.getSize();
-        }
-    }
-
-    protected final Bytes bytes;
+    private final List<Bytes> parts = new ArrayList<Bytes>();
 
     /**
      * Start blank.
      */
     public BytesBuilder() {
-        this(new Bytes());
     }
 
     /**
@@ -58,7 +26,7 @@ public class BytesBuilder {
      *            the value to start with.
      */
     public BytesBuilder(Bytes bytes) {
-        this.bytes = bytes;
+        parts.add(bytes);
     }
 
     /**
@@ -99,7 +67,9 @@ public class BytesBuilder {
      * @return the byte array.
      */
     public byte[] createByteArray() {
-        return bytes.toByteArray();
+        byte[] out = new byte[getSize()];
+        getBytes(out);
+        return out;
     }
 
     /**
@@ -117,7 +87,13 @@ public class BytesBuilder {
      * @return the {@link Bytes} object.
      */
     public Bytes create() {
-        return bytes;
+        if (parts.size() == 0) {
+            return new Bytes();
+        }
+        if (parts.size() == 1) {
+            return parts.get(0);
+        }
+        return new Bytes(createByteArray());
     }
 
     /**
@@ -129,8 +105,15 @@ public class BytesBuilder {
      * @return the size consumed in the byte array.
      */
     public int getBytes(byte[] out) {
-        bytes.getBytes(0, out, 0, bytes.getSize());
-        return bytes.getSize();
+        int offset = 0;
+        for (Bytes part : parts) {
+            int size = part.getSize();
+
+            part.getBytes(0, out, offset, size);
+
+            offset += size;
+        }
+        return offset;
     }
 
     /**
@@ -139,37 +122,38 @@ public class BytesBuilder {
      * @return the size of the builder.
      */
     public int getSize() {
-        return bytes.getSize();
+        int size = 0;
+        for (Bytes part : parts) {
+            size += part.getSize();
+        }
+        return size;
     }
 
     /**
-     * Make a builder that is the concatenation of the current value and the
-     * given bytes.
+     * Append data to this builder.
      * 
      * @param data
      *            the data to add to the builder.
-     * @return the new builder with the data added.
+     * @return this builder.
      */
     public BytesBuilder add(byte... data) {
-        return new AddAction(new Bytes(data));
+        return add(new Bytes(data));
     }
 
     /**
-     * Make a builder that is the concatenation of the current value and the
-     * given bytes.
+     * Append data to this builder.
      * 
      * @param data
      *            the bytes given in the lower 8 bits of each element in the
      *            array.
-     * @return the new builder with the data added.
+     * @return this builder.
      */
     public BytesBuilder add(int... data) {
-        return new AddAction(new Bytes(data));
+        return add(new Bytes(data));
     }
 
     /**
-     * Make a builder that is the concatenation of the current value and the
-     * given bytes.
+     * Append data to this builder.
      * 
      * @param data
      *            the buffer the bytes are contained in.
@@ -177,22 +161,33 @@ public class BytesBuilder {
      *            the offset in the buffer to find the bytes.
      * @param size
      *            the length in the buffer of the bytes.
-     * @return the new builder with the data added.
+     * @return this builder.
      */
     public BytesBuilder add(byte[] data, int offset, int size) {
-        return new AddAction(new Bytes(data, offset, size));
+        return add(new Bytes(data, offset, size));
     }
 
     /**
-     * Make a builder that is the concatenation of the current value and the
-     * given bytes.
+     * Append data to this builder.
      * 
      * @param data
      *            the string to take the low 8 bits from each character to make
      *            the data.
-     * @return the new builder with the data added.
+     * @return this builder.
      */
     public BytesBuilder add(String data) {
         return add(ByteString.toBytes(data));
+    }
+
+    /**
+     * Append data to this builder.
+     * 
+     * @param data
+     *            the data to append.
+     * @return this builder.
+     */
+    public BytesBuilder add(Bytes data) {
+        parts.add(data);
+        return this;
     }
 }
