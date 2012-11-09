@@ -108,7 +108,7 @@ public class FileStoreFileGetMainTest {
 
         };
 
-        Env env = new EnvBuilder().withStore("store").withNeed("need")
+        Env env = new EnvBuilder().withStore("store").withNeed("request")
                 .addArgument(TestData.KEY_CONTENT_MAP.getFullKey().toString())
                 .addArgument("out").create();
         new FileStoreFileGetMain(fs, waitHandler).run(env);
