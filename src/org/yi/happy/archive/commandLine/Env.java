@@ -44,26 +44,44 @@ public class Env {
                 arguments));
     }
 
+    /**
+     * @return the base data directory.
+     */
     public String getHome() {
         return home;
     }
 
+    /**
+     * @return the location of the block store.
+     */
     public String getStore() {
         return store;
     }
 
+    /**
+     * @return the location of the index store.
+     */
     public String getIndex() {
         return index;
     }
 
+    /**
+     * @return the location of the request list file.
+     */
     public String getNeed() {
         return need;
     }
 
+    /**
+     * @return the name of the command.
+     */
     public String getCommand() {
         return command;
     }
 
+    /**
+     * @return all the arguments.
+     */
     public List<String> getArguments() {
         return arguments;
     }
@@ -75,30 +93,53 @@ public class Env {
                 + arguments + "]";
     }
 
+    /**
+     * @return true if there are any arguments.
+     */
     public boolean hasArguments() {
         return !arguments.isEmpty();
     }
 
+    /**
+     * @return true if there is no store set.
+     */
     public boolean hasNoStore() {
         return store == null;
     }
 
+    /**
+     * @return true if there is no request list file name set.
+     */
     public boolean hasNoNeed() {
         return need == null;
     }
 
+    /**
+     * @return true if there are no arguments.
+     */
     public boolean hasNoArguments() {
         return arguments.isEmpty();
     }
 
+    /**
+     * @return the number of arguments.
+     */
     public int hasArgumentCount() {
         return arguments.size();
     }
 
+    /**
+     * @return true if there is no index set.
+     */
     public boolean hasNoIndex() {
         return index == null;
     }
 
+    /**
+     * @param index
+     *            which argument to fetch.
+     * @return the argument at that position.
+     */
     public String getArgument(int index) {
         return arguments.get(index);
     }
