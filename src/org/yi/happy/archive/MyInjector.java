@@ -53,8 +53,9 @@ public class MyInjector {
     }
 
     public static MainCommand injectFileStoreListMain(ApplicationScope scope) {
-        return new FileStoreListMain(injectFileSystem(scope),
-                injectOutput(scope), injectError(scope));
+        return new FileStoreListMain(injectBlockStore(scope),
+                injectFileSystem(scope), injectOutput(scope),
+                injectError(scope));
     }
 
     public static MainCommand injectIndexSearchMain(ApplicationScope scope) {

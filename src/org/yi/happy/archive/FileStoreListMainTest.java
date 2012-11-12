@@ -9,8 +9,6 @@ import java.io.PrintStream;
 import org.junit.Test;
 import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.commandLine.EnvBuilder;
-import org.yi.happy.archive.file_system.FakeFileSystem;
-import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
@@ -24,9 +22,7 @@ public class FileStoreListMainTest {
      */
     @Test
     public void test1() throws IOException {
-        FileSystem fs = new FakeFileSystem();
-        String base = "store";
-        BlockStore store = new FileBlockStore(fs, base);
+        BlockStore store = new StorageMemory();
         store.put(TestData.KEY_CONTENT.getEncodedBlock());
         store.put(TestData.KEY_CONTENT_1.getEncodedBlock());
         store.put(TestData.KEY_CONTENT_2.getEncodedBlock());
@@ -35,7 +31,7 @@ public class FileStoreListMainTest {
         PrintStream out = new PrintStream(out0, true);
 
         Env env = new EnvBuilder().withStore("store").create();
-        new FileStoreListMain(fs, out, null).run(env);
+        new FileStoreListMain(store, null, out, null).run(env);
 
         String want = TestData.KEY_CONTENT.getLocatorKey() + "\n"
                 + TestData.KEY_CONTENT_2.getLocatorKey() + "\n"
