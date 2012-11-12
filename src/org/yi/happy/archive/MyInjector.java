@@ -2,6 +2,7 @@ package org.yi.happy.archive;
 
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.List;
 import java.util.Map;
 
 import org.yi.happy.archive.commandLine.Env;
@@ -75,7 +76,11 @@ public class MyInjector {
     public static MainCommand injectBuildImageMain(ApplicationScope scope) {
         return new BuildImageMain(injectBlockStore(scope),
                 injectFileSystem(scope), injectOutput(scope),
-                injectError(scope), injectEnv(scope));
+                injectError(scope), injectArgs(scope));
+    }
+
+    public static List<String> injectArgs(ApplicationScope scope) {
+        return scope.getArgs();
     }
 
     public static Env injectEnv(ApplicationScope scope) {
@@ -100,7 +105,7 @@ public class MyInjector {
 
     public static MainCommand injectDecodeBlockMain(ApplicationScope scope) {
         return new DecodeBlockMain(injectFileSystem(scope),
-                injectOutput(scope), injectEnv(scope));
+                injectOutput(scope), injectArgs(scope));
     }
 
     public static MainCommand injectFileStoreTagAddMain(ApplicationScope scope) {

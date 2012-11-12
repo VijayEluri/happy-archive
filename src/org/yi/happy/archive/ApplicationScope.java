@@ -1,5 +1,6 @@
 package org.yi.happy.archive;
 
+import java.util.List;
 import java.util.Map;
 
 import org.yi.happy.archive.commandLine.Env;
@@ -25,5 +26,9 @@ public class ApplicationScope {
 
     public String getStore() {
         return env.getStore();
+    }
+
+    public List<String> getArgs() {
+        return env.getArguments();
     }
 }

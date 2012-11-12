@@ -4,10 +4,10 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Test;
-import org.yi.happy.archive.commandLine.Env;
-import org.yi.happy.archive.commandLine.EnvBuilder;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.key.ContentLocatorKey;
@@ -34,10 +34,8 @@ public class BuildImageMainTest {
                         .toString() + "\n"));
         fs.mkdir("output");
 
-        Env env = new EnvBuilder().withStore("store")
-                .addArgument("outstanding").addArgument("output")
-                .addArgument("4700").create();
-        new BuildImageMain(store, fs, out, null, env).run();
+        List<String> args = Arrays.asList("outstanding", "output", "4700");
+        new BuildImageMain(store, fs, out, null, args).run();
 
         assertArrayEquals(TestData.KEY_CONTENT.getBytes(),
                 fs.load("output/00000000.dat"));
@@ -61,10 +59,8 @@ public class BuildImageMainTest {
                         + TestData.KEY_CONTENT_1.getLocatorKey() + "\n"));
         fs.mkdir("output");
 
-        Env env = new EnvBuilder().withStore("store")
-                .addArgument("outstanding").addArgument("output")
-                .addArgument("4700").create();
-        new BuildImageMain(store, fs, out, null, env).run();
+        List<String> args = Arrays.asList("outstanding", "output", "4700");
+        new BuildImageMain(store, fs, out, null, args).run();
 
         assertArrayEquals(TestData.KEY_CONTENT.getBytes(),
                 fs.load("output/00000000.dat"));
@@ -96,10 +92,8 @@ public class BuildImageMainTest {
                         + "content-hash:00000000\n"));
         fs.mkdir("output");
 
-        Env env = new EnvBuilder().withStore("store")
-                .addArgument("outstanding").addArgument("output")
-                .addArgument("4700").create();
-        new BuildImageMain(store, fs, out, new NullPrintStream(), env).run();
+        List<String> args = Arrays.asList("outstanding", "output", "4700");
+        new BuildImageMain(store, fs, out, new NullPrintStream(), args).run();
 
         assertArrayEquals(TestData.KEY_CONTENT.getBytes(),
                 fs.load("output/00000000.dat"));

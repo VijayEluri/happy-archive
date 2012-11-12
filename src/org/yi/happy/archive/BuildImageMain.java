@@ -3,10 +3,10 @@ package org.yi.happy.archive;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.List;
 
 import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.block.EncodedBlock;
-import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesOutput;
 import org.yi.happy.archive.commandLine.UsesStore;
@@ -27,7 +27,7 @@ public class BuildImageMain implements MainCommand {
     private final PrintStream out;
     private final PrintStream err;
     private final BlockStore store;
-    private final Env env;
+    private final List<String> args;
 
     /**
      * create with context.
@@ -39,14 +39,17 @@ public class BuildImageMain implements MainCommand {
      * @param out
      *            where to send output.
      * @param err
+     *            the error stream.
+     * @param args
+     *            the parameters.
      */
     public BuildImageMain(BlockStore store, FileSystem fs, PrintStream out,
-            PrintStream err, Env env) {
+            PrintStream err, List<String> args) {
         this.store = store;
         this.fs = fs;
         this.out = out;
         this.err = err;
-        this.env = env;
+        this.args = args;
     }
 
     /**
@@ -59,8 +62,8 @@ public class BuildImageMain implements MainCommand {
     @Override
     @SmellsMessy
     public void run() throws IOException {
-        InputStream in0 = fs.openInputStream(env.getArgument(0));
-        int limit = Integer.parseInt(env.getArgument(2));
+        InputStream in0 = fs.openInputStream(args.get(0));
+        int limit = Integer.parseInt(args.get(2));
         IsoEstimate size = new IsoEstimate();
         int count = 0;
         try {
@@ -82,7 +85,7 @@ public class BuildImageMain implements MainCommand {
                     size.remove(data.length);
                     break;
                 }
-                fs.save(env.getArgument(1) + "/"
+                fs.save(args.get(1) + "/"
                         + String.format("%08x.dat", count), data);
                 count++;
             }
