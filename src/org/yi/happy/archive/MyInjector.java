@@ -69,7 +69,8 @@ public class MyInjector {
     }
 
     public static MainCommand injectBuildImageMain(ApplicationScope scope) {
-        return new BuildImageMain(injectFileSystem(scope), injectOutput(scope),
+        return new BuildImageMain(injectBlockStore(scope),
+                injectFileSystem(scope), injectOutput(scope),
                 injectError(scope));
     }
 

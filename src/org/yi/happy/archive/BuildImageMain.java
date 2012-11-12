@@ -24,16 +24,22 @@ public class BuildImageMain implements MainCommand {
     private final FileSystem fs;
     private final PrintStream out;
     private final PrintStream err;
+    private final BlockStore store;
 
     /**
      * create with context.
      * 
+     * @param store
+     *            the block store to use.
      * @param fs
      *            the file system to use.
      * @param out
      *            where to send output.
+     * @param err
      */
-    public BuildImageMain(FileSystem fs, PrintStream out, PrintStream err) {
+    public BuildImageMain(BlockStore store, FileSystem fs, PrintStream out,
+            PrintStream err) {
+        this.store = store;
         this.fs = fs;
         this.out = out;
         this.err = err;
@@ -49,7 +55,6 @@ public class BuildImageMain implements MainCommand {
     @Override
     @SmellsMessy
     public void run(Env env) throws IOException {
-        FileBlockStore store = new FileBlockStore(fs, env.getStore());
         InputStream in0 = fs.openInputStream(env.getArgument(0));
         int limit = Integer.parseInt(env.getArgument(2));
         IsoEstimate size = new IsoEstimate();

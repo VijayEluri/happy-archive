@@ -10,6 +10,8 @@ import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.commandLine.EnvBuilder;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.file_system.FileSystem;
+import org.yi.happy.archive.key.ContentLocatorKey;
+import org.yi.happy.archive.key.HashValue;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
@@ -24,7 +26,7 @@ public class BuildImageMainTest {
     @Test
     public void test1() throws IOException {
         FileSystem fs = new FakeFileSystem();
-        FileBlockStore store = new FileBlockStore(fs, "store");
+        BlockStore store = new StorageMemory();
         store.put(TestData.KEY_CONTENT.getEncodedBlock());
         CapturePrintStream out = CapturePrintStream.create();
         fs.save("outstanding",
@@ -35,7 +37,7 @@ public class BuildImageMainTest {
         Env env = new EnvBuilder().withStore("store")
                 .addArgument("outstanding").addArgument("output")
                 .addArgument("4700").create();
-        new BuildImageMain(fs, out, null).run(env);
+        new BuildImageMain(store, fs, out, null).run(env);
 
         assertArrayEquals(TestData.KEY_CONTENT.getBytes(),
                 fs.load("output/00000000.dat"));
@@ -50,7 +52,7 @@ public class BuildImageMainTest {
     @Test
     public void test2() throws IOException {
         FileSystem fs = new FakeFileSystem();
-        FileBlockStore store = new FileBlockStore(fs, "store");
+        BlockStore store = new StorageMemory();
         store.put(TestData.KEY_CONTENT.getEncodedBlock());
         store.put(TestData.KEY_CONTENT_1.getEncodedBlock());
         CapturePrintStream out = CapturePrintStream.create();
@@ -62,7 +64,7 @@ public class BuildImageMainTest {
         Env env = new EnvBuilder().withStore("store")
                 .addArgument("outstanding").addArgument("output")
                 .addArgument("4700").create();
-        new BuildImageMain(fs, out, null).run(env);
+        new BuildImageMain(store, fs, out, null).run(env);
 
         assertArrayEquals(TestData.KEY_CONTENT.getBytes(),
                 fs.load("output/00000000.dat"));
@@ -79,16 +81,13 @@ public class BuildImageMainTest {
     @Test
     public void testBrokenBlockInStore() throws IOException {
         FileSystem fs = new FakeFileSystem();
-        FileBlockStore store = new FileBlockStore(fs, "store");
+        StorageMemory store = new StorageMemory();
         store.put(TestData.KEY_CONTENT.getEncodedBlock());
         store.put(TestData.KEY_CONTENT_1.getEncodedBlock());
 
         /* put a broken block in the store */
-        fs.mkdir("store/0");
-        fs.mkdir("store/0/00");
-        fs.mkdir("store/0/00/000");
-        fs.save("store/0/00/000/00000000-content-hash",
-                TestData.FILE_EMPTY.getBytes());
+        store.putBroken(new ContentLocatorKey(new HashValue(0x00, 0x00, 0x00,
+                0x00)));
 
         CapturePrintStream out = CapturePrintStream.create();
         fs.save("outstanding",
@@ -100,7 +99,7 @@ public class BuildImageMainTest {
         Env env = new EnvBuilder().withStore("store")
                 .addArgument("outstanding").addArgument("output")
                 .addArgument("4700").create();
-        new BuildImageMain(fs, out, new NullPrintStream()).run(env);
+        new BuildImageMain(store, fs, out, new NullPrintStream()).run(env);
 
         assertArrayEquals(TestData.KEY_CONTENT.getBytes(),
                 fs.load("output/00000000.dat"));
