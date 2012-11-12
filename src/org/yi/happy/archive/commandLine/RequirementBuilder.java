@@ -5,6 +5,8 @@ public class RequirementBuilder {
     private boolean usesStore = false;
     private boolean usesIndex = false;
     private boolean usesNeed = false;
+    private String usesInput = null;
+    private String usesOutput = null;
 
     public RequirementBuilder withUsesStore() {
         usesStore = true;
@@ -31,6 +33,19 @@ public class RequirementBuilder {
     }
 
     public Requirement create() {
-        return new Requirement(usesArgs, usesStore, usesIndex, usesNeed);
+        return new Requirement(usesArgs, usesStore, usesIndex, usesNeed,
+                usesInput, usesOutput);
+    }
+
+    public void withUsesInput(String value) {
+        usesInput = value;
+        // TODO Auto-generated method stub
+
+    }
+
+    public void withUsesOutput(String value) {
+        usesOutput = value;
+        // TODO Auto-generated method stub
+
     }
 }

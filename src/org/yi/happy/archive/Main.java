@@ -8,6 +8,8 @@ import java.util.Map;
 import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.commandLine.MyEnv;
+import org.yi.happy.archive.commandLine.Requirement;
+import org.yi.happy.archive.commandLine.RequirementLoader;
 
 /**
  * The top level entry point that dispatches to the sub-commands.
@@ -59,6 +61,12 @@ public class Main {
             return;
         }
 
+        Requirement req = RequirementLoader.load(cls);
+        if (!RequirementLoader.check(req, env)) {
+            explain(req, env);
+            return;
+        }
+
         MainCommand cmd = getCommandObject(cls);
         if (cmd == null) {
             help();
@@ -66,6 +74,40 @@ public class Main {
         }
 
         cmd.run(env);
+    }
+
+    private static void explain(Requirement req, Env env) {
+        if (req.getUsesStore() && env.hasNoStore()) {
+            System.err.println("missing option --store store-path");
+        }
+
+        if (req.getUsesIndex() && env.hasNoIndex()) {
+            System.err.println("missing option --index index-path");
+        }
+
+        if (req.getUsesNeed() && env.hasNoNeed()) {
+            System.err.println("missing option --need need-file");
+        }
+
+        if (env.hasArgumentCount() < req.getMinArgs()) {
+            System.err.println("not enough arguments");
+        }
+
+        if (!req.isVarArgs() && env.hasArgumentCount() > req.getMinArgs()) {
+            System.err.println("too many arguments");
+        }
+
+        System.err.print("use: " + env.getCommand());
+        for (String arg : req.getUsesArgs()) {
+            System.err.print(" " + arg);
+        }
+        if (req.getUsesInput() != null) {
+            System.err.print(" < " + req.getUsesInput());
+        }
+        if (req.getUsesOutput() != null) {
+            System.err.print(" > " + req.getUsesOutput());
+        }
+        System.err.println();
     }
 
     private static MainCommand getCommandObject(Class<? extends MainCommand> cls)
@@ -82,7 +124,19 @@ public class Main {
 
     private static void help() {
         for (String name : commands.keySet()) {
-            System.out.println(name);
+            System.out.print(name);
+
+            Requirement req = RequirementLoader.load(commands.get(name));
+            for (String arg : req.getUsesArgs()) {
+                System.out.print(" " + arg);
+            }
+            if (req.getUsesInput() != null) {
+                System.out.print(" < " + req.getUsesInput());
+            }
+            if (req.getUsesOutput() != null) {
+                System.out.print(" > " + req.getUsesOutput());
+            }
+            System.out.println();
         }
     }
 }

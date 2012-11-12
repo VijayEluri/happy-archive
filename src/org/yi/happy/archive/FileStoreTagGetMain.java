@@ -6,6 +6,7 @@ import java.io.PrintStream;
 
 import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.commandLine.UsesInput;
 import org.yi.happy.archive.commandLine.UsesNeed;
 import org.yi.happy.archive.commandLine.UsesStore;
 import org.yi.happy.archive.file_system.FileSystem;
@@ -20,6 +21,7 @@ import org.yi.happy.archive.tag.TagStreamIterator;
  */
 @UsesStore
 @UsesNeed
+@UsesInput("tag-list")
 public class FileStoreTagGetMain implements MainCommand {
     private final FileSystem fs;
     private final WaitHandler waitHandler;

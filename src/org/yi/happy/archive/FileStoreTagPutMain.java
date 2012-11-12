@@ -9,6 +9,7 @@ import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.block.encoder.BlockEncoderFactory;
 import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.commandLine.UsesArgs;
+import org.yi.happy.archive.commandLine.UsesOutput;
 import org.yi.happy.archive.commandLine.UsesStore;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.file_system.FileSystem;
@@ -20,6 +21,7 @@ import org.yi.happy.archive.tag.TagOutputStream;
  */
 @UsesStore
 @UsesArgs({ "file..." })
+@UsesOutput("tag-list")
 public class FileStoreTagPutMain implements MainCommand {
 
     private final FileSystem fs;

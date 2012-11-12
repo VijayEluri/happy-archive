@@ -10,6 +10,8 @@ public class Requirement {
     private final boolean usesStore;
     private final boolean usesIndex;
     private final boolean usesNeed;
+    private final String usesInput;
+    private final String usesOutput;
 
     /**
      * Create an invocation environment requirement description.
@@ -22,13 +24,18 @@ public class Requirement {
      *            true if the index option is used.
      * @param usesNeed
      *            true if the need option is used.
+     * @param usesInput
+     * @param usesOutput
      */
     public Requirement(String[] usesArgs, boolean usesStore,
-            boolean usesIndex, boolean usesNeed) {
+ boolean usesIndex,
+            boolean usesNeed, String usesInput, String usesOutput) {
         this.usesArgs = usesArgs;
         this.usesStore = usesStore;
         this.usesIndex = usesIndex;
         this.usesNeed = usesNeed;
+        this.usesInput = usesInput;
+        this.usesOutput = usesOutput;
     }
 
     /**
@@ -57,6 +64,20 @@ public class Requirement {
      */
     public boolean getUsesNeed() {
         return usesNeed;
+    }
+
+    /**
+     * @return the name of the input part of the command description.
+     */
+    public String getUsesInput() {
+        return usesInput;
+    }
+
+    /**
+     * @return the name of the output part of the command description.
+     */
+    public String getUsesOutput() {
+        return usesInput;
     }
 
     /**

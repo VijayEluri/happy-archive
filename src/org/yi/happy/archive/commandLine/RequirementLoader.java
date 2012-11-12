@@ -40,6 +40,16 @@ public class RequirementLoader {
                 req.withUsesNeed();
                 continue;
             }
+
+            if (a.annotationType() == UsesInput.class) {
+                req.withUsesInput(((UsesInput) a).value());
+                continue;
+            }
+
+            if (a.annotationType() == UsesOutput.class) {
+                req.withUsesOutput(((UsesOutput) a).value());
+                continue;
+            }
         }
 
         return req.create();
