@@ -24,6 +24,7 @@ import org.yi.happy.archive.file_system.FileSystem;
 public class EncodeContentMain implements MainCommand {
     private final FileSystem fs;
     private final PrintStream out;
+    private final Env env;
 
     /**
      * 
@@ -32,9 +33,10 @@ public class EncodeContentMain implements MainCommand {
      * @param out
      *            where to send output.
      */
-    public EncodeContentMain(FileSystem fs, PrintStream out) {
+    public EncodeContentMain(FileSystem fs, PrintStream out, Env env) {
         this.fs = fs;
         this.out = out;
+        this.env = env;
     }
 
     /**
@@ -45,7 +47,7 @@ public class EncodeContentMain implements MainCommand {
      * @throws IOException
      */
     @Override
-    public void run(Env env) throws IOException {
+    public void run() throws IOException {
         BlockEncoder encoder = BlockEncoderFactory.getContentDefault();
 
         Block block = BlockParse.parse(fs.load(env.getArgument(0),

@@ -36,7 +36,7 @@ public class FileStoreTagPutMainTest {
 
         Env env = new EnvBuilder().withStore("store").addArgument("test.txt")
                 .create();
-        new FileStoreTagPutMain(store, fs, out).run(env);
+        new FileStoreTagPutMain(store, fs, out, env).run();
 
         out.flush();
 
@@ -65,7 +65,7 @@ public class FileStoreTagPutMainTest {
 
         Env env = new EnvBuilder().withStore("store").addArgument("test.txt")
                 .create();
-        new FileStoreTagPutMain(store, fs, out).run(env);
+        new FileStoreTagPutMain(store, fs, out, env).run();
 
         out.flush();
 

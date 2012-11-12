@@ -39,7 +39,7 @@ public class IndexSearchMainTest {
 
         Env env = new EnvBuilder().withIndex("index").addArgument("request")
                 .create();
-        new IndexSearchMain(fs, out).run(env);
+        new IndexSearchMain(fs, out, env).run();
 
         String o = out.toString();
         assertEquals("onsite\t01\t00.dat\t" + mapKey + "\n", o);
@@ -68,7 +68,7 @@ public class IndexSearchMainTest {
 
         Env env = new EnvBuilder().withIndex("index").addArgument("request")
                 .create();
-        new IndexSearchMain(fs, out).run(env);
+        new IndexSearchMain(fs, out, env).run();
 
         String o = out.toString();
         assertEquals("offsite\t02\t00.dat\t" + mapKey + "\n"
@@ -99,7 +99,7 @@ public class IndexSearchMainTest {
 
         Env env = new EnvBuilder().withIndex("index").addArgument("request")
                 .create();
-        new IndexSearchMain(fs, out).run(env);
+        new IndexSearchMain(fs, out, env).run();
 
         String o = out.toString();
         assertEquals("offsite\t02\t00.dat\t" + mapKey + "\n"
@@ -132,7 +132,7 @@ public class IndexSearchMainTest {
 
         Env env = new EnvBuilder().withIndex("index").addArgument("request")
                 .create();
-        new IndexSearchMain(fs, out).run(env);
+        new IndexSearchMain(fs, out, env).run();
 
         String o = out.toString();
         assertEquals("offsite\t02\t00.dat\t" + mapKey + "\n"
@@ -160,7 +160,7 @@ public class IndexSearchMainTest {
 
         Env env = new EnvBuilder().withIndex("index").addArgument("request")
                 .create();
-        new IndexSearchMain(fs, out).run(env);
+        new IndexSearchMain(fs, out, env).run();
 
         String o = out.toString();
         assertEquals("onsite\t01\t00.dat\t" + mapKey + "\n", o);

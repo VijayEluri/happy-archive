@@ -19,6 +19,7 @@ import org.yi.happy.archive.tag.RestoreFile;
 @UsesArgs({ "key", "output" })
 public class FileStoreFileGetMain implements MainCommand {
     private final BlockStore store;
+    private final Env env;
 
     /**
      * create.
@@ -31,10 +32,11 @@ public class FileStoreFileGetMain implements MainCommand {
      *            what to do when it is time to wait for data.
      */
     public FileStoreFileGetMain(BlockStore store, FileSystem fs,
-            WaitHandler waitHandler) {
+            WaitHandler waitHandler, Env env) {
         this.store = store;
         this.fs = fs;
         this.waitHandler = waitHandler;
+        this.env = env;
     }
 
     private FileSystem fs;
@@ -49,7 +51,7 @@ public class FileStoreFileGetMain implements MainCommand {
      * @throws IOException
      */
     @Override
-    public void run(Env env) throws IOException {
+    public void run() throws IOException {
         pendingFile = env.getNeed();
         FullKey key = FullKeyParse.parseFullKey(env.getArgument(0));
         String path = env.getArgument(1);

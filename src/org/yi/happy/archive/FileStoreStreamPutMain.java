@@ -6,7 +6,6 @@ import java.io.PrintStream;
 
 import org.yi.happy.archive.block.encoder.BlockEncoder;
 import org.yi.happy.archive.block.encoder.BlockEncoderFactory;
-import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.commandLine.UsesInput;
 import org.yi.happy.archive.commandLine.UsesOutput;
 import org.yi.happy.archive.commandLine.UsesStore;
@@ -23,6 +22,7 @@ public class FileStoreStreamPutMain implements MainCommand {
     private FileSystem fs;
     private InputStream in;
     private PrintStream out;
+    private final BlockStore store;
 
     /**
      * create.
@@ -34,7 +34,9 @@ public class FileStoreStreamPutMain implements MainCommand {
      * @param out
      *            the stream to write the result.
      */
-    public FileStoreStreamPutMain(FileSystem fs, InputStream in, PrintStream out) {
+    public FileStoreStreamPutMain(BlockStore store, FileSystem fs,
+            InputStream in, PrintStream out) {
+        this.store = store;
         this.fs = fs;
         this.in = in;
         this.out = out;
@@ -48,8 +50,7 @@ public class FileStoreStreamPutMain implements MainCommand {
      * @throws IOException
      */
     @Override
-    public void run(Env env) throws IOException {
-        BlockStore store = new FileBlockStore(fs, env.getStore());
+    public void run() throws IOException {
         BlockEncoder encoder = BlockEncoderFactory.getContentDefault();
 
         KeyOutputStream s = new KeyOutputStream(new StoreBlockStorage(encoder,

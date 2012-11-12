@@ -31,7 +31,7 @@ public class FileStoreListMainTest {
         PrintStream out = new PrintStream(out0, true);
 
         Env env = new EnvBuilder().withStore("store").create();
-        new FileStoreListMain(store, null, out, null).run(env);
+        new FileStoreListMain(store, null, out, null).run();
 
         String want = TestData.KEY_CONTENT.getLocatorKey() + "\n"
                 + TestData.KEY_CONTENT_2.getLocatorKey() + "\n"

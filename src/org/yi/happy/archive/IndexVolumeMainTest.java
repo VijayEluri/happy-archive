@@ -36,7 +36,7 @@ public class IndexVolumeMainTest {
         CapturePrintStream out = CapturePrintStream.create();
 
         Env env = new EnvBuilder().addArgument("image").create();
-        new IndexVolumeMain(fs, out, null).run(env);
+        new IndexVolumeMain(fs, out, null, env).run();
 
         StringBuilder sb = new StringBuilder();
         sb.append("00.dat\tplain\t");
@@ -77,7 +77,7 @@ public class IndexVolumeMainTest {
         CapturePrintStream err = CapturePrintStream.create();
 
         Env env = new EnvBuilder().addArgument("image").create();
-        new IndexVolumeMain(fs, out, err).run(env);
+        new IndexVolumeMain(fs, out, err, env).run();
 
         StringBuilder sb = new StringBuilder();
         sb.append("01.dat\tplain\t");

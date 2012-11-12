@@ -33,7 +33,7 @@ public class VolumeGetMainTest {
 
         Env env = new EnvBuilder().withStore("store").addArgument("/media")
                 .create();
-        new VolumeGetMain(store, fs, in, null).run(env);
+        new VolumeGetMain(store, fs, in, null, env).run();
 
         assertEquals(TestData.KEY_CONTENT_MAP.getEncodedBlock(),
                 store.get(TestData.KEY_CONTENT_MAP.getLocatorKey()));

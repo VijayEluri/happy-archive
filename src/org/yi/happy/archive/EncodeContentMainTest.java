@@ -24,10 +24,10 @@ public class EncodeContentMainTest {
         fs.save("in.dat", TestData.CLEAR_CONTENT.getBytes());
         CapturePrintStream out = CapturePrintStream.create();
 
-        EncodeContentMain app = new EncodeContentMain(fs, out);
         Env env = new EnvBuilder().addArgument("in.dat").addArgument("out.dat")
                 .create();
-        app.run(env);
+        EncodeContentMain app = new EncodeContentMain(fs, out, env);
+        app.run();
 
         assertEquals(
                 TestData.KEY_CONTENT_AES128.getFullKey().toString() + "\n", out

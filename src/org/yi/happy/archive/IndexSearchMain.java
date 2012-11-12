@@ -26,6 +26,7 @@ import org.yi.happy.archive.key.LocatorKeyParse;
 public class IndexSearchMain implements MainCommand {
     private final FileSystem fs;
     private final PrintStream out;
+    private final Env env;
 
     /**
      * create with context.
@@ -35,9 +36,10 @@ public class IndexSearchMain implements MainCommand {
      * @param out
      *            the output.
      */
-    public IndexSearchMain(FileSystem fs, PrintStream out) {
+    public IndexSearchMain(FileSystem fs, PrintStream out, Env env) {
         this.fs = fs;
         this.out = out;
+        this.env = env;
     }
 
     /**
@@ -51,7 +53,7 @@ public class IndexSearchMain implements MainCommand {
      */
     @Override
     @SmellsMessy
-    public void run(Env env) throws IOException, InterruptedException,
+    public void run() throws IOException, InterruptedException,
             ExecutionException {
         Set<LocatorKey> want = loadRequestSet(env.getArgument(0));
 

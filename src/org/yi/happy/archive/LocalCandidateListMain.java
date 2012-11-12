@@ -40,9 +40,11 @@ import org.yi.happy.archive.key.LocatorKeyParse;
 @UsesOutput("key-list")
 public class LocalCandidateListMain implements MainCommand {
     private final BlockStore store;
+    private final Env env;
 
-    public LocalCandidateListMain(BlockStore store) {
+    public LocalCandidateListMain(BlockStore store, Env env) {
         this.store = store;
+        this.env = env;
     }
 
     /**
@@ -54,7 +56,7 @@ public class LocalCandidateListMain implements MainCommand {
      * @throws InterruptedException
      */
     @Override
-    public void run(Env env) throws IOException,
+    public void run() throws IOException,
             InterruptedException {
         FileSystem fs = new RealFileSystem();
 

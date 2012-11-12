@@ -71,7 +71,7 @@ public class Main {
          */
         ApplicationScope scope = new ApplicationScope(commands, env);
         MainCommand cmd = getCommandObject(cls, scope);
-        cmd.run(env);
+        cmd.run();
     }
 
     private static void explain(Requirement req, Env env) {

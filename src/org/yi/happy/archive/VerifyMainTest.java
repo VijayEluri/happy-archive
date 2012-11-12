@@ -23,11 +23,10 @@ public class VerifyMainTest {
         FakeFileSystem fs = new FakeFileSystem();
         fs.save(TestData.KEY_CONTENT.getFileName(), TestData.KEY_CONTENT
                 .getBytes());
-        VerifyMain app = new VerifyMain(fs, out);
 
         Env env = new EnvBuilder().addArgument(
                 TestData.KEY_CONTENT.getFileName()).create();
-        app.run(env);
+        new VerifyMain(fs, out, env).run();
 
         assertEquals("ok " + TestData.KEY_CONTENT.getLocatorKey() + " "
                 + TestData.KEY_CONTENT.getFileName() + "\n", out.toString());
@@ -42,10 +41,10 @@ public class VerifyMainTest {
     public void testMissing() throws Exception {
         CapturePrintStream out = CapturePrintStream.create();
         FakeFileSystem fs = new FakeFileSystem();
-        VerifyMain app = new VerifyMain(fs, out);
 
         Env env = new EnvBuilder().addArgument("file.dat").create();
-        app.run(env);
+        VerifyMain app = new VerifyMain(fs, out, env);
+        app.run();
 
         assertEquals("fail file.dat\n", out.toString());
     }

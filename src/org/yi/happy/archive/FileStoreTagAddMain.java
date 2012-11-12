@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.yi.happy.archive.block.encoder.BlockEncoderFactory;
-import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.commandLine.UsesInput;
 import org.yi.happy.archive.commandLine.UsesOutput;
 import org.yi.happy.archive.commandLine.UsesStore;
@@ -34,7 +33,7 @@ public class FileStoreTagAddMain implements MainCommand {
     }
 
     @Override
-    public void run(Env env) throws IOException {
+    public void run() throws IOException {
         /*
          * read a stream of tags of standard input, for the file tags that lack
          * a data attribute, store the file and fill in the data and hash

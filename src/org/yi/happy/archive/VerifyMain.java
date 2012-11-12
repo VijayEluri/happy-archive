@@ -20,6 +20,7 @@ public class VerifyMain implements MainCommand {
 
     private final FileSystem fileSystem;
     private final PrintStream out;
+    private final Env env;
 
     /**
      * create, injecting the dependencies.
@@ -29,9 +30,10 @@ public class VerifyMain implements MainCommand {
      * @param out
      *            where to send the output.
      */
-    public VerifyMain(FileSystem fileSystem, PrintStream out) {
+    public VerifyMain(FileSystem fileSystem, PrintStream out, Env env) {
         this.fileSystem = fileSystem;
         this.out = out;
+        this.env = env;
     }
 
     /**
@@ -42,7 +44,7 @@ public class VerifyMain implements MainCommand {
      * @throws Exception
      */
     @Override
-    public void run(Env env) throws Exception {
+    public void run() throws Exception {
         for (String arg : env.getArguments()) {
             String line;
 

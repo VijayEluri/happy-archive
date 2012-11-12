@@ -37,7 +37,7 @@ public class BuildImageMainTest {
         Env env = new EnvBuilder().withStore("store")
                 .addArgument("outstanding").addArgument("output")
                 .addArgument("4700").create();
-        new BuildImageMain(store, fs, out, null).run(env);
+        new BuildImageMain(store, fs, out, null, env).run();
 
         assertArrayEquals(TestData.KEY_CONTENT.getBytes(),
                 fs.load("output/00000000.dat"));
@@ -64,7 +64,7 @@ public class BuildImageMainTest {
         Env env = new EnvBuilder().withStore("store")
                 .addArgument("outstanding").addArgument("output")
                 .addArgument("4700").create();
-        new BuildImageMain(store, fs, out, null).run(env);
+        new BuildImageMain(store, fs, out, null, env).run();
 
         assertArrayEquals(TestData.KEY_CONTENT.getBytes(),
                 fs.load("output/00000000.dat"));
@@ -99,7 +99,7 @@ public class BuildImageMainTest {
         Env env = new EnvBuilder().withStore("store")
                 .addArgument("outstanding").addArgument("output")
                 .addArgument("4700").create();
-        new BuildImageMain(store, fs, out, new NullPrintStream()).run(env);
+        new BuildImageMain(store, fs, out, new NullPrintStream(), env).run();
 
         assertArrayEquals(TestData.KEY_CONTENT.getBytes(),
                 fs.load("output/00000000.dat"));

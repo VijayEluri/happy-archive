@@ -24,6 +24,7 @@ public class VolumeGetMain implements MainCommand {
     private final InputStream in;
     private final PrintStream err;
     private final BlockStore store;
+    private final Env env;
 
     /**
      * create with context.
@@ -40,11 +41,12 @@ public class VolumeGetMain implements MainCommand {
      *            the standard error.
      */
     public VolumeGetMain(BlockStore store, FileSystem fs, InputStream in,
-            PrintStream err) {
+            PrintStream err, Env env) {
         this.store = store;
         this.fs = fs;
         this.in = in;
         this.err = err;
+        this.env = env;
     }
 
     /**
@@ -55,7 +57,7 @@ public class VolumeGetMain implements MainCommand {
      * @throws IOException
      */
     @Override
-    public void run(Env env) throws IOException {
+    public void run() throws IOException {
         LineCursor in = new LineCursor(this.in);
         while (in.next()) {
             try {

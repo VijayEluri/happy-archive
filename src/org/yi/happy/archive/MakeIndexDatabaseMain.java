@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.zip.GZIPInputStream;
 
-import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
 
@@ -28,7 +27,7 @@ public class MakeIndexDatabaseMain implements MainCommand {
      * @throws IOException
      */
     @Override
-    public void run(Env env) throws ClassNotFoundException,
+    public void run() throws ClassNotFoundException,
             SQLException, IOException {
         /*
          * XXX hacked together, needs to be cleaned

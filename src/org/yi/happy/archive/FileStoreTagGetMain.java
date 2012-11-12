@@ -28,6 +28,7 @@ public class FileStoreTagGetMain implements MainCommand {
     private String pendingFile;
     private final PrintStream err;
     private final BlockStore store;
+    private final Env env;
 
     /**
      * initialize.
@@ -45,12 +46,13 @@ public class FileStoreTagGetMain implements MainCommand {
      *            what to use for standard output.
      */
     public FileStoreTagGetMain(BlockStore store, FileSystem fs,
-            WaitHandler waitHandler, InputStream in, PrintStream err) {
+            WaitHandler waitHandler, InputStream in, PrintStream err, Env env) {
         this.store = store;
         this.fs = fs;
         this.waitHandler = waitHandler;
         this.in = in;
         this.err = err;
+        this.env = env;
     }
 
     /**
@@ -61,7 +63,7 @@ public class FileStoreTagGetMain implements MainCommand {
      * @throws IOException
      */
     @Override
-    public void run(Env env) throws IOException {
+    public void run() throws IOException {
         pendingFile = env.getNeed();
         RestoreManager restore = new RestoreManager(fs,
                 new RetrieveBlockStorage(store));

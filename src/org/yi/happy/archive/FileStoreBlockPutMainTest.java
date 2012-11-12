@@ -26,11 +26,11 @@ public class FileStoreBlockPutMainTest {
         FakeFileSystem fs = new FakeFileSystem();
         StorageMemory store = new StorageMemory();
         fs.save("block.dat", TestData.KEY_CONTENT.getBytes());
-        FileStoreBlockPutMain main = new FileStoreBlockPutMain(store, fs);
 
         Env env = new EnvBuilder().withStore("store").addArgument("block.dat")
                 .create();
-        main.run(env);
+        FileStoreBlockPutMain main = new FileStoreBlockPutMain(store, fs, env);
+        main.run();
 
         assertTrue(store.contains(TestData.KEY_CONTENT.getLocatorKey()));
     }

@@ -25,6 +25,7 @@ public class FileStoreStreamGetMain implements MainCommand {
     private final OutputStream out;
     private final WaitHandler waitHandler;
     private final BlockStore store;
+    private final Env env;
 
     /**
      * create.
@@ -39,11 +40,12 @@ public class FileStoreStreamGetMain implements MainCommand {
      *            what to do when no blocks are ready.
      */
     public FileStoreStreamGetMain(BlockStore store, FileSystem fs,
-            OutputStream out, WaitHandler waitHandler) {
+            OutputStream out, WaitHandler waitHandler, Env env) {
         this.store = store;
         this.fs = fs;
         this.out = out;
         this.waitHandler = waitHandler;
+        this.env = env;
     }
 
     /**
@@ -55,7 +57,7 @@ public class FileStoreStreamGetMain implements MainCommand {
      * @throws IOException
      */
     @Override
-    public void run(Env env) throws IOException {
+    public void run() throws IOException {
         pendingFile = env.getNeed();
 
         KeyInputStream in = new KeyInputStream(FullKeyParse.parseFullKey(env

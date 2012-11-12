@@ -3,7 +3,6 @@ package org.yi.happy.archive;
 import java.io.IOException;
 import java.io.PrintStream;
 
-import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.commandLine.UsesOutput;
 import org.yi.happy.archive.commandLine.UsesStore;
 import org.yi.happy.archive.file_system.FileSystem;
@@ -48,7 +47,7 @@ public class FileStoreListMain implements MainCommand {
      * @throws IOException
      */
     @Override
-    public void run(Env env) throws IOException {
+    public void run() throws IOException {
         store.visit(new BlockStoreVisitor<IOException>() {
             @Override
             public void accept(LocatorKey key) throws IOException {

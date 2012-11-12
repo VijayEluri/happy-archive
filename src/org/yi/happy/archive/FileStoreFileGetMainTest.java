@@ -116,7 +116,7 @@ public class FileStoreFileGetMainTest {
         Env env = new EnvBuilder().withStore("store").withNeed("request")
                 .addArgument(TestData.KEY_CONTENT_MAP.getFullKey().toString())
                 .addArgument("out").create();
-        new FileStoreFileGetMain(store, fs, waitHandler).run(env);
+        new FileStoreFileGetMain(store, fs, waitHandler, env).run();
 
         assertArrayEquals(ByteString.toUtf8("0123456789"), fs.load("out"));
     }

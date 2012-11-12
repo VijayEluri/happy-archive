@@ -24,6 +24,7 @@ import org.yi.happy.archive.key.FullKeyParse;
 public class DecodeBlockMain implements MainCommand {
     private final FileSystem fs;
     private final OutputStream out;
+    private final Env env;
 
     /**
      * create the procedure.
@@ -33,9 +34,10 @@ public class DecodeBlockMain implements MainCommand {
      * @param out
      *            the output stream to use.
      */
-    public DecodeBlockMain(FileSystem fs, OutputStream out) {
+    public DecodeBlockMain(FileSystem fs, OutputStream out, Env env) {
         this.fs = fs;
         this.out = out;
+        this.env = env;
     }
 
     /**
@@ -47,7 +49,7 @@ public class DecodeBlockMain implements MainCommand {
      */
     @Override
     @SmellsMessy
-    public void run(Env env) throws IOException {
+    public void run() throws IOException {
         EncodedBlock b = EncodedBlockParse.parse(fs.load(env.getArgument(0),
                 Blocks.MAX_SIZE));
         FullKey k = FullKeyParse.parseFullKey(env.getArgument(1));

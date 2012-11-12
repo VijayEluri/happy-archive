@@ -27,6 +27,7 @@ public class FileStoreTagPutMain implements MainCommand {
     private final FileSystem fs;
     private final PrintStream out;
     private final BlockStore store;
+    private final Env env;
 
     /**
      * create with context.
@@ -36,10 +37,12 @@ public class FileStoreTagPutMain implements MainCommand {
      * @param fs
      * @param out
      */
-    public FileStoreTagPutMain(BlockStore store, FileSystem fs, PrintStream out) {
+    public FileStoreTagPutMain(BlockStore store, FileSystem fs,
+            PrintStream out, Env env) {
         this.store = store;
         this.fs = fs;
         this.out = out;
+        this.env = env;
     }
 
     /**
@@ -52,7 +55,7 @@ public class FileStoreTagPutMain implements MainCommand {
     @Override
     @MagicLiteral
     @SmellsMessy
-    public void run(Env env) throws IOException {
+    public void run() throws IOException {
         try {
             /*
              * do the work

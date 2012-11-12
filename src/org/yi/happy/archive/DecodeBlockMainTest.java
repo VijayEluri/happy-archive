@@ -30,7 +30,7 @@ public class DecodeBlockMainTest {
         Env env = new EnvBuilder().addArgument("test.dat")
                 .addArgument(TestData.KEY_BLOB.getFullKey().toString())
                 .create();
-        new DecodeBlockMain(fs, out).run(env);
+        new DecodeBlockMain(fs, out, env).run();
 
         assertArrayEquals(TestData.CLEAR_CONTENT.getBytes(), out.toByteArray());
     }

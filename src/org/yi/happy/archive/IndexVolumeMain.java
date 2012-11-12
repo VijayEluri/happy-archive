@@ -26,6 +26,7 @@ public class IndexVolumeMain implements MainCommand {
     private final PrintStream out;
     private final DigestProvider digest;
     private final PrintStream err;
+    private final Env env;
 
     /**
      * create with a context.
@@ -37,10 +38,12 @@ public class IndexVolumeMain implements MainCommand {
      * @param err
      *            the error stream.
      */
-    public IndexVolumeMain(FileSystem fs, PrintStream out, PrintStream err) {
+    public IndexVolumeMain(FileSystem fs, PrintStream out, PrintStream err,
+            Env env) {
         this.fs = fs;
         this.out = out;
         this.err = err;
+        this.env = env;
 
         digest = DigestFactory.getProvider("sha-256");
     }
@@ -53,7 +56,7 @@ public class IndexVolumeMain implements MainCommand {
      * @throws IOException
      */
     @Override
-    public void run(Env env) throws IOException {
+    public void run() throws IOException {
         try {
             List<String> names = fs.list(env.getArgument(0));
             Collections.sort(names);

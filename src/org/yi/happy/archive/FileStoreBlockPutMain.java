@@ -17,6 +17,7 @@ import org.yi.happy.archive.file_system.FileSystem;
 public class FileStoreBlockPutMain implements MainCommand {
     private final FileSystem fs;
     private final BlockStore store;
+    private final Env env;
 
     /**
      * create.
@@ -26,9 +27,10 @@ public class FileStoreBlockPutMain implements MainCommand {
      * @param fs
      *            the file system to use.
      */
-    public FileStoreBlockPutMain(BlockStore store, FileSystem fs) {
+    public FileStoreBlockPutMain(BlockStore store, FileSystem fs, Env env) {
         this.store = store;
         this.fs = fs;
+        this.env = env;
     }
 
     /**
@@ -39,7 +41,7 @@ public class FileStoreBlockPutMain implements MainCommand {
      * @throws IOException
      */
     @Override
-    public void run(Env env) throws IOException {
+    public void run() throws IOException {
         EncodedBlock b = EncodedBlockParse.parse(fs.load(env.getArgument(0),
                 Blocks.MAX_SIZE));
 

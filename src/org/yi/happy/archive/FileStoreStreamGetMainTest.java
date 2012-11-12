@@ -121,7 +121,7 @@ public class FileStoreStreamGetMainTest {
         Env env = new EnvBuilder().withStore("store").withNeed("request")
                 .addArgument(TestData.KEY_CONTENT_MAP.getFullKey().toString())
                 .create();
-        new FileStoreStreamGetMain(store, fs, out, waitHandler).run(env);
+        new FileStoreStreamGetMain(store, fs, out, waitHandler, env).run();
 
         assertArrayEquals(ByteString.toUtf8("0123456789"), out.toByteArray());
     }
