@@ -1,36 +1,36 @@
 package org.yi.happy.archive.commandLine;
 
-public class RequirementsBuilder {
+public class RequirementBuilder {
     private String[] usesArgs = {};
     private boolean usesStore = false;
     private boolean usesIndex = false;
     private boolean usesNeed = false;
 
-    public RequirementsBuilder withUsesStore() {
+    public RequirementBuilder withUsesStore() {
         usesStore = true;
 
         return this;
     }
 
-    public RequirementsBuilder withUsesIndex() {
+    public RequirementBuilder withUsesIndex() {
         usesIndex = true;
 
         return this;
     }
 
-    public RequirementsBuilder withUsesNeed() {
+    public RequirementBuilder withUsesNeed() {
         usesNeed = true;
 
         return this;
     }
 
-    public RequirementsBuilder withUsesArgs(String... value) {
+    public RequirementBuilder withUsesArgs(String... value) {
         usesArgs = value;
 
         return this;
     }
 
-    public Requirements create() {
-        return new Requirements(usesArgs, usesStore, usesIndex, usesNeed);
+    public Requirement create() {
+        return new Requirement(usesArgs, usesStore, usesIndex, usesNeed);
     }
 }

@@ -69,7 +69,7 @@ public class MainAnnotateSyntax {
     public static void main(String[] args) {
         for (String name : commands.keySet()) {
             System.out.println(name + ":");
-            Requirements req = process(commands.get(name));
+            Requirement req = process(commands.get(name));
 
             if (req.getUsesIndex()) {
                 System.out.println("  option --store store-path");
@@ -95,8 +95,8 @@ public class MainAnnotateSyntax {
         }
     }
 
-    private static Requirements process(Class<? extends MainCommand> cls) {
-        RequirementsBuilder req = new RequirementsBuilder();
+    private static Requirement process(Class<? extends MainCommand> cls) {
+        RequirementBuilder req = new RequirementBuilder();
 
         for (Annotation a : cls.getAnnotations()) {
             if (a.annotationType() == UsesArgs.class) {
