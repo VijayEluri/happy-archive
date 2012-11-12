@@ -69,6 +69,13 @@ public class StorageMemory implements BlockStore {
         return 0;
     }
 
+    /**
+     * Make retrieval of a particular key throw an exception. Used to check that
+     * store failures are handled properly.
+     * 
+     * @param key
+     *            the key to mark in the store.
+     */
     public void putBroken(LocatorKey key) {
         data.remove(key);
         broken.add(key);

@@ -33,6 +33,8 @@ public class DecodeBlockMain implements MainCommand {
      *            the file system to use.
      * @param out
      *            the output stream to use.
+     * @param args
+     *            the non-option arguments.
      */
     public DecodeBlockMain(FileSystem fs, OutputStream out, List<String> args) {
         this.fs = fs;

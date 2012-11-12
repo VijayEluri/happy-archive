@@ -2,7 +2,6 @@ package org.yi.happy.archive;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintStream;
 
 import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.commandLine.UsesArgs;
@@ -19,7 +18,6 @@ import org.yi.happy.archive.key.LocatorKeyParse;
 public class StoreRemoveMain implements MainCommand {
 
     private final FileSystem fs;
-    private final PrintStream err;
     private final BlockStore store;
     private final Env env;
 
@@ -30,14 +28,14 @@ public class StoreRemoveMain implements MainCommand {
      *            the block store to use.
      * @param fs
      *            the file system to use.
-     * @param out
-     *            standard output.
+     * @param err
+     *            the error stream.
+     * @param env
+     *            the invocation environment.
      */
-    public StoreRemoveMain(BlockStore store, FileSystem fs, PrintStream err,
-            Env env) {
+    public StoreRemoveMain(BlockStore store, FileSystem fs, Env env) {
         this.store = store;
         this.fs = fs;
-        this.err = err;
         this.env = env;
     }
 

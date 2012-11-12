@@ -35,6 +35,8 @@ public class IndexSearchMain implements MainCommand {
      *            the file system.
      * @param out
      *            the output.
+     * @param env
+     *            the invocation environment
      */
     public IndexSearchMain(FileSystem fs, PrintStream out, Env env) {
         this.fs = fs;

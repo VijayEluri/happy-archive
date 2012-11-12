@@ -59,6 +59,8 @@ public class EnvHandlerTest {
 
     /**
      * I want an empty command line to parse successfully.
+     * 
+     * @throws CommandParseException
      */
     @Test
     public void testBlank() throws CommandParseException {
@@ -72,6 +74,8 @@ public class EnvHandlerTest {
 
     /**
      * I want an option with no name to not parse
+     * 
+     * @throws CommandParseException
      */
     @Test(expected = CommandParseException.class)
     public void testNoName() throws CommandParseException {
@@ -83,6 +87,8 @@ public class EnvHandlerTest {
 
     /**
      * I want an option starting with "---" to not parse
+     * 
+     * @throws CommandParseException
      */
     @Test(expected = CommandParseException.class)
     public void testThreeDashes() throws CommandParseException {

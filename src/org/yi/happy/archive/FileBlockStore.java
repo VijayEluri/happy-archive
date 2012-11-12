@@ -150,6 +150,7 @@ public class FileBlockStore implements BlockStore {
      * @throws IOException
      *             on error.
      */
+    @Override
     public long getTime(LocatorKey key) throws IOException {
         String fileName = makeFileName(key, false);
         return fs.getModificationTime(fileName);

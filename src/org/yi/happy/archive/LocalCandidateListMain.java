@@ -42,6 +42,15 @@ public class LocalCandidateListMain implements MainCommand {
     private final BlockStore store;
     private final Env env;
 
+    /**
+     * Set up the command to make a candidate list from a local store and local
+     * index.
+     * 
+     * @param store
+     *            the store.
+     * @param env
+     *            the invocation environment.
+     */
     public LocalCandidateListMain(BlockStore store, Env env) {
         this.store = store;
         this.env = env;
@@ -58,8 +67,6 @@ public class LocalCandidateListMain implements MainCommand {
     @Override
     public void run() throws IOException,
             InterruptedException {
-        FileSystem fs = new RealFileSystem();
-
         String indexBase = env.getIndex();
 
         final String volumeSet = env.getArgument(0);

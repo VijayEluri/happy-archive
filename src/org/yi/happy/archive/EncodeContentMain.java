@@ -32,6 +32,8 @@ public class EncodeContentMain implements MainCommand {
      *            the file system to use.
      * @param out
      *            where to send output.
+     * @param args
+     *            the non-option arguments.
      */
     public EncodeContentMain(FileSystem fs, PrintStream out, List<String> args) {
         this.fs = fs;

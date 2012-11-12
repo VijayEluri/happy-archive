@@ -5,7 +5,6 @@ import java.io.PrintStream;
 
 import org.yi.happy.archive.commandLine.UsesOutput;
 import org.yi.happy.archive.commandLine.UsesStore;
-import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.key.LocatorKey;
 
 /**
@@ -15,9 +14,7 @@ import org.yi.happy.archive.key.LocatorKey;
 @UsesOutput("key-list")
 public class FileStoreListMain implements MainCommand {
 
-    private final FileSystem fs;
     private final PrintStream out;
-    private final PrintStream err;
     private final BlockStore store;
 
     /**
@@ -31,12 +28,9 @@ public class FileStoreListMain implements MainCommand {
      *            the output stream.
      * @param err
      */
-    public FileStoreListMain(BlockStore store, FileSystem fs, PrintStream out,
-            PrintStream err) {
+    public FileStoreListMain(BlockStore store, PrintStream out) {
         this.store = store;
-        this.fs = fs;
         this.out = out;
-        this.err = err;
     }
 
     /**

@@ -35,10 +35,10 @@ public class VolumeGetMain implements MainCommand {
      *            the file system.
      * @param in
      *            the standard input.
-     * @param out
-     *            the standard output.
      * @param err
      *            the standard error.
+     * @param env
+     *            the invocation environment.
      */
     public VolumeGetMain(BlockStore store, FileSystem fs, InputStream in,
             PrintStream err, Env env) {

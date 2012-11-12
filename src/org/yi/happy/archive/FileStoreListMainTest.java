@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 import org.junit.Test;
-import org.yi.happy.archive.commandLine.Env;
-import org.yi.happy.archive.commandLine.EnvBuilder;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
@@ -30,8 +28,7 @@ public class FileStoreListMainTest {
         ByteArrayOutputStream out0 = new ByteArrayOutputStream();
         PrintStream out = new PrintStream(out0, true);
 
-        Env env = new EnvBuilder().withStore("store").create();
-        new FileStoreListMain(store, null, out, null).run();
+        new FileStoreListMain(store, out).run();
 
         String want = TestData.KEY_CONTENT.getLocatorKey() + "\n"
                 + TestData.KEY_CONTENT_2.getLocatorKey() + "\n"

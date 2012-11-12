@@ -2,7 +2,6 @@ package org.yi.happy.archive;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintStream;
 
 import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.commandLine.UsesInput;
@@ -26,7 +25,6 @@ public class FileStoreTagGetMain implements MainCommand {
     private final WaitHandler waitHandler;
     private final InputStream in;
     private String pendingFile;
-    private final PrintStream err;
     private final BlockStore store;
     private final Env env;
 
@@ -41,17 +39,17 @@ public class FileStoreTagGetMain implements MainCommand {
      *            what to do when waiting is needed.
      * @param in
      *            what to use for standard input.
-     * @param err
+     * @param env
+     *            the invocation environment.
      * @param out
      *            what to use for standard output.
      */
     public FileStoreTagGetMain(BlockStore store, FileSystem fs,
-            WaitHandler waitHandler, InputStream in, PrintStream err, Env env) {
+            WaitHandler waitHandler, InputStream in, Env env) {
         this.store = store;
         this.fs = fs;
         this.waitHandler = waitHandler;
         this.in = in;
-        this.err = err;
         this.env = env;
     }
 

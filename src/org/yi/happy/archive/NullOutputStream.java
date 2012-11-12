@@ -3,6 +3,10 @@ package org.yi.happy.archive;
 import java.io.IOException;
 import java.io.OutputStream;
 
+/**
+ * An output stream that does nothing. Very useful for testing where the output
+ * is ignored.
+ */
 public class NullOutputStream extends OutputStream {
 
     @Override

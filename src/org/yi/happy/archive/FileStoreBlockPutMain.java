@@ -26,6 +26,8 @@ public class FileStoreBlockPutMain implements MainCommand {
      *            the block store to use.
      * @param fs
      *            the file system to use.
+     * @param args
+     *            the non-option arguments.
      */
     public FileStoreBlockPutMain(BlockStore store, FileSystem fs,
             List<String> args) {

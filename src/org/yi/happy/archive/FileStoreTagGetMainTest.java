@@ -41,7 +41,7 @@ public class FileStoreTagGetMainTest {
 
         Env env = new EnvBuilder().withStore("store").withNeed("request")
                 .create();
-        new FileStoreTagGetMain(store, fs, waitHandler, in, null, env).run();
+        new FileStoreTagGetMain(store, fs, waitHandler, in, env).run();
 
         assertArrayEquals(TestData.FILE_CONTENT.getBytes(), fs
                 .load("hello.txt"));
@@ -94,7 +94,7 @@ public class FileStoreTagGetMainTest {
 
         Env env = new EnvBuilder().withStore("store").withNeed("request")
                 .create();
-        new FileStoreTagGetMain(store, fs, waitHandler, in, null, env).run();
+        new FileStoreTagGetMain(store, fs, waitHandler, in, env).run();
 
         assertArrayEquals(TestData.FILE_CONTENT.getBytes(), fs
                 .load("hello.txt"));

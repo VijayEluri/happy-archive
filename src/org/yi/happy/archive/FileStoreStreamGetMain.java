@@ -38,6 +38,8 @@ public class FileStoreStreamGetMain implements MainCommand {
      *            where to send the stream.
      * @param waitHandler
      *            what to do when no blocks are ready.
+     * @param env
+     *            the invocation environment.
      */
     public FileStoreStreamGetMain(BlockStore store, FileSystem fs,
             OutputStream out, WaitHandler waitHandler, Env env) {

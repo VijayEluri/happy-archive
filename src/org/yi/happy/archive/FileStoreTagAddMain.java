@@ -14,6 +14,10 @@ import org.yi.happy.archive.tag.TagBuilder;
 import org.yi.happy.archive.tag.TagOutputStream;
 import org.yi.happy.archive.tag.TagStreamIterator;
 
+/**
+ * A filter that takes a tag stream, and for files where the data field is not
+ * filled in, the file is stored and the field filled in.
+ */
 @UsesStore
 @UsesInput("tag-list")
 @UsesOutput("tag-list")

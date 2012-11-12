@@ -35,7 +35,11 @@ public class FileStoreTagPutMain implements MainCommand {
      * @param store
      *            the block store to use.
      * @param fs
+     *            the file system.
      * @param out
+     *            the output stream.
+     * @param env
+     *            the invocation environment.
      */
     public FileStoreTagPutMain(BlockStore store, FileSystem fs,
             PrintStream out, Env env) {

@@ -34,7 +34,7 @@ public class StoreRemoveMainTest {
 
         Env env = new EnvBuilder().withStore("store").addArgument("flush.lst")
                 .create();
-        new StoreRemoveMain(store, fs, null, env).run();
+        new StoreRemoveMain(store, fs, env).run();
 
         assertTrue(store.contains(TestData.KEY_CONTENT.getLocatorKey()));
         assertFalse(store.contains(TestData.KEY_CONTENT_1.getLocatorKey()));

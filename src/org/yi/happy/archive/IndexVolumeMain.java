@@ -37,6 +37,8 @@ public class IndexVolumeMain implements MainCommand {
      *            the output stream.
      * @param err
      *            the error stream.
+     * @param env
+     *            the invocation environment
      */
     public IndexVolumeMain(FileSystem fs, PrintStream out, PrintStream err,
             Env env) {
