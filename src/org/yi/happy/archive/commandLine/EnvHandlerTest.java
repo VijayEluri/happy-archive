@@ -56,4 +56,39 @@ public class EnvHandlerTest {
                 .withStore("somewhere").addArgument("file").create();
         assertEquals(want, env.create());
     }
+
+    /**
+     * I want an empty command line to parse successfully.
+     */
+    @Test
+    public void testBlank() throws CommandParseException {
+        EnvBuilder env = new EnvBuilder();
+
+        new CommandParseEngine(new EnvHandler(env)).parse();
+
+        Env want = new EnvBuilder().create();
+        assertEquals(want, env.create());
+    }
+
+    /**
+     * I want an option with no name to not parse
+     */
+    @Test(expected = CommandParseException.class)
+    public void testNoName() throws CommandParseException {
+        EnvBuilder env = new EnvBuilder();
+
+        new CommandParseEngine(new EnvHandler(env))
+                .parse("show-env", "--=true");
+    }
+
+    /**
+     * I want an option starting with "---" to not parse
+     */
+    @Test(expected = CommandParseException.class)
+    public void testThreeDashes() throws CommandParseException {
+        EnvBuilder env = new EnvBuilder();
+
+        new CommandParseEngine(new EnvHandler(env)).parse("show-env", "---");
+    }
+
 }

@@ -76,9 +76,5 @@ public class EnvHandler implements CommandParseHandler {
 
     @Override
     public void onFinished() throws CommandParseException {
-        if (needCommand) {
-            throw new CommandParseException(
-                    "the first argument must be a command");
-        }
     }
 }
