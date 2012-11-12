@@ -58,8 +58,13 @@ public class Main {
         }
 
         Env env = MyEnv.init(args);
+        Class<? extends MainCommand> cls = commands.get(env.getCommand());
+        if (cls == null) {
+            help();
+            return;
+        }
 
-        MainCommand c = getCommandObject(env.getCommand());
+        MainCommand c = getCommandObject(cls);
         if (c != null) {
             c.run(env);
             return;
@@ -68,13 +73,8 @@ public class Main {
         help();
     }
 
-    private static MainCommand getCommandObject(String command)
+    private static MainCommand getCommandObject(Class<? extends MainCommand> cls)
             throws Exception {
-        Class<? extends MainCommand> cls = commands.get(command);
-        if (cls == null) {
-            return null;
-        }
-
         String name = cls.getSimpleName();
         Method injectMethod = MyInjector.class.getMethod("inject" + name);
         if (injectMethod == null) {
