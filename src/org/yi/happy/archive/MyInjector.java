@@ -100,7 +100,7 @@ public class MyInjector {
 
     public static MainCommand injectEncodeContentMain(ApplicationScope scope) {
         return new EncodeContentMain(injectFileSystem(scope),
-                injectOutput(scope), injectEnv(scope));
+                injectOutput(scope), injectArgs(scope));
     }
 
     public static MainCommand injectDecodeBlockMain(ApplicationScope scope) {
@@ -129,7 +129,7 @@ public class MyInjector {
 
     public static MainCommand injectFileStoreBlockPutMain(ApplicationScope scope) {
         return new FileStoreBlockPutMain(injectBlockStore(scope),
-                injectFileSystem(scope), injectEnv(scope));
+                injectFileSystem(scope), injectArgs(scope));
     }
 
     public static MainCommand injectMakeIndexDatabaseMain(ApplicationScope scope) {

@@ -3,11 +3,11 @@ package org.yi.happy.archive;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Test;
 import org.yi.happy.annotate.NeedFailureTest;
-import org.yi.happy.archive.commandLine.Env;
-import org.yi.happy.archive.commandLine.EnvBuilder;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.test_data.TestData;
 
@@ -27,10 +27,8 @@ public class FileStoreBlockPutMainTest {
         StorageMemory store = new StorageMemory();
         fs.save("block.dat", TestData.KEY_CONTENT.getBytes());
 
-        Env env = new EnvBuilder().withStore("store").addArgument("block.dat")
-                .create();
-        FileStoreBlockPutMain main = new FileStoreBlockPutMain(store, fs, env);
-        main.run();
+        List<String> args = Arrays.asList("block.dat");
+        new FileStoreBlockPutMain(store, fs, args).run();
 
         assertTrue(store.contains(TestData.KEY_CONTENT.getLocatorKey()));
     }

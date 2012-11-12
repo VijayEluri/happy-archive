@@ -2,13 +2,13 @@ package org.yi.happy.archive;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.List;
 
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.encoder.BlockEncoder;
 import org.yi.happy.archive.block.encoder.BlockEncoderFactory;
 import org.yi.happy.archive.block.encoder.BlockEncoderResult;
 import org.yi.happy.archive.block.parser.BlockParse;
-import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesOutput;
 import org.yi.happy.archive.file_system.FileSystem;
@@ -24,7 +24,7 @@ import org.yi.happy.archive.file_system.FileSystem;
 public class EncodeContentMain implements MainCommand {
     private final FileSystem fs;
     private final PrintStream out;
-    private final Env env;
+    private final List<String> args;
 
     /**
      * 
@@ -33,10 +33,10 @@ public class EncodeContentMain implements MainCommand {
      * @param out
      *            where to send output.
      */
-    public EncodeContentMain(FileSystem fs, PrintStream out, Env env) {
+    public EncodeContentMain(FileSystem fs, PrintStream out, List<String> args) {
         this.fs = fs;
         this.out = out;
-        this.env = env;
+        this.args = args;
     }
 
     /**
@@ -50,10 +50,10 @@ public class EncodeContentMain implements MainCommand {
     public void run() throws IOException {
         BlockEncoder encoder = BlockEncoderFactory.getContentDefault();
 
-        Block block = BlockParse.parse(fs.load(env.getArgument(0),
+        Block block = BlockParse.parse(fs.load(args.get(0),
                 Blocks.MAX_SIZE));
         BlockEncoderResult e = encoder.encode(block);
-        fs.save(env.getArgument(1), e.getBlock().asBytes());
+        fs.save(args.get(1), e.getBlock().asBytes());
 
         out.println(e.getKey());
     }
