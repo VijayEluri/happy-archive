@@ -22,4 +22,8 @@ public class ApplicationScope {
     public Env getEnv() {
         return env;
     }
+
+    public String getStore() {
+        return env.getStore();
+    }
 }

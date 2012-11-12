@@ -114,7 +114,12 @@ public class MyInjector {
     }
 
     public static MainCommand injectFileStoreFileGetMain(ApplicationScope scope) {
-        return new FileStoreFileGetMain(injectFileSystem(scope),
+        return new FileStoreFileGetMain(injectBlockStore(scope),
+                injectFileSystem(scope),
                 injectWaitHandler(scope));
+    }
+
+    public static BlockStore injectBlockStore(ApplicationScope scope) {
+        return new FileBlockStore(injectFileSystem(scope), scope.getStore());
     }
 }
