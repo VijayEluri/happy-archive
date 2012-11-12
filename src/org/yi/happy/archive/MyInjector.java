@@ -8,8 +8,8 @@ import org.yi.happy.archive.file_system.RealFileSystem;
 public class MyInjector {
 
     public static MainCommand injectFileStoreTagPutMain(ApplicationScope scope) {
-        return new FileStoreTagPutMain(injectFileSystem(scope),
-                injectOutput(scope));
+        return new FileStoreTagPutMain(injectBlockStore(scope),
+                injectFileSystem(scope), injectOutput(scope));
     }
 
     public static PrintStream injectOutput(ApplicationScope scope) {

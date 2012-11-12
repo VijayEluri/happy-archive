@@ -29,13 +29,14 @@ public class FileStoreTagPutMainTest {
     public void test1() throws IOException {
         FileSystem fs = new FakeFileSystem();
         fs.save("test.txt", TestData.FILE_CONTENT.getBytes());
+        BlockStore store = new StorageMemory();
 
         ByteArrayOutputStream out0 = new ByteArrayOutputStream();
         PrintStream out = new PrintStream(out0);
 
         Env env = new EnvBuilder().withStore("store").addArgument("test.txt")
                 .create();
-        new FileStoreTagPutMain(fs, out).run(env);
+        new FileStoreTagPutMain(store, fs, out).run(env);
 
         out.flush();
 
@@ -57,13 +58,14 @@ public class FileStoreTagPutMainTest {
     public void test2() throws IOException {
         FileSystem fs = new FakeFileSystem();
         fs.save("test.txt", TestData.FILE_CONTENT.getBytes());
+        BlockStore store = new StorageMemory();
 
         ByteArrayOutputStream out0 = new ByteArrayOutputStream();
         PrintStream out = new PrintStream(out0);
 
         Env env = new EnvBuilder().withStore("store").addArgument("test.txt")
                 .create();
-        new FileStoreTagPutMain(fs, out).run(env);
+        new FileStoreTagPutMain(store, fs, out).run(env);
 
         out.flush();
 

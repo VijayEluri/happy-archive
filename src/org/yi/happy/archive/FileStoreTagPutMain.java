@@ -26,14 +26,18 @@ public class FileStoreTagPutMain implements MainCommand {
 
     private final FileSystem fs;
     private final PrintStream out;
+    private final BlockStore store;
 
     /**
      * create with context.
      * 
+     * @param store
+     *            the block store to use.
      * @param fs
      * @param out
      */
-    public FileStoreTagPutMain(FileSystem fs, PrintStream out) {
+    public FileStoreTagPutMain(BlockStore store, FileSystem fs, PrintStream out) {
+        this.store = store;
         this.fs = fs;
         this.out = out;
     }
@@ -50,8 +54,6 @@ public class FileStoreTagPutMain implements MainCommand {
     @SmellsMessy
     public void run(Env env) throws IOException {
         try {
-            FileBlockStore store = new FileBlockStore(fs, env.getStore());
-
             /*
              * do the work
              */
