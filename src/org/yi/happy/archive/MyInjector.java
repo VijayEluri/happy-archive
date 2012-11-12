@@ -101,8 +101,9 @@ public class MyInjector {
 
     public static MainCommand injectFileStoreStreamGetMain(
             ApplicationScope scope) {
-        return new FileStoreStreamGetMain(injectFileSystem(scope),
-                injectOutput(scope), injectWaitHandler(scope));
+        return new FileStoreStreamGetMain(injectBlockStore(scope),
+                injectFileSystem(scope), injectOutput(scope),
+                injectWaitHandler(scope));
     }
 
     public static MainCommand injectFileStoreBlockPutMain(ApplicationScope scope) {
@@ -116,8 +117,7 @@ public class MyInjector {
 
     public static MainCommand injectFileStoreFileGetMain(ApplicationScope scope) {
         return new FileStoreFileGetMain(injectBlockStore(scope),
-                injectFileSystem(scope),
-                injectWaitHandler(scope));
+                injectFileSystem(scope), injectWaitHandler(scope));
     }
 
     public static BlockStore injectBlockStore(ApplicationScope scope) {

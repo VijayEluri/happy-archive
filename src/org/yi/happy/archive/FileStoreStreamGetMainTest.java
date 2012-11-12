@@ -34,7 +34,7 @@ public class FileStoreStreamGetMainTest {
          */
 
         final FileSystem fs = new FakeFileSystem();
-        final FileBlockStore store = new FileBlockStore(fs, "store");
+        final BlockStore store = new StorageMemory();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
         WaitHandler waitHandler = new WaitHandler() {
@@ -121,7 +121,7 @@ public class FileStoreStreamGetMainTest {
         Env env = new EnvBuilder().withStore("store").withNeed("request")
                 .addArgument(TestData.KEY_CONTENT_MAP.getFullKey().toString())
                 .create();
-        new FileStoreStreamGetMain(fs, out, waitHandler).run(env);
+        new FileStoreStreamGetMain(store, fs, out, waitHandler).run(env);
 
         assertArrayEquals(ByteString.toUtf8("0123456789"), out.toByteArray());
     }
