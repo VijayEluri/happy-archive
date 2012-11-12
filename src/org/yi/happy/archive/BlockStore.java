@@ -62,4 +62,13 @@ public interface BlockStore {
      *             on error.
      */
     void remove(LocatorKey key) throws IOException;
+
+    /**
+     * get the creation time of a key in the store.
+     * 
+     * @param key
+     * @return the creation time.
+     * @throws IOException
+     */
+    long getTime(LocatorKey key) throws IOException;
 }

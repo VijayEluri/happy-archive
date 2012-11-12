@@ -45,7 +45,7 @@ public class MyInjector {
 
     public static MainCommand injectLocalCandidateListMain(
             ApplicationScope scope) {
-        return new LocalCandidateListMain();
+        return new LocalCandidateListMain(injectBlockStore(scope));
     }
 
     public static MainCommand injectStoreRemoveMain(ApplicationScope scope) {

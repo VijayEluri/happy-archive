@@ -54,4 +54,9 @@ public class StorageMemory implements BlockStore {
     public void remove(LocatorKey key) throws IOException {
         data.remove(key);
     }
+
+    @Override
+    public long getTime(LocatorKey key) throws IOException {
+        return 0;
+    }
 }

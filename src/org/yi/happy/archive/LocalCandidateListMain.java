@@ -37,6 +37,12 @@ import org.yi.happy.archive.key.LocatorKeyParse;
 @UsesIndex
 @UsesArgs({ "volume-set" })
 public class LocalCandidateListMain implements MainCommand {
+    private final BlockStore store;
+
+    public LocalCandidateListMain(BlockStore store) {
+        this.store = store;
+    }
+
     /**
      * Make a candidate list from a local store and local index.
      * 
@@ -49,8 +55,6 @@ public class LocalCandidateListMain implements MainCommand {
     public void run(Env env) throws IOException,
             InterruptedException {
         FileSystem fs = new RealFileSystem();
-
-        FileBlockStore store = new FileBlockStore(fs, env.getStore());
 
         String indexBase = env.getIndex();
 
