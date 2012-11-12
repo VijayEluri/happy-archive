@@ -2,13 +2,10 @@ package org.yi.happy.archive;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
 
 import org.junit.Test;
 import org.yi.happy.archive.commandLine.Env;
@@ -103,21 +100,5 @@ public class FileStoreTagGetMainTest {
                 .load("hello.txt"));
         assertArrayEquals(TestData.FILE_CONTENT_40.getBytes(), fs
                 .load("test.dat"));
-    }
-
-    /**
-     * trigger printing of the command usage.
-     * 
-     * @throws IOException
-     */
-    @Test
-    public void test3() throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Env env = new EnvBuilder().create();
-
-        new FileStoreTagGetMain(null, null, null, new PrintStream(out, true))
-                .run(env);
-
-        assertTrue(out.size() > 0);
     }
 }
