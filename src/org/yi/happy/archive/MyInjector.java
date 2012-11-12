@@ -93,16 +93,16 @@ public class MyInjector {
         return new StoreRemoveMain(injectFileSystem(), injectError());
     }
 
-    public static Provider<MainCommand> providerStoreListMain() {
+    public static Provider<MainCommand> providerFileStoreListMain() {
         return new Provider<MainCommand>() {
             @Override
             public MainCommand get() {
-                return injectStoreListMain();
+                return injectFileStoreListMain();
             }
         };
     }
 
-    public static MainCommand injectStoreListMain() {
+    public static MainCommand injectFileStoreListMain() {
         return new FileStoreListMain(injectFileSystem(), injectOutput(),
                 injectError());
     }

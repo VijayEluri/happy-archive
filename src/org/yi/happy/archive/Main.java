@@ -1,5 +1,6 @@
 package org.yi.happy.archive;
 
+import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -13,30 +14,31 @@ import org.yi.happy.archive.commandLine.MyEnv;
  */
 @EntryPoint
 public class Main {
-    private static final Map<String, Provider<MainCommand>> commands;
-    static {
-        Map<String, Provider<MainCommand>> c;
-        c = new LinkedHashMap<String, Provider<MainCommand>>();
 
-        c.put("file-get", MyInjector.providerFileStoreFileGetMain());
-        c.put("make-index-db", MyInjector.providerMakeIndexDatabaseMain());
-        c.put("decode", MyInjector.providerDecodeBlockMain());
-        c.put("encode", MyInjector.providerEncodeContentMain());
-        c.put("verify", MyInjector.providerVerifyMain());
-        c.put("block-put", MyInjector.providerFileStoreBlockPutMain());
-        c.put("stream-put", MyInjector.providerFileStoreStreamPutMain());
-        c.put("stream-get", MyInjector.providerFileStoreStreamGetMain());
-        c.put("tag-put", MyInjector.providerFileStoreTagPutMain());
-        c.put("tag-add", MyInjector.providerFileStoreTagAddMain());
-        c.put("tag-get", MyInjector.providerFileStoreTagGetMain());
-        c.put("backup-list", MyInjector.providerLocalCandidateListMain());
-        c.put("store-list", MyInjector.providerStoreListMain());
-        c.put("store-remove", MyInjector.providerStoreRemoveMain());
-        c.put("index-search", MyInjector.providerIndexSearchMain());
-        c.put("index-volume", MyInjector.providerIndexVolumeMain());
-        c.put("build-image", MyInjector.providerBuildImageMain());
-        c.put("volume-get", MyInjector.providerVolumeGetMain());
-        c.put("show-env", MyInjector.providerShowEnvMain());
+    private static final Map<String, Class<? extends MainCommand>> commands;
+    static {
+        Map<String, Class<? extends MainCommand>> c;
+        c = new LinkedHashMap<String, Class<? extends MainCommand>>();
+
+        c.put("file-get", FileStoreFileGetMain.class);
+        c.put("make-index-db", MakeIndexDatabaseMain.class);
+        c.put("decode", DecodeBlockMain.class);
+        c.put("encode", EncodeContentMain.class);
+        c.put("verify", VerifyMain.class);
+        c.put("block-put", FileStoreBlockPutMain.class);
+        c.put("stream-put", FileStoreStreamPutMain.class);
+        c.put("stream-get", FileStoreStreamGetMain.class);
+        c.put("tag-put", FileStoreTagPutMain.class);
+        c.put("tag-add", FileStoreTagAddMain.class);
+        c.put("tag-get", FileStoreTagGetMain.class);
+        c.put("backup-list", LocalCandidateListMain.class);
+        c.put("store-list", FileStoreListMain.class);
+        c.put("store-remove", StoreRemoveMain.class);
+        c.put("index-search", IndexSearchMain.class);
+        c.put("index-volume", IndexVolumeMain.class);
+        c.put("build-image", BuildImageMain.class);
+        c.put("volume-get", VolumeGetMain.class);
+        c.put("show-env", ShowEnvMain.class);
 
         commands = Collections.unmodifiableMap(c);
     }
@@ -57,13 +59,30 @@ public class Main {
 
         Env env = MyEnv.init(args);
 
-        Provider<MainCommand> c = commands.get(env.getCommand());
+        MainCommand c = getCommandObject(env.getCommand());
         if (c != null) {
-            c.get().run(env);
+            c.run(env);
             return;
         }
 
         help();
+    }
+
+    private static MainCommand getCommandObject(String command)
+            throws Exception {
+        Class<? extends MainCommand> cls = commands.get(command);
+        if (cls == null) {
+            return null;
+        }
+
+        String name = cls.getSimpleName();
+        Method injectMethod = MyInjector.class.getMethod("inject" + name);
+        if (injectMethod == null) {
+            return null;
+        }
+
+        Object out = injectMethod.invoke(null);
+        return cls.cast(out);
     }
 
     private static void help() {
