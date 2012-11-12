@@ -90,7 +90,8 @@ public class MyInjector {
     }
 
     public static MainCommand injectFileStoreTagAddMain(ApplicationScope scope) {
-        return new FileStoreTagAddMain();
+        return new FileStoreTagAddMain(injectBlockStore(scope),
+                injectFileSystem(scope));
     }
 
     public static MainCommand injectFileStoreStreamPutMain(

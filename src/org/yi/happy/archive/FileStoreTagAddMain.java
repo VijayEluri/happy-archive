@@ -10,7 +10,6 @@ import org.yi.happy.archive.commandLine.UsesOutput;
 import org.yi.happy.archive.commandLine.UsesStore;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.file_system.FileSystem;
-import org.yi.happy.archive.file_system.RealFileSystem;
 import org.yi.happy.archive.tag.Tag;
 import org.yi.happy.archive.tag.TagBuilder;
 import org.yi.happy.archive.tag.TagOutputStream;
@@ -20,6 +19,20 @@ import org.yi.happy.archive.tag.TagStreamIterator;
 @UsesInput("tag-list")
 @UsesOutput("tag-list")
 public class FileStoreTagAddMain implements MainCommand {
+    private final BlockStore store;
+    private final FileSystem fs;
+
+    /**
+     * @param store
+     *            the block store to use.
+     * @param fs
+     *            the file system to use.
+     */
+    public FileStoreTagAddMain(BlockStore store, FileSystem fs) {
+        this.store = store;
+        this.fs = fs;
+    }
+
     @Override
     public void run(Env env) throws IOException {
         /*
@@ -27,10 +40,7 @@ public class FileStoreTagAddMain implements MainCommand {
          * a data attribute, store the file and fill in the data and hash
          * attribute.
          */
-        FileSystem fs = new RealFileSystem();
         try {
-            FileBlockStore store = new FileBlockStore(fs, env.getStore());
-
             /*
              * do the work
              */
