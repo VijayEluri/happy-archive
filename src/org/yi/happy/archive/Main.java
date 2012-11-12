@@ -68,7 +68,8 @@ public class Main {
         /*
          * inject
          */
-        MainCommand cmd = getCommandObject(cls);
+        ApplicationScope scope = new ApplicationScope(commands, env);
+        MainCommand cmd = getCommandObject(cls, scope);
         cmd.run(env);
     }
 
@@ -106,11 +107,13 @@ public class Main {
         System.err.println();
     }
 
-    private static MainCommand getCommandObject(Class<? extends MainCommand> cls)
+    private static MainCommand getCommandObject(
+            Class<? extends MainCommand> cls, ApplicationScope scope)
             throws Exception {
         String name = cls.getSimpleName();
-        Method injectMethod = MyInjector.class.getMethod("inject" + name);
-        Object out = injectMethod.invoke(null);
+        Method injectMethod = MyInjector.class.getMethod("inject" + name,
+                ApplicationScope.class);
+        Object out = injectMethod.invoke(null, scope);
         return cls.cast(out);
     }
 
