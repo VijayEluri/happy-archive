@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.io.PrintStream;
 
 import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.commandLine.UsesArgs;
+import org.yi.happy.archive.commandLine.UsesStore;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.key.LocatorKeyParse;
@@ -12,6 +14,8 @@ import org.yi.happy.archive.key.LocatorKeyParse;
 /**
  * Remove keys from the store.
  */
+@UsesStore
+@UsesArgs("remove-list-file")
 public class StoreRemoveMain implements MainCommand {
 
     private final FileSystem fs;

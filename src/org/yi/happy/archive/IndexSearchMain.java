@@ -10,6 +10,8 @@ import java.util.concurrent.ExecutionException;
 import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.IndexSearch.SearchResult;
 import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.commandLine.UsesArgs;
+import org.yi.happy.archive.commandLine.UsesIndex;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.key.LocatorKeyParse;
@@ -17,6 +19,8 @@ import org.yi.happy.archive.key.LocatorKeyParse;
 /**
  * search indexes for keys.
  */
+@UsesIndex
+@UsesArgs("key-list-file")
 public class IndexSearchMain implements MainCommand {
     private final FileSystem fs;
     private final PrintStream out;

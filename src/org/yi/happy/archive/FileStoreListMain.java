@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.commandLine.UsesStore;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.key.LocatorKey;
 
 /**
  * A command line program to list the contents of store.
  */
+@UsesStore
 public class FileStoreListMain implements MainCommand {
 
     private final FileSystem fs;

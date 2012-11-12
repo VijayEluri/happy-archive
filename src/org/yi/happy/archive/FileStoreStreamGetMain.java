@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.commandLine.UsesArgs;
+import org.yi.happy.archive.commandLine.UsesNeed;
+import org.yi.happy.archive.commandLine.UsesStore;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.key.FullKeyParse;
 
@@ -12,6 +15,9 @@ import org.yi.happy.archive.key.FullKeyParse;
  * ones that are needed are put in a list, and the process continues to be
  * retried until all the needed blocks become available.
  */
+@UsesStore
+@UsesNeed
+@UsesArgs({ "key" })
 public class FileStoreStreamGetMain implements MainCommand {
     private final FileSystem fs;
     private final OutputStream out;

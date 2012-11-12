@@ -7,6 +7,8 @@ import java.io.PrintStream;
 import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.commandLine.UsesArgs;
+import org.yi.happy.archive.commandLine.UsesStore;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.key.LocatorKeyParse;
@@ -15,6 +17,8 @@ import org.yi.happy.archive.key.LocatorKeyParse;
  * Build an image of a backup disk. The set of files that will be burned to a
  * backup disk.
  */
+@UsesStore
+@UsesArgs({ "blocks-list", "image-path", "size-mb" })
 public class BuildImageMain implements MainCommand {
 
     private final FileSystem fs;

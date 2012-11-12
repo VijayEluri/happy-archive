@@ -8,6 +8,7 @@ import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.FullKeyParse;
@@ -17,6 +18,7 @@ import org.yi.happy.archive.key.FullKeyParse;
  * named file and the given full key is used to decode it. The decoded block is
  * sent to standard output.
  */
+@UsesArgs({ "input", "key" })
 public class DecodeBlockMain implements MainCommand {
     private final FileSystem fs;
     private final OutputStream out;

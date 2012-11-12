@@ -5,12 +5,16 @@ import java.io.IOException;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.commandLine.UsesArgs;
+import org.yi.happy.archive.commandLine.UsesStore;
 import org.yi.happy.archive.file_system.FileSystem;
 
 /**
  * put a block in a file store. Both the file store base directory and the block
  * as a file are named on the command line.
  */
+@UsesStore
+@UsesArgs({ "block" })
 public class FileStoreBlockPutMain implements MainCommand {
     private final FileSystem fs;
 

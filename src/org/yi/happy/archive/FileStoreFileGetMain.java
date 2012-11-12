@@ -4,6 +4,9 @@ import java.io.IOException;
 
 import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.commandLine.UsesArgs;
+import org.yi.happy.archive.commandLine.UsesNeed;
+import org.yi.happy.archive.commandLine.UsesStore;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.FullKeyParse;
@@ -13,6 +16,9 @@ import org.yi.happy.archive.tag.RestoreFile;
  * get a file from a file store.
  */
 @EntryPoint
+@UsesStore
+@UsesNeed
+@UsesArgs({ "key", "output" })
 public class FileStoreFileGetMain implements MainCommand {
     /**
      * create.

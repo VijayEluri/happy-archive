@@ -22,6 +22,9 @@ import java.util.zip.GZIPInputStream;
 import org.yi.happy.annotate.DuplicatedLogic;
 import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.commandLine.UsesArgs;
+import org.yi.happy.archive.commandLine.UsesIndex;
+import org.yi.happy.archive.commandLine.UsesStore;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
 import org.yi.happy.archive.key.LocatorKey;
@@ -30,6 +33,9 @@ import org.yi.happy.archive.key.LocatorKeyParse;
 /**
  * Make a candidate list from a local store and local index.
  */
+@UsesStore
+@UsesIndex
+@UsesArgs({ "volume-set" })
 public class LocalCandidateListMain implements MainCommand {
     /**
      * Make a candidate list from a local store and local index.

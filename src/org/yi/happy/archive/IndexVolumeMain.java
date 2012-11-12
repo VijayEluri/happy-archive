@@ -8,6 +8,7 @@ import java.util.List;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.crypto.Digests;
@@ -16,6 +17,7 @@ import org.yi.happy.archive.file_system.FileSystem;
 /**
  * Index a volume that has been burned.
  */
+@UsesArgs({ "image-path" })
 public class IndexVolumeMain implements MainCommand {
 
     private final FileSystem fs;

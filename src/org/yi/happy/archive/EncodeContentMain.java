@@ -10,6 +10,7 @@ import org.yi.happy.archive.block.encoder.BlockEncoderFactory;
 import org.yi.happy.archive.block.encoder.BlockEncoderResult;
 import org.yi.happy.archive.block.parser.BlockParse;
 import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.file_system.FileSystem;
 
 /**
@@ -18,6 +19,7 @@ import org.yi.happy.archive.file_system.FileSystem;
  * named in the second argument, the full key for decoding is printed on
  * standard output.
  */
+@UsesArgs({ "input", "output" })
 public class EncodeContentMain implements MainCommand {
     private final FileSystem fs;
     private final PrintStream out;

@@ -7,11 +7,13 @@ import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.BlockParse;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.file_system.FileSystem;
 
 /**
  * Verify that a set of blocks in files load, parse, and validate.
  */
+@UsesArgs({ "file..." })
 public class VerifyMain implements MainCommand {
 
     private final FileSystem fileSystem;

@@ -7,11 +7,15 @@ import java.io.PrintStream;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.commandLine.UsesArgs;
+import org.yi.happy.archive.commandLine.UsesStore;
 import org.yi.happy.archive.file_system.FileSystem;
 
 /**
  * load a list of files from a volume into a store.
  */
+@UsesStore
+@UsesArgs({ "volume-path" })
 public class VolumeGetMain implements MainCommand {
 
     private final FileSystem fs;

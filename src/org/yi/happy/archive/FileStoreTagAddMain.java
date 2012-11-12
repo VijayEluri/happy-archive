@@ -5,6 +5,7 @@ import java.io.InputStream;
 
 import org.yi.happy.archive.block.encoder.BlockEncoderFactory;
 import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.commandLine.UsesStore;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
@@ -13,6 +14,7 @@ import org.yi.happy.archive.tag.TagBuilder;
 import org.yi.happy.archive.tag.TagOutputStream;
 import org.yi.happy.archive.tag.TagStreamIterator;
 
+@UsesStore
 public class FileStoreTagAddMain implements MainCommand {
     @Override
     public void run(Env env) throws IOException {

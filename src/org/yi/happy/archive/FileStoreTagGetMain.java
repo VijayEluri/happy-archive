@@ -6,6 +6,8 @@ import java.io.PrintStream;
 
 import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.commandLine.UsesNeed;
+import org.yi.happy.archive.commandLine.UsesStore;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.FullKeyParse;
@@ -16,6 +18,8 @@ import org.yi.happy.archive.tag.TagStreamIterator;
 /**
  * A program to restore tags.
  */
+@UsesStore
+@UsesNeed
 public class FileStoreTagGetMain implements MainCommand {
     private final FileSystem fs;
     private final WaitHandler waitHandler;
