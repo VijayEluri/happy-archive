@@ -29,13 +29,13 @@ public class VolumeGetMainTest {
         fs.mkdir("/media");
         fs.save("/media/00.dat", TestData.KEY_CONTENT_MAP.getBytes());
         InputStream in = new ByteArrayInputStream("00.dat\n".getBytes("UTF-8"));
+        BlockStore store = new StorageMemory();
 
         Env env = new EnvBuilder().withStore("store").addArgument("/media")
                 .create();
-        new VolumeGetMain(fs, in, null).run(env);
+        new VolumeGetMain(store, fs, in, null).run(env);
 
-        FileBlockStore s = new FileBlockStore(fs, "store");
-        assertEquals(TestData.KEY_CONTENT_MAP.getEncodedBlock(), s
-                .get(TestData.KEY_CONTENT_MAP.getLocatorKey()));
+        assertEquals(TestData.KEY_CONTENT_MAP.getEncodedBlock(),
+                store.get(TestData.KEY_CONTENT_MAP.getLocatorKey()));
     }
 }

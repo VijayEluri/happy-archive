@@ -21,10 +21,13 @@ public class VolumeGetMain implements MainCommand {
     private final FileSystem fs;
     private final InputStream in;
     private final PrintStream err;
+    private final BlockStore store;
 
     /**
      * create with context.
      * 
+     * @param store
+     *            the block store to use.
      * @param fs
      *            the file system.
      * @param in
@@ -34,7 +37,9 @@ public class VolumeGetMain implements MainCommand {
      * @param err
      *            the standard error.
      */
-    public VolumeGetMain(FileSystem fs, InputStream in, PrintStream err) {
+    public VolumeGetMain(BlockStore store, FileSystem fs, InputStream in,
+            PrintStream err) {
+        this.store = store;
         this.fs = fs;
         this.in = in;
         this.err = err;
@@ -49,15 +54,13 @@ public class VolumeGetMain implements MainCommand {
      */
     @Override
     public void run(Env env) throws IOException {
-        FileBlockStore s = new FileBlockStore(fs, env.getStore());
-
         LineCursor in = new LineCursor(this.in);
         while (in.next()) {
             try {
                 byte[] data = fs.load(fs.join(env.getArgument(0), in.get()),
                         Blocks.MAX_SIZE);
                 EncodedBlock b = EncodedBlockParse.parse(data);
-                s.put(b);
+                store.put(b);
             } catch (Exception e) {
                 e.printStackTrace(err);
             }

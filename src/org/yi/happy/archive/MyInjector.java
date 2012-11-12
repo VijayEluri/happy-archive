@@ -75,8 +75,8 @@ public class MyInjector {
     }
 
     public static MainCommand injectVolumeGetMain(ApplicationScope scope) {
-        return new VolumeGetMain(injectFileSystem(scope), injectInput(scope),
-                injectError(scope));
+        return new VolumeGetMain(injectBlockStore(scope),
+                injectFileSystem(scope), injectInput(scope), injectError(scope));
     }
 
     public static MainCommand injectVerifyMain(ApplicationScope scope) {
