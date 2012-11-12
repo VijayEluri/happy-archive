@@ -52,11 +52,6 @@ public class Main {
      */
     @EntryPoint
     public static void main(String[] args) throws Exception {
-        if (args.length < 1) {
-            help();
-            return;
-        }
-
         Env env = MyEnv.init(args);
         Class<? extends MainCommand> cls = commands.get(env.getCommand());
         if (cls == null) {
@@ -64,13 +59,13 @@ public class Main {
             return;
         }
 
-        MainCommand c = getCommandObject(cls);
-        if (c != null) {
-            c.run(env);
+        MainCommand cmd = getCommandObject(cls);
+        if (cmd == null) {
+            help();
             return;
         }
 
-        help();
+        cmd.run(env);
     }
 
     private static MainCommand getCommandObject(Class<? extends MainCommand> cls)
