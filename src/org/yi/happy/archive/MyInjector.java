@@ -2,6 +2,7 @@ package org.yi.happy.archive;
 
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.Map;
 
 import org.yi.happy.archive.file_system.RealFileSystem;
 
@@ -126,5 +127,14 @@ public class MyInjector {
 
     public static BlockStore injectBlockStore(ApplicationScope scope) {
         return new FileBlockStore(injectFileSystem(scope), scope.getStore());
+    }
+
+    public static MainCommand injectHelpMain(ApplicationScope scope) {
+        return new HelpMain(injectOutput(scope), injectCommands(scope));
+    }
+
+    public static Map<String, Class<? extends MainCommand>> injectCommands(
+            ApplicationScope scope) {
+        return scope.getCommands();
     }
 }

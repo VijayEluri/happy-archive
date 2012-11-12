@@ -39,6 +39,7 @@ public class Main {
         c.put("build-image", BuildImageMain.class);
         c.put("volume-get", VolumeGetMain.class);
         c.put("show-env", ShowEnvMain.class);
+        c.put("help", HelpMain.class);
 
         commands = Collections.unmodifiableMap(c);
     }

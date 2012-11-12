@@ -1,22 +1,23 @@
 package org.yi.happy.archive;
 
 import java.io.PrintStream;
-import java.util.Set;
+import java.util.Map;
 
 import org.yi.happy.archive.commandLine.Env;
 
 public class HelpMain implements MainCommand {
     private final PrintStream out;
-    private final Set<String> commandNames;
+    private final Map<String, Class<? extends MainCommand>> commands;
 
-    public HelpMain(PrintStream out, Set<String> commandNames) {
+    public HelpMain(PrintStream out,
+            Map<String, Class<? extends MainCommand>> commands) {
         this.out = out;
-        this.commandNames = commandNames;
+        this.commands = commands;
     }
 
     @Override
     public void run(Env env) throws Exception {
-        for (String name : commandNames) {
+        for (String name : commands.keySet()) {
             out.println(name);
         }
     }
