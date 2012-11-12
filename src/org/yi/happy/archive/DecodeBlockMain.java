@@ -46,11 +46,6 @@ public class DecodeBlockMain implements MainCommand {
     @Override
     @SmellsMessy
     public void run(Env env) throws IOException {
-        if (env.hasArgumentCount() != 2) {
-            System.err.println("use: input key");
-            return;
-        }
-
         EncodedBlock b = EncodedBlockParse.parse(fs.load(env.getArgument(0),
                 Blocks.MAX_SIZE));
         FullKey k = FullKeyParse.parseFullKey(env.getArgument(1));

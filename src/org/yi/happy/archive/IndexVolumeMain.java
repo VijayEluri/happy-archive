@@ -52,11 +52,6 @@ public class IndexVolumeMain implements MainCommand {
      */
     @Override
     public void run(Env env) throws IOException {
-        if (env.hasArgumentCount() != 1) {
-            out.println("use: image");
-            return;
-        }
-
         try {
             List<String> names = fs.list(env.getArgument(0));
             Collections.sort(names);

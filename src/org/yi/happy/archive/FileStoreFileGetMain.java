@@ -44,10 +44,6 @@ public class FileStoreFileGetMain implements MainCommand {
      */
     @Override
     public void run(Env env) throws IOException {
-        if (env.hasNoStore() || env.hasNoNeed() || env.hasArgumentCount() != 2) {
-            System.err.println("use: --store store --need need key output");
-            return;
-        }
         FileBlockStore store = new FileBlockStore(fs, env.getStore());
         pendingFile = env.getNeed();
         FullKey key = FullKeyParse.parseFullKey(env.getArgument(0));

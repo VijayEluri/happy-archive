@@ -50,10 +50,6 @@ public class FileStoreStreamGetMain implements MainCommand {
      */
     @Override
     public void run(Env env) throws IOException {
-        if (env.hasNoStore() || env.hasNoNeed() || env.hasArgumentCount() != 1) {
-            System.err.println("use: --store store --need need key");
-            return;
-        }
         FileBlockStore store = new FileBlockStore(fs, env.getStore());
         pendingFile = env.getNeed();
 

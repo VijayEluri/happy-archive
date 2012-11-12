@@ -57,11 +57,6 @@ public class FileStoreTagGetMain implements MainCommand {
      */
     @Override
     public void run(Env env) throws IOException {
-        if (env.hasArguments() || env.hasNoStore() || env.hasNoNeed()) {
-            err.println("use: --store store --need need.lst < tags");
-            return;
-        }
-
         FileBlockStore store = new FileBlockStore(fs, env.getStore());
         pendingFile = env.getNeed();
         RestoreManager restore = new RestoreManager(fs,

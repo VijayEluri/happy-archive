@@ -45,11 +45,6 @@ public class FileStoreStreamPutMain implements MainCommand {
      */
     @Override
     public void run(Env env) throws IOException {
-        if (env.hasNoStore()) {
-            out.println("use: --store store");
-            return;
-        }
-
         BlockStore store = new FileBlockStore(fs, env.getStore());
         BlockEncoder encoder = BlockEncoderFactory.getContentDefault();
 

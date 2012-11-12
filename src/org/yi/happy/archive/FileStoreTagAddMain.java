@@ -29,11 +29,6 @@ public class FileStoreTagAddMain implements MainCommand {
          */
         FileSystem fs = new RealFileSystem();
         try {
-            if (env.hasNoStore()) {
-                System.err.println("use: --store store");
-                return;
-            }
-
             FileBlockStore store = new FileBlockStore(fs, env.getStore());
 
             /*

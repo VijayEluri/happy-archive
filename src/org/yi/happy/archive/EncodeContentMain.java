@@ -44,11 +44,6 @@ public class EncodeContentMain implements MainCommand {
      */
     @Override
     public void run(Env env) throws IOException {
-        if (env.hasArgumentCount() != 2) {
-            out.println("use: input output");
-            return;
-        }
-
         BlockEncoder encoder = BlockEncoderFactory.getContentDefault();
 
         Block block = BlockParse.parse(fs.load(env.getArgument(0),

@@ -49,12 +49,6 @@ public class FileStoreTagPutMain implements MainCommand {
     @MagicLiteral
     @SmellsMessy
     public void run(Env env) throws IOException {
-        if (env.hasNoStore() || env.hasNoArguments()) {
-            out.println("use: --store store file...");
-            out.flush();
-            return;
-        }
-
         try {
             FileBlockStore store = new FileBlockStore(fs, env.getStore());
 

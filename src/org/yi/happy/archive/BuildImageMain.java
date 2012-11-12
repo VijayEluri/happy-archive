@@ -18,7 +18,7 @@ import org.yi.happy.archive.key.LocatorKeyParse;
  * backup disk.
  */
 @UsesStore
-@UsesArgs({ "blocks-list", "image-path", "size-mb" })
+@UsesArgs({ "key-list", "image-path", "size-mb" })
 public class BuildImageMain implements MainCommand {
 
     private final FileSystem fs;
@@ -49,12 +49,6 @@ public class BuildImageMain implements MainCommand {
     @Override
     @SmellsMessy
     public void run(Env env) throws IOException {
-        if (env.hasNoStore() || env.hasArgumentCount() != 3) {
-            err.println("use: --store store outstanding-list image-directory"
-                    + " image-size-in-mb\n");
-            return;
-        }
-
         FileBlockStore store = new FileBlockStore(fs, env.getStore());
         InputStream in0 = fs.openInputStream(env.getArgument(0));
         int limit = Integer.parseInt(env.getArgument(2));

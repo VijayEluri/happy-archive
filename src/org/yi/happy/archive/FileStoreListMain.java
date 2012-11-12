@@ -41,11 +41,6 @@ public class FileStoreListMain implements MainCommand {
      */
     @Override
     public void run(Env env) throws IOException {
-        if (env.hasNoStore() || env.hasArguments()) {
-            err.println("use: --store store");
-            return;
-        }
-
         FileBlockStore store = new FileBlockStore(fs, env.getStore());
         store.visit(new BlockStoreVisitor<IOException>() {
             @Override

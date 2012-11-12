@@ -37,11 +37,6 @@ public class FileStoreBlockPutMain implements MainCommand {
      */
     @Override
     public void run(Env env) throws IOException {
-        if (env.hasNoStore() || env.hasArgumentCount() != 1) {
-            System.err.println("use: --store store block");
-            return;
-        }
-
         FileBlockStore store = new FileBlockStore(fs, env.getStore());
 
         EncodedBlock b = EncodedBlockParse.parse(fs.load(env.getArgument(0),

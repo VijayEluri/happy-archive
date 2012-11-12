@@ -49,11 +49,6 @@ public class VolumeGetMain implements MainCommand {
      */
     @Override
     public void run(Env env) throws IOException {
-        if (env.hasNoStore() || env.hasArgumentCount() != 1) {
-            err.println("use: store base < list");
-            return;
-        }
-
         FileBlockStore s = new FileBlockStore(fs, env.getStore());
 
         LineCursor in = new LineCursor(this.in);

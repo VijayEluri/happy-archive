@@ -15,7 +15,7 @@ import org.yi.happy.archive.key.LocatorKeyParse;
  * Remove keys from the store.
  */
 @UsesStore
-@UsesArgs("remove-list-file")
+@UsesArgs("key-list")
 public class StoreRemoveMain implements MainCommand {
 
     private final FileSystem fs;
@@ -43,11 +43,6 @@ public class StoreRemoveMain implements MainCommand {
      */
     @Override
     public void run(Env env) throws IOException {
-        if (env.hasNoStore() || env.hasArgumentCount() != 1) {
-            err.println("use: --store store remove.lst");
-            return;
-        }
-
         BlockStore store = new FileBlockStore(fs, env.getStore());
         InputStream in = fs.openInputStream(env.getArgument(0));
         try {

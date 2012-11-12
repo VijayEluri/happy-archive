@@ -20,7 +20,7 @@ import org.yi.happy.archive.key.LocatorKeyParse;
  * search indexes for keys.
  */
 @UsesIndex
-@UsesArgs("key-list-file")
+@UsesArgs("key-list")
 public class IndexSearchMain implements MainCommand {
     private final FileSystem fs;
     private final PrintStream out;
@@ -51,11 +51,6 @@ public class IndexSearchMain implements MainCommand {
     @SmellsMessy
     public void run(Env env) throws IOException, InterruptedException,
             ExecutionException {
-        if (env.hasNoIndex() || env.hasArgumentCount() != 1) {
-            out.println("use: --index index key-list\n");
-            return;
-        }
-
         Set<LocatorKey> want = loadRequestSet(env.getArgument(0));
 
         IndexSearch search = new IndexSearch(fs, env.getIndex());
