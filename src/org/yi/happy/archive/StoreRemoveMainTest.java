@@ -24,7 +24,7 @@ public class StoreRemoveMainTest {
     @Test
     public void test1() throws IOException {
         FileSystem fs = new FakeFileSystem();
-        BlockStore store = new FileBlockStore(fs, "store");
+        BlockStore store = new StorageMemory();
         store.put(TestData.KEY_CONTENT.getEncodedBlock());
         store.put(TestData.KEY_CONTENT_1.getEncodedBlock());
         store.put(TestData.KEY_CONTENT_2.getEncodedBlock());
@@ -34,7 +34,7 @@ public class StoreRemoveMainTest {
 
         Env env = new EnvBuilder().withStore("store").addArgument("flush.lst")
                 .create();
-        new StoreRemoveMain(fs, null).run(env);
+        new StoreRemoveMain(store, fs, null).run(env);
 
         assertTrue(store.contains(TestData.KEY_CONTENT.getLocatorKey()));
         assertFalse(store.contains(TestData.KEY_CONTENT_1.getLocatorKey()));

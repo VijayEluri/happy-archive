@@ -49,7 +49,8 @@ public class MyInjector {
     }
 
     public static MainCommand injectStoreRemoveMain(ApplicationScope scope) {
-        return new StoreRemoveMain(injectFileSystem(scope), injectError(scope));
+        return new StoreRemoveMain(injectBlockStore(scope),
+                injectFileSystem(scope), injectError(scope));
     }
 
     public static MainCommand injectFileStoreListMain(ApplicationScope scope) {

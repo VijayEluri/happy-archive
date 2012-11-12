@@ -20,16 +20,20 @@ public class StoreRemoveMain implements MainCommand {
 
     private final FileSystem fs;
     private final PrintStream err;
+    private final BlockStore store;
 
     /**
      * create with context.
      * 
+     * @param store
+     *            the block store to use.
      * @param fs
      *            the file system to use.
      * @param out
      *            standard output.
      */
-    public StoreRemoveMain(FileSystem fs, PrintStream err) {
+    public StoreRemoveMain(BlockStore store, FileSystem fs, PrintStream err) {
+        this.store = store;
         this.fs = fs;
         this.err = err;
     }
@@ -43,7 +47,6 @@ public class StoreRemoveMain implements MainCommand {
      */
     @Override
     public void run(Env env) throws IOException {
-        BlockStore store = new FileBlockStore(fs, env.getStore());
         InputStream in = fs.openInputStream(env.getArgument(0));
         try {
             LineCursor line = new LineCursor(in);
