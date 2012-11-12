@@ -28,7 +28,7 @@ public class FileStoreTagGetMainTest {
         ByteArrayInputStream in = new ByteArrayInputStream(TestData.TAG_FILES
                 .getBytes());
         FileSystem fs = new FakeFileSystem();
-        FileBlockStore store = new FileBlockStore(fs, "store");
+        BlockStore store = new StorageMemory();
         store.put(TestData.KEY_CONTENT.getEncodedBlock());
         store.put(TestData.KEY_CONTENT_40.getEncodedBlock());
 
@@ -41,7 +41,7 @@ public class FileStoreTagGetMainTest {
 
         Env env = new EnvBuilder().withStore("store").withNeed("request")
                 .create();
-        new FileStoreTagGetMain(fs, waitHandler, in, null).run(env);
+        new FileStoreTagGetMain(store, fs, waitHandler, in, null).run(env);
 
         assertArrayEquals(TestData.FILE_CONTENT.getBytes(), fs
                 .load("hello.txt"));
@@ -59,7 +59,7 @@ public class FileStoreTagGetMainTest {
         ByteArrayInputStream in = new ByteArrayInputStream(TestData.TAG_FILES
                 .getBytes());
         final FileSystem fs = new FakeFileSystem();
-        final FileBlockStore store = new FileBlockStore(fs, "store");
+        final BlockStore store = new StorageMemory();
 
         WaitHandler waitHandler = new WaitHandler() {
             @Override
@@ -94,7 +94,7 @@ public class FileStoreTagGetMainTest {
 
         Env env = new EnvBuilder().withStore("store").withNeed("request")
                 .create();
-        new FileStoreTagGetMain(fs, waitHandler, in, null).run(env);
+        new FileStoreTagGetMain(store, fs, waitHandler, in, null).run(env);
 
         assertArrayEquals(TestData.FILE_CONTENT.getBytes(), fs
                 .load("hello.txt"));

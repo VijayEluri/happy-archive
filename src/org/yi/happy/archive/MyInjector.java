@@ -21,9 +21,9 @@ public class MyInjector {
     }
 
     public static MainCommand injectFileStoreTagGetMain(ApplicationScope scope) {
-        return new FileStoreTagGetMain(injectFileSystem(scope),
-                injectWaitHandler(scope), injectInput(scope),
-                injectError(scope));
+        return new FileStoreTagGetMain(injectBlockStore(scope),
+                injectFileSystem(scope), injectWaitHandler(scope),
+                injectInput(scope), injectError(scope));
     }
 
     public static PrintStream injectError(ApplicationScope scope) {
