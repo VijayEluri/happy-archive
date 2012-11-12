@@ -77,7 +77,7 @@ public class Requirement {
      * @return the name of the output part of the command description.
      */
     public String getUsesOutput() {
-        return usesInput;
+        return usesOutput;
     }
 
     /**

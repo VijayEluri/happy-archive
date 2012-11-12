@@ -8,6 +8,7 @@ import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.commandLine.UsesArgs;
+import org.yi.happy.archive.commandLine.UsesInput;
 import org.yi.happy.archive.commandLine.UsesStore;
 import org.yi.happy.archive.file_system.FileSystem;
 
@@ -16,6 +17,7 @@ import org.yi.happy.archive.file_system.FileSystem;
  */
 @UsesStore
 @UsesArgs({ "volume-path" })
+@UsesInput("file-list")
 public class VolumeGetMain implements MainCommand {
 
     private final FileSystem fs;

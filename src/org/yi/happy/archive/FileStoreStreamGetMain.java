@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesNeed;
+import org.yi.happy.archive.commandLine.UsesOutput;
 import org.yi.happy.archive.commandLine.UsesStore;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.key.FullKeyParse;
@@ -18,6 +19,7 @@ import org.yi.happy.archive.key.FullKeyParse;
 @UsesStore
 @UsesNeed
 @UsesArgs({ "key" })
+@UsesOutput("file")
 public class FileStoreStreamGetMain implements MainCommand {
     private final FileSystem fs;
     private final OutputStream out;

@@ -10,8 +10,7 @@ import org.yi.happy.archive.commandLine.UsesStore;
 import org.yi.happy.archive.file_system.FileSystem;
 
 /**
- * put a block in a file store. Both the file store base directory and the block
- * as a file are named on the command line.
+ * put a block in the store.
  */
 @UsesStore
 @UsesArgs({ "block" })

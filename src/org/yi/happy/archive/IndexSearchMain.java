@@ -12,6 +12,7 @@ import org.yi.happy.archive.IndexSearch.SearchResult;
 import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesIndex;
+import org.yi.happy.archive.commandLine.UsesOutput;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.key.LocatorKeyParse;
@@ -21,6 +22,7 @@ import org.yi.happy.archive.key.LocatorKeyParse;
  */
 @UsesIndex
 @UsesArgs("key-list")
+@UsesOutput("result")
 public class IndexSearchMain implements MainCommand {
     private final FileSystem fs;
     private final PrintStream out;

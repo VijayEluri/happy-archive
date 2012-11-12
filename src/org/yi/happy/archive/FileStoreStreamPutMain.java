@@ -7,6 +7,8 @@ import java.io.PrintStream;
 import org.yi.happy.archive.block.encoder.BlockEncoder;
 import org.yi.happy.archive.block.encoder.BlockEncoderFactory;
 import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.commandLine.UsesInput;
+import org.yi.happy.archive.commandLine.UsesOutput;
 import org.yi.happy.archive.commandLine.UsesStore;
 import org.yi.happy.archive.file_system.FileSystem;
 
@@ -15,6 +17,8 @@ import org.yi.happy.archive.file_system.FileSystem;
  * stdin, store the stream, and print out the resulting key.
  */
 @UsesStore
+@UsesInput("file")
+@UsesOutput("key")
 public class FileStoreStreamPutMain implements MainCommand {
     private FileSystem fs;
     private InputStream in;
