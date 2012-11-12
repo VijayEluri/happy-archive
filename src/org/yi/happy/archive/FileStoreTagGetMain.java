@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 
-import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.commandLine.UsesInput;
 import org.yi.happy.archive.commandLine.UsesNeed;
@@ -57,7 +56,6 @@ public class FileStoreTagGetMain implements MainCommand {
      * @throws IOException
      */
     @Override
-    @EntryPoint
     public void run(Env env) throws IOException {
         if (env.hasArguments() || env.hasNoStore() || env.hasNoNeed()) {
             err.println("use: --store store --need need.lst < tags");

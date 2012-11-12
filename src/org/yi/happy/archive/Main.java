@@ -14,9 +14,7 @@ import org.yi.happy.archive.commandLine.RequirementLoader;
 /**
  * The top level entry point that dispatches to the sub-commands.
  */
-@EntryPoint
 public class Main {
-
     private static final Map<String, Class<? extends MainCommand>> commands;
     static {
         Map<String, Class<? extends MainCommand>> c;
@@ -67,12 +65,10 @@ public class Main {
             return;
         }
 
+        /*
+         * inject
+         */
         MainCommand cmd = getCommandObject(cls);
-        if (cmd == null) {
-            help();
-            return;
-        }
-
         cmd.run(env);
     }
 
@@ -114,10 +110,6 @@ public class Main {
             throws Exception {
         String name = cls.getSimpleName();
         Method injectMethod = MyInjector.class.getMethod("inject" + name);
-        if (injectMethod == null) {
-            return null;
-        }
-
         Object out = injectMethod.invoke(null);
         return cls.cast(out);
     }

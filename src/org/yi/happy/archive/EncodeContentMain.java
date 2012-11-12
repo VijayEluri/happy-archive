@@ -3,7 +3,6 @@ package org.yi.happy.archive;
 import java.io.IOException;
 import java.io.PrintStream;
 
-import org.yi.happy.annotate.EntryPoint;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.encoder.BlockEncoder;
 import org.yi.happy.archive.block.encoder.BlockEncoderFactory;
@@ -44,7 +43,6 @@ public class EncodeContentMain implements MainCommand {
      * @throws IOException
      */
     @Override
-    @EntryPoint
     public void run(Env env) throws IOException {
         if (env.hasArgumentCount() != 2) {
             out.println("use: input output");
