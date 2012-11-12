@@ -106,7 +106,8 @@ public class MyInjector {
     }
 
     public static MainCommand injectFileStoreBlockPutMain(ApplicationScope scope) {
-        return new FileStoreBlockPutMain(injectFileSystem(scope));
+        return new FileStoreBlockPutMain(injectBlockStore(scope),
+                injectFileSystem(scope));
     }
 
     public static MainCommand injectMakeIndexDatabaseMain(ApplicationScope scope) {

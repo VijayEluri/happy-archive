@@ -1,6 +1,6 @@
 package org.yi.happy.archive;
 
-import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
@@ -24,15 +24,14 @@ public class FileStoreBlockPutMainTest {
     @Test
     public void test1() throws IOException {
         FakeFileSystem fs = new FakeFileSystem();
+        StorageMemory store = new StorageMemory();
         fs.save("block.dat", TestData.KEY_CONTENT.getBytes());
-        FileStoreBlockPutMain main = new FileStoreBlockPutMain(fs);
+        FileStoreBlockPutMain main = new FileStoreBlockPutMain(store, fs);
 
         Env env = new EnvBuilder().withStore("store").addArgument("block.dat")
                 .create();
         main.run(env);
 
-        assertArrayEquals(TestData.KEY_CONTENT.getBytes(), fs
-                .load("store/8/87/87c/87c5f6fe4ea801c8eb227b8b218a0659"
-                        + "c18ece76b7c200c645ab4364becf68d5-content-hash"));
+        assertTrue(store.contains(TestData.KEY_CONTENT.getLocatorKey()));
     }
 }
