@@ -350,6 +350,17 @@ public class MyInjector {
     }
 
     /**
+     * get a {@link CriticalListMain}.
+     * 
+     * @param scope
+     *            the scope object.
+     * @return the object.
+     */
+    public static MainCommand injectCriticalListMain(ApplicationScope scope) {
+        return new CriticalListMain(injectBlockStore(scope), injectEnv(scope));
+    }
+
+    /**
      * get the command to implementation map.
      * 
      * @param scope

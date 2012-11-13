@@ -32,6 +32,7 @@ public class Main {
         c.put("tag-add", FileStoreTagAddMain.class);
         c.put("tag-get", FileStoreTagGetMain.class);
         c.put("backup-list", LocalCandidateListMain.class);
+        c.put("backup-critical-list", CriticalListMain.class);
         c.put("store-list", FileStoreListMain.class);
         c.put("store-remove", StoreRemoveMain.class);
         c.put("index-search", IndexSearchMain.class);
