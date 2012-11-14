@@ -5,10 +5,9 @@ import static org.junit.Assert.assertEquals;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 import org.junit.Test;
-import org.yi.happy.archive.commandLine.Env;
-import org.yi.happy.archive.commandLine.EnvBuilder;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.test_data.TestData;
@@ -31,9 +30,7 @@ public class VolumeGetMainTest {
         InputStream in = new ByteArrayInputStream("00.dat\n".getBytes("UTF-8"));
         BlockStore store = new StorageMemory();
 
-        Env env = new EnvBuilder().withStore("store").addArgument("/media")
-                .create();
-        new VolumeGetMain(store, fs, in, null, env).run();
+        new VolumeGetMain(store, fs, in, null, Arrays.asList("/media")).run();
 
         assertEquals(TestData.KEY_CONTENT_MAP.getEncodedBlock(),
                 store.get(TestData.KEY_CONTENT_MAP.getLocatorKey()));

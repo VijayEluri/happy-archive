@@ -220,7 +220,7 @@ public class MyInjector {
     public static MainCommand injectVolumeGetMain(ApplicationScope scope) {
         return new VolumeGetMain(injectBlockStore(scope),
                 injectFileSystem(scope), injectInput(scope),
-                injectError(scope), injectEnv(scope));
+                injectError(scope), injectArgs(scope));
     }
 
     /**

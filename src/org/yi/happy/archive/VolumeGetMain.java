@@ -3,10 +3,10 @@ package org.yi.happy.archive;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.List;
 
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
-import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesInput;
 import org.yi.happy.archive.commandLine.UsesStore;
@@ -24,7 +24,7 @@ public class VolumeGetMain implements MainCommand {
     private final InputStream in;
     private final PrintStream err;
     private final BlockStore store;
-    private final Env env;
+    private final List<String> args;
 
     /**
      * create with context.
@@ -37,16 +37,16 @@ public class VolumeGetMain implements MainCommand {
      *            the standard input.
      * @param err
      *            the standard error.
-     * @param env
-     *            the invocation environment.
+     * @param args
+     *            the non-option command line arguments.
      */
     public VolumeGetMain(BlockStore store, FileSystem fs, InputStream in,
-            PrintStream err, Env env) {
+            PrintStream err, List<String> args) {
         this.store = store;
         this.fs = fs;
         this.in = in;
         this.err = err;
-        this.env = env;
+        this.args = args;
     }
 
     /**
@@ -61,7 +61,7 @@ public class VolumeGetMain implements MainCommand {
         LineCursor in = new LineCursor(this.in);
         while (in.next()) {
             try {
-                byte[] data = fs.load(fs.join(env.getArgument(0), in.get()),
+                byte[] data = fs.load(fs.join(args.get(0), in.get()),
                         Blocks.MAX_SIZE);
                 EncodedBlock b = EncodedBlockParse.parse(data);
                 store.put(b);
