@@ -1,15 +1,16 @@
 package org.yi.happy.archive;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Test;
-import org.yi.happy.archive.commandLine.Env;
-import org.yi.happy.archive.commandLine.EnvBuilder;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.test_data.TestData;
@@ -32,6 +33,7 @@ public class FileStoreFileGetMainTest {
 
         final FileSystem fs = new FakeFileSystem();
         final StorageMemory store = new StorageMemory();
+        final NeedCapture needHandler = new NeedCapture();
 
         WaitHandler waitHandler = new WaitHandler() {
             @Override
@@ -47,10 +49,8 @@ public class FileStoreFileGetMainTest {
                     /*
                      * check the request list
                      */
-                    String want = TestData.KEY_CONTENT_MAP.getLocatorKey()
-                            + "\n";
-                    assertArrayEquals(ByteString.toUtf8(want),
-                            fs.load("request"));
+                    assertEquals(Arrays.asList(TestData.KEY_CONTENT_MAP
+                            .getLocatorKey()), needHandler.getKeys());
 
                     /*
                      * add the map block to the store
@@ -69,10 +69,10 @@ public class FileStoreFileGetMainTest {
                     /*
                      * check the request list
                      */
-                    String want = TestData.KEY_CONTENT_1.getLocatorKey() + "\n"
-                            + TestData.KEY_CONTENT_2.getLocatorKey() + "\n";
-                    assertArrayEquals(ByteString.toUtf8(want),
-                            fs.load("request"));
+                    assertEquals(Arrays.asList(
+                            TestData.KEY_CONTENT_1.getLocatorKey(),
+                            TestData.KEY_CONTENT_2.getLocatorKey()),
+                            needHandler.getKeys());
 
                     /*
                      * add the second part
@@ -91,6 +91,9 @@ public class FileStoreFileGetMainTest {
                     /*
                      * check the request list
                      */
+                    assertEquals(Arrays.asList(TestData.KEY_CONTENT_1
+                            .getLocatorKey()), needHandler.getKeys());
+
                     String want = TestData.KEY_CONTENT_1.getLocatorKey() + "\n";
                     assertArrayEquals(ByteString.toUtf8(want),
                             fs.load("request"));
@@ -113,10 +116,10 @@ public class FileStoreFileGetMainTest {
 
         };
 
-        Env env = new EnvBuilder().withStore("store").withNeed("request")
-                .addArgument(TestData.KEY_CONTENT_MAP.getFullKey().toString())
-                .addArgument("out").create();
-        new FileStoreFileGetMain(store, fs, waitHandler, env).run();
+        List<String> args = Arrays.asList(TestData.KEY_CONTENT_MAP.getFullKey()
+                .toString(), "out");
+        new FileStoreFileGetMain(store, fs, waitHandler, needHandler, args)
+                .run();
 
         assertArrayEquals(ByteString.toUtf8("0123456789"), fs.load("out"));
     }

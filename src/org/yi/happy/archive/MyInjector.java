@@ -333,7 +333,7 @@ public class MyInjector {
     public static MainCommand injectFileStoreFileGetMain(ApplicationScope scope) {
         return new FileStoreFileGetMain(injectBlockStore(scope),
                 injectFileSystem(scope), injectWaitHandler(scope),
-                injectEnv(scope));
+                injectNeedHandler(scope), injectArgs(scope));
     }
 
     /**
