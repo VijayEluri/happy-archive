@@ -59,7 +59,15 @@ public class MyInjector {
     public static MainCommand injectFileStoreTagGetMain(ApplicationScope scope) {
         return new FileStoreTagGetMain(injectBlockStore(scope),
                 injectFileSystem(scope), injectWaitHandler(scope),
-                injectInput(scope), injectEnv(scope));
+                injectInput(scope), injectNeedHandler(scope));
+    }
+
+    public static NeedHandler injectNeedHandler(ApplicationScope scope) {
+        return new NeedWriter(injectFileSystem(scope), injectNeedFile(scope));
+    }
+
+    public static String injectNeedFile(ApplicationScope scope) {
+        return scope.getNeedFile();
     }
 
     /**
@@ -288,7 +296,8 @@ public class MyInjector {
             ApplicationScope scope) {
         return new FileStoreStreamGetMain(injectBlockStore(scope),
                 injectFileSystem(scope), injectOutput(scope),
-                injectWaitHandler(scope), injectEnv(scope));
+                injectWaitHandler(scope), injectNeedHandler(scope),
+                injectEnv(scope));
     }
 
     /**

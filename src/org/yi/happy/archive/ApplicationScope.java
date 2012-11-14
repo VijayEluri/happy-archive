@@ -54,4 +54,8 @@ public class ApplicationScope {
     public List<String> getArgs() {
         return env.getArguments();
     }
+
+    public String getNeedFile() {
+        return env.getNeed();
+    }
 }

@@ -2,6 +2,8 @@ package org.yi.happy.archive;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.commandLine.UsesArgs;
@@ -9,7 +11,9 @@ import org.yi.happy.archive.commandLine.UsesNeed;
 import org.yi.happy.archive.commandLine.UsesOutput;
 import org.yi.happy.archive.commandLine.UsesStore;
 import org.yi.happy.archive.file_system.FileSystem;
+import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.FullKeyParse;
+import org.yi.happy.archive.key.LocatorKey;
 
 /**
  * Fetch a stream, the blocks may not all available in the file store, so the
@@ -25,6 +29,7 @@ public class FileStoreStreamGetMain implements MainCommand {
     private final OutputStream out;
     private final WaitHandler waitHandler;
     private final BlockStore store;
+    private final NeedHandler needHandler;
     private final Env env;
 
     /**
@@ -42,11 +47,13 @@ public class FileStoreStreamGetMain implements MainCommand {
      *            the invocation environment.
      */
     public FileStoreStreamGetMain(BlockStore store, FileSystem fs,
-            OutputStream out, WaitHandler waitHandler, Env env) {
+            OutputStream out, WaitHandler waitHandler, NeedHandler needHandler,
+            Env env) {
         this.store = store;
         this.fs = fs;
         this.out = out;
         this.waitHandler = waitHandler;
+        this.needHandler = needHandler;
         this.env = env;
     }
 
@@ -60,8 +67,6 @@ public class FileStoreStreamGetMain implements MainCommand {
      */
     @Override
     public void run() throws IOException {
-        pendingFile = env.getNeed();
-
         KeyInputStream in = new KeyInputStream(FullKeyParse.parseFullKey(env
                 .getArgument(0)), new RetrieveBlockStorage(store),
                 notReadyHandler);
@@ -69,15 +74,17 @@ public class FileStoreStreamGetMain implements MainCommand {
         Streams.copy(in, out);
     }
 
-    private String pendingFile;
-
     private NotReadyHandler notReadyHandler = new NotReadyHandler() {
         private int progress;
 
         @Override
         public void notReady(SplitReader reader) throws IOException {
-            PendingList.savePendingListFile(reader.getPending(), fs,
-                    pendingFile);
+            List<LocatorKey> keys = new ArrayList<LocatorKey>();
+            for (FullKey key : reader.getPending()) {
+                keys.add(key.toLocatorKey());
+            }
+            needHandler.post(keys);
+
             waitHandler.doWait(progress != reader.getProgress());
             progress = reader.getProgress();
         }
