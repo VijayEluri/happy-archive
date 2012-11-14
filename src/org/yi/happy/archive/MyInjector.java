@@ -295,9 +295,8 @@ public class MyInjector {
     public static MainCommand injectFileStoreStreamGetMain(
             ApplicationScope scope) {
         return new FileStoreStreamGetMain(injectBlockStore(scope),
-                injectFileSystem(scope), injectOutput(scope),
-                injectWaitHandler(scope), injectNeedHandler(scope),
-                injectEnv(scope));
+                injectOutput(scope), injectWaitHandler(scope),
+                injectNeedHandler(scope), injectArgs(scope));
     }
 
     /**

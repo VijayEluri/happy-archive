@@ -9,13 +9,10 @@ import static org.junit.Assert.fail;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Test;
 import org.yi.happy.annotate.SmellsMessy;
-import org.yi.happy.archive.commandLine.Env;
-import org.yi.happy.archive.commandLine.EnvBuilder;
-import org.yi.happy.archive.file_system.FakeFileSystem;
-import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
@@ -35,7 +32,6 @@ public class FileStoreStreamGetMainTest {
          * layers of objects in use to exercise the functionality.
          */
 
-        final FileSystem fs = new FakeFileSystem();
         final BlockStore store = new StorageMemory();
         final NeedCapture needHandler = new NeedCapture();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -96,10 +92,10 @@ public class FileStoreStreamGetMainTest {
                     /*
                      * check the request list
                      */
-                    String want = TestData.KEY_CONTENT_1.getLocatorKey() + "\n"
-                            + TestData.KEY_CONTENT_2.getLocatorKey() + "\n";
-                    assertArrayEquals(ByteString.toUtf8(want), fs
-                            .load("request"));
+                    assertEquals(Arrays.asList(
+                            TestData.KEY_CONTENT_1.getLocatorKey(),
+                            TestData.KEY_CONTENT_2.getLocatorKey()),
+                            needHandler.getKeys());
 
                     /*
                      * add the first part
@@ -119,11 +115,10 @@ public class FileStoreStreamGetMainTest {
 
         };
 
-        Env env = new EnvBuilder().withStore("store").withNeed("request")
-                .addArgument(TestData.KEY_CONTENT_MAP.getFullKey().toString())
-                .create();
-        new FileStoreStreamGetMain(store, fs, out, waitHandler, needHandler,
-                env).run();
+        List<String> args = Arrays.asList(TestData.KEY_CONTENT_MAP.getFullKey()
+                .toString());
+        new FileStoreStreamGetMain(store, out, waitHandler, needHandler, args)
+                .run();
 
         assertArrayEquals(ByteString.toUtf8("0123456789"), out.toByteArray());
     }

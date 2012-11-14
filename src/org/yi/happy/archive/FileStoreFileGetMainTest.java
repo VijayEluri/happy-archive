@@ -94,10 +94,6 @@ public class FileStoreFileGetMainTest {
                     assertEquals(Arrays.asList(TestData.KEY_CONTENT_1
                             .getLocatorKey()), needHandler.getKeys());
 
-                    String want = TestData.KEY_CONTENT_1.getLocatorKey() + "\n";
-                    assertArrayEquals(ByteString.toUtf8(want),
-                            fs.load("request"));
-
                     /*
                      * add the first part
                      */

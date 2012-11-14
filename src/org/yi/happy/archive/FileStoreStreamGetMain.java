@@ -5,12 +5,10 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesNeed;
 import org.yi.happy.archive.commandLine.UsesOutput;
 import org.yi.happy.archive.commandLine.UsesStore;
-import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.FullKeyParse;
 import org.yi.happy.archive.key.LocatorKey;
@@ -25,20 +23,17 @@ import org.yi.happy.archive.key.LocatorKey;
 @UsesArgs({ "key" })
 @UsesOutput("file")
 public class FileStoreStreamGetMain implements MainCommand {
-    private final FileSystem fs;
     private final OutputStream out;
     private final WaitHandler waitHandler;
     private final BlockStore store;
     private final NeedHandler needHandler;
-    private final Env env;
+    private final List<String> args;
 
     /**
      * create.
      * 
      * @param store
      *            the block store to use.
-     * @param fs
-     *            the file system.
      * @param out
      *            where to send the stream.
      * @param waitHandler
@@ -46,15 +41,13 @@ public class FileStoreStreamGetMain implements MainCommand {
      * @param env
      *            the invocation environment.
      */
-    public FileStoreStreamGetMain(BlockStore store, FileSystem fs,
-            OutputStream out, WaitHandler waitHandler, NeedHandler needHandler,
-            Env env) {
+    public FileStoreStreamGetMain(BlockStore store, OutputStream out,
+            WaitHandler waitHandler, NeedHandler needHandler, List<String> args) {
         this.store = store;
-        this.fs = fs;
         this.out = out;
         this.waitHandler = waitHandler;
         this.needHandler = needHandler;
-        this.env = env;
+        this.args = args;
     }
 
     /**
@@ -67,9 +60,8 @@ public class FileStoreStreamGetMain implements MainCommand {
      */
     @Override
     public void run() throws IOException {
-        KeyInputStream in = new KeyInputStream(FullKeyParse.parseFullKey(env
-                .getArgument(0)), new RetrieveBlockStorage(store),
-                notReadyHandler);
+        KeyInputStream in = new KeyInputStream(FullKeyParse.parseFullKey(args
+                .get(0)), new RetrieveBlockStorage(store), notReadyHandler);
 
         Streams.copy(in, out);
     }
