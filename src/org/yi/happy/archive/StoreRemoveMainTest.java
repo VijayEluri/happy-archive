@@ -4,10 +4,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Test;
-import org.yi.happy.archive.commandLine.Env;
-import org.yi.happy.archive.commandLine.EnvBuilder;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.test_data.TestData;
@@ -32,9 +32,8 @@ public class StoreRemoveMainTest {
                 + TestData.KEY_CONTENT_1.getLocatorKey() + "\n"
                 + TestData.KEY_CONTENT_2.getLocatorKey() + "\n"));
 
-        Env env = new EnvBuilder().withStore("store").addArgument("flush.lst")
-                .create();
-        new StoreRemoveMain(store, fs, env).run();
+        List<String> args = Arrays.asList("flush.lst");
+        new StoreRemoveMain(store, fs, args).run();
 
         assertTrue(store.contains(TestData.KEY_CONTENT.getLocatorKey()));
         assertFalse(store.contains(TestData.KEY_CONTENT_1.getLocatorKey()));

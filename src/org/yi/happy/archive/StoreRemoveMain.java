@@ -2,8 +2,8 @@ package org.yi.happy.archive;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
-import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesStore;
 import org.yi.happy.archive.file_system.FileSystem;
@@ -19,7 +19,7 @@ public class StoreRemoveMain implements MainCommand {
 
     private final FileSystem fs;
     private final BlockStore store;
-    private final Env env;
+    private final List<String> args;
 
     /**
      * create with context.
@@ -30,13 +30,11 @@ public class StoreRemoveMain implements MainCommand {
      *            the file system to use.
      * @param err
      *            the error stream.
-     * @param env
-     *            the invocation environment.
      */
-    public StoreRemoveMain(BlockStore store, FileSystem fs, Env env) {
+    public StoreRemoveMain(BlockStore store, FileSystem fs, List<String> args) {
         this.store = store;
         this.fs = fs;
-        this.env = env;
+        this.args = args;
     }
 
     /**
@@ -48,7 +46,7 @@ public class StoreRemoveMain implements MainCommand {
      */
     @Override
     public void run() throws IOException {
-        InputStream in = fs.openInputStream(env.getArgument(0));
+        InputStream in = fs.openInputStream(args.get(0));
         try {
             LineCursor line = new LineCursor(in);
             while (line.next()) {
