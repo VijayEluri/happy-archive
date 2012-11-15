@@ -36,6 +36,10 @@ public class IndexSearchMain implements MainCommand {
      *            the file system.
      * @param out
      *            the output.
+     * @param indexSearch
+     *            the index searching interface.
+     * @param args
+     *            the non-option command line arguments.
      */
     public IndexSearchMain(FileSystem fs, PrintStream out,
             IndexSearch indexSearch, List<String> args) {

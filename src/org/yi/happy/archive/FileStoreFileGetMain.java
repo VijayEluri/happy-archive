@@ -34,8 +34,10 @@ public class FileStoreFileGetMain implements MainCommand {
      *            the file system to use.
      * @param waitHandler
      *            what to do when it is time to wait for data.
-     * @param env
-     *            the invocation environment.
+     * @param needHandler
+     *            where to post the needed keys.
+     * @param args
+     *            the non-option command line arguments.
      */
     public FileStoreFileGetMain(BlockStore store, FileSystem fs,
             WaitHandler waitHandler, NeedHandler needHandler, List<String> args) {

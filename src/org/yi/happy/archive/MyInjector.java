@@ -62,10 +62,24 @@ public class MyInjector {
                 injectInput(scope), injectNeedHandler(scope));
     }
 
+    /**
+     * get a {@link NeedHandler}.
+     * 
+     * @param scope
+     *            the scope object.
+     * @return the object.
+     */
     public static NeedHandler injectNeedHandler(ApplicationScope scope) {
         return new NeedWriter(injectFileSystem(scope), injectNeedFile(scope));
     }
 
+    /**
+     * get the file name of the needed block list.
+     * 
+     * @param scope
+     *            the scope object.
+     * @return the file name.
+     */
     public static String injectNeedFile(ApplicationScope scope) {
         return scope.getNeedFile();
     }
@@ -370,10 +384,24 @@ public class MyInjector {
                 injectIndexSearch(scope));
     }
 
+    /**
+     * get a {@link IndexSearch}.
+     * 
+     * @param scope
+     *            the scope object.
+     * @return the object.
+     */
     public static IndexSearch injectIndexSearch(ApplicationScope scope) {
         return new IndexSearch(injectFileSystem(scope), injectIndexPath(scope));
     }
 
+    /**
+     * get the path to the index.
+     * 
+     * @param scope
+     *            the scope object.
+     * @return the path.
+     */
     public static String injectIndexPath(ApplicationScope scope) {
         return scope.getIndexPath();
     }

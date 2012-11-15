@@ -28,8 +28,8 @@ public class StoreRemoveMain implements MainCommand {
      *            the block store to use.
      * @param fs
      *            the file system to use.
-     * @param err
-     *            the error stream.
+     * @param args
+     *            the non-option command line arguments.
      */
     public StoreRemoveMain(BlockStore store, FileSystem fs, List<String> args) {
         this.store = store;

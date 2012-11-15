@@ -6,11 +6,22 @@ import java.util.List;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.key.LocatorKey;
 
+/**
+ * A need handler that posts the needed keys to a file.
+ */
 public class NeedWriter implements NeedHandler {
 
     private final String needFile;
     private final FileSystem fs;
 
+    /**
+     * Create the file posting need handler.
+     * 
+     * @param fs
+     *            the file system to use.
+     * @param needFile
+     *            the file name to post to.
+     */
     public NeedWriter(FileSystem fs, String needFile) {
         this.fs = fs;
         this.needFile = needFile;
