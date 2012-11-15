@@ -3,11 +3,11 @@ package org.yi.happy.archive;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.List;
 
 import org.yi.happy.annotate.MagicLiteral;
 import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.block.encoder.BlockEncoderFactory;
-import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesOutput;
 import org.yi.happy.archive.commandLine.UsesStore;
@@ -27,7 +27,7 @@ public class FileStoreTagPutMain implements MainCommand {
     private final FileSystem fs;
     private final PrintStream out;
     private final BlockStore store;
-    private final Env env;
+    private final List<String> args;
 
     /**
      * create with context.
@@ -38,15 +38,15 @@ public class FileStoreTagPutMain implements MainCommand {
      *            the file system.
      * @param out
      *            the output stream.
-     * @param env
-     *            the invocation environment.
+     * @param args
+     *            the non-option arguments.
      */
     public FileStoreTagPutMain(BlockStore store, FileSystem fs,
-            PrintStream out, Env env) {
+            PrintStream out, List<String> args) {
         this.store = store;
         this.fs = fs;
         this.out = out;
-        this.env = env;
+        this.args = args;
     }
 
     /**
@@ -70,7 +70,7 @@ public class FileStoreTagPutMain implements MainCommand {
 
             TagOutputStream out = new TagOutputStream(this.out);
 
-            for (String arg : env.getArguments()) {
+            for (String arg : args) {
                 if (fs.isFile(arg)) {
                     KeyOutputStream o1 = new KeyOutputStream(s);
                     DigestOutputStream o2 = new DigestOutputStream(

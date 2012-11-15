@@ -5,11 +5,10 @@ import static org.junit.Assert.assertEquals;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
-import org.yi.happy.archive.commandLine.Env;
-import org.yi.happy.archive.commandLine.EnvBuilder;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.tag.Tag;
@@ -34,9 +33,8 @@ public class FileStoreTagPutMainTest {
         ByteArrayOutputStream out0 = new ByteArrayOutputStream();
         PrintStream out = new PrintStream(out0);
 
-        Env env = new EnvBuilder().withStore("store").addArgument("test.txt")
-                .create();
-        new FileStoreTagPutMain(store, fs, out, env).run();
+        List<String> args = Arrays.asList("test.txt");
+        new FileStoreTagPutMain(store, fs, out, args).run();
 
         out.flush();
 
@@ -63,9 +61,8 @@ public class FileStoreTagPutMainTest {
         ByteArrayOutputStream out0 = new ByteArrayOutputStream();
         PrintStream out = new PrintStream(out0);
 
-        Env env = new EnvBuilder().withStore("store").addArgument("test.txt")
-                .create();
-        new FileStoreTagPutMain(store, fs, out, env).run();
+        List<String> args = Arrays.asList("test.txt");
+        new FileStoreTagPutMain(store, fs, out, args).run();
 
         out.flush();
 

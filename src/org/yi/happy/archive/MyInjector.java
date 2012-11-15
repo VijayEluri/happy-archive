@@ -24,7 +24,7 @@ public class MyInjector {
      */
     public static MainCommand injectFileStoreTagPutMain(ApplicationScope scope) {
         return new FileStoreTagPutMain(injectBlockStore(scope),
-                injectFileSystem(scope), injectOutput(scope), injectEnv(scope));
+                injectFileSystem(scope), injectOutput(scope), injectArgs(scope));
     }
 
     /**
