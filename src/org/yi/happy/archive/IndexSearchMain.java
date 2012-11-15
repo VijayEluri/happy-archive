@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.IndexSearch.SearchResult;
-import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesIndex;
 import org.yi.happy.archive.commandLine.UsesOutput;
@@ -26,7 +26,8 @@ import org.yi.happy.archive.key.LocatorKeyParse;
 public class IndexSearchMain implements MainCommand {
     private final FileSystem fs;
     private final PrintStream out;
-    private final Env env;
+    private final IndexSearch indexSearch;
+    private final List<String> args;
 
     /**
      * create with context.
@@ -35,13 +36,13 @@ public class IndexSearchMain implements MainCommand {
      *            the file system.
      * @param out
      *            the output.
-     * @param env
-     *            the invocation environment
      */
-    public IndexSearchMain(FileSystem fs, PrintStream out, Env env) {
+    public IndexSearchMain(FileSystem fs, PrintStream out,
+            IndexSearch indexSearch, List<String> args) {
         this.fs = fs;
         this.out = out;
-        this.env = env;
+        this.indexSearch = indexSearch;
+        this.args = args;
     }
 
     /**
@@ -57,10 +58,9 @@ public class IndexSearchMain implements MainCommand {
     @SmellsMessy
     public void run() throws IOException, InterruptedException,
             ExecutionException {
-        Set<LocatorKey> want = loadRequestSet(env.getArgument(0));
+        Set<LocatorKey> want = loadRequestSet(args.get(0));
 
-        IndexSearch search = new IndexSearch(fs, env.getIndex());
-        search.search(want, new IndexSearch.Handler() {
+        indexSearch.search(want, new IndexSearch.Handler() {
             @Override
             public void gotResult(SearchResult result) {
                 out.println(result);

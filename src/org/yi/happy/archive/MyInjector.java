@@ -160,7 +160,8 @@ public class MyInjector {
      */
     public static MainCommand injectIndexSearchMain(ApplicationScope scope) {
         return new IndexSearchMain(injectFileSystem(scope),
-                injectOutput(scope), injectEnv(scope));
+                injectOutput(scope), injectIndexSearch(scope),
+                injectArgs(scope));
     }
 
     /**

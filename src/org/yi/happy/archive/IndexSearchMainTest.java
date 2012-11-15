@@ -3,12 +3,12 @@ package org.yi.happy.archive;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import org.junit.Test;
 import org.yi.happy.annotate.NeedFailureTest;
-import org.yi.happy.archive.commandLine.Env;
-import org.yi.happy.archive.commandLine.EnvBuilder;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.test_data.TestData;
@@ -37,9 +37,9 @@ public class IndexSearchMainTest {
         fs.save("request", ByteString.toUtf8(mapKey + "\n"));
         CapturePrintStream out = CapturePrintStream.create();
 
-        Env env = new EnvBuilder().withIndex("index").addArgument("request")
-                .create();
-        new IndexSearchMain(fs, out, env).run();
+        IndexSearch indexSearch = new IndexSearch(fs, "index");
+        List<String> args = Arrays.asList("request");
+        new IndexSearchMain(fs, out, indexSearch, args).run();
 
         String o = out.toString();
         assertEquals("onsite\t01\t00.dat\t" + mapKey + "\n", o);
@@ -66,9 +66,9 @@ public class IndexSearchMainTest {
         fs.save("request", ByteString.toUtf8(mapKey + "\n"));
         CapturePrintStream out = CapturePrintStream.create();
 
-        Env env = new EnvBuilder().withIndex("index").addArgument("request")
-                .create();
-        new IndexSearchMain(fs, out, env).run();
+        IndexSearch indexSearch = new IndexSearch(fs, "index");
+        List<String> args = Arrays.asList("request");
+        new IndexSearchMain(fs, out, indexSearch, args).run();
 
         String o = out.toString();
         assertEquals("offsite\t02\t00.dat\t" + mapKey + "\n"
@@ -97,9 +97,9 @@ public class IndexSearchMainTest {
         fs.save("request", ByteString.toUtf8(mapKey + "\n" + partKey + "\n"));
         CapturePrintStream out = CapturePrintStream.create();
 
-        Env env = new EnvBuilder().withIndex("index").addArgument("request")
-                .create();
-        new IndexSearchMain(fs, out, env).run();
+        IndexSearch indexSearch = new IndexSearch(fs, "index");
+        List<String> args = Arrays.asList("request");
+        new IndexSearchMain(fs, out, indexSearch, args).run();
 
         String o = out.toString();
         assertEquals("offsite\t02\t00.dat\t" + mapKey + "\n"
@@ -130,9 +130,9 @@ public class IndexSearchMainTest {
         fs.save("request", ByteString.toUtf8(mapKey + "\n" + partKey + "\n"));
         CapturePrintStream out = CapturePrintStream.create();
 
-        Env env = new EnvBuilder().withIndex("index").addArgument("request")
-                .create();
-        new IndexSearchMain(fs, out, env).run();
+        IndexSearch indexSearch = new IndexSearch(fs, "index");
+        List<String> args = Arrays.asList("request");
+        new IndexSearchMain(fs, out, indexSearch, args).run();
 
         String o = out.toString();
         assertEquals("offsite\t02\t00.dat\t" + mapKey + "\n"
@@ -158,9 +158,9 @@ public class IndexSearchMainTest {
         fs.save("request", ByteString.toUtf8(mapKey + "\n"));
         CapturePrintStream out = CapturePrintStream.create();
 
-        Env env = new EnvBuilder().withIndex("index").addArgument("request")
-                .create();
-        new IndexSearchMain(fs, out, env).run();
+        IndexSearch indexSearch = new IndexSearch(fs, "index");
+        List<String> args = Arrays.asList("request");
+        new IndexSearchMain(fs, out, indexSearch, args).run();
 
         String o = out.toString();
         assertEquals("onsite\t01\t00.dat\t" + mapKey + "\n", o);
