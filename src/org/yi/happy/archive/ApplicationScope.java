@@ -58,4 +58,8 @@ public class ApplicationScope {
     public String getNeedFile() {
         return env.getNeed();
     }
+
+    public String getIndexPath() {
+        return env.getIndex();
+    }
 }

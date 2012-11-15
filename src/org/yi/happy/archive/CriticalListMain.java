@@ -11,11 +11,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.yi.happy.annotate.DuplicatedLogic;
-import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.commandLine.UsesIndex;
 import org.yi.happy.archive.commandLine.UsesOutput;
 import org.yi.happy.archive.commandLine.UsesStore;
-import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.key.LocatorKey;
 
 /**
@@ -27,8 +25,7 @@ import org.yi.happy.archive.key.LocatorKey;
 @DuplicatedLogic("LocalCandidateListMain")
 public class CriticalListMain implements MainCommand {
     private final BlockStore store;
-    private final Env env;
-    private final FileSystem fs;
+    private final IndexSearch indexSearch;
 
     /**
      * Set up the command to make a candidate list from a local store and local
@@ -36,13 +33,12 @@ public class CriticalListMain implements MainCommand {
      * 
      * @param store
      *            the store.
-     * @param env
-     *            the invocation environment.
+     * @param indexSearch
+     *            the index searching interface.
      */
-    public CriticalListMain(BlockStore store, FileSystem fs, Env env) {
+    public CriticalListMain(BlockStore store, IndexSearch indexSearch) {
         this.store = store;
-        this.fs = fs;
-        this.env = env;
+        this.indexSearch = indexSearch;
     }
 
     /**
@@ -54,10 +50,7 @@ public class CriticalListMain implements MainCommand {
      * @throws InterruptedException
      */
     @Override
-    public void run() throws IOException,
-            InterruptedException {
-        String indexBase = env.getIndex();
-
+    public void run() throws IOException, InterruptedException {
         /*
          * load list of keys in store.
          */
@@ -73,8 +66,7 @@ public class CriticalListMain implements MainCommand {
          * find keys in index.
          */
         final Set<LocatorKey> exists = new HashSet<LocatorKey>();
-        IndexSearch search = new IndexSearch(fs, indexBase);
-        search.search(want, new IndexSearch.Handler() {
+        indexSearch.search(want, new IndexSearch.Handler() {
             @Override
             public void gotResult(IndexSearch.SearchResult result) {
                 exists.add(result.getKey());

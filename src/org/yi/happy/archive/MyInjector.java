@@ -366,7 +366,15 @@ public class MyInjector {
      */
     public static MainCommand injectCriticalListMain(ApplicationScope scope) {
         return new CriticalListMain(injectBlockStore(scope),
-                injectFileSystem(scope), injectEnv(scope));
+                injectIndexSearch(scope));
+    }
+
+    public static IndexSearch injectIndexSearch(ApplicationScope scope) {
+        return new IndexSearch(injectFileSystem(scope), injectIndexPath(scope));
+    }
+
+    public static String injectIndexPath(ApplicationScope scope) {
+        return scope.getIndexPath();
     }
 
     /**
