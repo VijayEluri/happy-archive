@@ -4,11 +4,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Test;
 import org.yi.happy.annotate.NeedFailureTest;
-import org.yi.happy.archive.commandLine.Env;
-import org.yi.happy.archive.commandLine.EnvBuilder;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.crypto.Digests;
 import org.yi.happy.archive.file_system.FakeFileSystem;
@@ -35,8 +35,8 @@ public class IndexVolumeMainTest {
 
         CapturePrintStream out = CapturePrintStream.create();
 
-        Env env = new EnvBuilder().addArgument("image").create();
-        new IndexVolumeMain(fs, out, null, env).run();
+        List<String> args = Arrays.asList("image");
+        new IndexVolumeMain(fs, out, null, args).run();
 
         StringBuilder sb = new StringBuilder();
         sb.append("00.dat\tplain\t");
@@ -76,8 +76,8 @@ public class IndexVolumeMainTest {
         CapturePrintStream out = CapturePrintStream.create();
         CapturePrintStream err = CapturePrintStream.create();
 
-        Env env = new EnvBuilder().addArgument("image").create();
-        new IndexVolumeMain(fs, out, err, env).run();
+        List<String> args = Arrays.asList("image");
+        new IndexVolumeMain(fs, out, err, args).run();
 
         StringBuilder sb = new StringBuilder();
         sb.append("01.dat\tplain\t");

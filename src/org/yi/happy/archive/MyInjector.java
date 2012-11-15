@@ -172,7 +172,7 @@ public class MyInjector {
      */
     public static MainCommand injectIndexVolumeMain(ApplicationScope scope) {
         return new IndexVolumeMain(injectFileSystem(scope),
-                injectOutput(scope), injectError(scope), injectEnv(scope));
+                injectOutput(scope), injectError(scope), injectArgs(scope));
     }
 
     /**

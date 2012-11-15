@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
-import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesOutput;
 import org.yi.happy.archive.crypto.DigestFactory;
@@ -26,7 +25,7 @@ public class IndexVolumeMain implements MainCommand {
     private final PrintStream out;
     private final DigestProvider digest;
     private final PrintStream err;
-    private final Env env;
+    private final List<String> args;
 
     /**
      * create with a context.
@@ -37,15 +36,15 @@ public class IndexVolumeMain implements MainCommand {
      *            the output stream.
      * @param err
      *            the error stream.
-     * @param env
-     *            the invocation environment
+     * @param args
+     *            the non-option arguments.
      */
     public IndexVolumeMain(FileSystem fs, PrintStream out, PrintStream err,
-            Env env) {
+            List<String> args) {
         this.fs = fs;
         this.out = out;
         this.err = err;
-        this.env = env;
+        this.args = args;
 
         digest = DigestFactory.getProvider("sha-256");
     }
@@ -60,10 +59,10 @@ public class IndexVolumeMain implements MainCommand {
     @Override
     public void run() throws IOException {
         try {
-            List<String> names = fs.list(env.getArgument(0));
+            List<String> names = fs.list(args.get(0));
             Collections.sort(names);
             for (String name : names) {
-                process(fs.join(env.getArgument(0), name), name);
+                process(fs.join(args.get(0), name), name);
             }
         } finally {
             out.flush();
