@@ -124,7 +124,7 @@ public class MyInjector {
     public static MainCommand injectLocalCandidateListMain(
             ApplicationScope scope) {
         return new LocalCandidateListMain(injectBlockStore(scope),
-                injectEnv(scope));
+                injectFileSystem(scope), injectEnv(scope));
     }
 
     /**
@@ -365,7 +365,8 @@ public class MyInjector {
      * @return the object.
      */
     public static MainCommand injectCriticalListMain(ApplicationScope scope) {
-        return new CriticalListMain(injectBlockStore(scope), injectEnv(scope));
+        return new CriticalListMain(injectBlockStore(scope),
+                injectFileSystem(scope), injectEnv(scope));
     }
 
     /**

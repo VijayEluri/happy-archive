@@ -199,5 +199,21 @@ public class IndexSearch {
             return volumeSet + "\t" + volumeName + "\t" + fileName + "\t" + key;
         }
 
+        public String getVolumeSet() {
+            return volumeSet;
+        }
+
+        public String getVolumeName() {
+            return volumeName;
+        }
+
+        public String getFileName() {
+            return fileName;
+        }
+
+        public LocatorKey getKey() {
+            return key;
+        }
+
     }
 }
