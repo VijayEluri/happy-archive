@@ -232,7 +232,7 @@ public class MyInjector {
      */
     public static MainCommand injectVerifyMain(ApplicationScope scope) {
         return new VerifyMain(injectFileSystem(scope), injectOutput(scope),
-                injectEnv(scope));
+                injectArgs(scope));
     }
 
     /**

@@ -1,12 +1,12 @@
 package org.yi.happy.archive;
 
 import java.io.PrintStream;
+import java.util.List;
 
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.BlockParse;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
-import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesOutput;
 import org.yi.happy.archive.file_system.FileSystem;
@@ -20,7 +20,7 @@ public class VerifyMain implements MainCommand {
 
     private final FileSystem fileSystem;
     private final PrintStream out;
-    private final Env env;
+    private final List<String> args;
 
     /**
      * create, injecting the dependencies.
@@ -29,13 +29,13 @@ public class VerifyMain implements MainCommand {
      *            the file system to use.
      * @param out
      *            where to send the output.
-     * @param env
-     *            the invocation environment.
+     * @param args
+     *            the non-option arguments on the command line.
      */
-    public VerifyMain(FileSystem fileSystem, PrintStream out, Env env) {
+    public VerifyMain(FileSystem fileSystem, PrintStream out, List<String> args) {
         this.fileSystem = fileSystem;
         this.out = out;
-        this.env = env;
+        this.args = args;
     }
 
     /**
@@ -47,7 +47,7 @@ public class VerifyMain implements MainCommand {
      */
     @Override
     public void run() throws Exception {
-        for (String arg : env.getArguments()) {
+        for (String arg : args) {
             String line;
 
             try {
