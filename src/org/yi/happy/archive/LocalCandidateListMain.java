@@ -9,15 +9,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesIndex;
 import org.yi.happy.archive.commandLine.UsesOutput;
 import org.yi.happy.archive.commandLine.UsesStore;
-import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.key.LocatorKey;
 
 /**
@@ -29,8 +25,8 @@ import org.yi.happy.archive.key.LocatorKey;
 @UsesOutput("key-list")
 public class LocalCandidateListMain implements MainCommand {
     private final BlockStore store;
-    private final Env env;
-    private final FileSystem fs;
+    private final List<String> args;
+    private final IndexSearch indexSearch;
 
     /**
      * Set up the command to make a candidate list from a local store and local
@@ -38,13 +34,16 @@ public class LocalCandidateListMain implements MainCommand {
      * 
      * @param store
      *            the store.
-     * @param env
-     *            the invocation environment.
+     * @param indexSearch
+     *            the index search interface.
+     * @param args
+     *            the non-option arguments.
      */
-    public LocalCandidateListMain(BlockStore store, FileSystem fs, Env env) {
+    public LocalCandidateListMain(BlockStore store, IndexSearch indexSearch,
+            List<String> args) {
         this.store = store;
-        this.fs = fs;
-        this.env = env;
+        this.indexSearch = indexSearch;
+        this.args = args;
     }
 
     /**
@@ -56,11 +55,8 @@ public class LocalCandidateListMain implements MainCommand {
      * @throws InterruptedException
      */
     @Override
-    public void run() throws IOException,
-            InterruptedException {
-        String indexBase = env.getIndex();
-
-        final String volumeSet = env.getArgument(0);
+    public void run() throws IOException, InterruptedException {
+        final String volumeSet = args.get(0);
 
         /*
          * load list of keys in store.
@@ -76,13 +72,9 @@ public class LocalCandidateListMain implements MainCommand {
         /*
          * find keys in index.
          */
-        ExecutorService exec = Executors.newFixedThreadPool(2);
-
         final Set<LocatorKey> have = new HashSet<LocatorKey>();
         final Set<LocatorKey> exists = new HashSet<LocatorKey>();
-        IndexSearch search = new IndexSearch(fs, indexBase);
-        search.search(want, new IndexSearch.Handler() {
-            
+        indexSearch.search(want, new IndexSearch.Handler() {
             @Override
             public void gotResult(IndexSearch.SearchResult result) {
                 exists.add(result.getKey());
@@ -90,13 +82,13 @@ public class LocalCandidateListMain implements MainCommand {
                     have.add(result.getKey());
                 }
             }
-            
+
             @Override
             public void gotException(Throwable cause) {
                 System.err.println(cause.getMessage());
             }
         });
-        
+
         /*
          * calculate candidates: first the keys that do not exist in the index,
          * then the keys that do exist but not in this set.
