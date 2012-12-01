@@ -2,13 +2,51 @@ package org.yi.happy.archive.block;
 
 import java.util.Map;
 
+import org.yi.happy.annotate.ExternalValue;
 import org.yi.happy.archive.Bytes;
 
 /**
- * a data block is a set of simple headers and a body. The upper size of a block
- * is just over 1 MiB.
+ * a data block is a set of simple headers and a body, with a very simple
+ * format. The upper size of any block in use is just over 1 MiB.
  */
 public interface Block {
+    /**
+     * The first byte of the end of line sequence.
+     */
+    @ExternalValue
+    public static final byte CR = '\r';
+    /**
+     * The second byte of the end of line sequence.
+     */
+    @ExternalValue
+    public static final byte LF = '\n';
+    /**
+     * The first byte of the header separator sequence.
+     */
+    @ExternalValue
+    public static final byte COLON = ':';
+    /**
+     * The second byte of the header separator sequence.
+     */
+    @ExternalValue
+    public static final byte SPACE = ' ';
+
+    /**
+     * The terminator of a header and the separator between the headers and body
+     * (CR LF). Parsers should be flexible and accept any combination of the
+     * bytes in this sequence (either, both, reverse).
+     */
+    @ExternalValue
+    public static final Bytes ENDL = new Bytes(CR, LF);
+
+    /**
+     * The separator of a header name and the value of the header (COLON SPACE).
+     * Parsers should be flexible and accept the first byte by itself in
+     * addition to the full sequence.
+     */
+    @ExternalValue
+    public static final Bytes SEPARATOR = new Bytes(COLON, SPACE);
+
     /**
      * get the meta data (headers).
      * 

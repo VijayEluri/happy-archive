@@ -2,7 +2,6 @@ package org.yi.happy.archive.block;
 
 import java.util.Map;
 
-import org.yi.happy.annotate.MagicLiteral;
 import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.Bytes;
 
@@ -10,9 +9,6 @@ import org.yi.happy.archive.Bytes;
  * The part that is common for all the block types.
  */
 public abstract class AbstractBlock implements Block {
-    private byte[] ENDL = new byte[] { '\r', '\n' };
-    private byte[] SEPARATOR = new byte[] { ':', ' ' };
-
     /**
      * get the block representation as bytes, assuming all the meta entries are
      * valid and the body is not null.
@@ -37,14 +33,14 @@ public abstract class AbstractBlock implements Block {
         for (Map.Entry<String, String> j : m.entrySet()) {
             p[i] = ByteString.toUtf8(j.getKey());
             n += p[i].length;
-            n += SEPARATOR.length;
+            n += SEPARATOR.getSize();
             i++;
             p[i] = ByteString.toUtf8(j.getValue());
             n += p[i].length;
-            n += ENDL.length;
+            n += ENDL.getSize();
             i++;
         }
-        n += ENDL.length;
+        n += ENDL.getSize();
         n += b.getSize();
 
         /*
@@ -55,16 +51,16 @@ public abstract class AbstractBlock implements Block {
         for (i = 0; i < p.length; i += 2) {
             System.arraycopy(p[i], 0, out, n, p[i].length);
             n += p[i].length;
-            System.arraycopy(SEPARATOR, 0, out, n, SEPARATOR.length);
-            n += SEPARATOR.length;
+            SEPARATOR.getBytes(out, n);
+            n += SEPARATOR.getSize();
             System.arraycopy(p[i + 1], 0, out, n, p[i + 1].length);
             n += p[i + 1].length;
-            System.arraycopy(ENDL, 0, out, n, ENDL.length);
-            n += ENDL.length;
+            ENDL.getBytes(out, n);
+            n += ENDL.getSize();
         }
-        System.arraycopy(ENDL, 0, out, n, ENDL.length);
-        n += ENDL.length;
-        b.getBytes(0, out, n, b.getSize());
+        ENDL.getBytes(out, n);
+        n += ENDL.getSize();
+        b.getBytes(out, n);
         return out;
     }
 
@@ -112,19 +108,18 @@ public abstract class AbstractBlock implements Block {
      * @throws NullPointerException
      *             if name or value are null.
      */
-    @MagicLiteral
     protected void checkHeader(String name, String value) {
         for (int i = 0; i < name.length(); i++) {
             char c = name.charAt(i);
-            if (c == ':' || c == '\r' || c == '\n') {
+            if (c == COLON || c == CR || c == LF) {
                 throw new IllegalArgumentException(
-                        "name can not have ':' or newline");
+                        "name can not have colon or newline");
             }
         }
 
         for (int i = 0; i < value.length(); i++) {
             char c = value.charAt(i);
-            if (c == '\r' || c == '\n') {
+            if (c == CR || c == LF) {
                 throw new IllegalArgumentException("value can not have newline");
             }
         }

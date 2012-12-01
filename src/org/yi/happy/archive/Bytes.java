@@ -19,7 +19,7 @@ public final class Bytes implements Comparable<Bytes> {
      * @throws NullPointerException
      *             if data is null.
      */
-    public Bytes(byte... data) {
+    public Bytes(byte[] data) {
         this.data = data.clone();
     }
 
@@ -131,6 +131,18 @@ public final class Bytes implements Comparable<Bytes> {
      */
     public final void getBytes(int pos, byte[] dest, int destPos, int length) {
         System.arraycopy(data, pos, dest, destPos, length);
+    }
+
+    /**
+     * Copy all the bytes from this value.
+     * 
+     * @param dest
+     *            the destination byte array.
+     * @param destPos
+     *            the position in the destination byte array to copy to.
+     */
+    public final void getBytes(byte[] dest, int destPos) {
+        System.arraycopy(data, 0, dest, destPos, data.length);
     }
 
     /**
