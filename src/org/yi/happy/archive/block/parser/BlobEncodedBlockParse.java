@@ -1,7 +1,5 @@
 package org.yi.happy.archive.block.parser;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,16 +22,10 @@ public class BlobEncodedBlockParse {
     /**
      * The set of meta-data field names.
      */
-    private static final Set<String> META;
-    static {
-        Set<String> m = new HashSet<String>();
-        m.add(BlobEncodedBlock.KEY_TYPE_META);
-        m.add(BlobEncodedBlock.KEY_META);
-        m.add(BlobEncodedBlock.DIGEST_META);
-        m.add(BlobEncodedBlock.CIPHER_META);
-        m.add(BlobEncodedBlock.SIZE_META);
-        META = Collections.unmodifiableSet(m);
-    }
+    private static final Set<String> META = new SetBuilder<String>(
+            BlobEncodedBlock.KEY_TYPE_META, BlobEncodedBlock.KEY_META,
+            BlobEncodedBlock.DIGEST_META, BlobEncodedBlock.CIPHER_META,
+            BlobEncodedBlock.SIZE_META).createImmutable();
 
     /**
      * Parse a BlobEncodedBlock.

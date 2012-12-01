@@ -29,6 +29,7 @@ public class SplitReader {
     public SplitReader(FullKey fullKey, RetrieveBlock storage) {
         this.pending = new ArrayList<Pending>();
         this.pending.add(new Pending(fullKey, 0l));
+
         this.storage = storage;
     }
 
