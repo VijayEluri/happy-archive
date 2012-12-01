@@ -11,22 +11,25 @@ import org.yi.happy.archive.Bytes;
  */
 public interface Block {
     /**
-     * The first byte of the end of line sequence.
+     * The first byte of the end of line sequence ('\r').
      */
     @ExternalValue
     public static final byte CR = '\r';
+
     /**
-     * The second byte of the end of line sequence.
+     * The second byte of the end of line sequence ('\n').
      */
     @ExternalValue
     public static final byte LF = '\n';
+
     /**
-     * The first byte of the header separator sequence.
+     * The first byte of the header separator sequence (':').
      */
     @ExternalValue
     public static final byte COLON = ':';
+
     /**
-     * The second byte of the header separator sequence.
+     * The second byte of the header separator sequence (' ').
      */
     @ExternalValue
     public static final byte SPACE = ' ';
