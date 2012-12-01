@@ -3,11 +3,10 @@ package org.yi.happy.archive.block.parser;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.yi.happy.annotate.MagicLiteral;
 import org.yi.happy.annotate.SmellsProcedural;
-import org.yi.happy.archive.ByteParse;
 import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.Bytes;
+import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.GenericBlock;
 
 /**
@@ -35,7 +34,7 @@ public class GenericBlockParse {
          * parse the headers
          */
         while (true) {
-            Range endOfLine = ByteParse.findNewLine(bytes, rest);
+            Range endOfLine = findNewLine(bytes, rest);
             Range line = rest.before(endOfLine);
             rest = rest.after(endOfLine);
 
@@ -115,11 +114,10 @@ public class GenericBlockParse {
      *         found. Before this range is the key, after this range is the
      *         value.
      */
-    @MagicLiteral
     private Range findDivider(byte[] bytes, Range line) {
         for (int i = line.getOffset(); i < line.getEnd(); i++) {
-            if (bytes[i] == ':') {
-                if (i + 1 < line.getEnd() && bytes[i + 1] == ' ') {
+            if (bytes[i] == Block.COLON) {
+                if (i + 1 < line.getEnd() && bytes[i + 1] == Block.SPACE) {
                     return new Range(i, 2);
                 }
                 return new Range(i, 1);
@@ -127,5 +125,35 @@ public class GenericBlockParse {
         }
 
         return new Range(line.getEnd(), 0);
+    }
+
+    /**
+     * find the first line break in the range.
+     * 
+     * @param bytes
+     *            the bytes.
+     * @param range
+     *            the range to search in.
+     * @return range that is the line break, or the end of the range if none
+     *         found. Before this range is the first line, after this range is
+     *         the start of the next line.
+     */
+    public static Range findNewLine(byte[] bytes, Range range) {
+        for (int i = range.getOffset(); i < range.getEnd(); i++) {
+            if (bytes[i] == Block.CR) {
+                if (i + 1 < range.getEnd() && bytes[i + 1] == Block.LF) {
+                    return new Range(i, 2);
+                }
+                return new Range(i, 1);
+            }
+            if (bytes[i] == Block.LF) {
+                if (i + 1 < range.getEnd() && bytes[i + 1] == Block.CR) {
+                    return new Range(i, 2);
+                }
+                return new Range(i, 1);
+            }
+        }
+
+        return new Range(range.getEnd(), 0);
     }
 }
