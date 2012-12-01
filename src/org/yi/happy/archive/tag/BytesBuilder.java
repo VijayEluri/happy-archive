@@ -12,6 +12,7 @@ import org.yi.happy.archive.Bytes;
  */
 public class BytesBuilder {
     private final List<Bytes> parts = new ArrayList<Bytes>();
+    private int size = 0;
 
     /**
      * Start blank.
@@ -27,6 +28,7 @@ public class BytesBuilder {
      */
     public BytesBuilder(Bytes bytes) {
         parts.add(bytes);
+        size += bytes.getSize();
     }
 
     /**
@@ -122,10 +124,6 @@ public class BytesBuilder {
      * @return the size of the builder.
      */
     public int getSize() {
-        int size = 0;
-        for (Bytes part : parts) {
-            size += part.getSize();
-        }
         return size;
     }
 
@@ -188,6 +186,8 @@ public class BytesBuilder {
      */
     public BytesBuilder add(Bytes data) {
         parts.add(data);
+        size += data.getSize();
+
         return this;
     }
 }
