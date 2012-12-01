@@ -1,5 +1,6 @@
 package org.yi.happy.archive;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,6 +11,11 @@ import java.io.OutputStream;
  * {@link OutputStream}.
  */
 public class Streams {
+    /**
+     * The default buffer size used here. This is the same buffer size used by
+     * {@link BufferedInputStream}.
+     */
+    public static int BUFFER_SIZE = 8192;
 
     /**
      * copy the the entire input stream to the output stream.
@@ -42,7 +48,7 @@ public class Streams {
     public static void copy(InputStream in, OutputStream out, byte[] buff)
             throws IOException {
         if (buff == null) {
-            buff = new byte[8192];
+            buff = new byte[BUFFER_SIZE];
         }
 
         while (true) {
