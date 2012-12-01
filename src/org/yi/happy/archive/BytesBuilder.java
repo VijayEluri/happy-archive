@@ -1,11 +1,9 @@
-package org.yi.happy.archive.tag;
+package org.yi.happy.archive;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.yi.happy.archive.ByteString;
-import org.yi.happy.archive.Bytes;
 
 /**
  * A builder for making Bytes objects and byte arrays.

@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.Iterator;
 
 import org.junit.Test;
+import org.yi.happy.archive.BytesBuilder;
 
 /**
  * Tests for {@link TagStreamIterator}.

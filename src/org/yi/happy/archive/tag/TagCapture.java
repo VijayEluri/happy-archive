@@ -1,6 +1,7 @@
 package org.yi.happy.archive.tag;
 
 import org.yi.happy.archive.ByteString;
+import org.yi.happy.archive.BytesBuilder;
 
 /**
  * Capture tag objects out of a marked binary stream. Expects ( tag ( field (

@@ -1,9 +1,8 @@
-package org.yi.happy.archive.tag;
+package org.yi.happy.archive;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import org.yi.happy.archive.Bytes;
 
 /**
  * Tests for {@link BytesBuilder}.
