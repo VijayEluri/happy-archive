@@ -8,7 +8,7 @@ package org.yi.happy.archive.tag;
  * line unless there is something on it. Between pairs of newlines there are
  * empty lines marked.
  */
-public class LineHandler implements BinaryHandler {
+public class LineHandler extends AbstractStateMarkFilter {
     /**
      * The line label.
      */
@@ -24,13 +24,191 @@ public class LineHandler implements BinaryHandler {
      */
     public static final byte LF = '\n';
 
-    private static final int OUTSIDE = 0;
-    private static final int INSIDE = 1;
-    private static final int NL_CR = 2;
-    private static final int NL_LF = 3;
-    private int state = OUTSIDE;
+    /**
+     * outside of a line and a newline sequence, right before the start of a
+     * line.
+     */
+    private final State OUTSIDE = new State() {
+        @Override
+        public void startStream() {
+            sendStartStream();
+        }
 
-    private final BinaryHandler handler;
+        @Override
+        public void startRegion(String name) {
+            sendStartRegion(name);
+        }
+
+        @Override
+        public void data(byte b) {
+            if (b == CR) {
+                sendStartRegion(LINE);
+                sendEndRegion(LINE);
+                setState(NL_CR);
+                send();
+                return;
+            }
+
+            if (b == LF) {
+                sendStartRegion(LINE);
+                sendEndRegion(LINE);
+                setState(NL_LF);
+                send();
+                return;
+            }
+
+            sendStartRegion(LINE);
+            setState(INSIDE);
+            send();
+            return;
+        }
+
+        @Override
+        public void endRegion(String name) {
+            sendEndRegion(name);
+        }
+
+        @Override
+        public void endStream() {
+            sendEndStream();
+        }
+    };
+
+    /**
+     * inside a line.
+     */
+    private final State INSIDE = new State() {
+        @Override
+        public void startRegion(String name) {
+            sendEndRegion(LINE);
+            sendStartRegion(name);
+            setState(OUTSIDE);
+        }
+
+        @Override
+        public void data(byte b) {
+            if (b == CR) {
+                sendEndRegion(LINE);
+                send();
+                setState(NL_CR);
+                return;
+            }
+
+            if (b == LF) {
+                sendEndRegion(LINE);
+                send();
+                setState(NL_LF);
+                return;
+            }
+
+            send();
+            return;
+        }
+
+        @Override
+        public void endRegion(String name) {
+            sendEndRegion(LINE);
+            sendEndRegion(name);
+            setState(OUTSIDE);
+        }
+
+        @Override
+        public void endStream() {
+            sendEndRegion(LINE);
+            sendEndStream();
+            setState(OUTSIDE);
+        }
+    };
+
+    /**
+     * after the first carrier-return of a newline sequence.
+     */
+    private final State NL_CR = new State() {
+        @Override
+        public void startRegion(String name) {
+            sendStartRegion(name);
+            setState(OUTSIDE);
+        }
+
+        @Override
+        public void data(byte b) {
+            if (b == CR) {
+                sendStartRegion(LINE);
+                sendEndRegion(LINE);
+                send();
+                setState(NL_CR);
+                return;
+            }
+
+            if (b == LF) {
+                send();
+                setState(OUTSIDE);
+                return;
+            }
+
+            sendStartRegion(LINE);
+            send();
+            setState(INSIDE);
+            return;
+        }
+
+        @Override
+        public void endRegion(String name) {
+            sendEndRegion(name);
+            setState(OUTSIDE);
+        }
+
+        @Override
+        public void endStream() {
+            sendEndStream();
+            setState(OUTSIDE);
+        }
+    };
+
+    /**
+     * after the first line-feed of a newline sequence.
+     */
+    private final State NL_LF = new State() {
+        @Override
+        public void startRegion(String name) {
+            sendStartRegion(name);
+            setState(OUTSIDE);
+        }
+
+        @Override
+        public void data(byte b) {
+            if (b == CR) {
+                send();
+                setState(OUTSIDE);
+                return;
+            }
+
+            if (b == LF) {
+                sendStartRegion(LINE);
+                sendEndRegion(LINE);
+                send();
+                setState(NL_LF);
+                return;
+            }
+
+            sendStartRegion(LINE);
+            send();
+            setState(INSIDE);
+            return;
+        }
+
+        @Override
+        public void endRegion(String name) {
+            sendEndRegion(name);
+            setState(OUTSIDE);
+        }
+
+        @Override
+        public void endStream() {
+            sendEndStream();
+            setState(OUTSIDE);
+        }
+    };
 
     /**
      * set up {@link LineHandler} with a handler to accept the events.
@@ -39,150 +217,7 @@ public class LineHandler implements BinaryHandler {
      *            the handler that accepts the events.
      */
     public LineHandler(BinaryHandler handler) {
-        this.handler = handler;
+        super(handler);
+        setState(OUTSIDE);
     }
-
-    @Override
-    public void startStream() {
-        state = OUTSIDE;
-
-        handler.startStream();
-    }
-
-    @Override
-    public void startRegion(String name) {
-        if (state == INSIDE) {
-            handler.endRegion(LINE);
-            state = OUTSIDE;
-        }
-
-        else if (state == NL_CR || state == NL_LF) {
-            state = OUTSIDE;
-        }
-
-        handler.startRegion(name);
-    }
-
-    private int flush(byte[] buff, int start, int end) {
-        if (start == end) {
-            return end;
-        }
-
-        handler.bytes(buff, start, end - start);
-        return end;
-    }
-
-    @Override
-    public void bytes(byte[] buff, int offset, int length) {
-        int s = offset;
-
-        for (int i = offset; i < offset + length; i++) {
-            if (state == OUTSIDE) {
-                if (buff[i] == CR) {
-                    s = flush(buff, s, i);
-                    handler.startRegion(LINE);
-                    handler.endRegion(LINE);
-                    state = NL_CR;
-                }
-
-                else if (buff[i] == LF) {
-                    s = flush(buff, s, i);
-                    handler.startRegion(LINE);
-                    handler.endRegion(LINE);
-                    state = NL_LF;
-                }
-
-                else {
-                    s = flush(buff, s, i);
-                    handler.startRegion(LINE);
-                    state = INSIDE;
-                }
-            }
-
-            else if (state == INSIDE) {
-                if (buff[i] == CR) {
-                    s = flush(buff, s, i);
-                    handler.endRegion(LINE);
-                    state = NL_CR;
-                }
-
-                else if (buff[i] == LF) {
-                    s = flush(buff, s, i);
-                    handler.endRegion(LINE);
-                    state = NL_LF;
-                }
-            }
-
-            else if (state == NL_CR) {
-                if (buff[i] == CR) {
-                    s = flush(buff, s, i);
-                    handler.startRegion(LINE);
-                    handler.endRegion(LINE);
-                    state = NL_CR;
-                }
-
-                else if (buff[i] == LF) {
-                    s = flush(buff, s, i + 1);
-                    state = OUTSIDE;
-                }
-
-                else {
-                    s = flush(buff, s, i);
-                    handler.startRegion(LINE);
-                    state = INSIDE;
-                }
-            }
-
-            else if (state == NL_LF) {
-                if (buff[i] == CR) {
-                    s = flush(buff, s, i + 1);
-                    state = OUTSIDE;
-                }
-
-                else if (buff[i] == LF) {
-                    s = flush(buff, s, i);
-                    handler.startRegion(LINE);
-                    handler.endRegion(LINE);
-                    state = NL_LF;
-                }
-
-                else {
-                    s = flush(buff, s, i);
-                    handler.startRegion(LINE);
-                    state = INSIDE;
-                }
-            }
-        }
-
-        s = flush(buff, s, offset + length);
-    }
-
-    @Override
-    public void endRegion(String name) {
-        if (state == INSIDE) {
-            handler.endRegion(LINE);
-            state = OUTSIDE;
-        }
-
-        else if (state == NL_CR || state == NL_LF) {
-            state = OUTSIDE;
-        }
-
-        handler.endRegion(name);
-    }
-
-    @Override
-    public void endStream() {
-        if (state == INSIDE) {
-            handler.endRegion(LINE);
-            state = OUTSIDE;
-        }
-
-        else if (state == NL_CR || state == NL_LF) {
-            state = OUTSIDE;
-        }
-
-        handler.endStream();
-    }
-
 }
