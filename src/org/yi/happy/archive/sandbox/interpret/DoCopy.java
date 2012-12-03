@@ -13,7 +13,7 @@ public class DoCopy implements DoAction {
 
     @Override
     public void data(ActionCallback callback, byte b) {
-        callback.send();
+        callback.consumeAndSend();
     }
 
     @Override

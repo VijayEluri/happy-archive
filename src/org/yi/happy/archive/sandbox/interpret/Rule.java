@@ -1,6 +1,8 @@
 package org.yi.happy.archive.sandbox.interpret;
 
-
+/**
+ * A finite state machine rule.
+ */
 public class Rule {
 
     private final Object inState;
@@ -11,6 +13,18 @@ public class Rule {
 
     private final Object goState;
 
+    /**
+     * create a finite state machine rule.
+     * 
+     * @param inState
+     *            the state this rule applies.
+     * @param onCondition
+     *            the condition for this rule.
+     * @param doAction
+     *            the action to be done.
+     * @param goState
+     *            the state to transition to.
+     */
     public Rule(Object inState, OnCondition onCondition, DoAction doAction,
             Object goState) {
         this.inState = inState;

@@ -2,6 +2,10 @@ package org.yi.happy.archive.sandbox.interpret;
 
 import org.yi.happy.archive.tag.BinaryHandler;
 
+/**
+ * A rule based interpreter for doing simple transformations to a labeled binary
+ * stream.
+ */
 public class InterpretFilter implements BinaryHandler {
 
     private final BinaryHandler handler;
@@ -18,7 +22,7 @@ public class InterpretFilter implements BinaryHandler {
         }
 
         @Override
-        public void send() {
+        public void consumeAndSend() {
             sendData();
         }
 
@@ -35,6 +39,15 @@ public class InterpretFilter implements BinaryHandler {
 
     private Object state;
 
+    /**
+     * set up a rule based interpreter for doing simple transformations to a
+     * labeled binary stream using a finite state machine.
+     * 
+     * @param rules
+     *            the finite state machine rules.
+     * @param handler
+     *            the output handler.
+     */
     public InterpretFilter(Rules rules, BinaryHandler handler) {
         this.rules = rules;
         this.handler = handler;
@@ -66,6 +79,7 @@ public class InterpretFilter implements BinaryHandler {
         }
 
         sendEnd++;
+        sendCurrent++;
     }
 
     private void flush() {
@@ -112,15 +126,17 @@ public class InterpretFilter implements BinaryHandler {
 
     @Override
     public void bytes(byte[] buff, int offset, int length) {
+        int end = offset + length;
         sendStart = offset;
+        sendCurrent = offset;
         sendEnd = offset;
         sendBuff = buff;
         try {
-            for (sendCurrent = offset; sendCurrent < offset + length; sendCurrent++) {
+            while (sendCurrent < end) {
                 Rule rule = rules.data(state, buff[sendCurrent]);
-            if (rule == null) {
-                throw new IllegalStateException();
-            }
+                if (rule == null) {
+                    throw new IllegalStateException();
+                }
                 rule.getAction().data(callback, buff[sendCurrent]);
                 state = rule.getGo();
             }

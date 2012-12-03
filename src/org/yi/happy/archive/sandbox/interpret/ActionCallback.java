@@ -6,7 +6,7 @@ public interface ActionCallback {
 
     void endStream();
 
-    void send();
+    void consumeAndSend();
 
     void startRegion(String name);
 
