@@ -1,8 +1,6 @@
 package org.yi.happy.archive.sandbox.interpret;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.IdentityHashMap;
 
 /**
  * Finite state machine rules for {@link InterpretFilter}.
@@ -10,9 +8,9 @@ import java.util.List;
  * @param <Type>
  *            the type of the state points in the rule.
  */
-public class Rules<Type> implements Iterable<Rule<Type>> {
+public class Rules<Type> {
 
-    private List<Rule<Type>> rules = new ArrayList<Rule<Type>>();
+    private IdentityHashMap<Type, RuleState> states = new IdentityHashMap<Type, RuleState>();
     private Type startState;
 
     /**
@@ -22,34 +20,21 @@ public class Rules<Type> implements Iterable<Rule<Type>> {
      *            the rule to add.
      */
     public void add(Rule<Type> rule) {
-        rules.add(rule);
+        RuleState in = states.get(rule.getIn());
+        if (in == null) {
+            in = new RuleState();
+            states.put(rule.getIn(), in);
+        }
+        RuleState go = states.get(rule.getGo());
+        if (go == null) {
+            go = new RuleState();
+            states.put(rule.getGo(), go);
+        }
+
+        in.add(new Rule<RuleState>(in, rule.getOn(), rule.getAction(), go));
     }
 
-    /**
-     * set the starting state.
-     * 
-     * @param startState
-     *            the starting state.
-     */
-    public void setStartState(Type startState) {
-        this.startState = startState;
-    }
-
-    /**
-     * get the starting state.
-     * 
-     * @return the starting state.
-     */
-    public Type getStartState() {
-        return startState;
-    }
-
-    public List<Rule<Type>> getRules() {
-        return rules;
-    }
-
-    @Override
-    public Iterator<Rule<Type>> iterator() {
-        return rules.iterator();
+    public RuleState getState(Type state) {
+        return states.get(state);
     }
 }

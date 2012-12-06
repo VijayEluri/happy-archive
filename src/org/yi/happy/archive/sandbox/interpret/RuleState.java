@@ -1,36 +1,12 @@
 package org.yi.happy.archive.sandbox.interpret;
 
 import java.util.ArrayList;
-import java.util.IdentityHashMap;
 import java.util.List;
 
 public class RuleState {
     public List<Rule<RuleState>> rules = new ArrayList<Rule<RuleState>>();
 
-    public static <Type> RuleState compile(List<Rule<Type>> rules, Type first) {
-        IdentityHashMap<Object, RuleState> index = new IdentityHashMap<Object, RuleState>();
-        for (Rule<Type> rule : rules) {
-            RuleState in = index.get(rule.getIn());
-            if (in == null) {
-                in = new RuleState();
-                index.put(rule.getIn(), in);
-            }
-            RuleState go = index.get(rule.getGo());
-            if (go == null) {
-                go = new RuleState();
-                index.put(rule.getGo(), go);
-            }
-
-            in.add(new Rule<RuleState>(in, rule.getOn(), rule.getAction(), go));
-        }
-        return index.get(first);
-    }
-
-    public static <Type> RuleState compile(Rules<Type> rules) {
-        return compile(rules.getRules(), rules.getStartState());
-    }
-
-    private void add(Rule<RuleState> rule) {
+    public void add(Rule<RuleState> rule) {
         rules.add(rule);
     }
 

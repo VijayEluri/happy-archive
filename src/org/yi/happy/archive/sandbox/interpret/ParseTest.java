@@ -42,8 +42,7 @@ public class ParseTest {
     public void testFirst() {
         rules.add(new Rule<Object>(null, new OnAnything(), new DoCopy(), null));
 
-        BinaryHandler handler = new InterpretFilter(RuleState.compile(rules),
-                log);
+        BinaryHandler handler = new InterpretFilter(rules.getState(null), log);
         handler.startStream();
         handler.endStream();
 
@@ -57,8 +56,7 @@ public class ParseTest {
     public void testCopy() {
         rules.add(new Rule<Object>(null, new OnAnything(), new DoCopy(), null));
 
-        BinaryHandler handler = new InterpretFilter(RuleState.compile(rules),
-                log);
+        BinaryHandler handler = new InterpretFilter(rules.getState(null), log);
         handler.startStream();
         handler.bytes(ByteString.toBytes("ab"), 0, 2);
         handler.startRegion("eq");
@@ -80,8 +78,7 @@ public class ParseTest {
                 null));
         rules.add(new Rule<Object>(null, new OnAnything(), new DoCopy(), null));
 
-        BinaryHandler handler = new InterpretFilter(RuleState.compile(rules),
-                log);
+        BinaryHandler handler = new InterpretFilter(rules.getState(null), log);
         handler.startStream();
         handler.bytes(ByteString.toBytes("ab="), 0, 3);
         handler.endStream();
@@ -103,7 +100,6 @@ public class ParseTest {
         byte cr = '\r';
         byte lf = '\n';
 
-        rules.setStartState(outside);
         rule(outside, onByte(cr), doAll(doStart(line), doEnd(line), doSend()),
                 nlcr);
         rule(outside, onByte(lf), doAll(doStart(line), doEnd(line), doSend()),
@@ -129,7 +125,7 @@ public class ParseTest {
         rule(inside, onAnyByte(), doSend(), inside);
         rule(inside, onEnd(), doAll(doEnd(line), doCopy()), outside);
 
-        BinaryHandler handler = new InterpretFilter(RuleState.compile(rules),
+        BinaryHandler handler = new InterpretFilter(rules.getState(outside),
                 log);
         handler.startStream();
         handler.bytes(ByteString.toBytes("ab\rc\n\rd\n\n"), 0, 9);
