@@ -40,7 +40,7 @@ public class ParseTest {
      */
     @Test
     public void testFirst() {
-        rules.add(new Rule<Object>(null, new OnAnything(), new DoCopy(), null));
+        rules.add(null, new Rule<Object>(new OnAnything(), new DoCopy(), null));
 
         BinaryHandler handler = new InterpretFilter(rules.getState(null), log);
         handler.startStream();
@@ -54,7 +54,7 @@ public class ParseTest {
      */
     @Test
     public void testCopy() {
-        rules.add(new Rule<Object>(null, new OnAnything(), new DoCopy(), null));
+        rules.add(null, new Rule<Object>(new OnAnything(), new DoCopy(), null));
 
         BinaryHandler handler = new InterpretFilter(rules.getState(null), log);
         handler.startStream();
@@ -73,10 +73,10 @@ public class ParseTest {
      */
     @Test
     public void testSimpleMark() {
-        rules.add(new Rule<Object>(null, new OnByte('='), new DoAll(
+        rules.add(null, new Rule<Object>(new OnByte('='), new DoAll(
                 new DoStartRegion("eq"), new DoSend(), new DoEndRegion("eq")),
                 null));
-        rules.add(new Rule<Object>(null, new OnAnything(), new DoCopy(), null));
+        rules.add(null, new Rule<Object>(new OnAnything(), new DoCopy(), null));
 
         BinaryHandler handler = new InterpretFilter(rules.getState(null), log);
         handler.startStream();
@@ -155,7 +155,7 @@ public class ParseTest {
 
     private void rule(Object inState, OnCondition onCondition,
             DoAction doAction, Object goState) {
-        rules.add(new Rule<Object>(inState, onCondition, doAction, goState));
+        rules.add(inState, new Rule<Object>(onCondition, doAction, goState));
     }
 
     private DoAll doAll(DoAction... actions) {

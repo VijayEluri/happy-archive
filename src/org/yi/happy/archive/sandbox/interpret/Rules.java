@@ -11,19 +11,20 @@ import java.util.IdentityHashMap;
 public class Rules<Type> {
 
     private IdentityHashMap<Type, RuleState> states = new IdentityHashMap<Type, RuleState>();
-    private Type startState;
 
     /**
      * Add a rule to the set of rules.
      * 
+     * @param inState
+     *            the state the rule applies to.
      * @param rule
      *            the rule to add.
      */
-    public void add(Rule<Type> rule) {
-        RuleState in = states.get(rule.getIn());
+    public void add(Type inState, Rule<Type> rule) {
+        RuleState in = states.get(inState);
         if (in == null) {
             in = new RuleState();
-            states.put(rule.getIn(), in);
+            states.put(inState, in);
         }
         RuleState go = states.get(rule.getGo());
         if (go == null) {
@@ -31,7 +32,7 @@ public class Rules<Type> {
             states.put(rule.getGo(), go);
         }
 
-        in.add(new Rule<RuleState>(in, rule.getOn(), rule.getAction(), go));
+        in.add(new Rule<RuleState>(rule.getOn(), rule.getAction(), go));
     }
 
     public RuleState getState(Type state) {

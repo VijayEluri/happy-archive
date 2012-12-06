@@ -5,8 +5,6 @@ package org.yi.happy.archive.sandbox.interpret;
  */
 public class Rule<Type> {
 
-    private final Type inState;
-
     private final OnCondition onCondition;
 
     private final DoAction doAction;
@@ -25,16 +23,11 @@ public class Rule<Type> {
      * @param goState
      *            the state to transition to.
      */
-    public Rule(Type inState, OnCondition onCondition, DoAction doAction,
+    public Rule(OnCondition onCondition, DoAction doAction,
             Type goState) {
-        this.inState = inState;
         this.onCondition = onCondition;
         this.doAction = doAction;
         this.goState = goState;
-    }
-
-    public Type getIn() {
-        return inState;
     }
 
     public OnCondition getOn() {
