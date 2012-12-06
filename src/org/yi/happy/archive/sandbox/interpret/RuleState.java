@@ -36,84 +36,58 @@ public class RuleState implements State {
 
     @Override
     public State startStream(ActionCallback callback) {
-        Rule rule = null;
-        for (Rule r : rules) {
-            if (r.getOn().startStream()) {
-                rule = r;
-                break;
+        for (Rule rule : rules) {
+            if (rule.getOn().startStream()) {
+                rule.getAction().startStream(callback);
+                return rule.getGo();
             }
         }
-        if (rule == null) {
-            throw new UnsupportedOperationException();
-        }
-        rule.getAction().startStream(callback);
-        return rule.getGo();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public State endStream(ActionCallback callback) {
-        Rule rule = null;
-        for (Rule r : rules) {
-            if (r.getOn().endStream()) {
-                rule = r;
-                break;
+        for (Rule rule : rules) {
+            if (rule.getOn().endStream()) {
+                rule.getAction().endStream(callback);
+                return rule.getGo();
             }
         }
-        if (rule == null) {
-            throw new UnsupportedOperationException();
-        }
-        rule.getAction().endStream(callback);
-        return rule.getGo();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public State data(byte b, ActionCallback callback) {
-        Rule rule = null;
-        for (Rule r : rules) {
-            if (r.getOn().data(b)) {
-                rule = r;
-                break;
+        for (Rule rule : rules) {
+            if (rule.getOn().data(b)) {
+                rule.getAction().data(callback, b);
+                return rule.getGo();
             }
         }
-        if (rule == null) {
-            throw new UnsupportedOperationException();
-        }
-        rule.getAction().data(callback, b);
-        return rule.getGo();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public State startRegion(String name, ActionCallback callback) {
-        Rule rule = null;
-        for (Rule r : rules) {
-            if (r.getOn().startRegion(name)) {
-                rule = r;
-                break;
+        for (Rule rule : rules) {
+            if (rule.getOn().startRegion(name)) {
+                rule.getAction().startRegion(callback, name);
+                return rule.getGo();
             }
         }
-        if (rule == null) {
-            throw new UnsupportedOperationException();
-        }
+        throw new UnsupportedOperationException();
 
-        rule.getAction().startRegion(callback, name);
-
-        return rule.getGo();
     }
 
     @Override
     public State endRegion(String name, ActionCallback callback) {
-        Rule rule = null;
-        for (Rule r : rules) {
-            if (r.getOn().endRegion(name)) {
-                rule = r;
-                break;
+        for (Rule rule : rules) {
+            if (rule.getOn().endRegion(name)) {
+                rule.getAction().endRegion(callback, name);
+                return rule.getGo();
             }
         }
-        if (rule == null) {
-            throw new UnsupportedOperationException();
-        }
-        rule.getAction().endRegion(callback, name);
-        return rule.getGo();
+        throw new UnsupportedOperationException();
     }
 
 }
