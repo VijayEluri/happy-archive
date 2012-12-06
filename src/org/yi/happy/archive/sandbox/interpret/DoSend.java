@@ -1,5 +1,8 @@
 package org.yi.happy.archive.sandbox.interpret;
 
+/**
+ * An action that sends on the data byte.
+ */
 public class DoSend implements DoAction {
 
     @Override

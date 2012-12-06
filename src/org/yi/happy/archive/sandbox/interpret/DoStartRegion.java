@@ -1,8 +1,17 @@
 package org.yi.happy.archive.sandbox.interpret;
 
+/**
+ * An action that sends a startRegion event.
+ */
 public class DoStartRegion implements DoAction {
     private final String name;
 
+    /**
+     * create an action that sends a startRegion event.
+     * 
+     * @param name
+     *            the name of the region.
+     */
     public DoStartRegion(String name) {
         this.name = name;
     }

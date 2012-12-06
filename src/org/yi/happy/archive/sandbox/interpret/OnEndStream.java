@@ -1,5 +1,8 @@
 package org.yi.happy.archive.sandbox.interpret;
 
+/**
+ * A condition that matches the endStream event.
+ */
 public class OnEndStream implements OnCondition {
 
     @Override

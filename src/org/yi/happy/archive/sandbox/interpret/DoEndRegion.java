@@ -1,8 +1,17 @@
 package org.yi.happy.archive.sandbox.interpret;
 
+/**
+ * An action that sends an endRegion event.
+ */
 public class DoEndRegion implements DoAction {
     private final String name;
 
+    /**
+     * create an action that sends an endRegion event.
+     * 
+     * @param name
+     *            the name of the region.
+     */
     public DoEndRegion(String name) {
         this.name = name;
     }

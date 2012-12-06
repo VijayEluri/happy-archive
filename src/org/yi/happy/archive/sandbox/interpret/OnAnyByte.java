@@ -1,5 +1,8 @@
 package org.yi.happy.archive.sandbox.interpret;
 
+/**
+ * This condition matches any data event.
+ */
 public class OnAnyByte implements OnCondition {
 
     @Override

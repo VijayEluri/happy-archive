@@ -1,5 +1,8 @@
 package org.yi.happy.archive.sandbox.interpret;
 
+/**
+ * A condition that matches the startStream event.
+ */
 public class OnStartStream implements OnCondition {
 
     @Override

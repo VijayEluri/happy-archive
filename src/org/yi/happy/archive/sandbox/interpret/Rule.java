@@ -29,14 +29,23 @@ public class Rule {
         this.goState = goState;
     }
 
+    /**
+     * @return the condition for this rule.
+     */
     public OnCondition getOn() {
         return onCondition;
     }
 
+    /**
+     * @return the action for this rule.
+     */
     public DoAction getAction() {
         return doAction;
     }
 
+    /**
+     * @return the state to transition to.
+     */
     public State getGo() {
         return goState;
     }

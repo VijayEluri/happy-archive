@@ -1,12 +1,27 @@
 package org.yi.happy.archive.sandbox.interpret;
 
+/**
+ * This condition matches a specific byte event.
+ */
 public class OnByte implements OnCondition {
     private final byte value;
 
+    /**
+     * Create a condition that matches a specific data event.
+     * 
+     * @param value
+     *            the data value to match.
+     */
     public OnByte(byte value) {
         this.value = value;
     }
 
+    /**
+     * Create a condition that matches a specific data event.
+     * 
+     * @param c
+     *            the data value to match (the low 8 bits are used).
+     */
     public OnByte(char c) {
         this.value = (byte) c;
     }

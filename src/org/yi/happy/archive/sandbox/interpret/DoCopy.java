@@ -1,5 +1,8 @@
 package org.yi.happy.archive.sandbox.interpret;
 
+/**
+ * An action that copies the input to the output.
+ */
 public class DoCopy implements DoAction {
     @Override
     public void startStream(ActionCallback callback) {

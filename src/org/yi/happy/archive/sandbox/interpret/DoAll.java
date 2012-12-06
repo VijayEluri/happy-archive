@@ -4,9 +4,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * An action that does a list of actions.
+ */
 public class DoAll implements DoAction {
     private List<DoAction> actions;
 
+    /**
+     * create an action that does a list of actions.
+     * 
+     * @param actions
+     *            the list of actions.
+     */
     public DoAll(DoAction... actions) {
         this.actions = new ArrayList<DoAction>(Arrays.asList(actions));
     }
