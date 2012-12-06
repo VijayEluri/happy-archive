@@ -110,7 +110,7 @@ public class InterpretFilter implements BinaryHandler {
 
     private OutputHandler callback;
 
-    private RuleState state;
+    private State state;
 
     /**
      * set up a rule based interpreter for doing simple transformations to a
@@ -121,7 +121,7 @@ public class InterpretFilter implements BinaryHandler {
      * @param handler
      *            the output handler.
      */
-    public InterpretFilter(RuleState state, BinaryHandler handler) {
+    public InterpretFilter(State state, BinaryHandler handler) {
         this.callback = new OutputHandler(handler);
         this.state = state;
     }
