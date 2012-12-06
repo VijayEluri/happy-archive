@@ -15,7 +15,6 @@ import org.yi.happy.archive.tag.LogHandler;
  */
 public class ParseTest {
     private LogHandler log;
-    private Rules<Object> rules;
 
     /**
      * set up
@@ -23,7 +22,6 @@ public class ParseTest {
     @Before
     public void before() {
         log = new LogHandler();
-        rules = new Rules<Object>();
     }
 
     /**
@@ -32,7 +30,6 @@ public class ParseTest {
     @After
     public void after() {
         log = null;
-        rules = null;
     }
 
     /**
@@ -40,9 +37,10 @@ public class ParseTest {
      */
     @Test
     public void testFirst() {
-        rules.add(null, new Rule<Object>(new OnAnything(), new DoCopy(), null));
+        RuleState state = new RuleState();
+        state.add(new OnAnything(), new DoCopy(), state);
 
-        BinaryHandler handler = new InterpretFilter(rules.getState(null), log);
+        BinaryHandler handler = new InterpretFilter(state, log);
         handler.startStream();
         handler.endStream();
 
@@ -54,9 +52,10 @@ public class ParseTest {
      */
     @Test
     public void testCopy() {
-        rules.add(null, new Rule<Object>(new OnAnything(), new DoCopy(), null));
+        RuleState state = new RuleState();
+        state.add(new OnAnything(), new DoCopy(), state);
 
-        BinaryHandler handler = new InterpretFilter(rules.getState(null), log);
+        BinaryHandler handler = new InterpretFilter(state, log);
         handler.startStream();
         handler.bytes(ByteString.toBytes("ab"), 0, 2);
         handler.startRegion("eq");
@@ -73,12 +72,12 @@ public class ParseTest {
      */
     @Test
     public void testSimpleMark() {
-        rules.add(null, new Rule<Object>(new OnByte('='), new DoAll(
-                new DoStartRegion("eq"), new DoSend(), new DoEndRegion("eq")),
-                null));
-        rules.add(null, new Rule<Object>(new OnAnything(), new DoCopy(), null));
+        RuleState state = new RuleState();
+        state.add(new OnByte('='), new DoAll(new DoStartRegion("eq"),
+                new DoSend(), new DoEndRegion("eq")), state);
+        state.add(new OnAnything(), new DoCopy(), state);
 
-        BinaryHandler handler = new InterpretFilter(rules.getState(null), log);
+        BinaryHandler handler = new InterpretFilter(state, log);
         handler.startStream();
         handler.bytes(ByteString.toBytes("ab="), 0, 3);
         handler.endStream();
@@ -92,40 +91,40 @@ public class ParseTest {
      */
     @Test
     public void testLine() {
-        String outside = "outside";
-        String inside = "inside";
-        String nlcr = "nlcr";
-        String nllf = "nllf";
+        RuleState outside = new RuleState();
+        RuleState inside = new RuleState();
+        RuleState nlcr = new RuleState();
+        RuleState nllf = new RuleState();
         String line = "line";
         byte cr = '\r';
         byte lf = '\n';
 
-        rule(outside, onByte(cr), doAll(doStart(line), doEnd(line), doSend()),
+        outside.add(onByte(cr), doAll(doStart(line), doEnd(line), doSend()),
                 nlcr);
-        rule(outside, onByte(lf), doAll(doStart(line), doEnd(line), doSend()),
+        outside.add(onByte(lf), doAll(doStart(line), doEnd(line), doSend()),
                 nllf);
-        rule(outside, onAnyByte(), doAll(doStart(line), doSend()), inside);
-        rule(outside, onStart(), doCopy(), outside);
-        rule(outside, onEnd(), doCopy(), outside);
+        outside.add(onAnyByte(), doAll(doStart(line), doSend()), inside);
+        outside.add(onStart(), doCopy(), outside);
+        outside.add(onEnd(), doCopy(), outside);
 
-        rule(nlcr, onByte(cr), doAll(doStart(line), doEnd(line), doSend()),
+        nlcr.add(onByte(cr), doAll(doStart(line), doEnd(line), doSend()),
                 nlcr);
-        rule(nlcr, onByte(lf), doSend(), outside);
-        rule(nlcr, onAnyByte(), doAll(doStart(line), doSend()), inside);
-        rule(nlcr, onEnd(), doCopy(), outside);
+        nlcr.add(onByte(lf), doSend(), outside);
+        nlcr.add(onAnyByte(), doAll(doStart(line), doSend()), inside);
+        nlcr.add(onEnd(), doCopy(), outside);
 
-        rule(nllf, onByte(cr), doSend(), outside);
-        rule(nllf, onByte(lf), doAll(doStart(line), doEnd(line), doSend()),
+        nllf.add(onByte(cr), doSend(), outside);
+        nllf.add(onByte(lf), doAll(doStart(line), doEnd(line), doSend()),
                 nllf);
-        rule(nllf, onAnyByte(), doAll(doStart(line), doSend()), inside);
-        rule(nllf, onEnd(), doCopy(), outside);
+        nllf.add(onAnyByte(), doAll(doStart(line), doSend()), inside);
+        nllf.add(onEnd(), doCopy(), outside);
 
-        rule(inside, onByte(cr), doAll(doEnd(line), doSend()), nlcr);
-        rule(inside, onByte(lf), doAll(doEnd(line), doSend()), nllf);
-        rule(inside, onAnyByte(), doSend(), inside);
-        rule(inside, onEnd(), doAll(doEnd(line), doCopy()), outside);
+        inside.add(onByte(cr), doAll(doEnd(line), doSend()), nlcr);
+        inside.add(onByte(lf), doAll(doEnd(line), doSend()), nllf);
+        inside.add(onAnyByte(), doSend(), inside);
+        inside.add(onEnd(), doAll(doEnd(line), doCopy()), outside);
 
-        BinaryHandler handler = new InterpretFilter(rules.getState(outside),
+        BinaryHandler handler = new InterpretFilter(outside,
                 log);
         handler.startStream();
         handler.bytes(ByteString.toBytes("ab\rc\n\rd\n\n"), 0, 9);
@@ -151,11 +150,6 @@ public class ParseTest {
 
     private DoSend doSend() {
         return new DoSend();
-    }
-
-    private void rule(Object inState, OnCondition onCondition,
-            DoAction doAction, Object goState) {
-        rules.add(inState, new Rule<Object>(onCondition, doAction, goState));
     }
 
     private DoAll doAll(DoAction... actions) {

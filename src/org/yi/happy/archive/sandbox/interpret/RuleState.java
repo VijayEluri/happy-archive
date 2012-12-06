@@ -79,4 +79,9 @@ public class RuleState {
         }
         return rule;
     }
+
+    public void add(OnCondition onCondition, DoAction doAction,
+            RuleState goState) {
+        add(new Rule<RuleState>(onCondition, doAction, goState));
+    }
 }
