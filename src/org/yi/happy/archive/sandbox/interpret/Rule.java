@@ -9,7 +9,7 @@ public class Rule {
 
     private final DoAction doAction;
 
-    private final RuleState goState;
+    private final State goState;
 
     /**
      * create a finite state machine rule.
@@ -23,8 +23,7 @@ public class Rule {
      * @param goState
      *            the state to transition to.
      */
-    public Rule(OnCondition onCondition, DoAction doAction,
- RuleState goState) {
+    public Rule(OnCondition onCondition, DoAction doAction, State goState) {
         this.onCondition = onCondition;
         this.doAction = doAction;
         this.goState = goState;
@@ -38,7 +37,7 @@ public class Rule {
         return doAction;
     }
 
-    public RuleState getGo() {
+    public State getGo() {
         return goState;
     }
 }

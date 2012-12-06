@@ -35,7 +35,7 @@ public class RuleState implements State {
     }
 
     @Override
-    public RuleState startStream(ActionCallback callback) {
+    public State startStream(ActionCallback callback) {
         Rule rule = null;
         for (Rule r : rules) {
             if (r.getOn().startStream()) {
@@ -51,7 +51,7 @@ public class RuleState implements State {
     }
 
     @Override
-    public RuleState endStream(ActionCallback callback) {
+    public State endStream(ActionCallback callback) {
         Rule rule = null;
         for (Rule r : rules) {
             if (r.getOn().endStream()) {
@@ -67,7 +67,7 @@ public class RuleState implements State {
     }
 
     @Override
-    public RuleState data(byte b, ActionCallback callback) {
+    public State data(byte b, ActionCallback callback) {
         Rule rule = null;
         for (Rule r : rules) {
             if (r.getOn().data(b)) {
@@ -83,7 +83,7 @@ public class RuleState implements State {
     }
 
     @Override
-    public RuleState startRegion(String name, ActionCallback callback) {
+    public State startRegion(String name, ActionCallback callback) {
         Rule rule = null;
         for (Rule r : rules) {
             if (r.getOn().startRegion(name)) {
@@ -101,7 +101,7 @@ public class RuleState implements State {
     }
 
     @Override
-    public RuleState endRegion(String name, ActionCallback callback) {
+    public State endRegion(String name, ActionCallback callback) {
         Rule rule = null;
         for (Rule r : rules) {
             if (r.getOn().endRegion(name)) {
