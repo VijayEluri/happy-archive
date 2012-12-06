@@ -42,8 +42,8 @@ public class InterpretFilter implements BinaryHandler {
      * set up a rule based interpreter for doing simple transformations to a
      * labeled binary stream using a finite state machine.
      * 
-     * @param rules
-     *            the finite state machine rules.
+     * @param state
+     *            the starting state.
      * @param handler
      *            the output handler.
      */
@@ -104,16 +104,12 @@ public class InterpretFilter implements BinaryHandler {
 
     @Override
     public void startStream() {
-        Rule rule = state.startStream();
-        rule.getAction().startStream(callback);
-        state = rule.getGo();
+        state = state.startStream(callback);
     }
 
     @Override
     public void startRegion(String name) {
-        Rule rule = state.startRegion(name);
-        rule.getAction().startRegion(callback, name);
-        state = rule.getGo();
+        state = state.startRegion(name, callback);
     }
 
     @Override
@@ -125,9 +121,7 @@ public class InterpretFilter implements BinaryHandler {
         sendBuff = buff;
         try {
             while (sendCurrent < end) {
-                Rule rule = state.data(buff[sendCurrent]);
-                rule.getAction().data(callback, buff[sendCurrent]);
-                state = rule.getGo();
+                state = state.data(buff[sendCurrent], callback);
             }
             flush();
         } finally {
@@ -137,16 +131,12 @@ public class InterpretFilter implements BinaryHandler {
 
     @Override
     public void endRegion(String name) {
-        Rule rule = state.endRegion(name);
-        rule.getAction().endRegion(callback, name);
-        state = rule.getGo();
+        state = state.endRegion(name, callback);
     }
 
     @Override
     public void endStream() {
-        Rule rule = state.endStream();
-        rule.getAction().endStream(callback);
-        state = rule.getGo();
+        state = state.endStream(callback);
     }
 
 }

@@ -15,7 +15,7 @@ public class RuleState {
         add(new Rule(onCondition, doAction, goState));
     }
 
-    public Rule startStream() {
+    public RuleState startStream(ActionCallback callback) {
         Rule rule = null;
         for (Rule r : rules) {
             if (r.getOn().startStream()) {
@@ -26,10 +26,11 @@ public class RuleState {
         if (rule == null) {
             throw new UnsupportedOperationException();
         }
-        return rule;
+        rule.getAction().startStream(callback);
+        return rule.getGo();
     }
 
-    public Rule endStream() {
+    public RuleState endStream(ActionCallback callback) {
         Rule rule = null;
         for (Rule r : rules) {
             if (r.getOn().endStream()) {
@@ -40,10 +41,11 @@ public class RuleState {
         if (rule == null) {
             throw new UnsupportedOperationException();
         }
-        return rule;
+        rule.getAction().endStream(callback);
+        return rule.getGo();
     }
 
-    public Rule data(byte b) {
+    public RuleState data(byte b, ActionCallback callback) {
         Rule rule = null;
         for (Rule r : rules) {
             if (r.getOn().data(b)) {
@@ -54,10 +56,11 @@ public class RuleState {
         if (rule == null) {
             throw new UnsupportedOperationException();
         }
-        return rule;
+        rule.getAction().data(callback, b);
+        return rule.getGo();
     }
 
-    public Rule startRegion(String name) {
+    public RuleState startRegion(String name, ActionCallback callback) {
         Rule rule = null;
         for (Rule r : rules) {
             if (r.getOn().startRegion(name)) {
@@ -68,10 +71,13 @@ public class RuleState {
         if (rule == null) {
             throw new UnsupportedOperationException();
         }
-        return rule;
+
+        rule.getAction().startRegion(callback, name);
+
+        return rule.getGo();
     }
 
-    public Rule endRegion(String name) {
+    public RuleState endRegion(String name, ActionCallback callback) {
         Rule rule = null;
         for (Rule r : rules) {
             if (r.getOn().endRegion(name)) {
@@ -82,7 +88,8 @@ public class RuleState {
         if (rule == null) {
             throw new UnsupportedOperationException();
         }
-        return rule;
+        rule.getAction().endRegion(callback, name);
+        return rule.getGo();
     }
 
 }
