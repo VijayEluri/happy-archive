@@ -1,10 +1,11 @@
 package org.yi.happy.archive.sandbox.interpret;
 
+import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.List;
 
 public class RuleState {
-    public Rules<RuleState> rules = new Rules<RuleState>();
+    public List<Rule<RuleState>> rules = new ArrayList<Rule<RuleState>>();
 
     public static <Type> RuleState compile(List<Rule<Type>> rules, Type first) {
         IdentityHashMap<Object, RuleState> index = new IdentityHashMap<Object, RuleState>();
