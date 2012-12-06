@@ -105,9 +105,6 @@ public class InterpretFilter implements BinaryHandler {
     @Override
     public void startStream() {
         Rule<RuleState> rule = state.startStream(state);
-        if (rule == null) {
-            throw new IllegalStateException();
-        }
         rule.getAction().startStream(callback);
         state = rule.getGo();
     }
@@ -115,9 +112,6 @@ public class InterpretFilter implements BinaryHandler {
     @Override
     public void startRegion(String name) {
         Rule<RuleState> rule = state.startRegion(state, name);
-        if (rule == null) {
-            throw new IllegalStateException();
-        }
         rule.getAction().startRegion(callback, name);
         state = rule.getGo();
     }
@@ -132,9 +126,6 @@ public class InterpretFilter implements BinaryHandler {
         try {
             while (sendCurrent < end) {
                 Rule<RuleState> rule = state.data(state, buff[sendCurrent]);
-                if (rule == null) {
-                    throw new IllegalStateException();
-                }
                 rule.getAction().data(callback, buff[sendCurrent]);
                 state = rule.getGo();
             }
@@ -147,9 +138,6 @@ public class InterpretFilter implements BinaryHandler {
     @Override
     public void endRegion(String name) {
         Rule<RuleState> rule = state.endRegion(state, name);
-        if (rule == null) {
-            throw new IllegalStateException();
-        }
         rule.getAction().endRegion(callback, name);
         state = rule.getGo();
     }
@@ -157,9 +145,6 @@ public class InterpretFilter implements BinaryHandler {
     @Override
     public void endStream() {
         Rule<RuleState> rule = state.endStream(state);
-        if (rule == null) {
-            throw new IllegalStateException();
-        }
         rule.getAction().endStream(callback);
         state = rule.getGo();
     }

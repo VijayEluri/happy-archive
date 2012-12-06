@@ -34,31 +34,42 @@ public class RuleState {
     }
 
     public Rule<RuleState> startStream(RuleState state) {
-        return rules.startStream(state);
+        Rule<RuleState> rule = rules.startStream(state);
+        if (rule == null) {
+            throw new UnsupportedOperationException();
+        }
+        return rule;
     }
 
     public Rule<RuleState> endStream(RuleState state) {
-        return rules.endStream(state);
+        Rule<RuleState> rule = rules.endStream(state);
+        if (rule == null) {
+            throw new UnsupportedOperationException();
+        }
+        return rule;
     }
 
     public Rule<RuleState> data(RuleState state, byte b) {
-        return rules.data(state, b);
+        Rule<RuleState> rule = rules.data(state, b);
+        if (rule == null) {
+            throw new UnsupportedOperationException();
+        }
+        return rule;
     }
 
     public Rule<RuleState> startRegion(RuleState state, String name) {
-        return rules.startRegion(state, name);
+        Rule<RuleState> rule = rules.startRegion(state, name);
+        if (rule == null) {
+            throw new UnsupportedOperationException();
+        }
+        return rule;
     }
 
     public Rule<RuleState> endRegion(RuleState state, String name) {
-        return rules.endRegion(state, name);
+        Rule<RuleState> rule = rules.endRegion(state, name);
+        if (rule == null) {
+            throw new UnsupportedOperationException();
+        }
+        return rule;
     }
-
-    public void setStartState(RuleState startState) {
-        rules.setStartState(startState);
-    }
-
-    public RuleState getStartState() {
-        return rules.getStartState();
-    }
-
 }
