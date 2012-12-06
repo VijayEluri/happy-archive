@@ -3,15 +3,15 @@ package org.yi.happy.archive.sandbox.interpret;
 /**
  * A finite state machine rule.
  */
-public class Rule {
+public class Rule<Type> {
 
-    private final Object inState;
+    private final Type inState;
 
     private final OnCondition onCondition;
 
     private final DoAction doAction;
 
-    private final Object goState;
+    private final Type goState;
 
     /**
      * create a finite state machine rule.
@@ -25,15 +25,15 @@ public class Rule {
      * @param goState
      *            the state to transition to.
      */
-    public Rule(Object inState, OnCondition onCondition, DoAction doAction,
-            Object goState) {
+    public Rule(Type inState, OnCondition onCondition, DoAction doAction,
+            Type goState) {
         this.inState = inState;
         this.onCondition = onCondition;
         this.doAction = doAction;
         this.goState = goState;
     }
 
-    public Object getIn() {
+    public Type getIn() {
         return inState;
     }
 
@@ -45,7 +45,7 @@ public class Rule {
         return doAction;
     }
 
-    public Object getGo() {
+    public Type getGo() {
         return goState;
     }
 }

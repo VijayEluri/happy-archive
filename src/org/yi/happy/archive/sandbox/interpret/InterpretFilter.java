@@ -9,7 +9,6 @@ import org.yi.happy.archive.tag.BinaryHandler;
 public class InterpretFilter implements BinaryHandler {
 
     private final BinaryHandler handler;
-    private final Rules rules;
     private final ActionCallback callback = new ActionCallback() {
         @Override
         public void startStream() {
@@ -37,7 +36,7 @@ public class InterpretFilter implements BinaryHandler {
         }
     };
 
-    private Object state;
+    private RuleState state;
 
     /**
      * set up a rule based interpreter for doing simple transformations to a
@@ -48,10 +47,9 @@ public class InterpretFilter implements BinaryHandler {
      * @param handler
      *            the output handler.
      */
-    public InterpretFilter(Rules rules, BinaryHandler handler) {
-        this.rules = rules;
+    public InterpretFilter(RuleState state, BinaryHandler handler) {
         this.handler = handler;
-        this.state = rules.getStartState();
+        this.state = state;
     }
 
     protected void sendEndRegion(String name) {
@@ -106,7 +104,7 @@ public class InterpretFilter implements BinaryHandler {
 
     @Override
     public void startStream() {
-        Rule rule = rules.startStream(state);
+        Rule<RuleState> rule = state.startStream(state);
         if (rule == null) {
             throw new IllegalStateException();
         }
@@ -116,7 +114,7 @@ public class InterpretFilter implements BinaryHandler {
 
     @Override
     public void startRegion(String name) {
-        Rule rule = rules.startRegion(state, name);
+        Rule<RuleState> rule = state.startRegion(state, name);
         if (rule == null) {
             throw new IllegalStateException();
         }
@@ -133,7 +131,7 @@ public class InterpretFilter implements BinaryHandler {
         sendBuff = buff;
         try {
             while (sendCurrent < end) {
-                Rule rule = rules.data(state, buff[sendCurrent]);
+                Rule<RuleState> rule = state.data(state, buff[sendCurrent]);
                 if (rule == null) {
                     throw new IllegalStateException();
                 }
@@ -148,7 +146,7 @@ public class InterpretFilter implements BinaryHandler {
 
     @Override
     public void endRegion(String name) {
-        Rule rule = rules.endRegion(state, name);
+        Rule<RuleState> rule = state.endRegion(state, name);
         if (rule == null) {
             throw new IllegalStateException();
         }
@@ -158,7 +156,7 @@ public class InterpretFilter implements BinaryHandler {
 
     @Override
     public void endStream() {
-        Rule rule = rules.endStream(state);
+        Rule<RuleState> rule = state.endStream(state);
         if (rule == null) {
             throw new IllegalStateException();
         }

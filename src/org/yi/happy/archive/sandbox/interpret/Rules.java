@@ -5,11 +5,14 @@ import java.util.List;
 
 /**
  * Finite state machine rules for {@link InterpretFilter}.
+ * 
+ * @param <Type>
+ *            the type of the state points in the rule.
  */
-public class Rules {
+public class Rules<Type> {
 
-    private List<Rule> rules = new ArrayList<Rule>();
-    private String startState;
+    private List<Rule<Type>> rules = new ArrayList<Rule<Type>>();
+    private Type startState;
 
     /**
      * Add a rule to the set of rules.
@@ -17,7 +20,7 @@ public class Rules {
      * @param rule
      *            the rule to add.
      */
-    public void add(Rule rule) {
+    public void add(Rule<Type> rule) {
         rules.add(rule);
     }
 
@@ -28,8 +31,8 @@ public class Rules {
      *            the state to match.
      * @return the matching rule or null if not found.
      */
-    public Rule startStream(Object state) {
-        for (Rule rule : rules) {
+    public Rule<Type> startStream(Type state) {
+        for (Rule<Type> rule : rules) {
             if (rule.getIn() == state && rule.getOn().startStream()) {
                 return rule;
             }
@@ -44,8 +47,8 @@ public class Rules {
      *            the state to match.
      * @return the matching rule or null if not found.
      */
-    public Rule endStream(Object state) {
-        for (Rule rule : rules) {
+    public Rule<Type> endStream(Type state) {
+        for (Rule<Type> rule : rules) {
             if (rule.getIn() == state && rule.getOn().endStream()) {
                 return rule;
             }
@@ -62,8 +65,8 @@ public class Rules {
      *            the data to use in the match.
      * @return the matching rule or null if not found.
      */
-    public Rule data(Object state, byte b) {
-        for (Rule rule : rules) {
+    public Rule<Type> data(Type state, byte b) {
+        for (Rule<Type> rule : rules) {
             if (rule.getIn() == state && rule.getOn().data(b)) {
                 return rule;
             }
@@ -80,8 +83,8 @@ public class Rules {
      *            the region name to use in the match.
      * @return the matching rule or null if not found.
      */
-    public Rule startRegion(Object state, String name) {
-        for (Rule rule : rules) {
+    public Rule<Type> startRegion(Type state, String name) {
+        for (Rule<Type> rule : rules) {
             if (rule.getIn() == state && rule.getOn().startRegion(name)) {
                 return rule;
             }
@@ -98,8 +101,8 @@ public class Rules {
      *            the region name to use in the match.
      * @return the matching rule or null if not found.
      */
-    public Rule endRegion(Object state, String name) {
-        for (Rule rule : rules) {
+    public Rule<Type> endRegion(Type state, String name) {
+        for (Rule<Type> rule : rules) {
             if (rule.getIn() == state && rule.getOn().endRegion(name)) {
                 return rule;
             }
@@ -113,7 +116,7 @@ public class Rules {
      * @param startState
      *            the starting state.
      */
-    public void setStartState(String startState) {
+    public void setStartState(Type startState) {
         this.startState = startState;
     }
 
@@ -122,7 +125,11 @@ public class Rules {
      * 
      * @return the starting state.
      */
-    public String getStartState() {
+    public Type getStartState() {
         return startState;
+    }
+
+    public List<Rule<Type>> getRules() {
+        return rules;
     }
 }
