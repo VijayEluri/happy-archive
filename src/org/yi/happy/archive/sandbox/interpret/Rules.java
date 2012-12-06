@@ -1,6 +1,7 @@
 package org.yi.happy.archive.sandbox.interpret;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -9,7 +10,7 @@ import java.util.List;
  * @param <Type>
  *            the type of the state points in the rule.
  */
-public class Rules<Type> {
+public class Rules<Type> implements Iterable<Rule<Type>> {
 
     private List<Rule<Type>> rules = new ArrayList<Rule<Type>>();
     private Type startState;
@@ -131,5 +132,10 @@ public class Rules<Type> {
 
     public List<Rule<Type>> getRules() {
         return rules;
+    }
+
+    @Override
+    public Iterator<Rule<Type>> iterator() {
+        return rules.iterator();
     }
 }
