@@ -3,13 +3,13 @@ package org.yi.happy.archive.sandbox.interpret;
 /**
  * A finite state machine rule.
  */
-public class Rule<Type> {
+public class Rule {
 
     private final OnCondition onCondition;
 
     private final DoAction doAction;
 
-    private final Type goState;
+    private final RuleState goState;
 
     /**
      * create a finite state machine rule.
@@ -24,7 +24,7 @@ public class Rule<Type> {
      *            the state to transition to.
      */
     public Rule(OnCondition onCondition, DoAction doAction,
-            Type goState) {
+ RuleState goState) {
         this.onCondition = onCondition;
         this.doAction = doAction;
         this.goState = goState;
@@ -38,7 +38,7 @@ public class Rule<Type> {
         return doAction;
     }
 
-    public Type getGo() {
+    public RuleState getGo() {
         return goState;
     }
 }

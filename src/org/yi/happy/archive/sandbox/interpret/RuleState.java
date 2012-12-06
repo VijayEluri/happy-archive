@@ -4,15 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RuleState {
-    public List<Rule<RuleState>> rules = new ArrayList<Rule<RuleState>>();
+    public List<Rule> rules = new ArrayList<Rule>();
 
-    public void add(Rule<RuleState> rule) {
+    public void add(Rule rule) {
         rules.add(rule);
     }
 
-    public Rule<RuleState> startStream() {
-        Rule<RuleState> rule = null;
-        for (Rule<RuleState> r : rules) {
+    public void add(OnCondition onCondition, DoAction doAction,
+            RuleState goState) {
+        add(new Rule(onCondition, doAction, goState));
+    }
+
+    public Rule startStream() {
+        Rule rule = null;
+        for (Rule r : rules) {
             if (r.getOn().startStream()) {
                 rule = r;
                 break;
@@ -24,9 +29,9 @@ public class RuleState {
         return rule;
     }
 
-    public Rule<RuleState> endStream() {
-        Rule<RuleState> rule = null;
-        for (Rule<RuleState> r : rules) {
+    public Rule endStream() {
+        Rule rule = null;
+        for (Rule r : rules) {
             if (r.getOn().endStream()) {
                 rule = r;
                 break;
@@ -38,9 +43,9 @@ public class RuleState {
         return rule;
     }
 
-    public Rule<RuleState> data(byte b) {
-        Rule<RuleState> rule = null;
-        for (Rule<RuleState> r : rules) {
+    public Rule data(byte b) {
+        Rule rule = null;
+        for (Rule r : rules) {
             if (r.getOn().data(b)) {
                 rule = r;
                 break;
@@ -52,9 +57,9 @@ public class RuleState {
         return rule;
     }
 
-    public Rule<RuleState> startRegion(String name) {
-        Rule<RuleState> rule = null;
-        for (Rule<RuleState> r : rules) {
+    public Rule startRegion(String name) {
+        Rule rule = null;
+        for (Rule r : rules) {
             if (r.getOn().startRegion(name)) {
                 rule = r;
                 break;
@@ -66,9 +71,9 @@ public class RuleState {
         return rule;
     }
 
-    public Rule<RuleState> endRegion(String name) {
-        Rule<RuleState> rule = null;
-        for (Rule<RuleState> r : rules) {
+    public Rule endRegion(String name) {
+        Rule rule = null;
+        for (Rule r : rules) {
             if (r.getOn().endRegion(name)) {
                 rule = r;
                 break;
@@ -80,8 +85,4 @@ public class RuleState {
         return rule;
     }
 
-    public void add(OnCondition onCondition, DoAction doAction,
-            RuleState goState) {
-        add(new Rule<RuleState>(onCondition, doAction, goState));
-    }
 }
