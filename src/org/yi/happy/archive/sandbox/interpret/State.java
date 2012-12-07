@@ -1,7 +1,8 @@
 package org.yi.happy.archive.sandbox.interpret;
 
 /**
- * The base of the state pattern implementation for {@link InterpretFilter}.
+ * The state interface for the state pattern implementation for
+ * {@link StateByteFilter}.
  */
 public interface State {
     /**
