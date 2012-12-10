@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 import org.junit.Test;
 import org.yi.happy.archive.ByteString;
+import org.yi.happy.archive.binary_stream.LogHandler;
 
 /**
  * Tests for {@link TagHandler}.

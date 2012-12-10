@@ -1,5 +1,8 @@
 package org.yi.happy.archive.tag;
 
+import org.yi.happy.archive.binary_stream.AbstractStateMarkFilter;
+import org.yi.happy.archive.binary_stream.BinaryHandler;
+
 /**
  * Mark lines inside the stream or regions.
  * 

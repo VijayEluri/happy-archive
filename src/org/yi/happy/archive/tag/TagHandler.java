@@ -1,5 +1,7 @@
 package org.yi.happy.archive.tag;
 
+import org.yi.happy.archive.binary_stream.BinaryHandler;
+
 /**
  * Re-mark a binary stream from lines to tags. Expects ( line, newline ). Emits
  * ( tag ( field ( key, value ) ) ).

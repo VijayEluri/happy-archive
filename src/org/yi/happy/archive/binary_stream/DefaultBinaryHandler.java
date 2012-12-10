@@ -1,4 +1,4 @@
-package org.yi.happy.archive.tag;
+package org.yi.happy.archive.binary_stream;
 
 /**
  * A binary stream handler that does nothing.

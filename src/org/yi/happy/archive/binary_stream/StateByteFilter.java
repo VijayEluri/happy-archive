@@ -1,6 +1,5 @@
 package org.yi.happy.archive.binary_stream;
 
-import org.yi.happy.archive.tag.BinaryHandler;
 
 /**
  * A state machine, using the state pattern, based filter for a binary event

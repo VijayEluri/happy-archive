@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
+import org.yi.happy.archive.binary_stream.BinaryHandler;
+
 /**
  * A push-pull parser for tags from a stream of bytes.
  */

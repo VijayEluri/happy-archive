@@ -7,8 +7,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.yi.happy.archive.ByteString;
-import org.yi.happy.archive.tag.BinaryHandler;
-import org.yi.happy.archive.tag.LogHandler;
 
 /**
  * Tests for {@link StateByteFilter}.

@@ -1,4 +1,4 @@
-package org.yi.happy.archive.tag;
+package org.yi.happy.archive.binary_stream;
 
 /**
  * A template for a region marking stream parsing filter. This makes it easy to

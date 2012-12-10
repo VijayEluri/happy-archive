@@ -1,4 +1,4 @@
-package org.yi.happy.archive.tag;
+package org.yi.happy.archive.binary_stream;
 
 /**
  * Event parsing for binary data.

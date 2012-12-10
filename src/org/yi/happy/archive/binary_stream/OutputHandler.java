@@ -1,6 +1,5 @@
 package org.yi.happy.archive.binary_stream;
 
-import org.yi.happy.archive.tag.BinaryHandler;
 
 /**
  * The call back implementation used by {@link StateByteFilter} to get events
