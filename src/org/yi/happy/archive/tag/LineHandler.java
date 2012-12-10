@@ -1,8 +1,16 @@
 package org.yi.happy.archive.tag;
 
 import org.yi.happy.annotate.ExternalValue;
-import org.yi.happy.archive.binary_stream.AbstractStateMarkFilter;
 import org.yi.happy.archive.binary_stream.BinaryHandler;
+import org.yi.happy.archive.binary_stream.DoAll;
+import org.yi.happy.archive.binary_stream.DoCopy;
+import org.yi.happy.archive.binary_stream.DoEndRegion;
+import org.yi.happy.archive.binary_stream.DoStartRegion;
+import org.yi.happy.archive.binary_stream.OnAnyByte;
+import org.yi.happy.archive.binary_stream.OnAnything;
+import org.yi.happy.archive.binary_stream.OnByte;
+import org.yi.happy.archive.binary_stream.RuleState;
+import org.yi.happy.archive.binary_stream.StateByteFilter;
 
 /**
  * Mark lines inside the stream or regions.
@@ -12,7 +20,7 @@ import org.yi.happy.archive.binary_stream.BinaryHandler;
  * line unless there is something on it. Between pairs of newlines there are
  * empty lines marked.
  */
-public class LineHandler extends AbstractStateMarkFilter {
+public class LineHandler extends StateByteFilter {
     /**
      * The line label.
      */
@@ -34,187 +42,54 @@ public class LineHandler extends AbstractStateMarkFilter {
      * outside of a line and a newline sequence, right before the start of a
      * line.
      */
-    private final State OUTSIDE = new State() {
-        @Override
-        public void startStream() {
-            sendStartStream();
-        }
-
-        @Override
-        public void startRegion(String name) {
-            sendStartRegion(name);
-        }
-
-        @Override
-        public void data(byte b) {
-            if (b == CR) {
-                sendStartRegion(LINE);
-                sendEndRegion(LINE);
-                setState(NL_CR);
-                send();
-                return;
-            }
-
-            if (b == LF) {
-                sendStartRegion(LINE);
-                sendEndRegion(LINE);
-                setState(NL_LF);
-                send();
-                return;
-            }
-
-            sendStartRegion(LINE);
-            setState(INSIDE);
-            send();
-            return;
-        }
-
-        @Override
-        public void endRegion(String name) {
-            sendEndRegion(name);
-        }
-
-        @Override
-        public void endStream() {
-            sendEndStream();
-        }
-    };
+    private static final RuleState OUTSIDE = new RuleState();
 
     /**
      * inside a line.
      */
-    private final State INSIDE = new State() {
-        @Override
-        public void startRegion(String name) {
-            sendEndRegion(LINE);
-            sendStartRegion(name);
-            setState(OUTSIDE);
-        }
-
-        @Override
-        public void data(byte b) {
-            if (b == CR) {
-                sendEndRegion(LINE);
-                send();
-                setState(NL_CR);
-                return;
-            }
-
-            if (b == LF) {
-                sendEndRegion(LINE);
-                send();
-                setState(NL_LF);
-                return;
-            }
-
-            send();
-            return;
-        }
-
-        @Override
-        public void endRegion(String name) {
-            sendEndRegion(LINE);
-            sendEndRegion(name);
-            setState(OUTSIDE);
-        }
-
-        @Override
-        public void endStream() {
-            sendEndRegion(LINE);
-            sendEndStream();
-            setState(OUTSIDE);
-        }
-    };
+    private static final RuleState INSIDE = new RuleState();
 
     /**
      * after the first carrier-return of a newline sequence.
      */
-    private final State NL_CR = new State() {
-        @Override
-        public void startRegion(String name) {
-            sendStartRegion(name);
-            setState(OUTSIDE);
-        }
-
-        @Override
-        public void data(byte b) {
-            if (b == CR) {
-                sendStartRegion(LINE);
-                sendEndRegion(LINE);
-                send();
-                setState(NL_CR);
-                return;
-            }
-
-            if (b == LF) {
-                send();
-                setState(OUTSIDE);
-                return;
-            }
-
-            sendStartRegion(LINE);
-            send();
-            setState(INSIDE);
-            return;
-        }
-
-        @Override
-        public void endRegion(String name) {
-            sendEndRegion(name);
-            setState(OUTSIDE);
-        }
-
-        @Override
-        public void endStream() {
-            sendEndStream();
-            setState(OUTSIDE);
-        }
-    };
+    private static final RuleState NL_CR = new RuleState();
 
     /**
      * after the first line-feed of a newline sequence.
      */
-    private final State NL_LF = new State() {
-        @Override
-        public void startRegion(String name) {
-            sendStartRegion(name);
-            setState(OUTSIDE);
-        }
+    private static final RuleState NL_LF = new RuleState();
 
-        @Override
-        public void data(byte b) {
-            if (b == CR) {
-                send();
-                setState(OUTSIDE);
-                return;
-            }
+    static {
+        OUTSIDE.add(new OnByte(CR), new DoAll(new DoStartRegion(LINE),
+                new DoEndRegion(LINE), new DoCopy()), NL_CR);
+        OUTSIDE.add(new OnByte(LF), new DoAll(new DoStartRegion(LINE),
+                new DoEndRegion(LINE), new DoCopy()), NL_LF);
+        OUTSIDE.add(new OnAnyByte(), new DoAll(new DoStartRegion(LINE),
+                new DoCopy()), INSIDE);
+        OUTSIDE.add(new OnAnything(), new DoCopy(), OUTSIDE);
 
-            if (b == LF) {
-                sendStartRegion(LINE);
-                sendEndRegion(LINE);
-                send();
-                setState(NL_LF);
-                return;
-            }
+        INSIDE.add(new OnByte(CR), new DoAll(new DoEndRegion(LINE),
+                new DoCopy()), NL_CR);
+        INSIDE.add(new OnByte(LF), new DoAll(new DoEndRegion(LINE),
+                new DoCopy()), NL_LF);
+        INSIDE.add(new OnAnyByte(), new DoCopy(), INSIDE);
+        INSIDE.add(new OnAnything(), new DoAll(new DoEndRegion(LINE),
+                new DoCopy()), OUTSIDE);
 
-            sendStartRegion(LINE);
-            send();
-            setState(INSIDE);
-            return;
-        }
+        NL_CR.add(new OnByte(CR), new DoAll(new DoStartRegion(LINE),
+                new DoEndRegion(LINE), new DoCopy()), NL_CR);
+        NL_CR.add(new OnByte(LF), new DoCopy(), OUTSIDE);
+        NL_CR.add(new OnAnyByte(), new DoAll(new DoStartRegion(LINE),
+                new DoCopy()), INSIDE);
+        NL_CR.add(new OnAnything(), new DoCopy(), OUTSIDE);
 
-        @Override
-        public void endRegion(String name) {
-            sendEndRegion(name);
-            setState(OUTSIDE);
-        }
-
-        @Override
-        public void endStream() {
-            sendEndStream();
-            setState(OUTSIDE);
-        }
-    };
+        NL_LF.add(new OnByte(CR), new DoCopy(), OUTSIDE);
+        NL_LF.add(new OnByte(LF), new DoAll(new DoStartRegion(LINE),
+                new DoEndRegion(LINE), new DoCopy()), NL_LF);
+        NL_LF.add(new OnAnyByte(), new DoAll(new DoStartRegion(LINE),
+                new DoCopy()), INSIDE);
+        NL_LF.add(new OnAnything(), new DoCopy(), OUTSIDE);
+    }
 
     /**
      * set up {@link LineHandler} with a handler to accept the events.
@@ -223,7 +98,6 @@ public class LineHandler extends AbstractStateMarkFilter {
      *            the handler that accepts the events.
      */
     public LineHandler(BinaryHandler handler) {
-        super(handler);
-        setState(OUTSIDE);
+        super(OUTSIDE, handler);
     }
 }

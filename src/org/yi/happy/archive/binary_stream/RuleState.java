@@ -29,8 +29,7 @@ public class RuleState implements State {
      * @param goState
      *            the next state for the rule.
      */
-    public void add(OnCondition onCondition, DoAction doAction,
-            RuleState goState) {
+    public void add(OnCondition onCondition, DoAction doAction, State goState) {
         add(new Rule(onCondition, doAction, goState));
     }
 
