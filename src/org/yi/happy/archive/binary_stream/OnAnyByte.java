@@ -1,9 +1,9 @@
-package org.yi.happy.archive.sandbox.interpret;
+package org.yi.happy.archive.binary_stream;
 
 /**
- * A condition that matches the endStream event.
+ * This condition matches any data event.
  */
-public class OnEndStream implements OnCondition {
+public class OnAnyByte implements OnCondition {
 
     @Override
     public boolean startStream() {
@@ -12,12 +12,12 @@ public class OnEndStream implements OnCondition {
 
     @Override
     public boolean endStream() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean data(byte b) {
-        return false;
+        return true;
     }
 
     @Override

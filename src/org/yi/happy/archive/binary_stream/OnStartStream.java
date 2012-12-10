@@ -1,13 +1,13 @@
-package org.yi.happy.archive.sandbox.interpret;
+package org.yi.happy.archive.binary_stream;
 
 /**
- * A condition that matches nothing.
+ * A condition that matches the startStream event.
  */
-public class OnNothing implements OnCondition {
+public class OnStartStream implements OnCondition {
 
     @Override
     public boolean startStream() {
-        return false;
+        return true;
     }
 
     @Override

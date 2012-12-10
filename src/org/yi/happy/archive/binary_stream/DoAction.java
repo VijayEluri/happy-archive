@@ -1,4 +1,4 @@
-package org.yi.happy.archive.sandbox.interpret;
+package org.yi.happy.archive.binary_stream;
 
 /**
  * An action that can be used in a {@link Rule}.

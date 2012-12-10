@@ -1,4 +1,4 @@
-package org.yi.happy.archive.sandbox.interpret;
+package org.yi.happy.archive.binary_stream;
 
 /**
  * The state interface for the state pattern implementation for

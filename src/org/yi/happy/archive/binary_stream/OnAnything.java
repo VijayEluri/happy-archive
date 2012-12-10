@@ -1,18 +1,18 @@
-package org.yi.happy.archive.sandbox.interpret;
+package org.yi.happy.archive.binary_stream;
 
 /**
- * This condition matches any data event.
+ * This condition matches any event.
  */
-public class OnAnyByte implements OnCondition {
+public class OnAnything implements OnCondition {
 
     @Override
     public boolean startStream() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean endStream() {
-        return false;
+        return true;
     }
 
     @Override
@@ -22,12 +22,11 @@ public class OnAnyByte implements OnCondition {
 
     @Override
     public boolean startRegion(String name) {
-        return false;
+        return true;
     }
 
     @Override
     public boolean endRegion(String name) {
-        return false;
+        return true;
     }
-
 }

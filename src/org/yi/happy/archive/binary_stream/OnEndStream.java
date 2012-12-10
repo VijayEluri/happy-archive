@@ -1,18 +1,18 @@
-package org.yi.happy.archive.sandbox.interpret;
+package org.yi.happy.archive.binary_stream;
 
 /**
- * A condition that matches the startStream event.
+ * A condition that matches the endStream event.
  */
-public class OnStartStream implements OnCondition {
+public class OnEndStream implements OnCondition {
 
     @Override
     public boolean startStream() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean endStream() {
-        return false;
+        return true;
     }
 
     @Override
