@@ -14,8 +14,6 @@ public class Rule {
     /**
      * create a finite state machine rule.
      * 
-     * @param inState
-     *            the state this rule applies.
      * @param onCondition
      *            the condition for this rule.
      * @param doAction
@@ -27,6 +25,27 @@ public class Rule {
         this.onCondition = onCondition;
         this.doAction = doAction;
         this.goState = goState;
+    }
+
+    /**
+     * create a finite state machine rule.
+     * 
+     * @param onCondition
+     *            the condition for this rule.
+     * @param goState
+     *            the state to transition to.
+     * @param doAction
+     *            the action to be done.
+     */
+    public Rule(OnCondition onCondition, State goState, DoAction... doAction) {
+        this.onCondition = onCondition;
+        this.goState = goState;
+
+        if (doAction.length == 1) {
+            this.doAction = doAction[0];
+        } else {
+            this.doAction = new DoAll(doAction);
+        }
     }
 
     /**

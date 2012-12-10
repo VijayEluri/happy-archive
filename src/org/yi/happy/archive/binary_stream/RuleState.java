@@ -33,6 +33,21 @@ public class RuleState implements State {
         add(new Rule(onCondition, doAction, goState));
     }
 
+    /**
+     * Add a rule to the set of rules in this state.
+     * 
+     * @param onCondition
+     *            the condition for the rule.
+     * @param goState
+     *            the next state for the rule.
+     * @param doAction
+     *            the action for the rule.
+     */
+    public void add(OnCondition onCondition, State goState,
+            DoAction... doAction) {
+        add(new Rule(onCondition, goState, doAction));
+    }
+
     @Override
     public State startStream(ActionCallback callback) {
         for (Rule rule : rules) {

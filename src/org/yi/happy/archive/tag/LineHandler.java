@@ -2,7 +2,6 @@ package org.yi.happy.archive.tag;
 
 import org.yi.happy.annotate.ExternalValue;
 import org.yi.happy.archive.binary_stream.BinaryHandler;
-import org.yi.happy.archive.binary_stream.DoAll;
 import org.yi.happy.archive.binary_stream.DoCopy;
 import org.yi.happy.archive.binary_stream.DoEndRegion;
 import org.yi.happy.archive.binary_stream.DoStartRegion;
@@ -60,35 +59,33 @@ public class LineHandler extends StateByteFilter {
     private static final RuleState NL_LF = new RuleState();
 
     static {
-        OUTSIDE.add(new OnByte(CR), new DoAll(new DoStartRegion(LINE),
-                new DoEndRegion(LINE), new DoCopy()), NL_CR);
-        OUTSIDE.add(new OnByte(LF), new DoAll(new DoStartRegion(LINE),
-                new DoEndRegion(LINE), new DoCopy()), NL_LF);
-        OUTSIDE.add(new OnAnyByte(), new DoAll(new DoStartRegion(LINE),
-                new DoCopy()), INSIDE);
-        OUTSIDE.add(new OnAnything(), new DoCopy(), OUTSIDE);
+        OUTSIDE.add(new OnByte(CR), NL_CR, new DoStartRegion(LINE),
+                new DoEndRegion(LINE), new DoCopy());
+        OUTSIDE.add(new OnByte(LF), NL_LF, new DoStartRegion(LINE),
+                new DoEndRegion(LINE), new DoCopy());
+        OUTSIDE.add(new OnAnyByte(), INSIDE, new DoStartRegion(LINE),
+                new DoCopy());
+        OUTSIDE.add(new OnAnything(), OUTSIDE, new DoCopy());
 
-        INSIDE.add(new OnByte(CR), new DoAll(new DoEndRegion(LINE),
-                new DoCopy()), NL_CR);
-        INSIDE.add(new OnByte(LF), new DoAll(new DoEndRegion(LINE),
-                new DoCopy()), NL_LF);
-        INSIDE.add(new OnAnyByte(), new DoCopy(), INSIDE);
-        INSIDE.add(new OnAnything(), new DoAll(new DoEndRegion(LINE),
-                new DoCopy()), OUTSIDE);
+        INSIDE.add(new OnByte(CR), NL_CR, new DoEndRegion(LINE), new DoCopy());
+        INSIDE.add(new OnByte(LF), NL_LF, new DoEndRegion(LINE), new DoCopy());
+        INSIDE.add(new OnAnyByte(), INSIDE, new DoCopy());
+        INSIDE.add(new OnAnything(), OUTSIDE, new DoEndRegion(LINE),
+                new DoCopy());
 
-        NL_CR.add(new OnByte(CR), new DoAll(new DoStartRegion(LINE),
-                new DoEndRegion(LINE), new DoCopy()), NL_CR);
-        NL_CR.add(new OnByte(LF), new DoCopy(), OUTSIDE);
-        NL_CR.add(new OnAnyByte(), new DoAll(new DoStartRegion(LINE),
-                new DoCopy()), INSIDE);
-        NL_CR.add(new OnAnything(), new DoCopy(), OUTSIDE);
+        NL_CR.add(new OnByte(CR), NL_CR, new DoStartRegion(LINE),
+                new DoEndRegion(LINE), new DoCopy());
+        NL_CR.add(new OnByte(LF), OUTSIDE, new DoCopy());
+        NL_CR.add(new OnAnyByte(), INSIDE, new DoStartRegion(LINE),
+                new DoCopy());
+        NL_CR.add(new OnAnything(), OUTSIDE, new DoCopy());
 
-        NL_LF.add(new OnByte(CR), new DoCopy(), OUTSIDE);
-        NL_LF.add(new OnByte(LF), new DoAll(new DoStartRegion(LINE),
-                new DoEndRegion(LINE), new DoCopy()), NL_LF);
-        NL_LF.add(new OnAnyByte(), new DoAll(new DoStartRegion(LINE),
-                new DoCopy()), INSIDE);
-        NL_LF.add(new OnAnything(), new DoCopy(), OUTSIDE);
+        NL_LF.add(new OnByte(CR), OUTSIDE, new DoCopy());
+        NL_LF.add(new OnByte(LF), NL_LF, new DoStartRegion(LINE),
+                new DoEndRegion(LINE), new DoCopy());
+        NL_LF.add(new OnAnyByte(), INSIDE, new DoStartRegion(LINE),
+                new DoCopy());
+        NL_LF.add(new OnAnything(), OUTSIDE, new DoCopy());
     }
 
     /**
