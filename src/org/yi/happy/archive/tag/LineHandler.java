@@ -1,5 +1,6 @@
 package org.yi.happy.archive.tag;
 
+import org.yi.happy.annotate.ExternalValue;
 import org.yi.happy.archive.binary_stream.AbstractStateMarkFilter;
 import org.yi.happy.archive.binary_stream.BinaryHandler;
 
@@ -20,11 +21,13 @@ public class LineHandler extends AbstractStateMarkFilter {
     /**
      * one of the end of line characters.
      */
+    @ExternalValue
     public static final byte CR = '\r';
 
     /**
      * one of the end of line characters.
      */
+    @ExternalValue
     public static final byte LF = '\n';
 
     /**
