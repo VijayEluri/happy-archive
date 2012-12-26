@@ -39,6 +39,21 @@ public final class Bytes implements Comparable<Bytes> {
     }
 
     /**
+     * Create from a String. This is to allow for easy creation of literals
+     * based on character strings.
+     * 
+     * @param data
+     *            the contents, each character will be chopped to the least
+     *            significant eight bits.
+     */
+    public Bytes(String data) {
+        this.data = new byte[data.length()];
+        for (int i = 0; i < data.length(); i++) {
+            this.data[i] = (byte) data.charAt(i);
+        }
+    }
+
+    /**
      * Create from a slice of a byte array.
      * 
      * @param data
@@ -179,5 +194,10 @@ public final class Bytes implements Comparable<Bytes> {
             return (data[i] & 0xff) - (o.data[i] & 0xff);
         }
         return data.length - o.data.length;
+    }
+
+    @Override
+    public String toString() {
+        return "Bytes [data=" + Arrays.toString(data) + "]";
     }
 }

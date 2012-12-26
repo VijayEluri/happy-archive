@@ -105,4 +105,8 @@ public final class Fragment {
         return data.get((int) (offset - this.offset));
     }
 
+    @Override
+    public String toString() {
+        return "Fragment [offset=" + offset + ", data=" + data + "]";
+    }
 }
