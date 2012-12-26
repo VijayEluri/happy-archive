@@ -1,4 +1,4 @@
-package org.yi.happy.archive.join;
+package org.yi.happy.archive.restore;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,6 +34,11 @@ public class RestoreEngine {
     private FragmentHandler handler;
 
     /**
+     * True if processing only works from the front of the item list.
+     */
+    private boolean firstOnly;
+
+    /**
      * Set up the logic to join data blocks back together.
      * 
      * @param key
@@ -44,6 +49,8 @@ public class RestoreEngine {
     public RestoreEngine(FullKey key, FragmentHandler handler) {
         items = new ArrayList<Item>();
         items.add(new Item(key, 0l));
+
+        firstOnly = false;
 
         this.handler = handler;
     }
@@ -93,12 +100,32 @@ public class RestoreEngine {
             if (step(blocks, index)) {
                 continue;
             }
+            if (firstOnly) {
+                break;
+            }
             index++;
         }
 
         if (items.size() == 0) {
             handler.end();
         }
+    }
+
+    /**
+     * set if processing only works from the front of the item list.
+     * 
+     * @param firstOnly
+     *            true if processing only works from the front of the item list.
+     */
+    public void setFirstOnly(boolean firstOnly) {
+        this.firstOnly = firstOnly;
+    }
+
+    /**
+     * @return true if this engine has no more work to do.
+     */
+    public boolean isDone() {
+        return items.isEmpty();
     }
 
     /**

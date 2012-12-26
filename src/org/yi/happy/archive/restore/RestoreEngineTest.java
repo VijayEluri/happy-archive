@@ -1,4 +1,4 @@
-package org.yi.happy.archive.join;
+package org.yi.happy.archive.restore;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
