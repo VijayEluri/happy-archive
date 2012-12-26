@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.yi.happy.annotate.DuplicatedLogic;
 import org.yi.happy.annotate.MagicLiteral;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.DataBlock;
@@ -14,6 +15,7 @@ import org.yi.happy.archive.key.FullKeyParse;
 /**
  * fetches the blocks for a split key of various kinds.
  */
+@DuplicatedLogic("RestoreEngine")
 public class SplitReader {
 
     private int progress;

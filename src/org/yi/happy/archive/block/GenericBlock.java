@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.yi.happy.annotate.ExternalName;
 import org.yi.happy.archive.Bytes;
 
 /**
@@ -17,13 +16,8 @@ public final class GenericBlock extends AbstractBlock implements Block {
     private final Map<String, String> meta;
 
     /**
-     * the size meta-data field name.
-     */
-    @ExternalName
-    public static final String SIZE_META = "size";
-
-    /**
-     * create, checking that the meta-data headers are valid.
+     * create, checking that the meta-data headers are valid. If there is a
+     * "size" ({@link #SIZE_META}) header, it must match the size of the body.
      * 
      * @param meta
      *            the meta-data headers.

@@ -39,12 +39,6 @@ public final class ContentEncodedBlock extends AbstractBlock implements
     public static final String VERSION = "2";
 
     /**
-     * The name of the size meta-data header.
-     */
-    @ExternalName
-    public static final String SIZE_META = "size";
-
-    /**
      * create a content encoded block with all details.
      * 
      * @param key

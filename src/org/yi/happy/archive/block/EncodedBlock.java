@@ -38,12 +38,6 @@ public interface EncodedBlock extends Block {
     public static final String CIPHER_META = "cipher";
 
     /**
-     * the size meta-data field name.
-     */
-    @ExternalName
-    public static final String SIZE_META = "size";
-
-    /**
      * 
      * @return the locator key for this block.
      */

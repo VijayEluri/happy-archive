@@ -2,14 +2,25 @@ package org.yi.happy.archive.block;
 
 import java.util.Map;
 
+import org.yi.happy.annotate.ExternalName;
 import org.yi.happy.annotate.ExternalValue;
 import org.yi.happy.archive.Bytes;
 
 /**
  * a data block is a set of simple headers and a body, with a very simple
- * format. The upper size of any block in use is just over 1 MiB.
+ * format. The upper size of any block in use is just over 1 MiB. If there is a
+ * size header, then the size of the body must match the value of the size
+ * header.
  */
 public interface Block {
+    /**
+     * The meta-data field name for the size of the body. Implementations are
+     * required to ensure that if this meta-data field is present then it
+     * matches the size of the body.
+     */
+    @ExternalName
+    public static final String SIZE_META = "size";
+
     /**
      * The first byte of the end of line sequence ('\r').
      */

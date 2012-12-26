@@ -124,12 +124,6 @@ public class MapBlock extends AbstractBlock implements Block {
     @ExternalName
     public static final String TYPE = "map";
 
-    /**
-     * The meta-data field name for size.
-     */
-    @ExternalName
-    public static final String SIZE_META = "size";
-
     @Override
     public Map<String, String> getMeta() {
         Map<String, String> out = new LinkedHashMap<String, String>();
