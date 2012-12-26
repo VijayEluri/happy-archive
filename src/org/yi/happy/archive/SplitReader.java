@@ -2,15 +2,17 @@ package org.yi.happy.archive;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.yi.happy.annotate.DuplicatedLogic;
 import org.yi.happy.annotate.MagicLiteral;
 import org.yi.happy.archive.block.Block;
-import org.yi.happy.archive.block.DataBlock;
-import org.yi.happy.archive.block.MapBlock;
 import org.yi.happy.archive.key.FullKey;
-import org.yi.happy.archive.key.FullKeyParse;
+import org.yi.happy.archive.restore.CaptureFragmentHandler;
+import org.yi.happy.archive.restore.RestoreEngine;
 
 /**
  * fetches the blocks for a split key of various kinds.
@@ -19,6 +21,10 @@ import org.yi.happy.archive.key.FullKeyParse;
 public class SplitReader {
 
     private int progress;
+
+    private final CaptureFragmentHandler capture;
+
+    private final RestoreEngine engine;
 
     /**
      * create to read fullKey finding blocks in storage
@@ -29,8 +35,8 @@ public class SplitReader {
      *            where to find the blocks
      */
     public SplitReader(FullKey fullKey, RetrieveBlock storage) {
-        this.pending = new ArrayList<Pending>();
-        this.pending.add(new Pending(fullKey, 0l));
+        this.capture = new CaptureFragmentHandler();
+        this.engine = new RestoreEngine(fullKey, capture);
 
         this.storage = storage;
     }
@@ -44,7 +50,7 @@ public class SplitReader {
      *             if the block is available but fetching or decoding failed.
      */
     public Fragment fetchAny() throws IOException {
-        for (int i = 0; i < pending.size(); i++) {
+        for (int i = 0; i < engine.getItemCount(); i++) {
             Fragment out = fetch(i);
             if (out != null) {
                 return out;
@@ -81,182 +87,32 @@ public class SplitReader {
     @MagicLiteral
     private Fragment fetch(int index) throws IOException {
         while (true) {
-            if (index >= pending.size()) {
+            if (capture.isReady()) {
+                return capture.get();
+            }
+
+            if (index >= engine.getItemCount()) {
                 return null;
             }
 
-            Pending item = pending.get(index);
-            if (item.offset == null) {
+            if (engine.isReady(index) == false) {
                 return null;
             }
 
-            Block b = storage.retrieveBlock(item.key);
+            FullKey key = engine.getNeeded(index);
+            Block b = storage.retrieveBlock(key);
             if (b == null) {
                 return null;
             }
 
-            /*
-             * note that progress was made
-             */
-            progress++;
-
-            String type = b.getMeta().get("type");
-            if (type == null) {
-                return processData(index, item.offset, b);
+            try {
+                if (engine.addBlocks(Collections.singletonMap(key, b), index)) {
+                    progress++;
+                }
+            } catch (IllegalArgumentException e) {
+                throw new DecodeException(e);
             }
-
-            if (type.equals(MapBlock.TYPE)) {
-                processMap(index, item.offset, b);
-                continue;
-            }
-
-            if (type.equals("split")) {
-                processSplit(index, item, b);
-                continue;
-            }
-
-            if (type.equals("indirect")) {
-                item.key = FullKeyParse.parseFullKey(ByteString.toString(b
-                        .getBody()));
-                continue;
-            }
-
-            if (type.equals("list")) {
-                processList(index, item.offset, b);
-                continue;
-            }
-
-            throw new DecodeException("can not handle type: " + type);
         }
-    }
-
-    private Fragment processData(int index, long offset, Block b)
-            throws DecodeException {
-        /*
-         * data block
-         */
-        DataBlock block;
-        try {
-            block = DataBlockParse.parse(b);
-        } catch (IllegalArgumentException e) {
-            throw new DecodeException(e);
-        }
-        Bytes data = block.getBody();
-
-        pending.remove(index);
-        fixOffset(index, offset + data.getSize());
-        return new Fragment(offset, data);
-    }
-
-    /**
-     * replace an item with the contents of a split block
-     * 
-     * @param index
-     *            the index of the item
-     * @param item
-     *            the item
-     * @param b
-     *            the split block
-     */
-    @MagicLiteral
-    private void processSplit(int index, Pending item, Block b) {
-        String countString = b.getMeta().get("split-count");
-        int count = Integer.parseInt(countString);
-        List<Pending> add = new ArrayList<Pending>(count);
-        String base = item.key + "/";
-        for (int i = 0; i < count; i++) {
-            FullKey key = FullKeyParse.parseFullKey(base + i);
-            add.add(new Pending(key, null));
-        }
-
-        replaceItem(index, add, item.offset);
-    }
-
-    /**
-     * replace an item with a list of items, and fix the offset if needed
-     * 
-     * @param index
-     *            the index of the item to replace
-     * @param add
-     *            what to replace the item with
-     * @param offset
-     *            the offset of the first block if missing
-     */
-    private void replaceItem(int index, List<Pending> add, long offset) {
-        pending.remove(index);
-        pending.addAll(index, add);
-        fixOffset(index, offset);
-    }
-
-    /**
-     * replace the pending block at index with the contents of the map block
-     * 
-     * @param index
-     *            the index to replace
-     * @param base
-     *            the base offset of the block, for chainging relative offsets
-     *            into absolute offsets.
-     * @param b
-     *            a map block
-     */
-    @MagicLiteral
-    private void processMap(int index, long base, Block b) {
-        String map = ByteString.toString(b.getBody().toByteArray());
-        String[] lines = map.split("\n");
-        List<Pending> add = new ArrayList<Pending>(lines.length);
-        for (String line : lines) {
-            String[] cols = line.split("\t", 2);
-            FullKey key = FullKeyParse.parseFullKey(cols[0]);
-            long offset = Long.parseLong(cols[1]) + base;
-            add.add(new Pending(key, offset));
-        }
-
-        replaceItem(index, add, base);
-    }
-
-    /**
-     * replace an item with the contents of a list block.
-     * 
-     * @param index
-     *            the index to the item
-     * @param base
-     *            the base offset of the item
-     * @param b
-     *            the block
-     */
-    @MagicLiteral
-    private void processList(int index, long base, Block b) {
-        String map = ByteString.toString(b.getBody());
-        String[] lines = map.split("\n");
-        List<Pending> add = new ArrayList<Pending>(lines.length);
-        for (String line : lines) {
-            FullKey key = FullKeyParse.parseFullKey(line);
-            add.add(new Pending(key, null));
-        }
-
-        replaceItem(index, add, base);
-    }
-
-    /**
-     * fix the offset of an item. the offset of the item is set to offset if it
-     * is not already set.
-     * 
-     * @param index
-     *            the index of the item
-     * @param offset
-     *            the offset to set if it is not already set
-     */
-    private void fixOffset(int index, long offset) {
-        if (pending.size() <= index) {
-            return;
-        }
-
-        Pending item = pending.get(index);
-        if (item.offset != null) {
-            return;
-        }
-
-        item.offset = offset;
     }
 
     /**
@@ -266,11 +122,10 @@ public class SplitReader {
      * @return the list of full keys for blocks that are needed.
      */
     public List<FullKey> getPending() {
-        List<FullKey> out = new ArrayList<FullKey>(pending.size());
-        for (Pending i : pending) {
-            out.add(i.key);
-        }
-        return out;
+        Set<FullKey> out = new LinkedHashSet<FullKey>();
+        out.addAll(engine.getNeededNow());
+        out.addAll(engine.getNeededLater());
+        return new ArrayList<FullKey>(out);
     }
 
     /**
@@ -279,41 +134,8 @@ public class SplitReader {
      * @return true if there are no more pending blocks.
      */
     public boolean isDone() {
-        return pending.isEmpty();
+        return engine.isDone();
     }
-
-    /**
-     * trivial data structure for pending blocks
-     * 
-     * @author sarah dot a dot happy at gmail dot com
-     * 
-     */
-    private static class Pending {
-        /**
-         * create an entry
-         * 
-         * @param key
-         *            the key value
-         * @param offset
-         *            the offset value
-         */
-        public Pending(FullKey key, Long offset) {
-            this.key = key;
-            this.offset = offset;
-        }
-
-        /**
-         * the byte offset from the creating key where this block should appear
-         */
-        public Long offset;
-
-        /**
-         * the key that needs to be loaded in this position
-         */
-        public FullKey key;
-    }
-
-    private List<Pending> pending;
 
     private RetrieveBlock storage;
 
@@ -323,10 +145,10 @@ public class SplitReader {
      * @return the next offset, or null if done
      */
     public Long getOffset() {
-        if (pending.isEmpty()) {
+        if (engine.isDone()) {
             return null;
         }
-        return pending.get(0).offset;
+        return engine.getOffset(0);
     }
 
     /**

@@ -34,11 +34,6 @@ public class RestoreEngine {
     private FragmentHandler handler;
 
     /**
-     * True if processing only works from the front of the item list.
-     */
-    private boolean firstOnly;
-
-    /**
      * Set up the logic to join data blocks back together.
      * 
      * @param key
@@ -50,13 +45,13 @@ public class RestoreEngine {
         items = new ArrayList<Item>();
         items.add(new Item(key, 0l));
 
-        firstOnly = false;
-
         this.handler = handler;
     }
 
     /**
-     * @return the list of blocks that can be immediately processed.
+     * @return the list of blocks that can be immediately processed. The first
+     *         key in the list is the key that is needed if firstOnly is set to
+     *         true.
      */
     public List<FullKey> getNeededNow() {
         LinkedHashSet<FullKey> needed = new LinkedHashSet<FullKey>();
@@ -86,22 +81,51 @@ public class RestoreEngine {
     }
 
     /**
+     * @param index
+     *            the index of the item.
+     * @return the key needed by the item at the index in the list.
+     */
+    public FullKey getNeeded(int index) {
+        return items.get(index).key;
+    }
+
+    /**
+     * fetch the offset for the given item.
+     * 
+     * @param index
+     *            the index of the item.
+     * @return the offset, or null if it is not yet known.
+     */
+    public Long getOffset(int index) {
+        return items.get(index).offset;
+    }
+
+    /**
+     * 
+     * @param index
+     * @return true if the item is ready for processing.
+     */
+    public boolean isReady(int index) {
+        return items.get(index).offset != null;
+    }
+
+    /**
      * process some decoded blocks.
      * 
      * @param blocks
      *            the decoded blocks to process.
+     * @return true if progress was made.
      */
-    public void addBlocks(Map<FullKey, Block> blocks) {
+    public boolean addBlocks(Map<FullKey, Block> blocks) {
+        boolean progress = false;
         if (items.size() == 0) {
-            return;
+            return progress;
         }
 
         for (int index = 0; index < items.size();) {
-            if (step(blocks, index)) {
+            if (addBlocks(blocks, index)) {
+                progress = true;
                 continue;
-            }
-            if (firstOnly) {
-                break;
             }
             index++;
         }
@@ -109,16 +133,8 @@ public class RestoreEngine {
         if (items.size() == 0) {
             handler.end();
         }
-    }
 
-    /**
-     * set if processing only works from the front of the item list.
-     * 
-     * @param firstOnly
-     *            true if processing only works from the front of the item list.
-     */
-    public void setFirstOnly(boolean firstOnly) {
-        this.firstOnly = firstOnly;
+        return progress;
     }
 
     /**
@@ -129,16 +145,17 @@ public class RestoreEngine {
     }
 
     /**
-     * attempt a processing step on a processing list item.
+     * attempt a processing step on a processing list item. At most one fragment
+     * can be emitted to the fragment handler from this call.
      * 
      * @param blocks
      *            the blocks being processed.
      * @param index
-     *            the processing item to attempt.
+     *            the index of the processing item to attempt.
      * @return true if progress was made.
      */
     @MagicLiteral
-    private boolean step(Map<FullKey, Block> blocks, int index) {
+    public boolean addBlocks(Map<FullKey, Block> blocks, int index) {
         Item item = items.get(index);
 
         if (item.offset == null) {
@@ -219,6 +236,13 @@ public class RestoreEngine {
         }
 
         throw new IllegalArgumentException("can not handle block type: " + type);
+    }
+
+    /**
+     * @return the number of work items in the engine.
+     */
+    public int getItemCount() {
+        return items.size();
     }
 
     private void replace(int index, List<Item> with, long base) {
