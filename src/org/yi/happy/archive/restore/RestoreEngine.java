@@ -81,6 +81,24 @@ public class RestoreEngine {
     }
 
     /**
+     * @return the list of blocks that are known to be needed, the blocks that
+     *         can be immediately processed are at the beginning of the list.
+     */
+    public List<FullKey> getNeeded() {
+        LinkedHashSet<FullKey> needed = new LinkedHashSet<FullKey>();
+        LinkedHashSet<FullKey> later = new LinkedHashSet<FullKey>();
+        for (Item item : items) {
+            if (item.offset == null) {
+                later.add(item.key);
+            } else {
+                needed.add(item.key);
+            }
+        }
+        needed.addAll(later);
+        return new ArrayList<FullKey>(needed);
+    }
+
+    /**
      * @param index
      *            the index of the item.
      * @return the key needed by the item at the index in the list.
