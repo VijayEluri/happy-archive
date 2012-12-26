@@ -68,7 +68,7 @@ public class RestoreEngine {
                 continue;
             }
 
-            long offset = item.offset;
+            long base = item.offset;
 
             String type = block.getMeta().get("type");
             if (type == null) {
@@ -80,11 +80,8 @@ public class RestoreEngine {
                 }
                 Bytes data = b.getBody();
 
-                todo.remove(index);
-                if (todo.size() > index && todo.get(index).offset == null) {
-                    todo.get(index).offset = offset + data.getSize();
-                }
-                handler.data(offset, data);
+                replace(index, null, base + data.getSize());
+                handler.data(base, data);
                 continue;
             }
 
@@ -95,12 +92,11 @@ public class RestoreEngine {
                 for (String line : lines) {
                     String[] cols = line.split("\t", 2);
                     FullKey key = FullKeyParse.parseFullKey(cols[0]);
-                    long o = Long.parseLong(cols[1]) + offset;
-                    add.add(new Pending(key, o));
+                    long offset = Long.parseLong(cols[1]) + base;
+                    add.add(new Pending(key, offset));
                 }
 
-                todo.remove(index);
-                todo.addAll(index, add);
+                replace(index, add, base);
                 continue;
             }
 
@@ -111,5 +107,35 @@ public class RestoreEngine {
         if (todo.size() == 0) {
             handler.end();
         }
+    }
+
+    private void replace(int index, List<Pending> with, long base) {
+        todo.remove(index);
+        if (with != null) {
+            todo.addAll(index, with);
+        }
+        fixOffset(index, base);
+    }
+
+    /**
+     * If the offset is not set for the given item, set it to base.
+     * 
+     * @param index
+     *            the index into the todo list of the item.
+     * @param base
+     *            the base offset for the item.
+     */
+    private void fixOffset(int index, long base) {
+        if (todo.size() <= index) {
+            return;
+        }
+
+        Pending item = todo.get(index);
+
+        if (item.offset != null) {
+            return;
+        }
+
+        item.offset = base;
     }
 }
