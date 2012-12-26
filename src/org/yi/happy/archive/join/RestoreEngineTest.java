@@ -113,6 +113,11 @@ public class RestoreEngineTest {
         assertTrue(log.isDone());
     }
 
+    /**
+     * Restore a map with an overlap in it.
+     * 
+     * @throws Exception
+     */
     @Test
     public void testMapOverlap() throws Exception {
         TestData B = TestData.KEY_CONTENT_MAP_OVERLAP;
@@ -123,6 +128,11 @@ public class RestoreEngineTest {
         assertTrue(log.isDone());
     }
 
+    /**
+     * Restore a list.
+     * 
+     * @throws Exception
+     */
     @Test
     public void testList() throws Exception {
         TestData B = TestData.KEY_CONTENT_LIST;
@@ -133,6 +143,11 @@ public class RestoreEngineTest {
         assertTrue(log.isDone());
     }
 
+    /**
+     * Restore a list, checking that it will not process blocks out of order.
+     * 
+     * @throws Exception
+     */
     @Test
     public void testListOrder() throws Exception {
         TestData B = TestData.KEY_CONTENT_LIST;
