@@ -5,8 +5,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -53,7 +53,7 @@ public class RestoreEngineTest {
     public void testFirstBasic() throws Exception {
         RestoreEngine restore = new RestoreEngine(C.getFullKey(), log);
 
-        assertEquals(Arrays.asList(C.getFullKey()), restore.getNeededNow());
+        assertEquals(keyList(C), restore.getNeededNow());
 
         restore.addBlocks(blockMap(C));
 
@@ -78,24 +78,31 @@ public class RestoreEngineTest {
 
         restore.addBlocks(blockMap(MAP));
 
-        assertEquals(Collections.emptyList(), log.getFragments());
+        assertEquals(list(), log.getFragments());
 
-        assertEquals(Arrays.asList(C1.getFullKey(), C2.getFullKey()),
-                restore.getNeededNow());
+        assertEquals(keyList(C1, C2), restore.getNeededNow());
 
         restore.addBlocks(blockMap(C2));
 
-        assertEquals(Arrays.asList(new Fragment(5, D2)), log.getFragments());
+        assertEquals(list(frag(5, D2)), log.getFragments());
         assertFalse(log.isDone());
 
-        assertEquals(Arrays.asList(C1.getFullKey()), restore.getNeededNow());
+        assertEquals(keyList(C1), restore.getNeededNow());
 
         restore.addBlocks(blockMap(C1));
 
         assertEquals(list(frag(5, D2), frag(0, D1)), log.getFragments());
         assertTrue(log.isDone());
 
-        assertEquals(Collections.emptyList(), restore.getNeededNow());
+        assertEquals(keyList(), restore.getNeededNow());
+    }
+
+    private List<FullKey> keyList(TestData... items) {
+        List<FullKey> list = new ArrayList<FullKey>();
+        for (TestData item : items) {
+            list.add(item.getFullKey());
+        }
+        return list;
     }
 
     private static final TestData MAP_PAD = TestData.KEY_CONTENT_MAP_PAD;
@@ -113,6 +120,21 @@ public class RestoreEngineTest {
 
         assertEquals(list(frag(0, D1), frag(10, D2)), log.getFragments());
         assertTrue(log.isDone());
+    }
+
+    private static final TestData MAP_OVERLAP = TestData.KEY_CONTENT_MAP_OVERLAP;
+
+    @Test
+    public void testMapOverlap() throws Exception {
+        RestoreEngine restore = new RestoreEngine(key(MAP_OVERLAP), log);
+
+        restore.addBlocks(blockMap(MAP_OVERLAP, C1, C2));
+        assertEquals(list(frag(0, D1), frag(3, D2)), log.getFragments());
+        assertTrue(log.isDone());
+    }
+
+    private FullKey key(TestData item) {
+        return item.getFullKey();
     }
 
     private <T> List<T> list(T... items) {
