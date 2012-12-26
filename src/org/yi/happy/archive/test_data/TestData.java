@@ -223,8 +223,8 @@ public enum TestData {
     CLEAR_CONTENT_MAP,
 
     /**
-     * a two part map for "01234" + "56789". {@link #KEY_CONTENT_1},
-     * {@link #KEY_CONTENT_2}.
+     * a two part map for "01234" + "56789". {@link #KEY_CONTENT_1} at offset 0,
+     * {@link #KEY_CONTENT_2} at offset 5.
      */
     @Full("content-hash:87bed19266dc934236c132b9538cd8ec833aa85856b04be7b90f52"
             + "03f51aebf2:e43a2194e64835a3a90562c7497d1f70390"
@@ -235,12 +235,13 @@ public enum TestData {
     KEY_CONTENT_MAP,
 
     /**
-     * clear text version of KEY_CONTENT_MAP_OVERLAP
+     * clear text version of {@link #KEY_CONTENT_MAP_OVERLAP}
      */
     CLEAR_CONTENT_MAP_OVERLAP,
 
     /**
-     * a map with an overlap
+     * a map with an overlap. {@link #KEY_CONTENT_1} at offset 0, and
+     * {@link #KEY_CONTENT_2} at offset 3.
      */
     @Full("content-hash:f6319daaac6b24331301ab8315e946395d250fabe39c"
             + "b1ef7577c42df284ab3b:fcc7229ac6b6913b31179efa2e4612c61f7"
@@ -256,7 +257,8 @@ public enum TestData {
     CLEAR_CONTENT_MAP_PAD,
 
     /**
-     * a map with a gap
+     * a map with a gap. {@link #KEY_CONTENT_1} at offset 0, and
+     * {@link #KEY_CONTENT_2} at offset 10.
      */
     @Full("content-hash:467955babd84179b7ca3b9ac0462eb68592251677cc1"
             + "846a60fb579219e074e8:0491cc799e2b3dbae6c7475c4dab3cc3e49"
@@ -286,7 +288,8 @@ public enum TestData {
     CLEAR_NAME_SPLIT_1,
 
     /**
-     * an indirect block in the split for part 1
+     * an indirect block in the split for part 1. points to
+     * {@link #KEY_CONTENT_1}.
      */
     @Full("name-hash:sha-256:split/0")
     @Locator("name-hash:83013ce3b08bc6ef779a2dfae872c0171bcf463b646c1f6ff72062"
@@ -300,7 +303,8 @@ public enum TestData {
     CLEAR_NAME_SPLIT_2,
 
     /**
-     * an indirect block in the split for part 2
+     * an indirect block in the split for part 2. points to
+     * {@link #KEY_CONTENT_2}.
      */
     @Full("name-hash:sha-256:split/1")
     @Locator("name-hash:ba69e8638346563154fc571245edb331fbb71f420e97bce423c8ee"
