@@ -10,26 +10,26 @@ import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.key.FullKey;
 
 public class JoinManager {
-    private List<JoinTodo> items;
+    private List<RestoreEngine> items;
 
     public JoinManager() {
-        items = new ArrayList<JoinTodo>();
+        items = new ArrayList<RestoreEngine>();
     }
 
     public void addItem(FullKey key, FragmentHandler handler) {
-        items.add(new JoinTodo(key, handler));
+        items.add(new RestoreEngine(key, handler));
     }
 
     public List<FullKey> getNeededNow() {
         Set<FullKey> needed = new LinkedHashSet<FullKey>();
-        for (JoinTodo item : items) {
+        for (RestoreEngine item : items) {
             needed.addAll(item.getNeededNow());
         }
         return new ArrayList<FullKey>(needed);
     }
 
     public void addBlocks(Map<FullKey, Block> blocks) {
-        for (JoinTodo item : items) {
+        for (RestoreEngine item : items) {
             item.addBlocks(blocks);
         }
     }

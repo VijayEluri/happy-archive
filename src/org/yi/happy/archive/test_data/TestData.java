@@ -492,4 +492,18 @@ public enum TestData {
     public Block getBlock() throws IOException {
         return BlockParse.load(getUrl());
     }
+
+    /**
+     * Get the clear text version of this block.
+     * 
+     * @return the clear text version of this block, if available.
+     * @throws IOException
+     *             on error loading the block.
+     * @throws UnsupportedOperationException
+     *             if the clear text version is not listed.
+     */
+    public Block getClearBlock() throws IOException,
+            UnsupportedOperationException {
+        return getAnnotation(Clear.class).value().getBlock();
+    }
 }
