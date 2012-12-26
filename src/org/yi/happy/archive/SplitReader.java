@@ -7,7 +7,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.yi.happy.annotate.DuplicatedLogic;
 import org.yi.happy.annotate.MagicLiteral;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.key.FullKey;
@@ -17,7 +16,6 @@ import org.yi.happy.archive.restore.RestoreEngine;
 /**
  * fetches the blocks for a split key of various kinds.
  */
-@DuplicatedLogic("RestoreEngine")
 public class SplitReader {
 
     private int progress;
