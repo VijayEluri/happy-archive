@@ -30,11 +30,6 @@ public class DataBlockParse {
             throw new IllegalArgumentException("not a plain data block");
         }
 
-        int size = Integer.parseInt(meta.get("size"));
-        if (size != block.getBody().getSize()) {
-            throw new IllegalArgumentException("size mismatch");
-        }
-
         return new DataBlock(block.getBody());
     }
 
