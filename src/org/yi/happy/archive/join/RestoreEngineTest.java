@@ -97,16 +97,6 @@ public class RestoreEngineTest {
         assertEquals(keyList(), restore.getNeededNow());
     }
 
-    private List<FullKey> keyList(TestData... items) {
-        List<FullKey> list = new ArrayList<FullKey>();
-        for (TestData item : items) {
-            list.add(item.getFullKey());
-        }
-        return list;
-    }
-
-    private static final TestData MAP_PAD = TestData.KEY_CONTENT_MAP_PAD;
-
     /**
      * Restore a map with padding in it.
      * 
@@ -114,27 +104,74 @@ public class RestoreEngineTest {
      */
     @Test
     public void testMapPad() throws Exception {
-        RestoreEngine restore = new RestoreEngine(MAP_PAD.getFullKey(), log);
+        TestData B = TestData.KEY_CONTENT_MAP_PAD;
+        RestoreEngine restore = new RestoreEngine(key(B), log);
 
-        restore.addBlocks(blockMap(MAP_PAD, C1, C2));
+        restore.addBlocks(blockMap(B, C1, C2));
 
         assertEquals(list(frag(0, D1), frag(10, D2)), log.getFragments());
         assertTrue(log.isDone());
     }
 
-    private static final TestData MAP_OVERLAP = TestData.KEY_CONTENT_MAP_OVERLAP;
-
     @Test
     public void testMapOverlap() throws Exception {
-        RestoreEngine restore = new RestoreEngine(key(MAP_OVERLAP), log);
+        TestData B = TestData.KEY_CONTENT_MAP_OVERLAP;
+        RestoreEngine restore = new RestoreEngine(key(B), log);
 
-        restore.addBlocks(blockMap(MAP_OVERLAP, C1, C2));
+        restore.addBlocks(blockMap(B, C1, C2));
         assertEquals(list(frag(0, D1), frag(3, D2)), log.getFragments());
+        assertTrue(log.isDone());
+    }
+
+    @Test
+    public void testList() throws Exception {
+        TestData B = TestData.KEY_CONTENT_LIST;
+        RestoreEngine restore = new RestoreEngine(key(B), log);
+
+        restore.addBlocks(blockMap(B, C1, C2));
+        assertEquals(list(frag(0, D1), frag(5, D2)), log.getFragments());
+        assertTrue(log.isDone());
+    }
+
+    @Test
+    public void testListOrder() throws Exception {
+        TestData B = TestData.KEY_CONTENT_LIST;
+        RestoreEngine restore = new RestoreEngine(key(B), log);
+
+        restore.addBlocks(blockMap(B));
+
+        assertEquals(list(), log.getFragments());
+        assertEquals(keyList(C1), restore.getNeededNow());
+        assertEquals(keyList(C2), restore.getNeededLater());
+
+        restore.addBlocks(blockMap(C2));
+
+        assertEquals(list(), log.getFragments());
+        assertEquals(keyList(C1), restore.getNeededNow());
+        assertEquals(keyList(C2), restore.getNeededLater());
+
+        restore.addBlocks(blockMap(C1));
+
+        assertEquals(list(frag(0, D1)), log.getFragments());
+        assertEquals(keyList(C2), restore.getNeededNow());
+        assertEquals(keyList(), restore.getNeededLater());
+
+        restore.addBlocks(blockMap(C2));
+
+        assertEquals(list(frag(0, D1), frag(5, D2)), log.getFragments());
         assertTrue(log.isDone());
     }
 
     private FullKey key(TestData item) {
         return item.getFullKey();
+    }
+
+    private List<FullKey> keyList(TestData... items) {
+        List<FullKey> list = new ArrayList<FullKey>();
+        for (TestData item : items) {
+            list.add(key(item));
+        }
+        return list;
     }
 
     private <T> List<T> list(T... items) {

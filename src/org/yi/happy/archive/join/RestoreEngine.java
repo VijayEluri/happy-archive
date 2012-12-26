@@ -100,6 +100,19 @@ public class RestoreEngine {
                 continue;
             }
 
+            if (type.equals("list")) {
+                String list = ByteString.toString(block.getBody());
+                String[] lines = list.split("\n");
+                List<Pending> add = new ArrayList<Pending>(lines.length);
+                for (String line : lines) {
+                    FullKey key = FullKeyParse.parseFullKey(line);
+                    add.add(new Pending(key, null));
+                }
+
+                replace(index, add, base);
+                continue;
+            }
+
             throw new IllegalArgumentException("can not handle block type: "
                     + type);
         }
@@ -137,5 +150,17 @@ public class RestoreEngine {
         }
 
         item.offset = base;
+    }
+
+    public List<FullKey> getNeededLater() {
+        LinkedHashSet<FullKey> needed = new LinkedHashSet<FullKey>();
+        for (Pending item : todo) {
+            if (item.offset != null) {
+                continue;
+            }
+
+            needed.add(item.key);
+        }
+        return new ArrayList<FullKey>(needed);
     }
 }

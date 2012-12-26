@@ -318,7 +318,8 @@ public enum TestData {
     CLEAR_CONTENT_LIST,
 
     /**
-     * a block list, precursor to map
+     * a block list, precursor to map. the parts are {@link #KEY_CONTENT_1},
+     * {@link #KEY_CONTENT_2}.
      */
     @Full("content-hash:430a7bc21e3f95c443ec2151fc9e727119b21cc5878a"
             + "af1361971445bf8b1d0c:a879203e66ad42df67797f6639908d8d9fa"
