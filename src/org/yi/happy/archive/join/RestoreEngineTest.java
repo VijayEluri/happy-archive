@@ -177,6 +177,40 @@ public class RestoreEngineTest {
         assertTrue(log.isDone());
     }
 
+    /**
+     * Restore a split block.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testSplit() throws Exception {
+        TestData B = TestData.KEY_NAME_SPLIT;
+        TestData B1 = TestData.KEY_NAME_SPLIT_1;
+        TestData B2 = TestData.KEY_NAME_SPLIT_2;
+
+        RestoreEngine restore = new RestoreEngine(key(B), log);
+
+        restore.addBlocks(blockMap(B));
+
+        assertEquals(keyList(B1), restore.getNeededNow());
+        assertEquals(keyList(B2), restore.getNeededLater());
+
+        restore.addBlocks(blockMap(B1, B2));
+
+        assertEquals(keyList(C1), restore.getNeededNow());
+        assertEquals(keyList(B2), restore.getNeededLater());
+
+        restore.addBlocks(blockMap(C1, B2));
+
+        assertEquals(keyList(C2), restore.getNeededNow());
+        assertEquals(keyList(), restore.getNeededLater());
+
+        restore.addBlocks(blockMap(C2));
+
+        assertEquals(keyList(), restore.getNeededNow());
+        assertEquals(keyList(), restore.getNeededLater());
+    }
+
     private FullKey key(TestData item) {
         return item.getFullKey();
     }
