@@ -32,9 +32,9 @@ public class RestoreEngineTest {
     public void testFirstBasic() throws Exception {
         RestoreEngine restore = new RestoreEngine(C.getFullKey());
 
-        assertEquals(keyList(C), restore.getNeededNow());
+        assertEquals(false, restore.isOutputReady());
 
-        assertFalse(restore.isOutputReady());
+        assertEquals(keyList(C), restore.getNeededNow());
 
         restore.step(blockMap(C));
 
