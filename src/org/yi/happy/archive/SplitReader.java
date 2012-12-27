@@ -10,7 +10,6 @@ import java.util.Set;
 import org.yi.happy.annotate.MagicLiteral;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.key.FullKey;
-import org.yi.happy.archive.restore.CaptureFragmentHandler;
 import org.yi.happy.archive.restore.RestoreEngine;
 
 /**
@@ -19,8 +18,6 @@ import org.yi.happy.archive.restore.RestoreEngine;
 public class SplitReader {
 
     private int progress;
-
-    private final CaptureFragmentHandler capture;
 
     private final RestoreEngine engine;
 
@@ -33,8 +30,7 @@ public class SplitReader {
      *            where to find the blocks
      */
     public SplitReader(FullKey fullKey, RetrieveBlock storage) {
-        this.capture = new CaptureFragmentHandler();
-        this.engine = new RestoreEngine(fullKey, capture);
+        this.engine = new RestoreEngine(fullKey);
 
         this.storage = storage;
     }
@@ -85,8 +81,8 @@ public class SplitReader {
     @MagicLiteral
     private Fragment fetch(int index) throws IOException {
         while (true) {
-            if (capture.isReady()) {
-                return capture.get();
+            if (engine.isOutputReady()) {
+                return engine.getOutput();
             }
 
             if (index >= engine.getItemCount()) {

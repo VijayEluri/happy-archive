@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -59,26 +58,26 @@ public class RestoreEngineTest {
      */
     @Test
     public void testOutOfOrderMap() throws Exception {
-        LogFragmentHandler log = new LogFragmentHandler();
-        RestoreEngine restore = new RestoreEngine(MAP.getFullKey(), log);
+        RestoreEngine restore = new RestoreEngine(MAP.getFullKey());
 
         restore.step(blockMap(MAP));
 
-        assertEquals(list(), log.getFragments());
+        assertFalse(restore.isOutputReady());
 
         assertEquals(keyList(C1, C2), restore.getNeededNow());
 
         restore.step(blockMap(C2));
 
-        assertEquals(list(frag(5, D2)), log.getFragments());
-        assertFalse(log.isDone());
+        assertEquals(frag(5, D2), restore.getOutput());
+        assertFalse(restore.isOutputReady());
 
         assertEquals(keyList(C1), restore.getNeededNow());
 
         restore.step(blockMap(C1));
 
-        assertEquals(list(frag(5, D2), frag(0, D1)), log.getFragments());
-        assertTrue(log.isDone());
+        assertEquals(frag(0, D1), restore.getOutput());
+        assertFalse(restore.isOutputReady());
+        assertTrue(restore.isDone());
 
         assertEquals(keyList(), restore.getNeededNow());
     }
@@ -91,13 +90,14 @@ public class RestoreEngineTest {
     @Test
     public void testMapPad() throws Exception {
         TestData B = TestData.KEY_CONTENT_MAP_PAD;
-        LogFragmentHandler log = new LogFragmentHandler();
-        RestoreEngine restore = new RestoreEngine(key(B), log);
+        RestoreEngine restore = new RestoreEngine(key(B));
 
         restore.step(blockMap(B, C1, C2));
 
-        assertEquals(list(frag(0, D1), frag(10, D2)), log.getFragments());
-        assertTrue(log.isDone());
+        assertEquals(frag(0, D1), restore.getOutput());
+        assertEquals(frag(10, D2), restore.getOutput());
+        assertFalse(restore.isOutputReady());
+        assertTrue(restore.isDone());
     }
 
     /**
@@ -108,12 +108,13 @@ public class RestoreEngineTest {
     @Test
     public void testMapOverlap() throws Exception {
         TestData B = TestData.KEY_CONTENT_MAP_OVERLAP;
-        LogFragmentHandler log = new LogFragmentHandler();
-        RestoreEngine restore = new RestoreEngine(key(B), log);
+        RestoreEngine restore = new RestoreEngine(key(B));
 
         restore.step(blockMap(B, C1, C2));
-        assertEquals(list(frag(0, D1), frag(3, D2)), log.getFragments());
-        assertTrue(log.isDone());
+        assertEquals(frag(0, D1), restore.getOutput());
+        assertEquals(frag(3, D2), restore.getOutput());
+        assertFalse(restore.isOutputReady());
+        assertTrue(restore.isDone());
     }
 
     /**
@@ -124,12 +125,13 @@ public class RestoreEngineTest {
     @Test
     public void testList() throws Exception {
         TestData B = TestData.KEY_CONTENT_LIST;
-        LogFragmentHandler log = new LogFragmentHandler();
-        RestoreEngine restore = new RestoreEngine(key(B), log);
+        RestoreEngine restore = new RestoreEngine(key(B));
 
         restore.step(blockMap(B, C1, C2));
-        assertEquals(list(frag(0, D1), frag(5, D2)), log.getFragments());
-        assertTrue(log.isDone());
+        assertEquals(frag(0, D1), restore.getOutput());
+        assertEquals(frag(5, D2), restore.getOutput());
+        assertFalse(restore.isOutputReady());
+        assertTrue(restore.isDone());
     }
 
     /**
@@ -140,31 +142,35 @@ public class RestoreEngineTest {
     @Test
     public void testListOrder() throws Exception {
         TestData B = TestData.KEY_CONTENT_LIST;
-        LogFragmentHandler log = new LogFragmentHandler();
-        RestoreEngine restore = new RestoreEngine(key(B), log);
+        RestoreEngine restore = new RestoreEngine(key(B));
 
         restore.step(blockMap(B));
 
-        assertEquals(list(), log.getFragments());
+        assertFalse(restore.isOutputReady());
+
         assertEquals(keyList(C1), restore.getNeededNow());
         assertEquals(keyList(C2), restore.getNeededLater());
 
         restore.step(blockMap(C2));
 
-        assertEquals(list(), log.getFragments());
+        assertFalse(restore.isOutputReady());
+
         assertEquals(keyList(C1), restore.getNeededNow());
         assertEquals(keyList(C2), restore.getNeededLater());
 
         restore.step(blockMap(C1));
 
-        assertEquals(list(frag(0, D1)), log.getFragments());
+        assertEquals(frag(0, D1), restore.getOutput());
+        assertFalse(restore.isOutputReady());
+
         assertEquals(keyList(C2), restore.getNeededNow());
         assertEquals(keyList(), restore.getNeededLater());
 
         restore.step(blockMap(C2));
 
-        assertEquals(list(frag(0, D1), frag(5, D2)), log.getFragments());
-        assertTrue(log.isDone());
+        assertEquals(frag(5, D2), restore.getOutput());
+        assertFalse(restore.isOutputReady());
+        assertTrue(restore.isDone());
     }
 
     /**
@@ -178,8 +184,7 @@ public class RestoreEngineTest {
         TestData B1 = TestData.KEY_NAME_SPLIT_1;
         TestData B2 = TestData.KEY_NAME_SPLIT_2;
 
-        LogFragmentHandler log = new LogFragmentHandler();
-        RestoreEngine restore = new RestoreEngine(key(B), log);
+        RestoreEngine restore = new RestoreEngine(key(B));
 
         restore.step(blockMap(B));
 
@@ -188,10 +193,15 @@ public class RestoreEngineTest {
 
         restore.step(blockMap(B1, B2));
 
+        assertFalse(restore.isOutputReady());
+
         assertEquals(keyList(C1), restore.getNeededNow());
         assertEquals(keyList(B2), restore.getNeededLater());
 
         restore.step(blockMap(C1, B2));
+
+        assertEquals(frag(0, D1), restore.getOutput());
+        assertFalse(restore.isOutputReady());
 
         assertEquals(keyList(C2), restore.getNeededNow());
         assertEquals(keyList(), restore.getNeededLater());
@@ -200,6 +210,10 @@ public class RestoreEngineTest {
 
         assertEquals(keyList(), restore.getNeededNow());
         assertEquals(keyList(), restore.getNeededLater());
+
+        assertEquals(frag(5, D2), restore.getOutput());
+        assertFalse(restore.isOutputReady());
+        assertTrue(restore.isDone());
     }
 
     private FullKey key(TestData item) {
@@ -212,10 +226,6 @@ public class RestoreEngineTest {
             list.add(key(item));
         }
         return list;
-    }
-
-    private <T> List<T> list(T... items) {
-        return Arrays.asList(items);
     }
 
     private Fragment frag(int offset, Bytes data) {

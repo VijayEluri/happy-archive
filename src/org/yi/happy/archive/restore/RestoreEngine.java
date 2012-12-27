@@ -23,24 +23,17 @@ import org.yi.happy.archive.key.FullKeyParse;
  * The logic required to join data blocks back together.
  */
 public class RestoreEngine {
-    /*
-     * convert this to a push-pull data flow instead of a push-push.
-     */
-
     private static class Item {
         public FullKey key;
         public Long offset;
-        public Bytes data;
 
         public Item(FullKey key, Long offset) {
             this.key = key;
             this.offset = offset;
-            this.data = null;
         }
     }
 
     private List<Item> items;
-    private FragmentHandler handler;
     private Deque<Fragment> out;
 
     /**
@@ -48,20 +41,12 @@ public class RestoreEngine {
      * 
      * @param key
      *            the key to start from.
-     * @param handler
-     *            where to send the fragments as they are encountered.
      */
-    public RestoreEngine(FullKey key, FragmentHandler handler) {
-        items = new ArrayList<Item>();
-        items.add(new Item(key, 0l));
+    public RestoreEngine(FullKey key) {
+        this.items = new ArrayList<Item>();
+        this.items.add(new Item(key, 0l));
 
         this.out = new ArrayDeque<Fragment>();
-
-        this.handler = handler;
-    }
-
-    public RestoreEngine(FullKey key) {
-        this(key, null);
     }
 
     /**
@@ -164,10 +149,6 @@ public class RestoreEngine {
             index++;
         }
 
-        if (handler != null && items.size() == 0) {
-            handler.end();
-        }
-
         return progress;
     }
 
@@ -235,12 +216,7 @@ public class RestoreEngine {
             Bytes data = b.getBody();
 
             replace(index, null, base + data.getSize());
-
-            if (handler != null) {
-                handler.data(base, data);
-            } else {
-                out.add(new Fragment(base, data));
-            }
+            out.add(new Fragment(base, data));
             return true;
         }
 
