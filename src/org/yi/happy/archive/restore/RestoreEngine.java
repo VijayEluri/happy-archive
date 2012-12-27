@@ -1,7 +1,9 @@
 package org.yi.happy.archive.restore;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +12,7 @@ import org.yi.happy.annotate.MagicLiteral;
 import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.DataBlockParse;
+import org.yi.happy.archive.Fragment;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.DataBlock;
 import org.yi.happy.archive.block.MapBlock;
@@ -20,18 +23,25 @@ import org.yi.happy.archive.key.FullKeyParse;
  * The logic required to join data blocks back together.
  */
 public class RestoreEngine {
+    /*
+     * convert this to a push-pull data flow instead of a push-push.
+     */
+
     private static class Item {
         public FullKey key;
         public Long offset;
+        public Bytes data;
 
         public Item(FullKey key, Long offset) {
             this.key = key;
             this.offset = offset;
+            this.data = null;
         }
     }
 
     private List<Item> items;
     private FragmentHandler handler;
+    private Deque<Fragment> out;
 
     /**
      * Set up the logic to join data blocks back together.
@@ -45,7 +55,13 @@ public class RestoreEngine {
         items = new ArrayList<Item>();
         items.add(new Item(key, 0l));
 
+        this.out = new ArrayDeque<Fragment>();
+
         this.handler = handler;
+    }
+
+    public RestoreEngine(FullKey key) {
+        this(key, null);
     }
 
     /**
@@ -103,7 +119,7 @@ public class RestoreEngine {
      *            the index of the item.
      * @return the key needed by the item at the index in the list.
      */
-    public FullKey getNeeded(int index) {
+    public FullKey getKey(int index) {
         return items.get(index).key;
     }
 
@@ -134,21 +150,21 @@ public class RestoreEngine {
      *            the decoded blocks to process.
      * @return true if progress was made.
      */
-    public boolean addBlocks(Map<FullKey, Block> blocks) {
+    public boolean step(Map<FullKey, Block> blocks) {
         boolean progress = false;
         if (items.size() == 0) {
             return progress;
         }
 
         for (int index = 0; index < items.size();) {
-            if (addBlocks(blocks, index)) {
+            if (step(blocks, index)) {
                 progress = true;
                 continue;
             }
             index++;
         }
 
-        if (items.size() == 0) {
+        if (handler != null && items.size() == 0) {
             handler.end();
         }
 
@@ -163,6 +179,24 @@ public class RestoreEngine {
     }
 
     /**
+     * get an output fragment.
+     * 
+     * @return an output fragment.
+     */
+    public Fragment getOutput() {
+        return out.remove();
+    }
+
+    /**
+     * check if there is output ready.
+     * 
+     * @return true if there is output ready.
+     */
+    public boolean isOutputReady() {
+        return out.isEmpty() == false;
+    }
+
+    /**
      * attempt a processing step on a processing list item. At most one fragment
      * can be emitted to the fragment handler from this call.
      * 
@@ -173,7 +207,10 @@ public class RestoreEngine {
      * @return true if progress was made.
      */
     @MagicLiteral
-    public boolean addBlocks(Map<FullKey, Block> blocks, int index) {
+    public boolean step(Map<FullKey, Block> blocks, int index) {
+        /*
+         * TODO change to accept a single block.
+         */
         Item item = items.get(index);
 
         if (item.offset == null) {
@@ -198,7 +235,12 @@ public class RestoreEngine {
             Bytes data = b.getBody();
 
             replace(index, null, base + data.getSize());
-            handler.data(base, data);
+
+            if (handler != null) {
+                handler.data(base, data);
+            } else {
+                out.add(new Fragment(base, data));
+            }
             return true;
         }
 

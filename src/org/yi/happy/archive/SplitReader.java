@@ -97,14 +97,14 @@ public class SplitReader {
                 return null;
             }
 
-            FullKey key = engine.getNeeded(index);
+            FullKey key = engine.getKey(index);
             Block b = storage.retrieveBlock(key);
             if (b == null) {
                 return null;
             }
 
             try {
-                if (engine.addBlocks(Collections.singletonMap(key, b), index)) {
+                if (engine.step(Collections.singletonMap(key, b), index)) {
                     progress++;
                 }
             } catch (IllegalArgumentException e) {
