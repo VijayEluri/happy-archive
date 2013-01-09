@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.List;
 
+import org.yi.happy.annotate.MagicLiteral;
 import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.commandLine.UsesArgs;
@@ -61,6 +62,7 @@ public class BuildImageMain implements MainCommand {
      */
     @Override
     @SmellsMessy
+    @MagicLiteral
     public void run() throws IOException {
         InputStream in0 = fs.openInputStream(args.get(0));
         int limit = Integer.parseInt(args.get(2));
@@ -94,6 +96,9 @@ public class BuildImageMain implements MainCommand {
             in0.close();
         }
 
+        /*
+         * Full is 99% of the target capacity.
+         */
         String full = "";
         if (size.getMegaSize() > limit * 99 / 100) {
             full = "\tfull";
