@@ -1,11 +1,7 @@
 package org.yi.happy.archive;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.yi.happy.annotate.MagicLiteral;
 import org.yi.happy.archive.block.Block;
@@ -100,7 +96,7 @@ public class SplitReader {
             }
 
             try {
-                if (engine.step(Collections.singletonMap(key, b), index)) {
+                if (engine.step(index, b)) {
                     progress++;
                 }
             } catch (IllegalArgumentException e) {
@@ -116,10 +112,7 @@ public class SplitReader {
      * @return the list of full keys for blocks that are needed.
      */
     public List<FullKey> getPending() {
-        Set<FullKey> out = new LinkedHashSet<FullKey>();
-        out.addAll(engine.getNeededNow());
-        out.addAll(engine.getNeededLater());
-        return new ArrayList<FullKey>(out);
+        return engine.getNeeded();
     }
 
     /**
