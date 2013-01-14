@@ -229,7 +229,8 @@ public class RestoreEngine {
      *            the index of the work item.
      * @param block
      *            the decoded block the work item needs.
-     * @return true if progress was made.
+     * @return true if progress was made (and the item is no longer in the work
+     *         list).
      */
     @MagicLiteral
     public boolean step(int index, Block block) {
