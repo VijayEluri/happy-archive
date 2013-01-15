@@ -132,4 +132,16 @@ public class MapBlock extends AbstractBlock implements Block {
         return out;
     }
 
+    public int count() {
+        return entries.size();
+    }
+
+    public FullKey getKey(int index) {
+        return entries.get(index).getKey();
+    }
+
+    public long getOffset(int index) {
+        return entries.get(index).getOffset();
+    }
+
 }

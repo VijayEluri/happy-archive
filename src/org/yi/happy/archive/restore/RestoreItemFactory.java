@@ -6,6 +6,7 @@ import java.util.List;
 import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.MapBlock;
+import org.yi.happy.archive.block.MapBlockBuilder;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.FullKeyParse;
 
@@ -18,7 +19,7 @@ public class RestoreItemFactory {
      *            the block.
      * @return the created restore item.
      */
-    public static RestoreItem create(Block block) {
+    public static RestoreItem create(FullKey key, Block block) {
         String type = block.getMeta().get("type");
 
         if (type == null) {
@@ -32,17 +33,17 @@ public class RestoreItemFactory {
             /*
              * TODO parser to turn Block into MapBlock
              */
+            MapBlockBuilder builder = new MapBlockBuilder();
             String map = ByteString.toString(block.getBody().toByteArray());
             String[] lines = map.split("\n");
-            List<RestoreList.Child> children = new ArrayList<RestoreList.Child>(
-                    lines.length);
             for (String line : lines) {
                 String[] cols = line.split("\t", 2);
-                FullKey key = FullKeyParse.parseFullKey(cols[0]);
+                FullKey k = FullKeyParse.parseFullKey(cols[0]);
                 long offset = Long.parseLong(cols[1]);
-                children.add(new RestoreList.Child(key, offset));
+                builder.add(k, offset);
             }
-            return new RestoreList(block, children);
+
+            return new RestoreMap(builder.create());
         }
 
         if (type.equals("list")) {
@@ -54,8 +55,8 @@ public class RestoreItemFactory {
             List<RestoreList.Child> children = new ArrayList<RestoreList.Child>(
                     lines.length);
             for (String line : lines) {
-                FullKey key = FullKeyParse.parseFullKey(line);
-                children.add(new RestoreList.Child(key, -1));
+                FullKey k = FullKeyParse.parseFullKey(line);
+                children.add(new RestoreList.Child(k, -1));
             }
             if (children.size() > 0) {
                 children.get(0).setOffset(0);
@@ -67,16 +68,15 @@ public class RestoreItemFactory {
             /*
              * TODO parser to turn Block into SplitBlock
              */
-            /*
-             * XXX need the full key of this block to make this one.
-             */
-            throw new UnsupportedOperationException();
+            String countString = block.getMeta().get("split-count");
+            int count = Integer.parseInt(countString);
+            return new RestoreSplit(key, count, block);
         }
 
         if (type.equals("indirect")) {
-            FullKey key = FullKeyParse.parseFullKey(ByteString.toString(block
+            FullKey k = FullKeyParse.parseFullKey(ByteString.toString(block
                     .getBody()));
-            return new RestoreIndirect(block, key);
+            return new RestoreIndirect(block, k);
         }
 
         throw new IllegalArgumentException();
