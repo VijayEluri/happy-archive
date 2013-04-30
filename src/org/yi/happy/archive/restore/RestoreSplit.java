@@ -12,7 +12,7 @@ public class RestoreSplit implements RestoreItem {
     private final FullKey key;
     private RestoreItem[] children;
     private final SplitBlock block;
-    private long[] offset;
+    private long[] offsets;
 
     public RestoreSplit(FullKey key, SplitBlock block) {
         this.key = key;
@@ -23,10 +23,10 @@ public class RestoreSplit implements RestoreItem {
         this.children = new RestoreItem[count];
         Arrays.fill(children, new RestoreTodo());
 
-        this.offset = new long[count];
-        Arrays.fill(offset, -1);
+        this.offsets = new long[count];
+        Arrays.fill(offsets, -1);
         if (count > 0) {
-            offset[0] = 0;
+            offsets[0] = 0;
         }
     }
 
@@ -60,11 +60,28 @@ public class RestoreSplit implements RestoreItem {
 
     @Override
     public long getOffset(int index) {
-        return offset[index];
+        return offsets[index];
+    }
+
+    @Override
+    public void setOffset(int index, long offset) {
+        if (offsets[index] >= 0) {
+            throw new IllegalStateException();
+        }
+        offsets[index] = offset;
     }
 
     @Override
     public RestoreItem get(int index) {
         return children[index];
+    }
+
+    @Override
+    public void set(int index, RestoreItem item) {
+        if (children[index].isTodo() == false) {
+            throw new IllegalStateException();
+        }
+
+        children[index] = item;
     }
 }

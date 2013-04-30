@@ -50,6 +50,15 @@ public class RestoreList implements RestoreItem {
     }
 
     @Override
+    public void set(int index, RestoreItem item) {
+        if (children[index].isTodo() == false) {
+            throw new IllegalStateException();
+        }
+
+        children[index] = item;
+    }
+
+    @Override
     public FullKey getKey(int index) {
         return block.get(index);
     }
@@ -57,5 +66,13 @@ public class RestoreList implements RestoreItem {
     @Override
     public long getOffset(int index) {
         return offsets[index];
+    }
+
+    @Override
+    public void setOffset(int index, long offset) {
+        if (offsets[index] >= 0) {
+            throw new IllegalStateException();
+        }
+        offsets[index] = offset;
     }
 }

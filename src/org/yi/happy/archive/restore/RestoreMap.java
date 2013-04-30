@@ -49,8 +49,23 @@ public class RestoreMap implements RestoreItem {
     }
 
     @Override
+    public void setOffset(int index, long offset) {
+        if (index < 0 || index >= count()) {
+            throw new IndexOutOfBoundsException();
+        }
+        throw new IllegalStateException();
+    }
+
+    @Override
     public RestoreItem get(int index) {
         return children[index];
     }
 
+    @Override
+    public void set(int index, RestoreItem item) {
+        if (children[index].isTodo() == false) {
+            throw new IllegalStateException();
+        }
+        children[index] = item;
+    }
 }

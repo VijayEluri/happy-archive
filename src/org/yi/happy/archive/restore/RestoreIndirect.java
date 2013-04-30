@@ -51,6 +51,14 @@ public class RestoreIndirect implements RestoreItem {
     }
 
     @Override
+    public void setOffset(int index, long offset) {
+        if (index != 0) {
+            throw new IndexOutOfBoundsException();
+        }
+        throw new IllegalStateException();
+    }
+
+    @Override
     public RestoreItem get(int index) {
         if (index != 0) {
             throw new IndexOutOfBoundsException();
@@ -58,4 +66,16 @@ public class RestoreIndirect implements RestoreItem {
         return child;
     }
 
+    @Override
+    public void set(int index, RestoreItem item) {
+        if (index != 0) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        if (child.isTodo() == false) {
+            throw new IllegalStateException();
+        }
+
+        child = item;
+    }
 }

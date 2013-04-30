@@ -49,6 +49,16 @@ public interface RestoreItem {
     public long getOffset(int index);
 
     /**
+     * set the offset of the specified child.
+     * 
+     * @param index
+     *            the index of the child.
+     * @param offset
+     *            the new offset.
+     */
+    public void setOffset(int index, long offset);
+
+    /**
      * Get the restore item for the specified child.
      * 
      * @param index
@@ -56,4 +66,15 @@ public interface RestoreItem {
      * @return the restore item for the given child.
      */
     public RestoreItem get(int index);
+
+    /**
+     * set the restore item for the specified child.
+     * 
+     * @param index
+     *            the index of the child.
+     * @param item
+     *            the restore item to use.
+     */
+    public void set(int index, RestoreItem item);
+
 }

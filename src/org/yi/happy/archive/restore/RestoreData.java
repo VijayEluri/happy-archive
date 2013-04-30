@@ -37,12 +37,22 @@ public class RestoreData implements RestoreItem {
     }
 
     @Override
+    public void set(int index, RestoreItem item) {
+        throw new IndexOutOfBoundsException();
+    }
+
+    @Override
     public FullKey getKey(int index) {
         throw new IndexOutOfBoundsException();
     }
 
     @Override
     public long getOffset(int index) {
+        throw new IndexOutOfBoundsException();
+    }
+
+    @Override
+    public void setOffset(int index, long offset) {
         throw new IndexOutOfBoundsException();
     }
 }
