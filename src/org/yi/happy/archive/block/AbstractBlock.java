@@ -125,4 +125,15 @@ public abstract class AbstractBlock implements Block {
         }
     }
 
+    @Override
+    public String toString() {
+        StringBuilder out = new StringBuilder();
+        out.append("[").append(getClass().getSimpleName()).append(": ");
+        for (Map.Entry<String, String> i : getMeta().entrySet()) {
+            out.append(i.getKey()).append(" = ").append(i.getValue())
+                    .append(", ");
+        }
+        out.append(getBody()).append("]");
+        return out.toString();
+    }
 }

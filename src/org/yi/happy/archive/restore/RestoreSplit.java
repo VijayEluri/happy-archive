@@ -3,24 +3,26 @@ package org.yi.happy.archive.restore;
 import java.util.Arrays;
 
 import org.yi.happy.archive.block.Block;
+import org.yi.happy.archive.block.SplitBlock;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.FullKeyParse;
 
 public class RestoreSplit implements RestoreItem {
 
     private final FullKey key;
-    private final int count;
     private RestoreItem[] children;
-    private final Block block;
+    private final SplitBlock block;
     private long[] offset;
 
-    public RestoreSplit(FullKey key, int count, Block block) {
+    public RestoreSplit(FullKey key, SplitBlock block) {
         this.key = key;
-        this.count = count;
         this.block = block;
+
+        int count = block.getCount();
 
         this.children = new RestoreItem[count];
         Arrays.fill(children, new RestoreTodo());
+
         this.offset = new long[count];
         Arrays.fill(offset, -1);
         if (count > 0) {
@@ -45,12 +47,12 @@ public class RestoreSplit implements RestoreItem {
 
     @Override
     public int count() {
-        return count;
+        return block.getCount();
     }
 
     @Override
     public FullKey getKey(int index) {
-        if (index < 0 || index >= count) {
+        if (index < 0 || index >= count()) {
             throw new IndexOutOfBoundsException();
         }
         return FullKeyParse.parseFullKey(key + "/" + index);
@@ -65,5 +67,4 @@ public class RestoreSplit implements RestoreItem {
     public RestoreItem get(int index) {
         return children[index];
     }
-
 }

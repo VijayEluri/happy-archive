@@ -50,5 +50,4 @@ public class BadSignatureException extends IllegalArgumentException {
     public BadSignatureException(Throwable cause) {
         super(cause);
     }
-
 }

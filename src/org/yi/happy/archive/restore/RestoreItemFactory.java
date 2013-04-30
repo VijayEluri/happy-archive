@@ -1,84 +1,60 @@
 package org.yi.happy.archive.restore;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.block.Block;
+import org.yi.happy.archive.block.DataBlock;
+import org.yi.happy.archive.block.DataBlockParse;
+import org.yi.happy.archive.block.IndirectBlock;
+import org.yi.happy.archive.block.IndirectBlockParse;
+import org.yi.happy.archive.block.ListBlock;
+import org.yi.happy.archive.block.ListBlockParse;
 import org.yi.happy.archive.block.MapBlock;
-import org.yi.happy.archive.block.MapBlockBuilder;
+import org.yi.happy.archive.block.MapBlockParse;
+import org.yi.happy.archive.block.SplitBlock;
+import org.yi.happy.archive.block.SplitBlockParse;
 import org.yi.happy.archive.key.FullKey;
-import org.yi.happy.archive.key.FullKeyParse;
 
+/**
+ * A factory that takes a {@link Block} and makes a {@link RestoreItem}.
+ */
 public class RestoreItemFactory {
 
     /**
      * Create the specific restore item based on the block.
      * 
+     * @param key
+     *            the key of the block (only used for split blocks).
      * @param block
      *            the block.
      * @return the created restore item.
      */
     public static RestoreItem create(FullKey key, Block block) {
-        String type = block.getMeta().get("type");
-
-        if (type == null) {
-            /*
-             * TODO parser to turn Block into DataBlock
-             */
-            return new RestoreData(block);
+        if (DataBlockParse.isDataBlock(block)) {
+            DataBlock dataBlock = DataBlockParse.parse(block);
+            return new RestoreData(dataBlock);
         }
 
-        if (type.equals(MapBlock.TYPE)) {
-            /*
-             * TODO parser to turn Block into MapBlock
-             */
-            MapBlockBuilder builder = new MapBlockBuilder();
-            String map = ByteString.toString(block.getBody().toByteArray());
-            String[] lines = map.split("\n");
-            for (String line : lines) {
-                String[] cols = line.split("\t", 2);
-                FullKey k = FullKeyParse.parseFullKey(cols[0]);
-                long offset = Long.parseLong(cols[1]);
-                builder.add(k, offset);
-            }
-
-            return new RestoreMap(builder.create());
+        if (MapBlockParse.isMapBlock(block)) {
+            MapBlock mapBlock = MapBlockParse.parseMapBlock(block);
+            return new RestoreMap(mapBlock);
         }
 
-        if (type.equals("list")) {
-            /*
-             * TODO parser to turn Block into ListBlock
-             */
-            String list = ByteString.toString(block.getBody());
-            String[] lines = list.split("\n");
-            List<RestoreList.Child> children = new ArrayList<RestoreList.Child>(
-                    lines.length);
-            for (String line : lines) {
-                FullKey k = FullKeyParse.parseFullKey(line);
-                children.add(new RestoreList.Child(k, -1));
-            }
-            if (children.size() > 0) {
-                children.get(0).setOffset(0);
-            }
-            return new RestoreList(block, children);
+        if (ListBlockParse.isListBlock(block)) {
+            ListBlock listBlock = ListBlockParse.parseListBlock(block);
+            return new RestoreList(listBlock);
         }
 
-        if (type.equals("split")) {
-            /*
-             * TODO parser to turn Block into SplitBlock
-             */
-            String countString = block.getMeta().get("split-count");
-            int count = Integer.parseInt(countString);
-            return new RestoreSplit(key, count, block);
+        if (SplitBlockParse.isSplitBlock(block)) {
+            SplitBlock splitBlock = SplitBlockParse.parseSplitBlock(block);
+            return new RestoreSplit(key, splitBlock);
         }
 
-        if (type.equals("indirect")) {
-            FullKey k = FullKeyParse.parseFullKey(ByteString.toString(block
-                    .getBody()));
-            return new RestoreIndirect(block, k);
+        if (IndirectBlockParse.isIndirectBlock(block)) {
+            IndirectBlock indirectBlock = IndirectBlockParse
+                    .parseIndirectBlock(block);
+            return new RestoreIndirect(indirectBlock);
         }
 
         throw new IllegalArgumentException();
     }
+
 }

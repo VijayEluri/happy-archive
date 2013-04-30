@@ -1,7 +1,6 @@
 package org.yi.happy.archive.restore;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
 import org.yi.happy.archive.block.Block;
@@ -18,7 +17,7 @@ public class RestoreItemTest {
         assertEquals(true, item.isData());
         assertEquals(false, item.isTodo());
 
-        assertSame(block, item.getBlock());
+        assertEquals(block, item.getBlock());
     }
 
     @Test

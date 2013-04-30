@@ -132,7 +132,7 @@ public class BytesBuilder {
      *            the data to add to the builder.
      * @return this builder.
      */
-    public BytesBuilder add(byte... data) {
+    public BytesBuilder add(byte[] data) {
         return add(new Bytes(data));
     }
 

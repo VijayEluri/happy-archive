@@ -1,5 +1,7 @@
 package org.yi.happy.archive.restore;
 
+import java.util.Arrays;
+
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.MapBlock;
 import org.yi.happy.archive.key.FullKey;
@@ -13,9 +15,7 @@ public class RestoreMap implements RestoreItem {
         this.block = block;
 
         this.children = new RestoreItem[block.count()];
-        for (int i = 0; i < children.length; i++) {
-            this.children[i] = new RestoreTodo();
-        }
+        Arrays.fill(this.children, new RestoreTodo());
     }
 
     @Override

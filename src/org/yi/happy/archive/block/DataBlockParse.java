@@ -1,13 +1,9 @@
-package org.yi.happy.archive;
+package org.yi.happy.archive.block;
 
 import java.util.Map;
 
-import org.yi.happy.archive.block.Block;
-import org.yi.happy.archive.block.DataBlock;
+import org.yi.happy.archive.Sets;
 
-/**
- * parser for a basic data block.
- */
 public class DataBlockParse {
 
     /**
@@ -31,6 +27,11 @@ public class DataBlockParse {
         }
 
         return new DataBlock(block.getBody());
+    }
+
+    public static boolean isDataBlock(Block block) {
+        String type = block.getMeta().get("type");
+        return type == null;
     }
 
 }
