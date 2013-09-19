@@ -49,4 +49,9 @@ public class RestoreTodo implements RestoreItem {
     public void setOffset(int index, long offset) {
         throw new IndexOutOfBoundsException();
     }
+
+    @Override
+    public long getSize() {
+        return -1;
+    }
 }

@@ -264,4 +264,150 @@ public class RestoreItemTest {
 
         return RestoreItemFactory.create(key, block);
     }
+
+    @Test
+    public void testFillOffset() throws Exception {
+        RestoreItemList list = new RestoreItemList();
+        list.add(LIST.getFullKey(), 0, load(LIST));
+
+        assertEquals(-1, list.get(0).getOffset(1));
+
+        list.get(0).set(0, load(LIST_0));
+
+        assertEquals(-1, list.get(0).getOffset(1));
+
+        list.fillOffset();
+
+        assertEquals(5, list.get(0).getOffset(1));
+    }
+
+    @Test
+    public void testFillOffset2() throws Exception {
+        RestoreItemList list = new RestoreItemList();
+        list.add(LIST_0.getFullKey(), 0, new RestoreTodo());
+        list.add(LIST_1.getFullKey(), -1, new RestoreTodo());
+
+        assertEquals(-1, list.getOffset(1));
+
+        list.set(0, load(LIST_0));
+
+        assertEquals(-1, list.getOffset(1));
+
+        list.fillOffset();
+
+        assertEquals(5, list.getOffset(1));
+
+    }
+
+    @Test
+    public void testGetSize() throws Exception {
+        RestoreItemList list = new RestoreItemList();
+        list.add(MAP.getFullKey(), 0, load(MAP));
+
+        assertEquals(-1, list.getSize());
+
+        list.get(0).set(1, load(MAP_1));
+
+        assertEquals(10, list.getSize());
+    }
+
+    @Test
+    public void testGetSize2() throws Exception {
+        RestoreItemList list = new RestoreItemList();
+        list.add(LIST.getFullKey(), 0, load(LIST));
+
+        assertEquals(-1, list.getSize());
+
+        list.get(0).set(0, load(LIST_0));
+        list.get(0).set(1, load(LIST_1));
+
+        assertEquals(-1, list.getSize());
+
+        list.fillOffset();
+
+        assertEquals(10, list.getSize());
+    }
+
+    @Test
+    public void testGetTodo() throws Exception {
+        RestoreItemList list = new RestoreItemList();
+        list.add(LIST.getFullKey(), 10, load(LIST));
+
+        assertEquals(1, list.count());
+
+        list = list.getTodo();
+
+        assertEquals(2, list.count());
+
+        assertEquals(LIST_0.getFullKey(), list.getKey(0));
+        assertEquals(10, list.getOffset(0));
+        assertEquals(true, list.get(0).isTodo());
+
+        assertEquals(LIST_1.getFullKey(), list.getKey(1));
+        assertEquals(-1, list.getOffset(1));
+        assertEquals(true, list.get(1).isTodo());
+
+        list.set(0, load(LIST_0));
+
+        list = list.getTodo();
+
+        assertEquals(1, list.count());
+
+        assertEquals(LIST_1.getFullKey(), list.getKey(0));
+        assertEquals(15, list.getOffset(0));
+        assertEquals(true, list.get(0).isTodo());
+    }
+
+    @Test
+    public void testGetTodo2() throws Exception {
+        RestoreItemList list = new RestoreItemList();
+        list.add(LIST.getFullKey(), 10, load(LIST));
+
+        assertEquals(1, list.count());
+
+        list = list.getTodo();
+
+        assertEquals(2, list.count());
+
+        assertEquals(LIST_0.getFullKey(), list.getKey(0));
+        assertEquals(10, list.getOffset(0));
+        assertEquals(true, list.get(0).isTodo());
+
+        assertEquals(LIST_1.getFullKey(), list.getKey(1));
+        assertEquals(-1, list.getOffset(1));
+        assertEquals(true, list.get(1).isTodo());
+
+        list.set(1, load(LIST));
+
+        list = list.getTodo();
+
+        assertEquals(2, list.count());
+
+        assertEquals(LIST_0.getFullKey(), list.getKey(0));
+        assertEquals(10, list.getOffset(0));
+        assertEquals(true, list.get(0).isTodo());
+
+        assertEquals(LIST_1.getFullKey(), list.getKey(1));
+        assertEquals(-1, list.getOffset(1));
+        assertEquals(false, list.get(1).isTodo());
+
+        list.set(0, load(LIST));
+
+        list = list.getTodo();
+
+        assertEquals(3, list.count());
+
+        assertEquals(LIST_0.getFullKey(), list.getKey(0));
+        assertEquals(10, list.getOffset(0));
+        assertEquals(true, list.get(0).isTodo());
+
+        assertEquals(LIST_1.getFullKey(), list.getKey(1));
+        assertEquals(-1, list.getOffset(1));
+        assertEquals(true, list.get(1).isTodo());
+
+        assertEquals(LIST_1.getFullKey(), list.getKey(2));
+        assertEquals(-1, list.getOffset(2));
+        assertEquals(false, list.get(2).isTodo());
+    }
+
 }

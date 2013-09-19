@@ -75,4 +75,19 @@ public class RestoreList implements RestoreItem {
         }
         offsets[index] = offset;
     }
+
+    @Override
+    public long getSize() {
+        long offset = getOffset(count() - 1);
+        if (offset == -1) {
+            return -1;
+        }
+
+        long size = get(count() - 1).getSize();
+        if (size == -1) {
+            return -1;
+        }
+
+        return offset + size;
+    }
 }

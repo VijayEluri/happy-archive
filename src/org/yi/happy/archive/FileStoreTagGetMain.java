@@ -91,8 +91,9 @@ public class FileStoreTagGetMain implements MainCommand {
 
             if (type.equals("file")) {
                 /*
-                 * TODO make sure that the parent directories exist
+                 * make sure that the parent directories exist
                  */
+                fs.mkparentdir(name);
 
                 restore.addFile(name, k);
                 continue;

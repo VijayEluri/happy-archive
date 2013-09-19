@@ -130,4 +130,20 @@ public class RealFileSystem implements FileSystem {
     public long getModificationTime(String fileName) {
         return new File(fileName).lastModified();
     }
+
+    @Override
+    public boolean mkparentdir(String path) throws IOException {
+        File f = new File(path);
+        f = f.getParentFile();
+
+        if (f.mkdirs()) {
+            return true;
+        }
+
+        if (f.isDirectory()) {
+            return false;
+        }
+
+        throw new IOException();
+    }
 }

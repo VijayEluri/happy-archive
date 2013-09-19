@@ -68,4 +68,13 @@ public class RestoreMap implements RestoreItem {
         }
         children[index] = item;
     }
+
+    @Override
+    public long getSize() {
+        long size = get(count() - 1).getSize();
+        if (size == -1) {
+            return -1;
+        }
+        return getOffset(count() - 1) + size;
+    }
 }

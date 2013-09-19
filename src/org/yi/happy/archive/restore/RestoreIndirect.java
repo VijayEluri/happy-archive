@@ -78,4 +78,9 @@ public class RestoreIndirect implements RestoreItem {
 
         child = item;
     }
+
+    @Override
+    public long getSize() {
+        return child.getSize();
+    }
 }

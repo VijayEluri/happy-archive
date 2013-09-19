@@ -21,9 +21,14 @@ public interface RestoreItem {
     public boolean isTodo();
 
     /**
-     * @return the data block to go with this item, if available.
+     * @return the data block to go with this item, if it is from a data block.
      */
     public Block getBlock();
+
+    /**
+     * @return the full size of this restore item, or -1 if not known.
+     */
+    public long getSize();
 
     /**
      * @return the number of children
@@ -76,5 +81,4 @@ public interface RestoreItem {
      *            the restore item to use.
      */
     public void set(int index, RestoreItem item);
-
 }

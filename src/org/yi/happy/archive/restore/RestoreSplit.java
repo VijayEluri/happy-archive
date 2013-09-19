@@ -84,4 +84,19 @@ public class RestoreSplit implements RestoreItem {
 
         children[index] = item;
     }
+
+    @Override
+    public long getSize() {
+        long offset = getOffset(count() - 1);
+        if (offset == -1) {
+            return -1;
+        }
+
+        long size = get(count() - 1).getSize();
+        if (size == -1) {
+            return -1;
+        }
+
+        return offset + size;
+    }
 }

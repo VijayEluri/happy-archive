@@ -171,4 +171,15 @@ public interface FileSystem {
      * @return the modification time for a file in milliseconds since epoch.
      */
     long getModificationTime(String fileName);
+
+    /**
+     * Make the parent directories for the given path.
+     * 
+     * @param path
+     *            the path to the find to make the parent directory for.
+     * @return true if the directory was created, false if it exists.
+     * @throws IOException
+     *             if the directory can not be created.
+     */
+    boolean mkparentdir(String path) throws IOException;
 }

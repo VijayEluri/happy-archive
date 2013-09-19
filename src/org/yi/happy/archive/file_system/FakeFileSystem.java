@@ -253,4 +253,10 @@ public class FakeFileSystem implements FileSystem {
         // TODO Auto-generated method stub
         return 0;
     }
+
+    @Override
+    public boolean mkparentdir(String path) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }
