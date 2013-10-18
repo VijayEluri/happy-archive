@@ -3,7 +3,6 @@ package org.yi.happy.archive.restore;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.Collections;
 import java.util.Deque;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -11,15 +10,10 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 import org.yi.happy.annotate.MagicLiteral;
-import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.Fragment;
 import org.yi.happy.archive.block.Block;
-import org.yi.happy.archive.block.DataBlock;
-import org.yi.happy.archive.block.DataBlockParse;
-import org.yi.happy.archive.block.MapBlock;
 import org.yi.happy.archive.key.FullKey;
-import org.yi.happy.archive.key.FullKeyParse;
 
 /**
  * The logic required to join data blocks back together. This takes care of the
@@ -54,9 +48,7 @@ public class RestoreEngine {
     }
 
     /**
-     * @return the list of blocks that can be immediately processed. The first
-     *         key in the list is the key that is needed if firstOnly is set to
-     *         true.
+     * @return the list of blocks that can be immediately processed.
      */
     public List<FullKey> getNeededNow() {
         LinkedHashSet<FullKey> needed = new LinkedHashSet<FullKey>();
@@ -71,7 +63,8 @@ public class RestoreEngine {
     }
 
     /**
-     * @return the list of blocks that are known to be needed later.
+     * @return the list of blocks that are known to be needed but can not be
+     *         immediately processed.
      */
     public List<FullKey> getNeededLater() {
         LinkedHashSet<FullKey> needed = new LinkedHashSet<FullKey>();
@@ -242,79 +235,25 @@ public class RestoreEngine {
 
         long base = item.offset;
 
-        String type = block.getMeta().get("type");
-        if (type == null) {
-
-            DataBlock b;
-            try {
-                b = DataBlockParse.parse(block);
-            } catch (IllegalArgumentException e) {
-                throw e;
-            }
-            Bytes data = b.getBody();
+        RestoreItem r = RestoreItemFactory.create(item.key, block);
+        if (r.isData()) {
+            Bytes data = r.getBlock().getBody();
 
             replace(index, null, base + data.getSize());
             out.add(new Fragment(base, data));
             return true;
         }
 
-        if (type.equals(MapBlock.TYPE)) {
-
-            String map = ByteString.toString(block.getBody().toByteArray());
-            String[] lines = map.split("\n");
-            List<WorkItem> add = new ArrayList<WorkItem>(lines.length);
-            for (String line : lines) {
-                String[] cols = line.split("\t", 2);
-                FullKey key = FullKeyParse.parseFullKey(cols[0]);
-                long offset = Long.parseLong(cols[1]) + base;
-                add.add(new WorkItem(key, offset));
+        List<WorkItem> add = new ArrayList<WorkItem>();
+        for (int i = 0; i < r.count(); i++) {
+            if (r.getOffset(i) == -1) {
+                add.add(new WorkItem(r.getKey(i), null));
+            } else {
+                add.add(new WorkItem(r.getKey(i), r.getOffset(i) + base));
             }
-
-            replace(index, add, base);
-            return true;
         }
-
-        if (type.equals("list")) {
-
-            String list = ByteString.toString(block.getBody());
-            String[] lines = list.split("\n");
-            List<WorkItem> add = new ArrayList<WorkItem>(lines.length);
-            for (String line : lines) {
-                FullKey key = FullKeyParse.parseFullKey(line);
-                add.add(new WorkItem(key, null));
-            }
-
-            replace(index, add, base);
-            return true;
-        }
-
-        if (type.equals("split")) {
-
-            String countString = block.getMeta().get("split-count");
-            int count = Integer.parseInt(countString);
-            List<WorkItem> add = new ArrayList<WorkItem>(count);
-            String keyBase = item.key + "/";
-            for (int i = 0; i < count; i++) {
-                FullKey key = FullKeyParse.parseFullKey(keyBase + i);
-                add.add(new WorkItem(key, null));
-            }
-
-            replace(index, add, base);
-            return true;
-        }
-
-        if (type.equals("indirect")) {
-
-            FullKey key = FullKeyParse.parseFullKey(ByteString.toString(block
-                    .getBody()));
-            List<WorkItem> add = Collections.singletonList(new WorkItem(key,
-                    base));
-
-            replace(index, add, base);
-            return true;
-        }
-
-        throw new IllegalArgumentException("can not handle block type: " + type);
+        replace(index, add, base);
+        return true;
     }
 
     /**

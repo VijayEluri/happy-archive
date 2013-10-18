@@ -7,6 +7,9 @@ import org.yi.happy.annotate.ExternalName;
 import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.key.FullKey;
 
+/**
+ * A data block that refers to another block by key.
+ */
 public class IndirectBlock extends AbstractBlock {
 
     /**
@@ -24,11 +27,20 @@ public class IndirectBlock extends AbstractBlock {
     private final FullKey key;
     private final int size;
 
+    /**
+     * Make an indirect block.
+     * 
+     * @param key
+     *            the key of the block this block refers to.
+     */
     public IndirectBlock(FullKey key) {
         this.key = key;
         this.size = key.toString().length();
     }
 
+    /**
+     * @return the key of the block this block refers to.
+     */
     public FullKey getKey() {
         return key;
     }

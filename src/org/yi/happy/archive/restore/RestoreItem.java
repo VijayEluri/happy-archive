@@ -5,8 +5,9 @@ import org.yi.happy.archive.key.FullKey;
 
 /**
  * Represents a block that is in the process of being restored. The block could
- * have data or could refer to other blocks. The model here is a data block or a
- * table of children (key, offset, data).
+ * be unknown, could be data, or could refer to other blocks. The model here is
+ * flags for being unknown or data, a block and a table of children (key,
+ * offset, data).
  */
 public interface RestoreItem {
 

@@ -4,6 +4,9 @@ import java.util.Map;
 
 import org.yi.happy.archive.Sets;
 
+/**
+ * A parser for a basic data block.
+ */
 public class DataBlockParse {
 
     /**
@@ -29,6 +32,11 @@ public class DataBlockParse {
         return new DataBlock(block.getBody());
     }
 
+    /**
+     * @param block
+     *            the block to check the type of.
+     * @return true if the block is a basic data block.
+     */
     public static boolean isDataBlock(Block block) {
         String type = block.getMeta().get("type");
         return type == null;

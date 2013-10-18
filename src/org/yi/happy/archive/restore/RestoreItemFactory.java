@@ -26,6 +26,8 @@ public class RestoreItemFactory {
      * @param block
      *            the block.
      * @return the created restore item.
+     * @throws IllegalArgumentException
+     *             if the block can not be parsed.
      */
     public static RestoreItem create(FullKey key, Block block) {
         if (DataBlockParse.isDataBlock(block)) {
