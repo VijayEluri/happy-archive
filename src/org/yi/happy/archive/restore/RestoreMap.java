@@ -70,6 +70,16 @@ public class RestoreMap implements RestoreItem {
     }
 
     @Override
+    public void clear(int index) {
+        RestoreItem item = children[index];
+        if (item.isData() == false) {
+            throw new IllegalStateException();
+        }
+        item = new RestoreDone(item.getSize());
+        children[index] = item;
+    }
+
+    @Override
     public long getSize() {
         long size = get(count() - 1).getSize();
         if (size == -1) {

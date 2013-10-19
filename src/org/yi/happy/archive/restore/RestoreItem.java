@@ -42,6 +42,7 @@ public interface RestoreItem {
      * @param index
      *            the index of the child.
      * @return the key of the block for the specified child.
+     * @throws IndexOutOfBoundsException
      */
     public FullKey getKey(int index);
 
@@ -51,6 +52,7 @@ public interface RestoreItem {
      * @param index
      *            the index of the child.
      * @return the offset of the specified child, or -1 if not known.
+     * @throws IndexOutOfBoundsException
      */
     public long getOffset(int index);
 
@@ -61,6 +63,7 @@ public interface RestoreItem {
      *            the index of the child.
      * @param offset
      *            the new offset.
+     * @throws IndexOutOfBoundsException
      */
     public void setOffset(int index, long offset);
 
@@ -70,16 +73,30 @@ public interface RestoreItem {
      * @param index
      *            the index of the child.
      * @return the restore item for the given child.
+     * @throws IndexOutOfBoundsException
      */
     public RestoreItem get(int index);
 
     /**
-     * set the restore item for the specified child.
+     * set the restore item for the specified child. The item can only be set if
+     * the current one has the todo flag set.
      * 
      * @param index
      *            the index of the child.
      * @param item
      *            the restore item to use.
+     * @throws IndexOutOfBoundsException
+     * @throws IllegalStateException
      */
     public void set(int index, RestoreItem item);
+
+    /**
+     * clear the restore item for the specified child. The item can only be
+     * cleared if the current one has the data flag set.
+     * 
+     * @param index
+     *            the index of the child.
+     * @throws IndexOutOfBoundsException
+     */
+    public void clear(int index);
 }

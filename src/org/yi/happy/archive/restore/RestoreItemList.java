@@ -51,6 +51,16 @@ public class RestoreItemList implements RestoreItem {
         items.set(index, item);
     }
 
+    @Override
+    public void clear(int index) {
+        RestoreItem item = items.get(index);
+        if (item.isData() != true) {
+            throw new IllegalStateException();
+        }
+        item = new RestoreDone(item.getSize());
+        items.set(index, item);
+    }
+
     /**
      * add an entry to the table of children.
      * 

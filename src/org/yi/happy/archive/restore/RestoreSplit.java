@@ -86,6 +86,16 @@ public class RestoreSplit implements RestoreItem {
     }
 
     @Override
+    public void clear(int index) {
+        RestoreItem item = children[index];
+        if (item.isData() == false) {
+            throw new IllegalStateException();
+        }
+        item = new RestoreDone(item.getSize());
+        children[index] = item;
+    }
+
+    @Override
     public long getSize() {
         long offset = getOffset(count() - 1);
         if (offset == -1) {

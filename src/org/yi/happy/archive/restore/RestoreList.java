@@ -59,6 +59,16 @@ public class RestoreList implements RestoreItem {
     }
 
     @Override
+    public void clear(int index) {
+        RestoreItem item = children[index];
+        if (item.isData() == false) {
+            throw new IllegalStateException();
+        }
+        item = new RestoreDone(item.getSize());
+        children[index] = item;
+    }
+
+    @Override
     public FullKey getKey(int index) {
         return block.get(index);
     }

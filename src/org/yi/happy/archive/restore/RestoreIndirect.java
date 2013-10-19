@@ -80,6 +80,19 @@ public class RestoreIndirect implements RestoreItem {
     }
 
     @Override
+    public void clear(int index) {
+        if (index != 0) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        if (child.isData() == false) {
+            throw new IllegalStateException();
+        }
+
+        child = new RestoreDone(child.getSize());
+    }
+
+    @Override
     public long getSize() {
         return child.getSize();
     }

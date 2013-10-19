@@ -57,6 +57,11 @@ public class RestoreData implements RestoreItem {
     }
 
     @Override
+    public void clear(int index) {
+        throw new IndexOutOfBoundsException();
+    }
+
+    @Override
     public long getSize() {
         return block.getBody().getSize();
     }

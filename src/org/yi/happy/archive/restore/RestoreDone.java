@@ -3,7 +3,13 @@ package org.yi.happy.archive.restore;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.key.FullKey;
 
-public class RestoreTodo implements RestoreItem {
+public class RestoreDone implements RestoreItem {
+
+    private final long size;
+
+    public RestoreDone(long size) {
+        this.size = size;
+    }
 
     @Override
     public boolean isData() {
@@ -12,7 +18,7 @@ public class RestoreTodo implements RestoreItem {
 
     @Override
     public boolean isTodo() {
-        return true;
+        return false;
     }
 
     @Override
@@ -21,23 +27,13 @@ public class RestoreTodo implements RestoreItem {
     }
 
     @Override
+    public long getSize() {
+        return size;
+    }
+
+    @Override
     public int count() {
         return 0;
-    }
-
-    @Override
-    public RestoreItem get(int index) {
-        throw new IndexOutOfBoundsException();
-    }
-
-    @Override
-    public void set(int index, RestoreItem item) {
-        throw new IndexOutOfBoundsException();
-    }
-
-    @Override
-    public void clear(int index) {
-        throw new IndexOutOfBoundsException();
     }
 
     @Override
@@ -56,7 +52,17 @@ public class RestoreTodo implements RestoreItem {
     }
 
     @Override
-    public long getSize() {
-        return -1;
+    public RestoreItem get(int index) {
+        throw new IndexOutOfBoundsException();
+    }
+
+    @Override
+    public void set(int index, RestoreItem item) {
+        throw new IndexOutOfBoundsException();
+    }
+
+    @Override
+    public void clear(int index) {
+        throw new IndexOutOfBoundsException();
     }
 }
