@@ -3,6 +3,9 @@ package org.yi.happy.archive.restore;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.key.FullKey;
 
+/**
+ * A {@link RestoreItem} that has not been loaded.
+ */
 public class RestoreTodo implements RestoreItem {
 
     @Override

@@ -12,12 +12,21 @@ import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.BytesBuilder;
 import org.yi.happy.archive.key.FullKey;
 
+/**
+ * A block that is just a list of keys.
+ */
 public class ListBlock extends AbstractBlock implements Block {
 
     private final List<FullKey> entries;
 
     private final int size;
 
+    /**
+     * Create from a list of keys.
+     * 
+     * @param entries
+     *            the keys.
+     */
     public ListBlock(List<FullKey> entries) {
         entries = new ArrayList<FullKey>(entries);
         this.entries = Collections.unmodifiableList(entries);
@@ -64,10 +73,20 @@ public class ListBlock extends AbstractBlock implements Block {
         return out;
     }
 
+    /**
+     * @return how many keys are in the list.
+     */
     public int count() {
         return entries.size();
     }
 
+    /**
+     * get a key from the list.
+     * 
+     * @param index
+     *            the index into the list.
+     * @return the key.
+     */
     public FullKey get(int index) {
         return entries.get(index);
     }

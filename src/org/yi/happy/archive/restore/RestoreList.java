@@ -6,11 +6,20 @@ import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.ListBlock;
 import org.yi.happy.archive.key.FullKey;
 
+/**
+ * a {@link RestoreItem} for a {@link ListBlock}.
+ */
 public class RestoreList implements RestoreItem {
     private ListBlock block;
     private long[] offsets;
     private RestoreItem[] children;
 
+    /**
+     * make from a {@link ListBlock}.
+     * 
+     * @param block
+     *            the {@link ListBlock}.
+     */
     public RestoreList(ListBlock block) {
         this.block = block;
 

@@ -6,11 +6,20 @@ import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.MapBlock;
 import org.yi.happy.archive.key.FullKey;
 
+/**
+ * The {@link RestoreItem} for a {@link MapBlock}.
+ */
 public class RestoreMap implements RestoreItem {
 
     private final MapBlock block;
     private RestoreItem[] children;
 
+    /**
+     * make from a {@link MapBlock}.
+     * 
+     * @param block
+     *            the {@link MapBlock}.
+     */
     public RestoreMap(MapBlock block) {
         this.block = block;
 

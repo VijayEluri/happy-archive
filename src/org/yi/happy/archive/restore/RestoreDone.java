@@ -3,10 +3,19 @@ package org.yi.happy.archive.restore;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.key.FullKey;
 
+/**
+ * A place holder for cleared data blocks in a {@link RestoreItem} tree.
+ */
 public class RestoreDone implements RestoreItem {
 
     private final long size;
 
+    /**
+     * create with a size.
+     * 
+     * @param size
+     *            the size.
+     */
     public RestoreDone(long size) {
         this.size = size;
     }

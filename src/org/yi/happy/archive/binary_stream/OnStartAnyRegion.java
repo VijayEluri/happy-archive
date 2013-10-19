@@ -1,6 +1,8 @@
 package org.yi.happy.archive.binary_stream;
 
-
+/**
+ * A condition that matches any start region.
+ */
 public class OnStartAnyRegion implements OnCondition {
 
     @Override

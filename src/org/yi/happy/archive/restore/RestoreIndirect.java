@@ -4,11 +4,20 @@ import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.IndirectBlock;
 import org.yi.happy.archive.key.FullKey;
 
+/**
+ * A {@link RestoreItem} for an {@link IndirectBlock}.
+ */
 public class RestoreIndirect implements RestoreItem {
 
     private final IndirectBlock block;
     private RestoreItem child;
 
+    /**
+     * make from an {@link IndirectBlock}.
+     * 
+     * @param block
+     *            the {@link IndirectBlock}.
+     */
     public RestoreIndirect(IndirectBlock block) {
         this.block = block;
         this.child = new RestoreTodo();

@@ -61,6 +61,11 @@ public class RestoreItemTest {
         assertEquals(MAP.getClearBlock(), item.getBlock());
     }
 
+    /**
+     * set an entry in a map block restore item.
+     * 
+     * @throws Exception
+     */
     @Test
     public void testSetMap() throws Exception {
         RestoreItem item = load(MAP);
@@ -69,6 +74,12 @@ public class RestoreItemTest {
         assertEquals(false, item.get(0).isTodo());
     }
 
+    /**
+     * set an offset in a map block, this is not allowed because the offsets are
+     * already set.
+     * 
+     * @throws Exception
+     */
     @Test(expected = IllegalStateException.class)
     public void testSetMapBad() throws Exception {
         RestoreItem item = load(MAP);
@@ -76,6 +87,11 @@ public class RestoreItemTest {
         item.setOffset(0, 0);
     }
 
+    /**
+     * attempt to reset a child. children can only be set once.
+     * 
+     * @throws Exception
+     */
     @Test(expected = IllegalStateException.class)
     public void testSetMapBad2() throws Exception {
         RestoreItem item = load(MAP);
@@ -90,6 +106,11 @@ public class RestoreItemTest {
     private static final TestData LIST_0 = TestData.KEY_CONTENT_1;
     private static final TestData LIST_1 = TestData.KEY_CONTENT_2;
 
+    /**
+     * load a list block and check all the values.
+     * 
+     * @throws Exception
+     */
     @Test
     public void testLoadList() throws Exception {
 
@@ -97,6 +118,8 @@ public class RestoreItemTest {
 
         assertEquals(false, item.isData());
         assertEquals(false, item.isTodo());
+
+        assertEquals(-1, item.getSize());
 
         assertEquals(2, item.count());
 
@@ -111,6 +134,12 @@ public class RestoreItemTest {
         assertEquals(LIST.getClearBlock(), item.getBlock());
     }
 
+    /**
+     * set one of the two children in the list, one of the offsets, and check
+     * all the values.
+     * 
+     * @throws Exception
+     */
     @Test
     public void testSetList() throws Exception {
         RestoreItem item = load(LIST);
@@ -123,6 +152,11 @@ public class RestoreItemTest {
         assertEquals(5, item.getOffset(1));
     }
 
+    /**
+     * The offset can only be set once. on a list block.
+     * 
+     * @throws Exception
+     */
     @Test(expected = IllegalStateException.class)
     public void testSetListBad() throws Exception {
         RestoreItem item = load(LIST);
@@ -130,6 +164,11 @@ public class RestoreItemTest {
         item.setOffset(0, 0);
     }
 
+    /**
+     * the offset can only be set once. on a list block.
+     * 
+     * @throws Exception
+     */
     @Test(expected = IllegalStateException.class)
     public void testSetListBad2() throws Exception {
         RestoreItem item = load(LIST);
@@ -140,6 +179,11 @@ public class RestoreItemTest {
         item.setOffset(1, 5);
     }
 
+    /**
+     * the child can only be set once. on a list block.
+     * 
+     * @throws Exception
+     */
     @Test(expected = IllegalStateException.class)
     public void testSetListBad3() throws Exception {
         RestoreItem item = load(LIST);
@@ -154,6 +198,11 @@ public class RestoreItemTest {
     private static final TestData SPLIT_0 = TestData.KEY_NAME_SPLIT_1;
     private static final TestData SPLIT_1 = TestData.KEY_NAME_SPLIT_2;
 
+    /**
+     * check all the fields of a split block.
+     * 
+     * @throws Exception
+     */
     @Test
     public void testLoadSplit() throws Exception {
 
@@ -175,6 +224,11 @@ public class RestoreItemTest {
         assertEquals(SPLIT.getClearBlock(), item.getBlock());
     }
 
+    /**
+     * set of offset of a child. on a split block.
+     * 
+     * @throws Exception
+     */
     @Test
     public void testSetSplit() throws Exception {
         RestoreItem item = load(SPLIT);
@@ -187,6 +241,11 @@ public class RestoreItemTest {
         assertEquals(5, item.getOffset(1));
     }
 
+    /**
+     * the offset can only be set once. on a split block.
+     * 
+     * @throws Exception
+     */
     @Test(expected = IllegalStateException.class)
     public void testSetSplitBad() throws Exception {
         RestoreItem item = load(SPLIT);
@@ -194,6 +253,11 @@ public class RestoreItemTest {
         item.setOffset(0, 0);
     }
 
+    /**
+     * the offset can only be set once. on a split block.
+     * 
+     * @throws Exception
+     */
     @Test(expected = IllegalStateException.class)
     public void testSetSplitBad2() throws Exception {
         RestoreItem item = load(SPLIT);
@@ -203,6 +267,11 @@ public class RestoreItemTest {
         item.setOffset(1, 5);
     }
 
+    /**
+     * the offset can only be set once. on a split block.
+     * 
+     * @throws Exception
+     */
     @Test(expected = IllegalStateException.class)
     public void testSetSplitBad3() throws Exception {
         RestoreItem item = load(SPLIT);
@@ -216,6 +285,11 @@ public class RestoreItemTest {
     private static final TestData INDIRECT = TestData.KEY_NAME_SPLIT_1;
     private static final TestData INDIRECT_0 = TestData.KEY_CONTENT_1;
 
+    /**
+     * check all the fields of an indirect block.
+     * 
+     * @throws Exception
+     */
     @Test
     public void testLoadIndirect() throws Exception {
 
@@ -233,6 +307,11 @@ public class RestoreItemTest {
         assertEquals(INDIRECT.getClearBlock(), item.getBlock());
     }
 
+    /**
+     * set the single child of an indirect block.
+     * 
+     * @throws Exception
+     */
     @Test
     public void testSetIndirect() throws Exception {
         RestoreItem item = load(INDIRECT);
@@ -241,6 +320,11 @@ public class RestoreItemTest {
         assertEquals(false, item.get(0).isTodo());
     }
 
+    /**
+     * the offset can only be set once. on an indirect block.
+     * 
+     * @throws Exception
+     */
     @Test(expected = IllegalStateException.class)
     public void testSetIndirectBad() throws Exception {
         RestoreItem item = load(INDIRECT);
@@ -248,6 +332,11 @@ public class RestoreItemTest {
         item.setOffset(0, 0);
     }
 
+    /**
+     * the child can only be set once. on an indirect block.
+     * 
+     * @throws Exception
+     */
     @Test(expected = IllegalStateException.class)
     public void testSetIndirectBad2() throws Exception {
         RestoreItem item = load(INDIRECT);
@@ -265,6 +354,11 @@ public class RestoreItemTest {
         return RestoreItemFactory.create(key, block);
     }
 
+    /**
+     * a {@link RestoreItemList} can fill in offsets as some details are known.
+     * 
+     * @throws Exception
+     */
     @Test
     public void testFillOffset() throws Exception {
         RestoreItemList list = new RestoreItemList();
@@ -281,6 +375,11 @@ public class RestoreItemTest {
         assertEquals(5, list.get(0).getOffset(1));
     }
 
+    /**
+     * a {@link RestoreItemList} can fill in offsets as some details are known.
+     * 
+     * @throws Exception
+     */
     @Test
     public void testFillOffset2() throws Exception {
         RestoreItemList list = new RestoreItemList();
@@ -299,6 +398,11 @@ public class RestoreItemTest {
 
     }
 
+    /**
+     * {@link RestoreItem}s have a size when enough is known. on a map.
+     * 
+     * @throws Exception
+     */
     @Test
     public void testGetSize() throws Exception {
         RestoreItemList list = new RestoreItemList();
@@ -311,6 +415,11 @@ public class RestoreItemTest {
         assertEquals(10, list.getSize());
     }
 
+    /**
+     * {@link RestoreItem}s have a size when enough is known. on a list.
+     * 
+     * @throws Exception
+     */
     @Test
     public void testGetSize2() throws Exception {
         RestoreItemList list = new RestoreItemList();
@@ -328,6 +437,11 @@ public class RestoreItemTest {
         assertEquals(10, list.getSize());
     }
 
+    /**
+     * we can flatten a {@link RestoreItemList}.
+     * 
+     * @throws Exception
+     */
     @Test
     public void testGetTodo() throws Exception {
         RestoreItemList list = new RestoreItemList();
@@ -358,6 +472,11 @@ public class RestoreItemTest {
         assertEquals(true, list.get(0).isTodo());
     }
 
+    /**
+     * we can flatten a {@link RestoreItemList}.
+     * 
+     * @throws Exception
+     */
     @Test
     public void testGetTodo2() throws Exception {
         RestoreItemList list = new RestoreItemList();
