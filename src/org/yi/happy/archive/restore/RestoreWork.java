@@ -12,6 +12,8 @@ import org.yi.happy.archive.key.FullKey;
  * list for {@link RestoreEngine}.
  */
 public class RestoreWork implements RestoreItem {
+    // TODO make an Entry class to hold the pair of values for each entry.
+
     private List<FullKey> keys = new ArrayList<FullKey>();
     private List<Long> offsets = new ArrayList<Long>();
 
@@ -117,7 +119,7 @@ public class RestoreWork implements RestoreItem {
         /*
          * fix the offset if the replacement was empty.
          */
-        if (offsets.size() > index && offsets.get(index) == -1) {
+        if (index < offsets.size() && offsets.get(index) == -1) {
             if (item.isData()) {
                 base = base + item.getBlock().getBody().getSize();
             }

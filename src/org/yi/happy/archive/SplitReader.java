@@ -3,7 +3,6 @@ package org.yi.happy.archive;
 import java.io.IOException;
 import java.util.List;
 
-import org.yi.happy.annotate.MagicLiteral;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.restore.RestoreEngine;
@@ -40,12 +39,28 @@ public class SplitReader {
      *             if the block is available but fetching or decoding failed.
      */
     public Fragment fetchAny() throws IOException {
-        for (int i = 0; i < engine.getItemCount(); i++) {
-            Fragment out = fetch(i);
-            if (out != null) {
-                return out;
+        engine.start();
+        while (engine.findReady()) {
+            Block block = storage.retrieveBlock(engine.getKey());
+            if (block == null) {
+                engine.skip();
+                continue;
             }
+
+            Fragment out;
+            try {
+                out = engine.step(block);
+            } catch (IllegalArgumentException e) {
+                throw new DecodeException(e);
+            }
+            progress++;
+            if (out == null) {
+                continue;
+            }
+
+            return out;
         }
+
         return null;
     }
 
@@ -57,52 +72,28 @@ public class SplitReader {
      *             if the block is available but fetching or decoding failed.
      */
     public Fragment fetchFirst() throws IOException {
-        return fetch(0);
-    }
-
-    /**
-     * try to fetch the given entry in the pending list, if it can be fetched
-     * return the details and remove it from the pending list. if the block
-     * being fetched is an indirection then the pending list gets updated and
-     * the attempt is repeated. If the offset of the entry in the pending list
-     * is not known, it can not be fetched and null is returned.
-     * 
-     * @param index
-     *            the index in the pending list to try and load
-     * @return the loaded data for the given entry, or null if the block is not
-     *         available.
-     * @throws IOException
-     *             if the block is available but fetching or decoding failed.
-     */
-    @MagicLiteral
-    private Fragment fetch(int index) throws IOException {
-        while (true) {
-            if (engine.isOutputReady()) {
-                return engine.getOutput();
+        engine.start();
+        while (engine.findReady()) {
+            Block block = storage.retrieveBlock(engine.getKey());
+            if (block == null) {
+                break;
             }
 
-            if (index >= engine.getItemCount()) {
-                return null;
-            }
-
-            if (engine.isReady(index) == false) {
-                return null;
-            }
-
-            FullKey key = engine.getKey(index);
-            Block b = storage.retrieveBlock(key);
-            if (b == null) {
-                return null;
-            }
-
+            Fragment out;
             try {
-                if (engine.step(index, b)) {
-                    progress++;
-                }
+                out = engine.step(block);
             } catch (IllegalArgumentException e) {
                 throw new DecodeException(e);
             }
+            progress++;
+            if (out == null) {
+                continue;
+            }
+
+            return out;
         }
+
+        return null;
     }
 
     /**
@@ -135,7 +126,8 @@ public class SplitReader {
         if (engine.isDone()) {
             return null;
         }
-        return engine.getOffset(0);
+        engine.start();
+        return engine.getOffset();
     }
 
     /**

@@ -6,7 +6,8 @@ import org.yi.happy.archive.key.FullKey;
 /**
  * Represents a loaded block that can be given to {@link RestoreEngine}. The
  * block could be data, or could refer to other blocks. The model here is a
- * flags for data, a block, and a table of children (key, offset).
+ * flags for data, a block, and a table of children (key, offset). The first
+ * child, if it exists, should always have an offset.
  */
 public interface RestoreItem {
 
