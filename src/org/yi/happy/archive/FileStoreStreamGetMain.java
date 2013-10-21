@@ -12,6 +12,7 @@ import org.yi.happy.archive.commandLine.UsesStore;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.FullKeyParse;
 import org.yi.happy.archive.key.LocatorKey;
+import org.yi.happy.archive.restore.RestoreEngine;
 
 /**
  * Fetch a stream, the blocks may not all available in the file store, so the
@@ -72,15 +73,16 @@ public class FileStoreStreamGetMain implements MainCommand {
         private int progress;
 
         @Override
-        public void notReady(SplitReader reader) throws IOException {
+        public void notReady(RestoreEngine reader, int progress)
+                throws IOException {
             List<LocatorKey> keys = new ArrayList<LocatorKey>();
-            for (FullKey key : reader.getPending()) {
+            for (FullKey key : reader.getNeeded()) {
                 keys.add(key.toLocatorKey());
             }
             needHandler.post(keys);
 
-            waitHandler.doWait(progress != reader.getProgress());
-            progress = reader.getProgress();
+            waitHandler.doWait(this.progress != progress);
+            this.progress = progress;
         }
     };
 }

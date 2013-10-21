@@ -3,6 +3,7 @@ package org.yi.happy.archive;
 import java.io.IOException;
 import java.util.List;
 
+import org.yi.happy.archive.restore.RestoreEngine;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
@@ -39,7 +40,7 @@ public class ScriptNotReadyHandler implements NotReadyHandler {
      * block, if there are no blocks left then throw {@link IONotReadyException}
      */
     @Override
-    public void notReady(SplitReader reader) throws IOException {
+    public void notReady(RestoreEngine reader, int progress) throws IOException {
         if (script.size() == 0) {
             throw new IONotReadyException();
         }

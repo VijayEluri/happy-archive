@@ -35,6 +35,7 @@ import org.yi.happy.archive.key.FullKey;
  */
 public class RestoreEngine {
     private RestoreWork work;
+    private int index = 0;
 
     /**
      * Set up the logic to join data blocks back together.
@@ -111,8 +112,6 @@ public class RestoreEngine {
     public boolean isDone() {
         return work.count() == 0;
     }
-
-    private int index = 0;
 
     /**
      * Set the cursor back to the beginning.

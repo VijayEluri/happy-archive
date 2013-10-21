@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.yi.happy.annotate.SmellsMessy;
+import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.key.FullKey;
+import org.yi.happy.archive.restore.RestoreEngine;
 
 /**
  * an input stream for reading keys from a store.
@@ -17,12 +19,22 @@ public class KeyInputStream extends InputStream {
     /**
      * the split reader that does most of the work
      */
-    private SplitReader reader;
+    private RestoreEngine reader;
+
+    /**
+     * the decoding block store.
+     */
+    private RetrieveBlock store;
 
     /**
      * how much of the stream has been read
      */
     private long offset;
+
+    /**
+     * how many blocks have been processed
+     */
+    private int progress;
 
     /**
      * the current data fragment
@@ -47,8 +59,9 @@ public class KeyInputStream extends InputStream {
      */
     public KeyInputStream(FullKey fullKey, RetrieveBlock store,
             NotReadyHandler notReadyHandler) {
+        this.reader = new RestoreEngine(fullKey);
+        this.store = store;
         this.notReadyHandler = notReadyHandler;
-        this.reader = new SplitReader(fullKey, store);
         this.offset = 0;
     }
 
@@ -88,12 +101,22 @@ public class KeyInputStream extends InputStream {
             }
 
             try {
-                buff = reader.fetchFirst();
+                while (reader.findReady()) {
+                    Block block = store.retrieveBlock(reader.getKey());
+                    if (block == null) {
+                        break;
+                    }
+                    buff = reader.step(block);
+                    progress++;
+                    if (buff != null) {
+                        break;
+                    }
+                }
             } catch (IOException e) {
                 buff = null;
             }
             if (buff == null) {
-                notReadyHandler.notReady(reader);
+                notReadyHandler.notReady(reader, progress);
             }
         }
     }

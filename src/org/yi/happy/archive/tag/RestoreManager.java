@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.yi.happy.archive.RetrieveBlock;
-import org.yi.happy.archive.SplitReader;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.key.FullKey;
 
@@ -43,7 +42,7 @@ public class RestoreManager {
      *            the key to store there.
      */
     public void addFile(String path, FullKey fullKey) {
-        files.add(new RestoreFile(new SplitReader(fullKey, store), path, fs));
+        files.add(new RestoreFile(fullKey, store, path, fs));
     }
 
     /**
