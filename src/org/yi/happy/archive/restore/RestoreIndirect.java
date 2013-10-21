@@ -10,7 +10,6 @@ import org.yi.happy.archive.key.FullKey;
 public class RestoreIndirect implements RestoreItem {
 
     private final IndirectBlock block;
-    private RestoreItem child;
 
     /**
      * make from an {@link IndirectBlock}.
@@ -20,16 +19,10 @@ public class RestoreIndirect implements RestoreItem {
      */
     public RestoreIndirect(IndirectBlock block) {
         this.block = block;
-        this.child = new RestoreTodo();
     }
 
     @Override
     public boolean isData() {
-        return false;
-    }
-
-    @Override
-    public boolean isTodo() {
         return false;
     }
 
@@ -57,52 +50,5 @@ public class RestoreIndirect implements RestoreItem {
             throw new IndexOutOfBoundsException();
         }
         return 0;
-    }
-
-    @Override
-    public void setOffset(int index, long offset) {
-        if (index != 0) {
-            throw new IndexOutOfBoundsException();
-        }
-        throw new IllegalStateException();
-    }
-
-    @Override
-    public RestoreItem get(int index) {
-        if (index != 0) {
-            throw new IndexOutOfBoundsException();
-        }
-        return child;
-    }
-
-    @Override
-    public void set(int index, RestoreItem item) {
-        if (index != 0) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        if (child.isTodo() == false) {
-            throw new IllegalStateException();
-        }
-
-        child = item;
-    }
-
-    @Override
-    public void clear(int index) {
-        if (index != 0) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        if (child.isData() == false) {
-            throw new IllegalStateException();
-        }
-
-        child = new RestoreDone(child.getSize());
-    }
-
-    @Override
-    public long getSize() {
-        return child.getSize();
     }
 }

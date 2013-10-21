@@ -26,11 +26,6 @@ public class RestoreData implements RestoreItem {
     }
 
     @Override
-    public boolean isTodo() {
-        return false;
-    }
-
-    @Override
     public Block getBlock() {
         return block;
     }
@@ -41,16 +36,6 @@ public class RestoreData implements RestoreItem {
     }
 
     @Override
-    public RestoreItem get(int index) {
-        throw new IndexOutOfBoundsException();
-    }
-
-    @Override
-    public void set(int index, RestoreItem item) {
-        throw new IndexOutOfBoundsException();
-    }
-
-    @Override
     public FullKey getKey(int index) {
         throw new IndexOutOfBoundsException();
     }
@@ -58,20 +43,5 @@ public class RestoreData implements RestoreItem {
     @Override
     public long getOffset(int index) {
         throw new IndexOutOfBoundsException();
-    }
-
-    @Override
-    public void setOffset(int index, long offset) {
-        throw new IndexOutOfBoundsException();
-    }
-
-    @Override
-    public void clear(int index) {
-        throw new IndexOutOfBoundsException();
-    }
-
-    @Override
-    public long getSize() {
-        return block.getBody().getSize();
     }
 }

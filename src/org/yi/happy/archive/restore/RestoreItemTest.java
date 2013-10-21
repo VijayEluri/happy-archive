@@ -24,7 +24,6 @@ public class RestoreItemTest {
         RestoreItem item = load(DATA);
 
         assertEquals(true, item.isData());
-        assertEquals(false, item.isTodo());
 
         assertEquals(0, item.count());
 
@@ -46,60 +45,16 @@ public class RestoreItemTest {
         RestoreItem item = load(MAP);
 
         assertEquals(false, item.isData());
-        assertEquals(false, item.isTodo());
 
         assertEquals(2, item.count());
 
         assertEquals(MAP_0.getFullKey(), item.getKey(0));
         assertEquals(0, item.getOffset(0));
-        assertEquals(true, item.get(0).isTodo());
 
         assertEquals(MAP_1.getFullKey(), item.getKey(1));
         assertEquals(5, item.getOffset(1));
-        assertEquals(true, item.get(1).isTodo());
 
         assertEquals(MAP.getClearBlock(), item.getBlock());
-    }
-
-    /**
-     * set an entry in a map block restore item.
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void testSetMap() throws Exception {
-        RestoreItem item = load(MAP);
-
-        item.set(0, load(MAP_0));
-        assertEquals(false, item.get(0).isTodo());
-    }
-
-    /**
-     * set an offset in a map block, this is not allowed because the offsets are
-     * already set.
-     * 
-     * @throws Exception
-     */
-    @Test(expected = IllegalStateException.class)
-    public void testSetMapBad() throws Exception {
-        RestoreItem item = load(MAP);
-
-        item.setOffset(0, 0);
-    }
-
-    /**
-     * attempt to reset a child. children can only be set once.
-     * 
-     * @throws Exception
-     */
-    @Test(expected = IllegalStateException.class)
-    public void testSetMapBad2() throws Exception {
-        RestoreItem item = load(MAP);
-
-        item.set(0, load(MAP_0));
-        assertEquals(false, item.get(0).isTodo());
-
-        item.set(0, new RestoreTodo());
     }
 
     private static final TestData LIST = TestData.KEY_CONTENT_LIST;
@@ -117,81 +72,16 @@ public class RestoreItemTest {
         RestoreItem item = load(LIST);
 
         assertEquals(false, item.isData());
-        assertEquals(false, item.isTodo());
-
-        assertEquals(-1, item.getSize());
 
         assertEquals(2, item.count());
 
         assertEquals(LIST_0.getFullKey(), item.getKey(0));
         assertEquals(0, item.getOffset(0));
-        assertEquals(true, item.get(0).isTodo());
 
         assertEquals(LIST_1.getFullKey(), item.getKey(1));
         assertEquals(-1, item.getOffset(1));
-        assertEquals(true, item.get(1).isTodo());
 
         assertEquals(LIST.getClearBlock(), item.getBlock());
-    }
-
-    /**
-     * set one of the two children in the list, one of the offsets, and check
-     * all the values.
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void testSetList() throws Exception {
-        RestoreItem item = load(LIST);
-
-        item.set(0, load(LIST_0));
-        assertEquals(false, item.get(0).isTodo());
-
-        assertEquals(-1, item.getOffset(1));
-        item.setOffset(1, 5);
-        assertEquals(5, item.getOffset(1));
-    }
-
-    /**
-     * The offset can only be set once. on a list block.
-     * 
-     * @throws Exception
-     */
-    @Test(expected = IllegalStateException.class)
-    public void testSetListBad() throws Exception {
-        RestoreItem item = load(LIST);
-
-        item.setOffset(0, 0);
-    }
-
-    /**
-     * the offset can only be set once. on a list block.
-     * 
-     * @throws Exception
-     */
-    @Test(expected = IllegalStateException.class)
-    public void testSetListBad2() throws Exception {
-        RestoreItem item = load(LIST);
-
-        item.setOffset(1, 5);
-        assertEquals(5, item.getOffset(1));
-
-        item.setOffset(1, 5);
-    }
-
-    /**
-     * the child can only be set once. on a list block.
-     * 
-     * @throws Exception
-     */
-    @Test(expected = IllegalStateException.class)
-    public void testSetListBad3() throws Exception {
-        RestoreItem item = load(LIST);
-
-        item.set(0, load(LIST_0));
-        assertEquals(false, item.get(0).isTodo());
-
-        item.set(0, new RestoreTodo());
     }
 
     private static final TestData SPLIT = TestData.KEY_NAME_SPLIT;
@@ -209,77 +99,16 @@ public class RestoreItemTest {
         RestoreItem item = load(SPLIT);
 
         assertEquals(false, item.isData());
-        assertEquals(false, item.isTodo());
 
         assertEquals(2, item.count());
 
         assertEquals(SPLIT_0.getFullKey(), item.getKey(0));
         assertEquals(0, item.getOffset(0));
-        assertEquals(true, item.get(0).isTodo());
 
         assertEquals(SPLIT_1.getFullKey(), item.getKey(1));
         assertEquals(-1, item.getOffset(1));
-        assertEquals(true, item.get(1).isTodo());
 
         assertEquals(SPLIT.getClearBlock(), item.getBlock());
-    }
-
-    /**
-     * set of offset of a child. on a split block.
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void testSetSplit() throws Exception {
-        RestoreItem item = load(SPLIT);
-
-        item.set(0, load(SPLIT_0));
-        assertEquals(false, item.get(0).isTodo());
-
-        assertEquals(-1, item.getOffset(1));
-        item.setOffset(1, 5);
-        assertEquals(5, item.getOffset(1));
-    }
-
-    /**
-     * the offset can only be set once. on a split block.
-     * 
-     * @throws Exception
-     */
-    @Test(expected = IllegalStateException.class)
-    public void testSetSplitBad() throws Exception {
-        RestoreItem item = load(SPLIT);
-
-        item.setOffset(0, 0);
-    }
-
-    /**
-     * the offset can only be set once. on a split block.
-     * 
-     * @throws Exception
-     */
-    @Test(expected = IllegalStateException.class)
-    public void testSetSplitBad2() throws Exception {
-        RestoreItem item = load(SPLIT);
-
-        item.setOffset(1, 5);
-        assertEquals(5, item.getOffset(1));
-        item.setOffset(1, 5);
-    }
-
-    /**
-     * the offset can only be set once. on a split block.
-     * 
-     * @throws Exception
-     */
-    @Test(expected = IllegalStateException.class)
-    public void testSetSplitBad3() throws Exception {
-        RestoreItem item = load(SPLIT);
-
-        item.set(0, load(SPLIT_0));
-        assertEquals(false, item.get(0).isTodo());
-
-        item.set(0, new RestoreTodo());
     }
 
     private static final TestData INDIRECT = TestData.KEY_NAME_SPLIT_1;
@@ -296,55 +125,13 @@ public class RestoreItemTest {
         RestoreItem item = load(INDIRECT);
 
         assertEquals(false, item.isData());
-        assertEquals(false, item.isTodo());
 
         assertEquals(1, item.count());
 
         assertEquals(INDIRECT_0.getFullKey(), item.getKey(0));
         assertEquals(0, item.getOffset(0));
-        assertEquals(true, item.get(0).isTodo());
 
         assertEquals(INDIRECT.getClearBlock(), item.getBlock());
-    }
-
-    /**
-     * set the single child of an indirect block.
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void testSetIndirect() throws Exception {
-        RestoreItem item = load(INDIRECT);
-
-        item.set(0, load(INDIRECT_0));
-        assertEquals(false, item.get(0).isTodo());
-    }
-
-    /**
-     * the offset can only be set once. on an indirect block.
-     * 
-     * @throws Exception
-     */
-    @Test(expected = IllegalStateException.class)
-    public void testSetIndirectBad() throws Exception {
-        RestoreItem item = load(INDIRECT);
-
-        item.setOffset(0, 0);
-    }
-
-    /**
-     * the child can only be set once. on an indirect block.
-     * 
-     * @throws Exception
-     */
-    @Test(expected = IllegalStateException.class)
-    public void testSetIndirectBad2() throws Exception {
-        RestoreItem item = load(INDIRECT);
-
-        item.set(0, load(INDIRECT_0));
-        assertEquals(false, item.get(0).isTodo());
-
-        item.set(0, new RestoreTodo());
     }
 
     private RestoreItem load(TestData data) throws Exception {
@@ -355,236 +142,145 @@ public class RestoreItemTest {
     }
 
     /**
-     * a {@link RestoreItemList} can fill in offsets as some details are known.
+     * Work through a data block.
      * 
      * @throws Exception
      */
     @Test
-    public void testFillOffset() throws Exception {
-        RestoreItemList list = new RestoreItemList();
-        list.add(LIST.getFullKey(), 0, load(LIST));
+    public void testWorkData() throws Exception {
+        RestoreWork work = new RestoreWork(DATA.getFullKey());
 
-        assertEquals(-1, list.get(0).getOffset(1));
+        assertEquals(1, work.count());
 
-        list.get(0).set(0, load(LIST_0));
+        assertEquals(0, work.getOffset(0));
+        assertEquals(DATA.getFullKey(), work.getKey(0));
 
-        assertEquals(-1, list.get(0).getOffset(1));
+        work.replace(0, load(DATA));
 
-        list.fillOffset();
-
-        assertEquals(5, list.get(0).getOffset(1));
+        assertEquals(0, work.count());
     }
 
     /**
-     * a {@link RestoreItemList} can fill in offsets as some details are known.
+     * Work through a list block.
      * 
      * @throws Exception
      */
     @Test
-    public void testFillOffset2() throws Exception {
-        RestoreItemList list = new RestoreItemList();
-        list.add(LIST_0.getFullKey(), 0, new RestoreTodo());
-        list.add(LIST_1.getFullKey(), -1, new RestoreTodo());
+    public void testWorkList() throws Exception {
+        RestoreWork work = new RestoreWork(LIST.getFullKey());
 
-        assertEquals(-1, list.getOffset(1));
+        assertEquals(1, work.count());
 
-        list.set(0, load(LIST_0));
+        assertEquals(0, work.getOffset(0));
+        assertEquals(LIST.getFullKey(), work.getKey(0));
 
-        assertEquals(-1, list.getOffset(1));
+        work.replace(0, load(LIST));
 
-        list.fillOffset();
+        assertEquals(2, work.count());
 
-        assertEquals(5, list.getOffset(1));
+        assertEquals(0, work.getOffset(0));
+        assertEquals(LIST_0.getFullKey(), work.getKey(0));
 
+        assertEquals(-1, work.getOffset(1));
+        assertEquals(LIST_1.getFullKey(), work.getKey(1));
+
+        work.replace(0, load(LIST_0));
+
+        assertEquals(1, work.count());
+
+        assertEquals(5, work.getOffset(0));
+        assertEquals(LIST_1.getFullKey(), work.getKey(0));
+
+        work.replace(0, load(LIST_1));
+
+        assertEquals(0, work.count());
     }
 
     /**
-     * {@link RestoreItem}s have a size when enough is known. on a map.
+     * Attempt to replace an entry with no offset.
      * 
      * @throws Exception
      */
-    @Test
-    public void testGetSize() throws Exception {
-        RestoreItemList list = new RestoreItemList();
-        list.add(MAP.getFullKey(), 0, load(MAP));
+    @Test(expected = IllegalStateException.class)
+    public void testWorkBadReplace() throws Exception {
+        RestoreWork work = new RestoreWork(LIST_0.getFullKey());
+        work.add(LIST_1.getFullKey(), -1);
 
-        assertEquals(-1, list.getSize());
+        assertEquals(2, work.count());
+        assertEquals(-1, work.getOffset(1));
 
-        list.get(0).set(1, load(MAP_1));
-
-        assertEquals(10, list.getSize());
+        work.replace(1, load(LIST_1));
     }
 
     /**
-     * {@link RestoreItem}s have a size when enough is known. on a list.
+     * Work through a map block.
      * 
      * @throws Exception
      */
     @Test
-    public void testGetSize2() throws Exception {
-        RestoreItemList list = new RestoreItemList();
-        list.add(LIST.getFullKey(), 0, load(LIST));
+    public void testWorkMap() throws Exception {
+        RestoreWork work = new RestoreWork(MAP.getFullKey());
 
-        assertEquals(-1, list.getSize());
+        assertEquals(1, work.count());
 
-        list.get(0).set(0, load(LIST_0));
-        list.get(0).set(1, load(LIST_1));
+        assertEquals(0, work.getOffset(0));
+        assertEquals(MAP.getFullKey(), work.getKey(0));
 
-        assertEquals(-1, list.getSize());
+        work.replace(0, load(MAP));
 
-        list.fillOffset();
+        assertEquals(2, work.count());
 
-        assertEquals(10, list.getSize());
+        assertEquals(0, work.getOffset(0));
+        assertEquals(MAP_0.getFullKey(), work.getKey(0));
+
+        assertEquals(5, work.getOffset(1));
+        assertEquals(MAP_1.getFullKey(), work.getKey(1));
+
+        work.replace(0, load(MAP_0));
+
+        assertEquals(1, work.count());
+
+        assertEquals(5, work.getOffset(0));
+        assertEquals(MAP_1.getFullKey(), work.getKey(0));
+
+        work.replace(0, load(MAP_1));
+
+        assertEquals(0, work.count());
     }
 
     /**
-     * we can flatten a {@link RestoreItemList}.
+     * Work through a map block, out of order.
      * 
      * @throws Exception
      */
     @Test
-    public void testGetTodo() throws Exception {
-        RestoreItemList list = new RestoreItemList();
-        list.add(LIST.getFullKey(), 10, load(LIST));
+    public void testWorkMap2() throws Exception {
+        RestoreWork work = new RestoreWork(MAP.getFullKey());
 
-        assertEquals(1, list.count());
+        assertEquals(1, work.count());
 
-        list = list.getTodo();
+        assertEquals(0, work.getOffset(0));
+        assertEquals(MAP.getFullKey(), work.getKey(0));
 
-        assertEquals(2, list.count());
+        work.replace(0, load(MAP));
 
-        assertEquals(LIST_0.getFullKey(), list.getKey(0));
-        assertEquals(10, list.getOffset(0));
-        assertEquals(true, list.get(0).isTodo());
+        assertEquals(2, work.count());
 
-        assertEquals(LIST_1.getFullKey(), list.getKey(1));
-        assertEquals(-1, list.getOffset(1));
-        assertEquals(true, list.get(1).isTodo());
+        assertEquals(0, work.getOffset(0));
+        assertEquals(MAP_0.getFullKey(), work.getKey(0));
 
-        list.set(0, load(LIST_0));
+        assertEquals(5, work.getOffset(1));
+        assertEquals(MAP_1.getFullKey(), work.getKey(1));
 
-        list = list.getTodo();
+        work.replace(1, load(MAP_1));
 
-        assertEquals(1, list.count());
+        assertEquals(1, work.count());
 
-        assertEquals(LIST_1.getFullKey(), list.getKey(0));
-        assertEquals(15, list.getOffset(0));
-        assertEquals(true, list.get(0).isTodo());
-    }
+        assertEquals(0, work.getOffset(0));
+        assertEquals(MAP_0.getFullKey(), work.getKey(0));
 
-    /**
-     * we can flatten a {@link RestoreItemList}.
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void testGetTodo2() throws Exception {
-        RestoreItemList list = new RestoreItemList();
-        list.add(LIST.getFullKey(), 10, load(LIST));
+        work.replace(0, load(MAP_0));
 
-        assertEquals(1, list.count());
-
-        list = list.getTodo();
-
-        assertEquals(2, list.count());
-
-        assertEquals(LIST_0.getFullKey(), list.getKey(0));
-        assertEquals(10, list.getOffset(0));
-        assertEquals(true, list.get(0).isTodo());
-
-        assertEquals(LIST_1.getFullKey(), list.getKey(1));
-        assertEquals(-1, list.getOffset(1));
-        assertEquals(true, list.get(1).isTodo());
-
-        list.set(1, load(LIST));
-
-        list = list.getTodo();
-
-        assertEquals(2, list.count());
-
-        assertEquals(LIST_0.getFullKey(), list.getKey(0));
-        assertEquals(10, list.getOffset(0));
-        assertEquals(true, list.get(0).isTodo());
-
-        assertEquals(LIST_1.getFullKey(), list.getKey(1));
-        assertEquals(-1, list.getOffset(1));
-        assertEquals(false, list.get(1).isTodo());
-
-        list.set(0, load(LIST));
-
-        list = list.getTodo();
-
-        assertEquals(3, list.count());
-
-        assertEquals(LIST_0.getFullKey(), list.getKey(0));
-        assertEquals(10, list.getOffset(0));
-        assertEquals(true, list.get(0).isTodo());
-
-        assertEquals(LIST_1.getFullKey(), list.getKey(1));
-        assertEquals(-1, list.getOffset(1));
-        assertEquals(true, list.get(1).isTodo());
-
-        assertEquals(LIST_1.getFullKey(), list.getKey(2));
-        assertEquals(-1, list.getOffset(2));
-        assertEquals(false, list.get(2).isTodo());
-    }
-
-    /**
-     * Create and follow a cursor through a typical usage.
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void cursorTypical() throws Exception {
-        RestoreItemList list = new RestoreItemList();
-        list.add(MAP.getFullKey(), 0, new RestoreTodo());
-        
-        RestoreCursor cursor = new RestoreCursor(list);
-        
-        assertEquals(false, cursor.isLeaf());
-        assertEquals(true, cursor.nextLeaf());
-        
-        assertEquals(true, cursor.isLeaf());
-        assertEquals(true, cursor.isTodo());
-        assertEquals(MAP.getFullKey(), cursor.getKey());
-        assertEquals(0, cursor.getOffset());
-
-        cursor.set(load(MAP));
-        
-        assertEquals(false, cursor.isLeaf());
-        assertEquals(false, cursor.isTodo());
-        assertEquals(false, cursor.isData());
-        assertEquals(MAP.getFullKey(), cursor.getKey());
-        assertEquals(0, cursor.getOffset());
-
-        assertEquals(true, cursor.nextLeaf());
-        
-        assertEquals(true, cursor.isTodo());
-        assertEquals(MAP_0.getFullKey(), cursor.getKey());
-        assertEquals(0, cursor.getOffset());
-        
-        assertEquals(true, cursor.nextLeaf());
-        
-        assertEquals(true, cursor.isTodo());
-        assertEquals(MAP_1.getFullKey(), cursor.getKey());
-        assertEquals(5, cursor.getOffset());
-        
-        assertEquals(false, cursor.nextLeaf());
-        
-        cursor = new RestoreCursor(list);
-        
-        assertEquals(true, cursor.nextLeaf());
-        
-        assertEquals(true, cursor.isTodo());
-        assertEquals(MAP_0.getFullKey(), cursor.getKey());
-        assertEquals(0, cursor.getOffset());
-        
-        assertEquals(true, cursor.nextLeaf());
-        
-        assertEquals(true, cursor.isTodo());
-        assertEquals(MAP_1.getFullKey(), cursor.getKey());
-        assertEquals(5, cursor.getOffset());
-        
-        assertEquals(false, cursor.nextLeaf());
+        assertEquals(0, work.count());
     }
 }
