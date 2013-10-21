@@ -529,4 +529,62 @@ public class RestoreItemTest {
         assertEquals(false, list.get(2).isTodo());
     }
 
+    /**
+     * Create and follow a cursor through a typical usage.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void cursorTypical() throws Exception {
+        RestoreItemList list = new RestoreItemList();
+        list.add(MAP.getFullKey(), 0, new RestoreTodo());
+        
+        RestoreCursor cursor = new RestoreCursor(list);
+        
+        assertEquals(false, cursor.isLeaf());
+        assertEquals(true, cursor.nextLeaf());
+        
+        assertEquals(true, cursor.isLeaf());
+        assertEquals(true, cursor.isTodo());
+        assertEquals(MAP.getFullKey(), cursor.getKey());
+        assertEquals(0, cursor.getOffset());
+
+        cursor.set(load(MAP));
+        
+        assertEquals(false, cursor.isLeaf());
+        assertEquals(false, cursor.isTodo());
+        assertEquals(false, cursor.isData());
+        assertEquals(MAP.getFullKey(), cursor.getKey());
+        assertEquals(0, cursor.getOffset());
+
+        assertEquals(true, cursor.nextLeaf());
+        
+        assertEquals(true, cursor.isTodo());
+        assertEquals(MAP_0.getFullKey(), cursor.getKey());
+        assertEquals(0, cursor.getOffset());
+        
+        assertEquals(true, cursor.nextLeaf());
+        
+        assertEquals(true, cursor.isTodo());
+        assertEquals(MAP_1.getFullKey(), cursor.getKey());
+        assertEquals(5, cursor.getOffset());
+        
+        assertEquals(false, cursor.nextLeaf());
+        
+        cursor = new RestoreCursor(list);
+        
+        assertEquals(true, cursor.nextLeaf());
+        
+        assertEquals(true, cursor.isTodo());
+        assertEquals(MAP_0.getFullKey(), cursor.getKey());
+        assertEquals(0, cursor.getOffset());
+        
+        assertEquals(true, cursor.nextLeaf());
+        
+        assertEquals(true, cursor.isTodo());
+        assertEquals(MAP_1.getFullKey(), cursor.getKey());
+        assertEquals(5, cursor.getOffset());
+        
+        assertEquals(false, cursor.nextLeaf());
+    }
 }
