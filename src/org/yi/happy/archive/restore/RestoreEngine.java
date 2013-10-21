@@ -2,7 +2,6 @@ package org.yi.happy.archive.restore;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.Deque;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -21,17 +20,7 @@ import org.yi.happy.archive.key.FullKey;
  * pull out resulting fragments.
  */
 public class RestoreEngine {
-    private static class WorkItem {
-        public FullKey key;
-        public Long offset;
-
-        public WorkItem(FullKey key, Long offset) {
-            this.key = key;
-            this.offset = offset;
-        }
-    }
-
-    private List<WorkItem> workItems;
+    private RestoreWork work;
     private Deque<Fragment> out;
 
     /**
@@ -41,9 +30,18 @@ public class RestoreEngine {
      *            the key to start from.
      */
     public RestoreEngine(FullKey key) {
-        this.workItems = new ArrayList<WorkItem>();
-        this.workItems.add(new WorkItem(key, 0l));
+        this.work = new RestoreWork(key);
+        this.out = new ArrayDeque<Fragment>();
+    }
 
+    /**
+     * Set up the logic to join data blocks back together.
+     * 
+     * @param work
+     *            the work list to work on.
+     */
+    public RestoreEngine(RestoreWork work) {
+        this.work = work;
         this.out = new ArrayDeque<Fragment>();
     }
 
@@ -52,12 +50,12 @@ public class RestoreEngine {
      */
     public List<FullKey> getNeededNow() {
         LinkedHashSet<FullKey> needed = new LinkedHashSet<FullKey>();
-        for (WorkItem item : workItems) {
-            if (item.offset == null) {
+        for (int index = 0; index < work.count(); index++) {
+            if (work.getOffset(index) == -1) {
                 continue;
             }
 
-            needed.add(item.key);
+            needed.add(work.getKey(index));
         }
         return new ArrayList<FullKey>(needed);
     }
@@ -68,12 +66,12 @@ public class RestoreEngine {
      */
     public List<FullKey> getNeededLater() {
         LinkedHashSet<FullKey> needed = new LinkedHashSet<FullKey>();
-        for (WorkItem item : workItems) {
-            if (item.offset != null) {
+        for (int index = 0; index < work.count(); index++) {
+            if (work.getOffset(index) != -1) {
                 continue;
             }
 
-            needed.add(item.key);
+            needed.add(work.getKey(index));
         }
         return new ArrayList<FullKey>(needed);
     }
@@ -85,11 +83,11 @@ public class RestoreEngine {
     public List<FullKey> getNeeded() {
         LinkedHashSet<FullKey> needed = new LinkedHashSet<FullKey>();
         LinkedHashSet<FullKey> later = new LinkedHashSet<FullKey>();
-        for (WorkItem item : workItems) {
-            if (item.offset == null) {
-                later.add(item.key);
+        for (int index = 0; index < work.count(); index++) {
+            if (work.getOffset(index) == -1) {
+                later.add(work.getKey(index));
             } else {
-                needed.add(item.key);
+                needed.add(work.getKey(index));
             }
         }
         needed.addAll(later);
@@ -102,7 +100,7 @@ public class RestoreEngine {
      * @return the key needed by the item at the index in the list.
      */
     public FullKey getKey(int index) {
-        return workItems.get(index).key;
+        return work.getKey(index);
     }
 
     /**
@@ -113,24 +111,7 @@ public class RestoreEngine {
      * @return the offset, or null if it is not yet known.
      */
     public Long getOffset(int index) {
-        return workItems.get(index).offset;
-    }
-
-    /**
-     * get the ready state of all the work items in one call.
-     * 
-     * @return a BitSet with a bit set for each work item that is ready.
-     */
-    public BitSet isReady() {
-        BitSet ready = new BitSet();
-        int i = 0;
-        for (WorkItem item : workItems) {
-            if (item.offset != null) {
-                ready.set(i);
-            }
-            i++;
-        }
-        return ready;
+        return work.getOffset(index);
     }
 
     /**
@@ -141,7 +122,7 @@ public class RestoreEngine {
      * @return true if the item is ready for processing.
      */
     public boolean isReady(int index) {
-        return workItems.get(index).offset != null;
+        return work.getOffset(index) != -1;
     }
 
     /**
@@ -152,20 +133,20 @@ public class RestoreEngine {
      * @return true if progress was made.
      */
     public boolean step(Map<FullKey, Block> blocks) {
+        // TODO replace this method with some type of iterator.
         boolean progress = false;
 
-        if (workItems.size() == 0) {
+        if (work.count() == 0) {
             return progress;
         }
 
-        for (int index = 0; index < workItems.size();) {
+        for (int index = 0; index < work.count();) {
             process: {
-                WorkItem item = workItems.get(index);
-                if (item.offset == null) {
+                if (work.getOffset(index) == -1) {
                     break process;
                 }
 
-                Block block = blocks.get(item.key);
+                Block block = blocks.get(work.getKey(index));
                 if (block == null) {
                     break process;
                 }
@@ -192,7 +173,7 @@ public class RestoreEngine {
      * @return true if this engine has no more work to do.
      */
     public boolean isDone() {
-        return workItems.isEmpty();
+        return work.count() == 0;
     }
 
     /**
@@ -227,32 +208,20 @@ public class RestoreEngine {
      */
     @MagicLiteral
     public boolean step(int index, Block block) {
-        WorkItem item = workItems.get(index);
+        long offset = work.getOffset(index);
 
-        if (item.offset == null) {
+        if (offset == -1) {
             return false;
         }
 
-        long base = item.offset;
+        RestoreItem item = RestoreItemFactory.create(work.getKey(index), block);
+        work.replace(index, item);
 
-        RestoreItem r = RestoreItemFactory.create(item.key, block);
-        if (r.isData()) {
-            Bytes data = r.getBlock().getBody();
-
-            replace(index, null, base + data.getSize());
-            out.add(new Fragment(base, data));
-            return true;
+        if (item.isData()) {
+            Bytes data = item.getBlock().getBody();
+            out.add(new Fragment(offset, data));
         }
 
-        List<WorkItem> add = new ArrayList<WorkItem>();
-        for (int i = 0; i < r.count(); i++) {
-            if (r.getOffset(i) == -1) {
-                add.add(new WorkItem(r.getKey(i), null));
-            } else {
-                add.add(new WorkItem(r.getKey(i), r.getOffset(i) + base));
-            }
-        }
-        replace(index, add, base);
         return true;
     }
 
@@ -260,36 +229,6 @@ public class RestoreEngine {
      * @return the number of work items in the engine.
      */
     public int getItemCount() {
-        return workItems.size();
-    }
-
-    private void replace(int index, List<WorkItem> with, long base) {
-        workItems.remove(index);
-        if (with != null) {
-            workItems.addAll(index, with);
-        }
-        fixOffset(index, base);
-    }
-
-    /**
-     * If the offset is not set for the given item, set it to base.
-     * 
-     * @param index
-     *            the index into the items list.
-     * @param base
-     *            the base offset for the item.
-     */
-    private void fixOffset(int index, long base) {
-        if (workItems.size() <= index) {
-            return;
-        }
-
-        WorkItem item = workItems.get(index);
-
-        if (item.offset != null) {
-            return;
-        }
-
-        item.offset = base;
+        return work.count();
     }
 }
