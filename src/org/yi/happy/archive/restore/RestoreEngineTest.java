@@ -35,7 +35,7 @@ public class RestoreEngineTest {
         restore.start();
 
         assertEquals(true, restore.findReady());
-        assertEquals(C.getFullKey(), restore.getKey());
+        assertEquals(key(C), restore.getKey());
         assertEquals(frag(0, D), restore.step(C.getClearBlock()));
 
         assertEquals(false, restore.findReady());
@@ -67,11 +67,11 @@ public class RestoreEngineTest {
         assertEquals(null, restore.step(MAP.getClearBlock()));
 
         assertEquals(true, restore.findReady());
-        assertEquals(C1.getFullKey(), restore.getKey());
+        assertEquals(key(C1), restore.getKey());
         restore.skip();
         
         assertEquals(true, restore.findReady());
-        assertEquals(C2.getFullKey(), restore.getKey());
+        assertEquals(key(C2), restore.getKey());
         restore.skip();
         
         assertEquals(false, restore.findReady());
@@ -83,11 +83,11 @@ public class RestoreEngineTest {
         restore.start();
 
         assertEquals(true, restore.findReady());
-        assertEquals(C1.getFullKey(), restore.getKey());
+        assertEquals(key(C1), restore.getKey());
         restore.skip();
 
         assertEquals(true, restore.findReady());
-        assertEquals(C2.getFullKey(), restore.getKey());
+        assertEquals(key(C2), restore.getKey());
         assertEquals(frag(5, D2), restore.step(C2.getClearBlock()));
 
         assertEquals(false, restore.findReady());
@@ -99,7 +99,7 @@ public class RestoreEngineTest {
         restore.start();
 
         assertEquals(true, restore.findReady());
-        assertEquals(C1.getFullKey(), restore.getKey());
+        assertEquals(key(C1), restore.getKey());
         assertEquals(frag(0, D1), restore.step(C1.getClearBlock()));
 
         assertEquals(false, restore.findReady());
@@ -123,15 +123,15 @@ public class RestoreEngineTest {
         restore.start();
 
         assertEquals(true, restore.findReady());
-        assertEquals(B.getFullKey(), restore.getKey());
+        assertEquals(key(B), restore.getKey());
         assertEquals(null, restore.step(B.getClearBlock()));
 
         assertEquals(true, restore.findReady());
-        assertEquals(C1.getFullKey(), restore.getKey());
+        assertEquals(key(C1), restore.getKey());
         assertEquals(frag(0, D1), restore.step(C1.getClearBlock()));
 
         assertEquals(true, restore.findReady());
-        assertEquals(C2.getFullKey(), restore.getKey());
+        assertEquals(key(C2), restore.getKey());
         assertEquals(frag(10, D2), restore.step(C2.getClearBlock()));
 
         assertEquals(false, restore.findReady());
@@ -154,15 +154,15 @@ public class RestoreEngineTest {
         restore.start();
 
         assertEquals(true, restore.findReady());
-        assertEquals(B.getFullKey(), restore.getKey());
+        assertEquals(key(B), restore.getKey());
         assertEquals(null, restore.step(B.getClearBlock()));
 
         assertEquals(true, restore.findReady());
-        assertEquals(C1.getFullKey(), restore.getKey());
+        assertEquals(key(C1), restore.getKey());
         assertEquals(frag(0, D1), restore.step(C1.getClearBlock()));
 
         assertEquals(true, restore.findReady());
-        assertEquals(C2.getFullKey(), restore.getKey());
+        assertEquals(key(C2), restore.getKey());
         assertEquals(frag(3, D2), restore.step(C2.getClearBlock()));
 
         assertEquals(false, restore.findReady());
@@ -185,15 +185,15 @@ public class RestoreEngineTest {
         restore.start();
 
         assertTrue(restore.findReady());
-        assertEquals(B.getFullKey(), restore.getKey());
+        assertEquals(key(B), restore.getKey());
         assertEquals(null, restore.step(B.getClearBlock()));
 
         assertTrue(restore.findReady());
-        assertEquals(C1.getFullKey(), restore.getKey());
+        assertEquals(key(C1), restore.getKey());
         assertEquals(frag(0, D1), restore.step(C1.getClearBlock()));
 
         assertTrue(restore.findReady());
-        assertEquals(C2.getFullKey(), restore.getKey());
+        assertEquals(key(C2), restore.getKey());
         assertEquals(frag(5, D2), restore.step(C2.getClearBlock()));
 
         assertFalse(restore.findReady());
@@ -220,11 +220,11 @@ public class RestoreEngineTest {
         restore.start();
 
         assertEquals(true, restore.findReady());
-        assertEquals(B.getFullKey(), restore.getKey());
+        assertEquals(key(B), restore.getKey());
         assertEquals(null, restore.step(B.getClearBlock()));
 
         assertEquals(true, restore.findReady());
-        assertEquals(C1.getFullKey(), restore.getKey());
+        assertEquals(key(C1), restore.getKey());
         restore.skip();
 
         assertEquals(false, restore.findReady());
@@ -241,7 +241,7 @@ public class RestoreEngineTest {
         restore.start();
 
         assertEquals(true, restore.findReady());
-        assertEquals(C1.getFullKey(), restore.getKey());
+        assertEquals(key(C1), restore.getKey());
         restore.skip();
 
         assertEquals(false, restore.findReady());
@@ -258,11 +258,11 @@ public class RestoreEngineTest {
         restore.start();
 
         assertEquals(true, restore.findReady());
-        assertEquals(C1.getFullKey(), restore.getKey());
+        assertEquals(key(C1), restore.getKey());
         assertEquals(frag(0, D1), restore.step(C1.getClearBlock()));
 
         assertEquals(true, restore.findReady());
-        assertEquals(C2.getFullKey(), restore.getKey());
+        assertEquals(key(C2), restore.getKey());
         restore.skip();
 
         assertEquals(false, restore.findReady());
@@ -275,7 +275,7 @@ public class RestoreEngineTest {
         restore.start();
 
         assertEquals(true, restore.findReady());
-        assertEquals(C2.getFullKey(), restore.getKey());
+        assertEquals(key(C2), restore.getKey());
         assertEquals(frag(5, D2), restore.step(C2.getClearBlock()));
 
         assertEquals(false, restore.findReady());
@@ -305,11 +305,11 @@ public class RestoreEngineTest {
         restore.start();
 
         assertEquals(true, restore.findReady());
-        assertEquals(B.getFullKey(), restore.getKey());
+        assertEquals(key(B), restore.getKey());
         assertEquals(null, restore.step(B.getClearBlock()));
 
         assertEquals(true, restore.findReady());
-        assertEquals(B1.getFullKey(), restore.getKey());
+        assertEquals(key(B1), restore.getKey());
         restore.skip();
 
         assertEquals(false, restore.findReady());
@@ -326,11 +326,11 @@ public class RestoreEngineTest {
         restore.start();
 
         assertEquals(true, restore.findReady());
-        assertEquals(B1.getFullKey(), restore.getKey());
+        assertEquals(key(B1), restore.getKey());
         assertEquals(null, restore.step(B1.getClearBlock()));
 
         assertEquals(true, restore.findReady());
-        assertEquals(C1.getFullKey(), restore.getKey());
+        assertEquals(key(C1), restore.getKey());
         restore.skip();
 
         assertEquals(false, restore.findReady());
@@ -347,15 +347,15 @@ public class RestoreEngineTest {
         restore.start();
 
         assertEquals(true, restore.findReady());
-        assertEquals(C1.getFullKey(), restore.getKey());
+        assertEquals(key(C1), restore.getKey());
         assertEquals(frag(0, D1), restore.step(C1.getClearBlock()));
 
         assertEquals(true, restore.findReady());
-        assertEquals(B2.getFullKey(), restore.getKey());
+        assertEquals(key(B2), restore.getKey());
         assertEquals(null, restore.step(B2.getClearBlock()));
 
         assertEquals(true, restore.findReady());
-        assertEquals(C2.getFullKey(), restore.getKey());
+        assertEquals(key(C2), restore.getKey());
         restore.skip();
 
         assertEquals(false, restore.findReady());
@@ -372,7 +372,7 @@ public class RestoreEngineTest {
         restore.start();
 
         assertEquals(true, restore.findReady());
-        assertEquals(C2.getFullKey(), restore.getKey());
+        assertEquals(key(C2), restore.getKey());
         assertEquals(frag(5, D2), restore.step(C2.getClearBlock()));
 
         assertEquals(false, restore.findReady());
