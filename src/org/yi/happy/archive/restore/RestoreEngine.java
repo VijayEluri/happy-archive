@@ -58,51 +58,13 @@ public class RestoreEngine {
     }
 
     /**
-     * @return the list of blocks that can be immediately processed.
-     */
-    public List<FullKey> getNeededNow() {
-        LinkedHashSet<FullKey> needed = new LinkedHashSet<FullKey>();
-        for (int index = 0; index < work.count(); index++) {
-            if (work.getOffset(index) == -1) {
-                continue;
-            }
-
-            needed.add(work.getKey(index));
-        }
-        return new ArrayList<FullKey>(needed);
-    }
-
-    /**
-     * @return the list of blocks that are known to be needed but can not be
-     *         immediately processed.
-     */
-    public List<FullKey> getNeededLater() {
-        LinkedHashSet<FullKey> needed = new LinkedHashSet<FullKey>();
-        for (int index = 0; index < work.count(); index++) {
-            if (work.getOffset(index) != -1) {
-                continue;
-            }
-
-            needed.add(work.getKey(index));
-        }
-        return new ArrayList<FullKey>(needed);
-    }
-
-    /**
-     * @return the list of blocks that are known to be needed, the blocks that
-     *         can be immediately processed are at the beginning of the list.
+     * @return the list of blocks that are known to be needed.
      */
     public List<FullKey> getNeeded() {
         LinkedHashSet<FullKey> needed = new LinkedHashSet<FullKey>();
-        LinkedHashSet<FullKey> later = new LinkedHashSet<FullKey>();
         for (int index = 0; index < work.count(); index++) {
-            if (work.getOffset(index) == -1) {
-                later.add(work.getKey(index));
-            } else {
-                needed.add(work.getKey(index));
-            }
+            needed.add(work.getKey(index));
         }
-        needed.addAll(later);
         return new ArrayList<FullKey>(needed);
     }
 

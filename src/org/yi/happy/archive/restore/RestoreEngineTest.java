@@ -29,7 +29,7 @@ public class RestoreEngineTest {
     public void testFirstBasic() throws Exception {
         RestoreEngine restore = new RestoreEngine(C.getFullKey());
 
-        assertEquals(keyList(C), restore.getNeededNow());
+        assertEquals(keyList(C), restore.getNeeded());
 
         // loop
         restore.start();
@@ -77,7 +77,7 @@ public class RestoreEngineTest {
         assertEquals(false, restore.findReady());
         // loop done
 
-        assertEquals(keyList(C1, C2), restore.getNeededNow());
+        assertEquals(keyList(C1, C2), restore.getNeeded());
 
         // loop
         restore.start();
@@ -93,7 +93,7 @@ public class RestoreEngineTest {
         assertEquals(false, restore.findReady());
         // loop done
 
-        assertEquals(keyList(C1), restore.getNeededNow());
+        assertEquals(keyList(C1), restore.getNeeded());
 
         // loop
         restore.start();
@@ -106,7 +106,7 @@ public class RestoreEngineTest {
         // loop done
 
         assertTrue(restore.isDone());
-        assertEquals(keyList(), restore.getNeededNow());
+        assertEquals(keyList(), restore.getNeeded());
     }
 
     /**
@@ -230,8 +230,7 @@ public class RestoreEngineTest {
         assertEquals(false, restore.findReady());
         // loop done
 
-        assertEquals(keyList(C1), restore.getNeededNow());
-        assertEquals(keyList(C2), restore.getNeededLater());
+        assertEquals(keyList(C1, C2), restore.getNeeded());
 
         /*
          * C2 is available, but not C1.
@@ -247,8 +246,7 @@ public class RestoreEngineTest {
         assertEquals(false, restore.findReady());
         // loop done
 
-        assertEquals(keyList(C1), restore.getNeededNow());
-        assertEquals(keyList(C2), restore.getNeededLater());
+        assertEquals(keyList(C1, C2), restore.getNeeded());
 
         /*
          * this time C1 is available and C2 is not
@@ -268,8 +266,7 @@ public class RestoreEngineTest {
         assertEquals(false, restore.findReady());
         // loop done
 
-        assertEquals(keyList(C2), restore.getNeededNow());
-        assertEquals(keyList(), restore.getNeededLater());
+        assertEquals(keyList(C2), restore.getNeeded());
 
         // loop
         restore.start();
@@ -315,8 +312,7 @@ public class RestoreEngineTest {
         assertEquals(false, restore.findReady());
         // loop done
 
-        assertEquals(keyList(B1), restore.getNeededNow());
-        assertEquals(keyList(B2), restore.getNeededLater());
+        assertEquals(keyList(B1, B2), restore.getNeeded());
 
         /*
          * all the requested blocks are available
@@ -336,8 +332,7 @@ public class RestoreEngineTest {
         assertEquals(false, restore.findReady());
         // loop done
 
-        assertEquals(keyList(C1), restore.getNeededNow());
-        assertEquals(keyList(B2), restore.getNeededLater());
+        assertEquals(keyList(C1, B2), restore.getNeeded());
 
         /*
          * all the requested blocks are available
@@ -361,8 +356,7 @@ public class RestoreEngineTest {
         assertEquals(false, restore.findReady());
         // loop done
 
-        assertEquals(keyList(C2), restore.getNeededNow());
-        assertEquals(keyList(), restore.getNeededLater());
+        assertEquals(keyList(C2), restore.getNeeded());
 
         /*
          * all the requested blocks are available
@@ -378,8 +372,7 @@ public class RestoreEngineTest {
         assertEquals(false, restore.findReady());
         // loop done
 
-        assertEquals(keyList(), restore.getNeededNow());
-        assertEquals(keyList(), restore.getNeededLater());
+        assertEquals(keyList(), restore.getNeeded());
 
         assertTrue(restore.isDone());
     }
