@@ -19,6 +19,10 @@ public class RestoreFile {
     private final RetrieveBlock store;
     private final String path;
     private final FileSystem fs;
+
+    /**
+     * the number of blocks read and processed.
+     */
     private int progress = 0;
 
     /**
@@ -112,9 +116,9 @@ public class RestoreFile {
     }
 
     /**
-     * Get the amount of progress that has been made.
+     * Get the number of blocks read and processed.
      * 
-     * @return the amount of progress that has been made.
+     * @return the number of blocks read and processed.
      */
     public int getProgress() {
         return progress;

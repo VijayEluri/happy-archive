@@ -32,7 +32,7 @@ public class KeyInputStream extends InputStream {
     private long offset;
 
     /**
-     * how many blocks have been processed
+     * the number of blocks read and processed.
      */
     private int progress;
 

@@ -57,9 +57,9 @@ public class RestoreManager {
     }
 
     /**
-     * get the progress so far.
+     * get the number of blocks read and processed.
      * 
-     * @return the progress so far.
+     * @return the number of blocks read and processed.
      */
     public int getProgress() {
         int progress = 0;
