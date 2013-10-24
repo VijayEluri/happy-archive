@@ -12,10 +12,17 @@ import org.yi.happy.archive.key.FullKey;
  * list for {@link RestoreEngine}.
  */
 public class RestoreWork implements RestoreItem {
-    // TODO make an Entry class to hold the pair of values for each entry.
+    private static class Entry {
+        public final FullKey key;
+        public long offset;
 
-    private List<FullKey> keys = new ArrayList<FullKey>();
-    private List<Long> offsets = new ArrayList<Long>();
+        public Entry(FullKey key, long offset) {
+            this.key = key;
+            this.offset = offset;
+        }
+    }
+
+    private List<Entry> entries = new ArrayList<Entry>();
 
     /**
      * create a blank list.
@@ -30,23 +37,22 @@ public class RestoreWork implements RestoreItem {
      *            the key to add to the list.
      */
     public RestoreWork(FullKey key) {
-        keys.add(key);
-        offsets.add(0l);
+        entries.add(new Entry(key, 0l));
     }
 
     @Override
     public int count() {
-        return keys.size();
+        return entries.size();
     }
 
     @Override
     public FullKey getKey(int index) {
-        return keys.get(index);
+        return entries.get(index).key;
     }
 
     @Override
     public long getOffset(int index) {
-        return offsets.get(index);
+        return entries.get(index).offset;
     }
 
     /**
@@ -58,12 +64,11 @@ public class RestoreWork implements RestoreItem {
      *            the offset of the child.
      */
     public void add(FullKey key, long offset) {
-        if (offsets.isEmpty() && offset == -1) {
+        if (entries.isEmpty() && offset == -1) {
             throw new IllegalArgumentException();
         }
 
-        keys.add(key);
-        offsets.add(offset);
+        entries.add(new Entry(key, offset));
     }
 
     @Override
@@ -89,7 +94,7 @@ public class RestoreWork implements RestoreItem {
      *             if the offset of the entry at index is not known.
      */
     public void replace(int index, RestoreItem item) {
-        long base = offsets.get(index);
+        long base = entries.get(index).offset;
 
         /*
          * can only replace rows where the offset is known.
@@ -98,8 +103,7 @@ public class RestoreWork implements RestoreItem {
             throw new IllegalStateException();
         }
 
-        List<FullKey> keysAdd = new ArrayList<FullKey>();
-        List<Long> offsetsAdd = new ArrayList<Long>();
+        List<Entry> add = new ArrayList<Entry>();
 
         for (int i = 0; i < item.count(); i++) {
             long offset = item.getOffset(i);
@@ -107,23 +111,20 @@ public class RestoreWork implements RestoreItem {
                 offset = base + offset;
             }
 
-            keysAdd.add(item.getKey(i));
-            offsetsAdd.add(offset);
+            add.add(new Entry(item.getKey(i), offset));
         }
 
-        keys.remove(index);
-        keys.addAll(index, keysAdd);
-        offsets.remove(index);
-        offsets.addAll(index, offsetsAdd);
+        entries.remove(index);
+        entries.addAll(index, add);
 
         /*
          * fix the offset if the replacement was empty.
          */
-        if (index < offsets.size() && offsets.get(index) == -1) {
+        if (index < entries.size() && entries.get(index).offset == -1) {
             if (item.isData()) {
                 base = base + item.getBlock().getBody().getSize();
             }
-            offsets.set(index, base);
+            entries.get(index).offset = base;
         }
     }
 }
