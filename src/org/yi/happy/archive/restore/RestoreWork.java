@@ -118,7 +118,8 @@ public class RestoreWork implements RestoreItem {
         entries.addAll(index, add);
 
         /*
-         * fix the offset if the replacement was empty.
+         * if the replacement was empty, and the following entry exists, and the
+         * following entry had an unknown offset, we now know what it should be.
          */
         if (index < entries.size() && entries.get(index).offset == -1) {
             if (item.isData()) {
