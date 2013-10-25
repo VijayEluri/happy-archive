@@ -52,48 +52,28 @@ public class RestoreFile {
      * @throws IOException
      */
     public void step() throws IOException {
-        engine.start();
-        Fragment part = null;
-        while (engine.findReady()) {
-            Block block = store.retrieveBlock(engine.getKey());
-            if (block == null) {
-                engine.skip();
-                continue;
-            }
-            part = engine.step(block);
-            progress++;
-            if (part != null) {
-                break;
-            }
-        }
-
-        if (part == null) {
-            return;
-        }
-
-        RandomOutputFile f = fs.openRandomOutputFile(path);
+        RandomOutputFile out = null;
         try {
-            while (true) {
-                if (part != null) {
-                    f.writeAt(part.getOffset(), part.getData().toByteArray());
-                    part = null;
-                }
-
-                if (engine.findReady() == false) {
-                    break;
-                }
-
+            engine.start();
+            while (engine.findReady()) {
                 Block block = store.retrieveBlock(engine.getKey());
                 if (block == null) {
                     engine.skip();
                     continue;
                 }
-
-                part = engine.step(block);
+                Fragment part = engine.step(block);
                 progress++;
+                if (part != null) {
+                    if (out == null) {
+                        out = fs.openRandomOutputFile(path);
+                    }
+                    out.writeAt(part.getOffset(), part.getData().toByteArray());
+                }
             }
         } finally {
-            f.close();
+            if (out != null) {
+                out.close();
+            }
         }
     }
 
