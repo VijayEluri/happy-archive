@@ -4,7 +4,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.yi.happy.annotate.ExternalName;
-import org.yi.happy.annotate.MagicLiteral;
 import org.yi.happy.archive.Bytes;
 
 /**
@@ -44,13 +43,16 @@ public class SplitBlock extends AbstractBlock {
     @ExternalName
     public static final String SPLIT_COUNT_META = "split-count";
 
-    @MagicLiteral
+    private static final String SIZE = "0";
+
     @Override
     public Map<String, String> getMeta() {
+        String splitCount = Integer.toString(count);
+
         Map<String, String> out = new LinkedHashMap<String, String>();
         out.put(TYPE_META, TYPE);
-        out.put(SPLIT_COUNT_META, Integer.toString(count));
-        out.put(SIZE_META, "0");
+        out.put(SPLIT_COUNT_META, splitCount);
+        out.put(SIZE_META, SIZE);
         return out;
     }
 
