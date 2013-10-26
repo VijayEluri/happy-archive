@@ -70,7 +70,7 @@ public class MyInjector {
      * @return the object.
      */
     public static NeedHandler injectNeedHandler(ApplicationScope scope) {
-        return new NeedWriter(injectFileSystem(scope), injectNeedFile(scope));
+        return new NeedWriter(injectNeedFile(scope));
     }
 
     /**

@@ -1,18 +1,19 @@
 package org.yi.happy.archive;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-import org.yi.happy.archive.file_system.FileSystem;
+import org.yi.happy.annotate.GlobalFilesystem;
 import org.yi.happy.archive.key.LocatorKey;
 
 /**
  * A need handler that posts the needed keys to a file.
  */
+@GlobalFilesystem
 public class NeedWriter implements NeedHandler {
-
     private final String needFile;
-    private final FileSystem fs;
 
     /**
      * Create the file posting need handler.
@@ -22,19 +23,20 @@ public class NeedWriter implements NeedHandler {
      * @param needFile
      *            the file name to post to.
      */
-    public NeedWriter(FileSystem fs, String needFile) {
-        this.fs = fs;
+    public NeedWriter(String needFile) {
         this.needFile = needFile;
     }
 
     @Override
     public void post(List<LocatorKey> keys) throws IOException {
-        StringBuilder p = new StringBuilder();
-        for (LocatorKey key : keys) {
-            p.append(key).append("\n");
+        FileWriter out = new FileWriter(needFile + ".part");
+        try {
+            for (LocatorKey key : keys) {
+                out.append(key.toString()).append("\n");
+            }
+        } finally {
+            out.close();
         }
-        fs.save(needFile + ".tmp", ByteString.toUtf8(p.toString()));
-        fs.rename(needFile + ".tmp", needFile);
+        new File(needFile + ".part").renameTo(new File(needFile));
     }
-
 }
