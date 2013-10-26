@@ -8,11 +8,13 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
+import org.yi.happy.annotate.GlobalFilesystem;
 import org.yi.happy.archive.Streams;
 
 /**
  * An implementation of {@link FileSystem} that acts on the real file system.
  */
+@GlobalFilesystem
 public class RealFileSystem implements FileSystem {
 
     @Override

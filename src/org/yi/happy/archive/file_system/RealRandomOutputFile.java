@@ -3,9 +3,12 @@ package org.yi.happy.archive.file_system;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
+import org.yi.happy.annotate.GlobalFilesystem;
+
 /**
  * An implementation of {@link RandomOutputFile} which acts on a real file.
  */
+@GlobalFilesystem
 public class RealRandomOutputFile implements RandomOutputFile {
     private RandomAccessFile f;
 

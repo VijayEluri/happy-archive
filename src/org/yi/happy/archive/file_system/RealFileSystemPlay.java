@@ -3,6 +3,8 @@ package org.yi.happy.archive.file_system;
 import java.io.File;
 import java.io.IOException;
 
+import org.yi.happy.annotate.GlobalFilesystem;
+
 /**
  * Experiment with {@link RealFileSystem}.
  */
@@ -56,6 +58,7 @@ public class RealFileSystemPlay {
      * 
      * @param args
      */
+    @GlobalFilesystem
     public static void main(String[] args) {
         File f = new File("test/");
 
