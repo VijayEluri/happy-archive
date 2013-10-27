@@ -1,23 +1,24 @@
 package org.yi.happy.archive;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
+import java.util.Arrays;
 
+import org.yi.happy.annotate.GlobalFilesystem;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
-import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.key.LocatorKeyParse;
 
 /**
- * A block store that uses a file system to store the blocks.
+ * A block store that uses the file system to store the blocks.
  */
+@GlobalFilesystem
 public class FileBlockStore implements BlockStore {
-
-    private final FileSystem fs;
-    private final String base;
+    private final File base;
 
     /**
      * create a file system block store.
@@ -27,23 +28,33 @@ public class FileBlockStore implements BlockStore {
      * @param base
      *            the base path to use.
      */
-    public FileBlockStore(FileSystem fs, String base) {
-        this.fs = fs;
+    public FileBlockStore(File base) {
         this.base = base;
     }
 
     @Override
-    public void put(EncodedBlock b) throws IOException {
-        LocatorKey key = b.getKey();
-        String fileName = makeFileName(key, true);
-        fs.save(fileName, b.asBytes());
+    public void put(EncodedBlock block) throws IOException {
+        LocatorKey key = block.getKey();
+        File file = makeFile(key);
+        file.getParentFile().mkdirs();
+        FileOutputStream out = new FileOutputStream(file);
+        try {
+            out.write(block.asBytes());
+        } finally {
+            out.close();
+        }
     }
 
     @Override
     public EncodedBlock get(LocatorKey key) throws IOException {
-        String fileName = makeFileName(key, false);
+        File file = makeFile(key);
         try {
-            return EncodedBlockParse.parse(fs.load(fileName));
+            FileInputStream in = new FileInputStream(file);
+            try {
+                return EncodedBlockParse.parse(Streams.load(in));
+            } finally {
+                in.close();
+            }
         } catch (FileNotFoundException e) {
             return null;
         } catch (IllegalArgumentException e) {
@@ -59,86 +70,56 @@ public class FileBlockStore implements BlockStore {
     }
 
     private <T extends Throwable> void visit(BlockStoreVisitor<T> visitor,
-            String path, int levels) throws T {
-        if (levels == 0) {
-            List<String> names;
-            try {
-                names = fs.list(path);
-            } catch (IOException e) {
-                // no children because it was a file.
-                return;
-            }
-            Collections.sort(names);
+            File path, int levels) throws T {
+        if (!path.isDirectory()) {
+            return;
+        }
+
+        String[] names = path.list();
+        if (names == null) {
+            // should not happen
+            return;
+        }
+        Arrays.sort(names);
+
+        if (levels > 0) {
             for (String name : names) {
-                String[] part = name.split("-", 2);
-                visitor.accept(LocatorKeyParse.parseLocatorKey(part[1], part[0]));
+                visit(visitor, new File(path, name), levels - 1);
             }
             return;
         }
-        if (fs.isDir(path)) {
-            List<String> names;
-            try {
-                names = fs.list(path);
-            } catch (IOException e) {
-                // shouldn't happen
-                return;
-            }
-            Collections.sort(names);
-            for (String name : names) {
-                name = fs.join(path, name);
-                if (!fs.isDir(name)) {
-                    continue;
-                }
-                visit(visitor, name, levels - 1);
-            }
+
+        for (String name : names) {
+            String[] part = name.split("-", 2);
+            LocatorKey key = LocatorKeyParse.parseLocatorKey(part[1], part[0]);
+            visitor.accept(key);
         }
     }
 
     @Override
     public boolean contains(LocatorKey key) throws IOException {
-        String fileName = makeFileName(key, false);
-        return fs.exists(fileName);
+        File file = makeFile(key);
+        return file.exists();
     }
 
-    /**
-     * Make the file name that a key will be stored at.
-     * 
-     * @param key
-     *            the key to get the file name form.
-     * @param create
-     *            true to also create the directories.
-     * @return the file name that the key should be stored at.
-     * @throws IOException
-     *             if the directories can not be created.
-     */
-    private String makeFileName(LocatorKey key, boolean create)
-            throws IOException {
+    private File makeFile(LocatorKey key) {
         String name = key.getHash() + "-" + key.getType();
 
-        if (create) {
-            fs.mkdir(base);
-        }
-        String fileName = fs.join(base, name.substring(0, 1));
-        if (create) {
-            fs.mkdir(fileName);
-        }
-        fileName = fs.join(fileName, name.substring(0, 2));
-        if (create) {
-            fs.mkdir(fileName);
-        }
-        fileName = fs.join(fileName, name.substring(0, 3));
-        if (create) {
-            fs.mkdir(fileName);
-        }
-        fileName = fs.join(fileName, name);
-
-        return fileName;
+        File file = base;
+        file = new File(file, name.substring(0, 1));
+        file = new File(file, name.substring(0, 2));
+        file = new File(file, name.substring(0, 3));
+        file = new File(file, name);
+        return file;
     }
 
     @Override
     public void remove(LocatorKey key) throws IOException {
-        String fileName = makeFileName(key, false);
-        fs.delete(fileName);
+        File file = makeFile(key);
+
+        if (!file.delete() && file.exists()) {
+            throw new IOException();
+        }
     }
 
     /**
@@ -146,13 +127,13 @@ public class FileBlockStore implements BlockStore {
      * 
      * @param key
      *            the key to query.
-     * @return the modification time.
+     * @return the modification time, or 0l if the key is not in the store.
      * @throws IOException
      *             on error.
      */
     @Override
     public long getTime(LocatorKey key) throws IOException {
-        String fileName = makeFileName(key, false);
-        return fs.getModificationTime(fileName);
+        File file = makeFile(key);
+        return file.lastModified();
     }
 }

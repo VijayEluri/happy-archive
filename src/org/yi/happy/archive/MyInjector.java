@@ -1,10 +1,12 @@
 package org.yi.happy.archive;
 
+import java.io.File;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.List;
 import java.util.Map;
 
+import org.yi.happy.annotate.GlobalFilesystem;
 import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
@@ -358,7 +360,19 @@ public class MyInjector {
      * @return the object.
      */
     public static BlockStore injectBlockStore(ApplicationScope scope) {
-        return new FileBlockStore(injectFileSystem(scope), scope.getStore());
+        return new FileBlockStore(injectStoreFile(scope));
+    }
+
+    /**
+     * get the {@link File} object representing the base of the store.
+     * 
+     * @param scope
+     *            the scope object.
+     * @return the object.
+     */
+    @GlobalFilesystem
+    public static File injectStoreFile(ApplicationScope scope) {
+        return new File(scope.getStore());
     }
 
     /**

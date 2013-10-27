@@ -37,6 +37,9 @@ public class NeedWriter implements NeedHandler {
         } finally {
             out.close();
         }
-        new File(needFile + ".part").renameTo(new File(needFile));
+
+        if (!new File(needFile + ".part").renameTo(new File(needFile))) {
+            throw new IOException();
+        }
     }
 }
