@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.yi.happy.annotate.DuplicatedLogic;
+import org.yi.happy.annotate.RestoreLoop;
+import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesNeed;
 import org.yi.happy.archive.commandLine.UsesOutput;
@@ -63,25 +65,50 @@ public class FileStoreStreamGetMain implements MainCommand {
      * @throws IOException
      */
     @Override
+    @RestoreLoop
     public void run() throws IOException {
-        KeyInputStream in = new KeyInputStream(FullKeyParse.parseFullKey(args
-                .get(0)), new StorageClearBlockSource(store), notReadyHandler);
+        FragmentOutputStream target = new FragmentOutputStream(out);
+        ClearBlockSource source = new StorageClearBlockSource(store);
+        FullKey key = FullKeyParse.parseFullKey(args.get(0));
 
-        Streams.copy(in, out);
+        RestoreEngine engine = new RestoreEngine(key);
+
+        /*
+         * do the work
+         */
+        while (true) {
+            boolean progress = false;
+            while (engine.findReady()) {
+                Block block = source.get(engine.getKey());
+                if (block == null) {
+                    break;
+                }
+
+                Fragment part = engine.step(block);
+                progress = true;
+
+                if (part != null) {
+                    target.write(part);
+                }
+            }
+
+            if (engine.isDone()) {
+                break;
+            }
+
+            notReady(engine, progress);
+        }
     }
 
-    private NotReadyHandler notReadyHandler = new NotReadyHandler() {
-        @Override
-        @DuplicatedLogic("with FileStoreTagGetMain.notReady")
-        public void notReady(RestoreEngine engine, boolean progress)
-                throws IOException {
-            List<LocatorKey> keys = new ArrayList<LocatorKey>();
-            for (FullKey key : engine.getNeeded()) {
-                keys.add(key.toLocatorKey());
-            }
-            needHandler.post(keys);
-
-            waitHandler.doWait(progress);
+    @DuplicatedLogic("with FileStoreTagGetMain.notReady")
+    private void notReady(RestoreEngine engine, boolean progress)
+            throws IOException {
+        List<LocatorKey> keys = new ArrayList<LocatorKey>();
+        for (FullKey key : engine.getNeeded()) {
+            keys.add(key.toLocatorKey());
         }
-    };
+        needHandler.post(keys);
+
+        waitHandler.doWait(progress);
+    }
 }

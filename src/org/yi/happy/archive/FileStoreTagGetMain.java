@@ -111,15 +111,16 @@ public class FileStoreTagGetMain implements MainCommand {
         }
 
         ClearBlockSource source = new StorageClearBlockSource(store);
+        RandomOutputFile out = null;
 
-        /*
-         * do the work
-         */
-        while (true) {
-            boolean progress = false;
-            RandomOutputFile out = null;
-            String path = null;
-            try {
+        try {
+            /*
+             * do the work
+             */
+            while (true) {
+                boolean progress = false;
+                String path = null;
+
                 engine.start();
                 while (engine.findReady()) {
                     Block block = source.get(engine.getKey());
@@ -127,8 +128,10 @@ public class FileStoreTagGetMain implements MainCommand {
                         engine.skip();
                         continue;
                     }
+
                     Fragment part = engine.step(block);
                     progress = true;
+
                     if (part != null) {
                         if (out != null && !path.equals(engine.getJobName())) {
                             out.close();
@@ -142,15 +145,22 @@ public class FileStoreTagGetMain implements MainCommand {
                                 .toByteArray());
                     }
                 }
-            } finally {
+
+                if (engine.isDone()) {
+                    break;
+                }
+
                 if (out != null) {
                     out.close();
+                    out = null;
                 }
+                notReady(engine, progress);
             }
-            if (engine.isDone()) {
-                break;
+        } finally {
+            if (out != null) {
+                out.close();
+                out = null;
             }
-            notReady(engine, progress);
         }
     }
 

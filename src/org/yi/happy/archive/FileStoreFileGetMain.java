@@ -52,7 +52,6 @@ public class FileStoreFileGetMain implements MainCommand {
         this.args = args;
     }
 
-
     /**
      * get a file from a file store.
      * 
@@ -84,8 +83,10 @@ public class FileStoreFileGetMain implements MainCommand {
                         engine.skip();
                         continue;
                     }
+
                     Fragment part = engine.step(block);
                     progress = true;
+
                     if (part != null) {
                         if (out == null) {
                             out = fs.openRandomOutputFile(path);
@@ -100,9 +101,11 @@ public class FileStoreFileGetMain implements MainCommand {
                     out = null;
                 }
             }
+
             if (engine.isDone()) {
                 break;
             }
+
             notReady(engine, progress);
         }
     }
