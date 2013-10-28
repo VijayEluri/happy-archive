@@ -5,14 +5,18 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.yi.happy.annotate.DuplicatedLogic;
+import org.yi.happy.annotate.RestoreLoop;
+import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.commandLine.UsesInput;
 import org.yi.happy.archive.commandLine.UsesNeed;
 import org.yi.happy.archive.commandLine.UsesStore;
 import org.yi.happy.archive.file_system.FileSystem;
+import org.yi.happy.archive.file_system.RandomOutputFile;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.FullKeyParse;
 import org.yi.happy.archive.key.LocatorKey;
-import org.yi.happy.archive.tag.RestoreManager;
+import org.yi.happy.archive.restore.RestoreEngine;
 import org.yi.happy.archive.tag.Tag;
 import org.yi.happy.archive.tag.TagStreamIterator;
 
@@ -64,27 +68,29 @@ public class FileStoreTagGetMain implements MainCommand {
      * @throws IOException
      */
     @Override
+    @RestoreLoop
     public void run() throws IOException {
-        RestoreManager restore = new RestoreManager(fs,
-                new StorageClearBlockSource(store));
+        RestoreEngine engine = new RestoreEngine();
 
         for (Tag i : new TagStreamIterator(in)) {
             String name = i.get("name");
             if (name == null) {
                 continue;
             }
+
             String type = i.get("type");
             if (type == null) {
                 continue;
             }
+
             String data = i.get("data");
             if (data == null) {
                 continue;
             }
 
-            FullKey k;
+            FullKey key;
             try {
-                k = FullKeyParse.parseFullKey(data);
+                key = FullKeyParse.parseFullKey(data);
             } catch (IllegalArgumentException e) {
                 continue;
             }
@@ -95,7 +101,7 @@ public class FileStoreTagGetMain implements MainCommand {
                  */
                 fs.mkparentdir(name);
 
-                restore.addFile(name, k);
+                engine.add(name, key);
                 continue;
             }
 
@@ -104,26 +110,59 @@ public class FileStoreTagGetMain implements MainCommand {
              */
         }
 
-        restore.step();
-        while (!restore.isDone()) {
-            notReady(restore);
-            restore.step();
+        ClearBlockSource source = new StorageClearBlockSource(store);
+
+        /*
+         * do the work
+         */
+        while (true) {
+            boolean progress = false;
+            RandomOutputFile out = null;
+            String path = null;
+            try {
+                engine.start();
+                while (engine.findReady()) {
+                    Block block = source.get(engine.getKey());
+                    if (block == null) {
+                        engine.skip();
+                        continue;
+                    }
+                    Fragment part = engine.step(block);
+                    progress = true;
+                    if (part != null) {
+                        if (out != null && !path.equals(engine.getJobName())) {
+                            out.close();
+                            out = null;
+                        }
+                        if (out == null) {
+                            path = engine.getJobName();
+                            out = fs.openRandomOutputFile(path);
+                        }
+                        out.writeAt(part.getOffset(), part.getData()
+                                .toByteArray());
+                    }
+                }
+            } finally {
+                if (out != null) {
+                    out.close();
+                }
+            }
+            if (engine.isDone()) {
+                break;
+            }
+            notReady(engine, progress);
         }
     }
 
-    private void notReady(RestoreManager reader) throws IOException {
-        /*
-         * XXX near duplicate from FileStoreFileGetMain.notReady(RestoreManager)
-         */
+    @DuplicatedLogic("with FileStoreFileGetMain.notReady")
+    private void notReady(RestoreEngine engine, boolean progress)
+            throws IOException {
         List<LocatorKey> keys = new ArrayList<LocatorKey>();
-        for (FullKey key : reader.getPending()) {
+        for (FullKey key : engine.getNeeded()) {
             keys.add(key.toLocatorKey());
         }
         needHandler.post(keys);
 
-        waitHandler.doWait(progress != reader.getProgress());
-        progress = reader.getProgress();
+        waitHandler.doWait(progress);
     }
-
-    private int progress;
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.yi.happy.annotate.DuplicatedLogic;
 import org.yi.happy.annotate.RestoreLoop;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.commandLine.UsesArgs;
@@ -106,6 +107,7 @@ public class FileStoreFileGetMain implements MainCommand {
         }
     }
 
+    @DuplicatedLogic("with FileStoreTagGetMain.notReady")
     private void notReady(RestoreEngine engine, boolean progress)
             throws IOException {
         List<LocatorKey> keys = new ArrayList<LocatorKey>();
