@@ -1,23 +1,28 @@
 package org.yi.happy.archive.tag;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
+import org.yi.happy.archive.Fragment;
 import org.yi.happy.archive.RetrieveBlock;
+import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.file_system.FileSystem;
+import org.yi.happy.archive.file_system.RandomOutputFile;
 import org.yi.happy.archive.key.FullKey;
+import org.yi.happy.archive.restore.RestoreManyEngine;
 
 /**
  * A management process for multiple files being restored.
  */
 public class RestoreManager {
-
-    private List<RestoreFile> files;
+    private final RestoreManyEngine engine;
     private final FileSystem fs;
     private final RetrieveBlock store;
+
+    /**
+     * the number of blocks read and processed.
+     */
+    private int progress = 0;
 
     /**
      * initialize.
@@ -30,7 +35,7 @@ public class RestoreManager {
     public RestoreManager(FileSystem fs, RetrieveBlock store) {
         this.fs = fs;
         this.store = store;
-        files = new ArrayList<RestoreFile>();
+        this.engine = new RestoreManyEngine();
     }
 
     /**
@@ -42,7 +47,7 @@ public class RestoreManager {
      *            the key to store there.
      */
     public void addFile(String path, FullKey fullKey) {
-        files.add(new RestoreFile(fullKey, store, path, fs));
+        engine.add(path, fullKey);
     }
 
     /**
@@ -51,8 +56,34 @@ public class RestoreManager {
      * @throws IOException
      */
     public void step() throws IOException {
-        for (RestoreFile f : files) {
-            f.step();
+        RandomOutputFile out = null;
+        String path = null;
+        try {
+            engine.start();
+            while (engine.findReady()) {
+                Block block = store.retrieveBlock(engine.getKey());
+                if (block == null) {
+                    engine.skip();
+                    continue;
+                }
+                Fragment part = engine.step(block);
+                progress++;
+                if (part != null) {
+                    if (out != null && !path.equals(engine.getJobName())) {
+                        out.close();
+                        out = null;
+                    }
+                    if (out == null) {
+                        path = engine.getJobName();
+                        out = fs.openRandomOutputFile(path);
+                    }
+                    out.writeAt(part.getOffset(), part.getData().toByteArray());
+                }
+            }
+        } finally {
+            if (out != null) {
+                out.close();
+            }
         }
     }
 
@@ -62,10 +93,6 @@ public class RestoreManager {
      * @return the number of blocks read and processed.
      */
     public int getProgress() {
-        int progress = 0;
-        for (RestoreFile f : files) {
-            progress += f.getProgress();
-        }
         return progress;
     }
 
@@ -75,18 +102,7 @@ public class RestoreManager {
      * @return a list of the needed blocks.
      */
     public List<FullKey> getPending() {
-        List<FullKey> out = new ArrayList<FullKey>();
-        Set<FullKey> seen = new HashSet<FullKey>();
-        for (RestoreFile f : files) {
-            for (FullKey k : f.getPending()) {
-                if (seen.contains(k)) {
-                    continue;
-                }
-                out.add(k);
-                seen.add(k);
-            }
-        }
-        return out;
+        return engine.getNeeded();
     }
 
     /**
@@ -95,12 +111,6 @@ public class RestoreManager {
      * @return true if the restore is done.
      */
     public boolean isDone() {
-        for (RestoreFile f : files) {
-            if (!f.isDone()) {
-                return false;
-            }
-        }
-        return true;
+        return engine.isDone();
     }
-
 }
