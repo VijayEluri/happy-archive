@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import org.junit.Test;
-import org.yi.happy.archive.SimpleRetrieveBlock;
+import org.yi.happy.archive.MapClearBlockSource;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.test_data.TestData;
@@ -24,7 +24,7 @@ public class RestoreManagerTest {
      */
     @Test
     public void test1() throws IOException {
-        SimpleRetrieveBlock store = new SimpleRetrieveBlock();
+        MapClearBlockSource store = new MapClearBlockSource();
         FileSystem fs = new FakeFileSystem();
         RestoreManager r = new RestoreManager(fs, store);
 
@@ -56,7 +56,7 @@ public class RestoreManagerTest {
      */
     @Test
     public void test2() throws IOException {
-        SimpleRetrieveBlock store = new SimpleRetrieveBlock();
+        MapClearBlockSource store = new MapClearBlockSource();
         FileSystem fs = new FakeFileSystem();
         RestoreManager r = new RestoreManager(fs, store);
 
@@ -91,7 +91,7 @@ public class RestoreManagerTest {
      */
     @Test
     public void testRestore2() throws IOException {
-        SimpleRetrieveBlock store = new SimpleRetrieveBlock();
+        MapClearBlockSource store = new MapClearBlockSource();
         FileSystem fs = new FakeFileSystem();
         RestoreManager r = new RestoreManager(fs, store);
 

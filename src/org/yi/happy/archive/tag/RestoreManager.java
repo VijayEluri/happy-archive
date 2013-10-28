@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.yi.happy.archive.Fragment;
-import org.yi.happy.archive.RetrieveBlock;
+import org.yi.happy.archive.ClearBlockSource;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RandomOutputFile;
@@ -17,7 +17,7 @@ import org.yi.happy.archive.restore.RestoreManyEngine;
 public class RestoreManager {
     private final RestoreManyEngine engine;
     private final FileSystem fs;
-    private final RetrieveBlock store;
+    private final ClearBlockSource store;
 
     /**
      * the number of blocks read and processed.
@@ -32,7 +32,7 @@ public class RestoreManager {
      * @param store
      *            the block store to use.
      */
-    public RestoreManager(FileSystem fs, RetrieveBlock store) {
+    public RestoreManager(FileSystem fs, ClearBlockSource store) {
         this.fs = fs;
         this.store = store;
         this.engine = new RestoreManyEngine();
@@ -61,7 +61,7 @@ public class RestoreManager {
         try {
             engine.start();
             while (engine.findReady()) {
-                Block block = store.retrieveBlock(engine.getKey());
+                Block block = store.get(engine.getKey());
                 if (block == null) {
                     engine.skip();
                     continue;

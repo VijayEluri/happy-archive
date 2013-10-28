@@ -66,7 +66,7 @@ public class FileStoreTagGetMain implements MainCommand {
     @Override
     public void run() throws IOException {
         RestoreManager restore = new RestoreManager(fs,
-                new RetrieveBlockStorage(store));
+                new StorageClearBlockSource(store));
 
         for (Tag i : new TagStreamIterator(in)) {
             String name = i.get("name");

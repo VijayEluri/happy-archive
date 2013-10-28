@@ -8,7 +8,7 @@ import org.yi.happy.archive.key.FullKey;
 /**
  * A block retrieval and decoding service interface.
  */
-public interface RetrieveBlock {
+public interface ClearBlockSource {
     /**
      * Fetch and decode a block. Implementations should return a block if it can
      * be fetched and decoded. In the case where fetching fails in a way that
@@ -23,5 +23,5 @@ public interface RetrieveBlock {
      *             if the block is available but fetching or decoding failed,
      *             and it is expected that trying again will continue to fail.
      */
-    public Block retrieveBlock(FullKey key) throws IOException;
+    public Block get(FullKey key) throws IOException;
 }

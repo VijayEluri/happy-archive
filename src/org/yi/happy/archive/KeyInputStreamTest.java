@@ -43,7 +43,7 @@ public class KeyInputStreamTest {
     /**
      * decoding store
      */
-    private RetrieveBlockStorage store;
+    private StorageClearBlockSource store;
 
     /**
      * create objects common to all tests
@@ -51,7 +51,7 @@ public class KeyInputStreamTest {
     @Before
     public void before() {
         rawStore = new StorageMemory();
-        store = new RetrieveBlockStorage(rawStore);
+        store = new StorageClearBlockSource(rawStore);
     }
 
     /**

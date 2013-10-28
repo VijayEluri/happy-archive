@@ -64,7 +64,7 @@ public class FileStoreStreamGetMain implements MainCommand {
     @Override
     public void run() throws IOException {
         KeyInputStream in = new KeyInputStream(FullKeyParse.parseFullKey(args
-                .get(0)), new RetrieveBlockStorage(store), notReadyHandler);
+                .get(0)), new StorageClearBlockSource(store), notReadyHandler);
 
         Streams.copy(in, out);
     }

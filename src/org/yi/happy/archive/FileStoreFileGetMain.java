@@ -62,7 +62,7 @@ public class FileStoreFileGetMain implements MainCommand {
         FullKey key = FullKeyParse.parseFullKey(args.get(0));
         String path = args.get(1);
 
-        RestoreFile r = new RestoreFile(key, new RetrieveBlockStorage(store),
+        RestoreFile r = new RestoreFile(key, new StorageClearBlockSource(store),
                 path, fs);
         r.step();
         while (!r.isDone()) {

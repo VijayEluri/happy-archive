@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import org.junit.Test;
-import org.yi.happy.archive.SimpleRetrieveBlock;
+import org.yi.happy.archive.MapClearBlockSource;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.test_data.TestData;
@@ -24,7 +24,7 @@ public class RestoreFileTest {
     @Test
     public void test1() throws IOException {
         FileSystem fs = new FakeFileSystem();
-        SimpleRetrieveBlock store = new SimpleRetrieveBlock();
+        MapClearBlockSource store = new MapClearBlockSource();
         store.put(TestData.KEY_CONTENT);
 
         RestoreFile f = new RestoreFile(TestData.KEY_CONTENT.getFullKey(),
@@ -43,7 +43,7 @@ public class RestoreFileTest {
     @Test
     public void test2() throws IOException {
         FileSystem fs = new FakeFileSystem();
-        SimpleRetrieveBlock store = new SimpleRetrieveBlock();
+        MapClearBlockSource store = new MapClearBlockSource();
 
         RestoreFile f = new RestoreFile(TestData.KEY_CONTENT.getFullKey(),
                 store, "test.dat", fs);

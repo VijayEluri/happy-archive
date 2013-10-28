@@ -10,7 +10,7 @@ import org.yi.happy.archive.key.FullKey;
 /**
  * Block retrieval and decoding service that connects to a block store.
  */
-public class RetrieveBlockStorage implements RetrieveBlock {
+public class StorageClearBlockSource implements ClearBlockSource {
 
     /**
      * create attached to a storage object
@@ -18,7 +18,7 @@ public class RetrieveBlockStorage implements RetrieveBlock {
      * @param storage
      *            the storage object
      */
-    public RetrieveBlockStorage(BlockStore storage) {
+    public StorageClearBlockSource(BlockStore storage) {
         this.storage = storage;
     }
 
@@ -28,7 +28,7 @@ public class RetrieveBlockStorage implements RetrieveBlock {
     private final BlockStore storage;
 
     @Override
-    public Block retrieveBlock(FullKey key) throws IOException {
+    public Block get(FullKey key) throws IOException {
         EncodedBlock b;
         try {
             b = storage.get(key.toLocatorKey());

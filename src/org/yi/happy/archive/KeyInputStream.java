@@ -24,7 +24,7 @@ public class KeyInputStream extends InputStream {
     /**
      * the decoding block store.
      */
-    private RetrieveBlock store;
+    private ClearBlockSource store;
 
     /**
      * how much of the stream has been read
@@ -57,7 +57,7 @@ public class KeyInputStream extends InputStream {
      * @param notReadyHandler
      *            notified when a block is needed and not found in the store
      */
-    public KeyInputStream(FullKey fullKey, RetrieveBlock store,
+    public KeyInputStream(FullKey fullKey, ClearBlockSource store,
             NotReadyHandler notReadyHandler) {
         this.reader = new RestoreEngine(fullKey);
         this.store = store;
@@ -102,7 +102,7 @@ public class KeyInputStream extends InputStream {
 
             try {
                 while (reader.findReady()) {
-                    Block block = store.retrieveBlock(reader.getKey());
+                    Block block = store.get(reader.getKey());
                     if (block == null) {
                         break;
                     }
