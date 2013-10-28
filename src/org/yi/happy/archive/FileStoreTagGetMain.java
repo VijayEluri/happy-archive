@@ -12,7 +12,6 @@ import org.yi.happy.archive.commandLine.UsesInput;
 import org.yi.happy.archive.commandLine.UsesNeed;
 import org.yi.happy.archive.commandLine.UsesStore;
 import org.yi.happy.archive.file_system.FileSystem;
-import org.yi.happy.archive.file_system.RandomOutputFile;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.FullKeyParse;
 import org.yi.happy.archive.key.LocatorKey;
@@ -111,7 +110,7 @@ public class FileStoreTagGetMain implements MainCommand {
         }
 
         ClearBlockSource source = new StorageClearBlockSource(store);
-        RandomOutputFile out = null;
+        FragmentSave target = new FragmentSaveFileSystem(fs);
 
         try {
             /*
@@ -119,7 +118,6 @@ public class FileStoreTagGetMain implements MainCommand {
              */
             while (true) {
                 boolean progress = false;
-                String path = null;
 
                 engine.start();
                 while (engine.findReady()) {
@@ -133,16 +131,7 @@ public class FileStoreTagGetMain implements MainCommand {
                     progress = true;
 
                     if (part != null) {
-                        if (out != null && !path.equals(engine.getJobName())) {
-                            out.close();
-                            out = null;
-                        }
-                        if (out == null) {
-                            path = engine.getJobName();
-                            out = fs.openRandomOutputFile(path);
-                        }
-                        out.writeAt(part.getOffset(), part.getData()
-                                .toByteArray());
+                        target.save(engine.getJobName(), part);
                     }
                 }
 
@@ -150,17 +139,11 @@ public class FileStoreTagGetMain implements MainCommand {
                     break;
                 }
 
-                if (out != null) {
-                    out.close();
-                    out = null;
-                }
+                target.close();
                 notReady(engine, progress);
             }
         } finally {
-            if (out != null) {
-                out.close();
-                out = null;
-            }
+            target.close();
         }
     }
 

@@ -11,7 +11,6 @@ import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesNeed;
 import org.yi.happy.archive.commandLine.UsesStore;
 import org.yi.happy.archive.file_system.FileSystem;
-import org.yi.happy.archive.file_system.RandomOutputFile;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.FullKeyParse;
 import org.yi.happy.archive.key.LocatorKey;
@@ -68,14 +67,14 @@ public class FileStoreFileGetMain implements MainCommand {
 
         ClearBlockSource source = new StorageClearBlockSource(store);
         RestoreEngine engine = new RestoreEngine(key);
+        FragmentSave target = new FragmentSaveFileSystem(fs);
 
-        /*
-         * do the work
-         */
-        while (true) {
-            boolean progress = false;
-            RandomOutputFile out = null;
-            try {
+        try {
+            /*
+             * do the work
+             */
+            while (true) {
+                boolean progress = false;
                 engine.start();
                 while (engine.findReady()) {
                     Block block = source.get(engine.getKey());
@@ -88,25 +87,19 @@ public class FileStoreFileGetMain implements MainCommand {
                     progress = true;
 
                     if (part != null) {
-                        if (out == null) {
-                            out = fs.openRandomOutputFile(path);
-                        }
-                        out.writeAt(part.getOffset(), part.getData()
-                                .toByteArray());
+                        target.save(path, part);
                     }
                 }
-            } finally {
-                if (out != null) {
-                    out.close();
-                    out = null;
+
+                if (engine.isDone()) {
+                    break;
                 }
-            }
 
-            if (engine.isDone()) {
-                break;
+                target.close();
+                notReady(engine, progress);
             }
-
-            notReady(engine, progress);
+        } finally {
+            target.close();
         }
     }
 
