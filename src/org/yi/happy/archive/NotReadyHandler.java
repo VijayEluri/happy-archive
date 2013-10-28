@@ -16,9 +16,11 @@ public interface NotReadyHandler {
      * @param reader
      *            the reader that is not ready
      * @param progress
+     *            true if progress has been made since the last time this was
+     *            called.
      * @throws IOException
      *             if the not ready situation can not be overcome
      */
-    void notReady(RestoreEngine reader, int progress) throws IOException;
+    void notReady(RestoreEngine reader, boolean progress) throws IOException;
 
 }

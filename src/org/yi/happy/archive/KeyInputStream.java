@@ -32,9 +32,10 @@ public class KeyInputStream extends InputStream {
     private long offset;
 
     /**
-     * the number of blocks read and processed.
+     * true if a block has been read and processed since the last time the
+     * {@link NotReadyHandler} has been notified.
      */
-    private int progress;
+    private boolean progress;
 
     /**
      * the current data fragment
@@ -62,6 +63,7 @@ public class KeyInputStream extends InputStream {
         this.reader = new RestoreEngine(fullKey);
         this.store = store;
         this.notReadyHandler = notReadyHandler;
+        this.progress = false;
         this.offset = 0;
     }
 
@@ -107,7 +109,7 @@ public class KeyInputStream extends InputStream {
                         break;
                     }
                     buff = reader.step(block);
-                    progress++;
+                    progress = true;
                     if (buff != null) {
                         break;
                     }
@@ -117,6 +119,7 @@ public class KeyInputStream extends InputStream {
             }
             if (buff == null) {
                 notReadyHandler.notReady(reader, progress);
+                progress = false;
             }
         }
     }

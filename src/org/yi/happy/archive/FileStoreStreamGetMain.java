@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.yi.happy.annotate.DuplicatedLogic;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesNeed;
 import org.yi.happy.archive.commandLine.UsesOutput;
@@ -70,19 +71,17 @@ public class FileStoreStreamGetMain implements MainCommand {
     }
 
     private NotReadyHandler notReadyHandler = new NotReadyHandler() {
-        private int progress;
-
         @Override
-        public void notReady(RestoreEngine reader, int progress)
+        @DuplicatedLogic("with FileStoreTagGetMain.notReady")
+        public void notReady(RestoreEngine engine, boolean progress)
                 throws IOException {
             List<LocatorKey> keys = new ArrayList<LocatorKey>();
-            for (FullKey key : reader.getNeeded()) {
+            for (FullKey key : engine.getNeeded()) {
                 keys.add(key.toLocatorKey());
             }
             needHandler.post(keys);
 
-            waitHandler.doWait(this.progress != progress);
-            this.progress = progress;
+            waitHandler.doWait(progress);
         }
     };
 }

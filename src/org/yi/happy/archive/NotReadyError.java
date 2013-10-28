@@ -10,7 +10,8 @@ import org.yi.happy.archive.restore.RestoreEngine;
 public class NotReadyError implements NotReadyHandler {
 
     @Override
-    public void notReady(RestoreEngine reader, int progress) throws IOException {
+    public void notReady(RestoreEngine engine, boolean progress)
+            throws IOException {
         throw new IONotReadyException();
     }
 

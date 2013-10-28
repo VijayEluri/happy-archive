@@ -40,7 +40,8 @@ public class ScriptNotReadyHandler implements NotReadyHandler {
      * block, if there are no blocks left then throw {@link IONotReadyException}
      */
     @Override
-    public void notReady(RestoreEngine reader, int progress) throws IOException {
+    public void notReady(RestoreEngine engine, boolean progress)
+            throws IOException {
         if (script.size() == 0) {
             throw new IONotReadyException();
         }
