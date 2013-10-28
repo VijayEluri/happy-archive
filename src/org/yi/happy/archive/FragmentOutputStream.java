@@ -1,5 +1,6 @@
 package org.yi.happy.archive;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -9,6 +10,12 @@ import java.io.OutputStream;
 public class FragmentOutputStream {
     private OutputStream out;
     private long written;
+
+    /**
+     * The buffer size when generating gap data. This is the same buffer size
+     * used by {@link BufferedInputStream}.
+     */
+    private static int BUFFER_SIZE = 8192;
 
     /**
      * set up to write to an {@link OutputStream}.
@@ -46,8 +53,8 @@ public class FragmentOutputStream {
         if (written < position) {
             long gap = position - written;
             byte[] pad;
-            if (gap > 8192) {
-                pad = new byte[8192];
+            if (gap > BUFFER_SIZE) {
+                pad = new byte[BUFFER_SIZE];
             } else {
                 pad = new byte[(int) gap];
             }
