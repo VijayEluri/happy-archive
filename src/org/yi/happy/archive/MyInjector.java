@@ -347,9 +347,19 @@ public class MyInjector {
      * @return the object.
      */
     public static MainCommand injectFileStoreFileGetMain(ApplicationScope scope) {
-        return new FileStoreFileGetMain(injectBlockStore(scope),
-                injectFileSystem(scope), injectWaitHandler(scope),
+        return new FileStoreFileGetMain(injectClearBlockSource(scope),
+                injectFragmentSave(scope), injectWaitHandler(scope),
                 injectNeedHandler(scope), injectArgs(scope));
+    }
+
+    @GlobalFilesystem
+    private static FragmentSave injectFragmentSave(ApplicationScope scope) {
+        return new FragmentSaveFile();
+    }
+
+    private static ClearBlockSource injectClearBlockSource(
+            ApplicationScope scope) {
+        return new StorageClearBlockSource(injectBlockStore(scope));
     }
 
     /**

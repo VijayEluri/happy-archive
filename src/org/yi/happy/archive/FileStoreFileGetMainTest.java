@@ -11,8 +11,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
-import org.yi.happy.archive.file_system.FakeFileSystem;
-import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
@@ -31,8 +29,8 @@ public class FileStoreFileGetMainTest {
          * layers of objects in use to exercise the functionality.
          */
 
-        final FileSystem fs = new FakeFileSystem();
-        final StorageMemory store = new StorageMemory();
+        final FragmentSaveMemory target = new FragmentSaveMemory();
+        final MapClearBlockSource store = new MapClearBlockSource();
         final NeedCapture needHandler = new NeedCapture();
 
         WaitHandler waitHandler = new WaitHandler() {
@@ -55,7 +53,7 @@ public class FileStoreFileGetMainTest {
                     /*
                      * add the map block to the store
                      */
-                    store.put(TestData.KEY_CONTENT_MAP.getEncodedBlock());
+                    store.put(TestData.KEY_CONTENT_MAP);
 
                     state = state2;
                 }
@@ -77,7 +75,7 @@ public class FileStoreFileGetMainTest {
                     /*
                      * add the second part
                      */
-                    store.put(TestData.KEY_CONTENT_2.getEncodedBlock());
+                    store.put(TestData.KEY_CONTENT_2);
 
                     state = state3;
                 }
@@ -97,7 +95,7 @@ public class FileStoreFileGetMainTest {
                     /*
                      * add the first part
                      */
-                    store.put(TestData.KEY_CONTENT_1.getEncodedBlock());
+                    store.put(TestData.KEY_CONTENT_1);
 
                     state = state4;
                 }
@@ -114,9 +112,9 @@ public class FileStoreFileGetMainTest {
 
         List<String> args = Arrays.asList(TestData.KEY_CONTENT_MAP.getFullKey()
                 .toString(), "out");
-        new FileStoreFileGetMain(store, fs, waitHandler, needHandler, args)
+        new FileStoreFileGetMain(store, target, waitHandler, needHandler, args)
                 .run();
 
-        assertArrayEquals(ByteString.toUtf8("0123456789"), fs.load("out"));
+        assertArrayEquals(ByteString.toUtf8("0123456789"), target.get("out"));
     }
 }
