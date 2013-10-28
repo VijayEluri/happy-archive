@@ -23,12 +23,32 @@ public class RestoreEngineTest {
     private static final Bytes D = new Bytes("hello\n");
 
     /**
-     * The first basic operations, load a single data block.
+     * A blank restore.
+     */
+    @Test
+    public void testBlank() {
+        RestoreEngine restore = new RestoreEngine();
+
+        assertEquals(keyList(), restore.getNeeded());
+
+        assertTrue(restore.isDone());
+
+        // loop
+        restore.start();
+
+        assertEquals(false, restore.findReady());
+        // loop done
+
+        assertTrue(restore.isDone());
+    }
+
+    /**
+     * The first very basic operations, load a single data block.
      * 
      * @throws Exception
      */
     @Test
-    public void testFirstBasic() throws Exception {
+    public void testFirstVeryBasic() throws Exception {
         RestoreEngine restore = new RestoreEngine(C.getFullKey());
 
         assertEquals(keyList(C), restore.getNeeded());
@@ -40,6 +60,30 @@ public class RestoreEngineTest {
         assertEquals(key(C), restore.getKey());
         assertEquals(frag(0, D), restore.step(C.getClearBlock()));
 
+        assertEquals(false, restore.findReady());
+        // loop done
+
+        assertTrue(restore.isDone());
+    }
+
+    /**
+     * The first basic operations, load a single data block, with name.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testFirstBasic() throws Exception {
+        RestoreEngine restore = new RestoreEngine("", C.getFullKey());
+
+        assertEquals(keyList(C), restore.getNeeded());
+
+        // loop
+        restore.start();
+
+        assertEquals(true, restore.findReady());
+        assertEquals(key(C), restore.getKey());
+        assertEquals(frag(0, D), restore.step(C.getClearBlock()));
+        assertEquals("", restore.getJobName());
         assertEquals(false, restore.findReady());
         // loop done
 
@@ -71,11 +115,11 @@ public class RestoreEngineTest {
         assertEquals(true, restore.findReady());
         assertEquals(key(C1), restore.getKey());
         restore.skip();
-        
+
         assertEquals(true, restore.findReady());
         assertEquals(key(C2), restore.getKey());
         restore.skip();
-        
+
         assertEquals(false, restore.findReady());
         // loop done
 
@@ -379,6 +423,137 @@ public class RestoreEngineTest {
         assertTrue(restore.isDone());
     }
 
+    /**
+     * load two keys.
+     * 
+     * @throws Exception
+     */
+    public void testListAndSplit() throws Exception {
+        TestData L = TestData.KEY_CONTENT_LIST;
+        TestData S = TestData.KEY_NAME_SPLIT;
+        TestData S1 = TestData.KEY_NAME_SPLIT_1;
+        TestData S2 = TestData.KEY_NAME_SPLIT_2;
+
+        RestoreEngine restore = new RestoreEngine();
+        restore.add(name(L), key(L));
+        restore.add(name(S), key(S));
+
+        assertEquals(keyList(L, S), restore.getNeeded());
+
+        /*
+         * L and S available
+         */
+        
+        // loop
+        restore.start();
+        
+        assertTrue(restore.findReady());
+        assertEquals(key(L), restore.getKey());
+        assertEquals(null, restore.step(block(L)));
+        
+        assertTrue(restore.findReady());
+        assertEquals(key(C1), restore.getKey());
+        restore.skip();
+        
+        assertTrue(restore.findReady());
+        assertEquals(key(S), restore.getKey());
+        assertEquals(null, restore.step(block(S)));
+        
+        assertTrue(restore.findReady());
+        assertEquals(key(S1), restore.getKey());
+        restore.skip();
+        
+        assertFalse(restore.findReady());
+        // loop done
+        
+        assertEquals(keyList(C1, C2, S1, S2), restore.getNeeded());
+        
+        /*
+         * C1, C2, S1, S2 available.
+         */
+        
+        // loop
+        restore.start();
+        
+        assertTrue(restore.findReady());
+        assertEquals(key(C1), restore.getKey());
+        assertEquals(frag(0, D1), restore.step(block(C1)));
+        assertEquals(name(L), restore.getJobName());
+
+        assertTrue(restore.findReady());
+        assertEquals(key(C2), restore.getKey());
+        assertEquals(frag(5, D2), restore.step(block(C2)));
+        assertEquals(name(L), restore.getJobName());
+
+        assertTrue(restore.findReady());
+        assertEquals(key(S1), restore.getKey());
+        assertEquals(null, restore.step(block(S1)));
+
+        assertTrue(restore.findReady());
+        assertEquals(key(C1), restore.getKey());
+        assertEquals(frag(0, D1), restore.step(block(C1)));
+        assertEquals(name(S), restore.getJobName());
+
+        assertTrue(restore.findReady());
+        assertEquals(key(S2), restore.getKey());
+        assertEquals(null, restore.step(block(S2)));
+
+        assertTrue(restore.findReady());
+        assertEquals(key(C2), restore.getKey());
+        assertEquals(frag(0, D2), restore.step(block(C2)));
+        assertEquals(name(S), restore.getJobName());
+
+        assertFalse(restore.findReady());
+        // loop done
+
+        assertTrue(restore.isDone());
+    }
+
+    /**
+     * get the blocks of multiple keys in order.
+     * 
+     * @throws Exception
+     */
+    public void testInOrder() throws Exception {
+        String J1 = "1";
+        String J2 = "2";
+        TestData M = TestData.KEY_CONTENT_MAP;
+
+        RestoreEngine restore = new RestoreEngine();
+        restore.add(J1, key(M));
+        restore.add(J2, key(M));
+
+        /*
+         * M, C2 available
+         */
+
+        // loop
+        restore.start();
+
+        assertTrue(restore.findReady());
+        assertEquals(key(M), restore.getKey());
+        assertEquals(null, restore.step(block(M)));
+
+        assertTrue(restore.findReady());
+        assertEquals(key(C1), restore.getKey());
+        restore.skipJob();
+
+        assertTrue(restore.findReady());
+        assertEquals(key(M), restore.getKey());
+        assertEquals(null, restore.step(block(M)));
+
+        assertTrue(restore.findReady());
+        assertEquals(key(C1), restore.getKey());
+        restore.skipJob();
+
+        assertFalse(restore.findReady());
+        // loop done
+    }
+
+    private static String name(TestData item) {
+        return item.name();
+    }
+
     private static FullKey key(TestData item) {
         return item.getFullKey();
     }
@@ -394,7 +569,7 @@ public class RestoreEngineTest {
     private static Fragment frag(int offset, Bytes data) {
         return new Fragment(offset, data);
     }
-    
+
     private static Block block(TestData item) throws IOException {
         return item.getClearBlock();
     }

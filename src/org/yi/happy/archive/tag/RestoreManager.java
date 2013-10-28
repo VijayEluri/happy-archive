@@ -9,13 +9,13 @@ import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RandomOutputFile;
 import org.yi.happy.archive.key.FullKey;
-import org.yi.happy.archive.restore.RestoreManyEngine;
+import org.yi.happy.archive.restore.RestoreEngine;
 
 /**
  * A management process for multiple files being restored.
  */
 public class RestoreManager {
-    private final RestoreManyEngine engine;
+    private final RestoreEngine engine;
     private final FileSystem fs;
     private final ClearBlockSource store;
 
@@ -35,7 +35,7 @@ public class RestoreManager {
     public RestoreManager(FileSystem fs, ClearBlockSource store) {
         this.fs = fs;
         this.store = store;
-        this.engine = new RestoreManyEngine();
+        this.engine = new RestoreEngine();
     }
 
     /**
