@@ -11,7 +11,6 @@ import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.commandLine.UsesInput;
 import org.yi.happy.archive.commandLine.UsesNeed;
 import org.yi.happy.archive.commandLine.UsesStore;
-import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.FullKeyParse;
 import org.yi.happy.archive.key.LocatorKey;
@@ -26,7 +25,6 @@ import org.yi.happy.archive.tag.TagStreamIterator;
 @UsesNeed
 @UsesInput("tag-list")
 public class FileStoreTagGetMain implements MainCommand {
-    private final FileSystem fs;
     private final WaitHandler waitHandler;
     private final InputStream in;
     private final NeedHandler needHandler;
@@ -40,8 +38,6 @@ public class FileStoreTagGetMain implements MainCommand {
      *            the block source to use.
      * @param target
      *            where to save the fragments.
-     * @param fs
-     *            the file system to use.
      * @param waitHandler
      *            what to do when waiting is needed.
      * @param in
@@ -54,11 +50,9 @@ public class FileStoreTagGetMain implements MainCommand {
      *            what to use for standard output.
      */
     public FileStoreTagGetMain(ClearBlockSource source, FragmentSave target,
-            FileSystem fs,
             WaitHandler waitHandler, InputStream in, NeedHandler needHandler) {
         this.source = source;
         this.target = target;
-        this.fs = fs;
         this.waitHandler = waitHandler;
         this.in = in;
         this.needHandler = needHandler;
@@ -100,11 +94,6 @@ public class FileStoreTagGetMain implements MainCommand {
             }
 
             if (type.equals("file")) {
-                /*
-                 * make sure that the parent directories exist
-                 */
-                fs.mkparentdir(name);
-
                 engine.add(name, key);
                 continue;
             }

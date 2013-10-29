@@ -60,9 +60,8 @@ public class MyInjector {
      */
     public static MainCommand injectFileStoreTagGetMain(ApplicationScope scope) {
         return new FileStoreTagGetMain(injectClearBlockSource(scope),
-                injectFragmentSave(scope), injectFileSystem(scope),
-                injectWaitHandler(scope), injectInput(scope),
-                injectNeedHandler(scope));
+                injectFragmentSave(scope), injectWaitHandler(scope),
+                injectInput(scope), injectNeedHandler(scope));
     }
 
     /**

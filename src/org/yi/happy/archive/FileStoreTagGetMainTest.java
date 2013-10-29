@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
-import org.yi.happy.archive.file_system.FakeFileSystem;
-import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.test_data.TestData;
 
@@ -37,8 +35,7 @@ public class FileStoreTagGetMainTest {
     @Test
     public void test1() throws IOException {
         MapClearBlockSource source = new MapClearBlockSource();
-        FileSystem fs = new FakeFileSystem();
-        FragmentSave target = new FragmentSaveFileSystem(fs);
+        FragmentSaveMemory target = new FragmentSaveMemory();
         InputStream in = input(IN);
 
         source.put(C1);
@@ -51,11 +48,10 @@ public class FileStoreTagGetMainTest {
             }
         };
 
-        new FileStoreTagGetMain(source, target, fs, waitHandler, in, null)
-                .run();
+        new FileStoreTagGetMain(source, target, waitHandler, in, null).run();
 
-        assertArrayEquals(raw(D1), fs.load(N1));
-        assertArrayEquals(raw(D2), fs.load(N2));
+        assertArrayEquals(raw(D1), target.get(N1));
+        assertArrayEquals(raw(D2), target.get(N2));
     }
 
     /**
@@ -66,8 +62,7 @@ public class FileStoreTagGetMainTest {
     @Test
     public void test2() throws IOException {
         InputStream in = input(IN);
-        final FileSystem fs = new FakeFileSystem();
-        FragmentSave target = new FragmentSaveFileSystem(fs);
+        FragmentSaveMemory target = new FragmentSaveMemory();
         final MapClearBlockSource source = new MapClearBlockSource();
         final NeedCapture needHandler = new NeedCapture();
 
@@ -100,11 +95,11 @@ public class FileStoreTagGetMainTest {
             };
         };
 
-        new FileStoreTagGetMain(source, target, fs, waitHandler, in,
-                needHandler).run();
+        new FileStoreTagGetMain(source, target, waitHandler, in, needHandler)
+                .run();
 
-        assertArrayEquals(raw(D1), fs.load(N1));
-        assertArrayEquals(raw(D2), fs.load(N2));
+        assertArrayEquals(raw(D1), target.get(N1));
+        assertArrayEquals(raw(D2), target.get(N2));
     }
 
     private ByteArrayInputStream input(TestData item) throws IOException {
