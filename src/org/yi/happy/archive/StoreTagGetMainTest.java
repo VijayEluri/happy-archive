@@ -1,18 +1,15 @@
 package org.yi.happy.archive;
 
 import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Test;
-import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.restore.RestoreEngine;
 import org.yi.happy.archive.test_data.TestData;
 
@@ -29,18 +26,19 @@ public class StoreTagGetMainTest {
     private static final TestData D2 = TestData.FILE_CONTENT_40;
 
     /**
-     * restore two files, with all the data already available.
+     * fetch {@link TestData#TAG_FILES}.
      * 
      * @throws IOException
      */
     @Test
-    public void test1() throws IOException {
+    public void testSimple() throws IOException {
         MapClearBlockSource source = new MapClearBlockSource();
-        FragmentSaveMemory target = new FragmentSaveMemory();
-        InputStream in = input(IN);
-
         source.put(C1);
         source.put(C2);
+
+        FragmentSaveMemory target = new FragmentSaveMemory();
+
+        InputStream in = input(IN);
 
         new StoreTagGetMain(source, target, null, in).run();
 
@@ -49,47 +47,42 @@ public class StoreTagGetMainTest {
     }
 
     /**
-     * restore two files, with all the data available after it is asked for.
+     * fetch {@link TestData#TAG_FILES}. With not everything ready at the same
+     * time.
      * 
      * @throws IOException
      */
     @Test
-    public void test2() throws IOException {
-        InputStream in = input(IN);
-        FragmentSaveMemory target = new FragmentSaveMemory();
+    public void testNotReady() throws IOException {
         final MapClearBlockSource source = new MapClearBlockSource();
+        FragmentSaveMemory target = new FragmentSaveMemory();
 
         NotReadyHandler notReady = new NotReadyHandler() {
+            private int call = 0;
+
             @Override
             public void onNotReady(RestoreEngine engine, boolean progress)
                     throws IOException {
-                state.onNotReady(engine, progress);
-            }
-            
-            private NotReadyHandler state = new NotReadyHandler() {
-                @Override
-                public void onNotReady(RestoreEngine engine, boolean progress)
-                        throws IOException {
+                call++;
+                if (call == 1) {
                     assertFalse(progress);
-
-                    assertEquals(keyList(C1, C2), engine.getNeeded());
-
                     source.put(C1);
+                    return;
+                }
+                if (call == 2) {
+                    assertTrue(progress);
+                    return;
+                }
+                if (call == 3) {
+                    assertFalse(progress);
                     source.put(C2);
-
-                    state = state1;
+                    return;
                 }
-            };
-
-            private NotReadyHandler state1 = new NotReadyHandler() {
-                @Override
-                public void onNotReady(RestoreEngine engine, boolean progress)
-                        throws IOException {
-                    fail();
-                }
-            };
+                fail();
+            }
         };
-        
+
+        InputStream in = input(IN);
         new StoreTagGetMain(source, target, notReady, in).run();
 
         assertArrayEquals(raw(D1), target.get(N1));
@@ -102,17 +95,5 @@ public class StoreTagGetMainTest {
 
     private byte[] raw(TestData item) throws IOException {
         return item.getBytes();
-    }
-
-    private FullKey key(TestData item) {
-        return item.getFullKey();
-    }
-
-    private List<FullKey> keyList(TestData... items) {
-        List<FullKey> out = new ArrayList<FullKey>();
-        for (TestData item : items) {
-            out.add(key(item));
-        }
-        return out;
     }
 }

@@ -235,6 +235,12 @@ public enum TestData {
     KEY_CONTENT_MAP,
 
     /**
+     * The result of restoring {@link #KEY_CONTENT_MAP} or
+     * {@link #KEY_CONTENT_LIST} or {@link #KEY_NAME_SPLIT}.
+     */
+    FILE_CONTENT_MAP,
+
+    /**
      * clear text version of {@link #KEY_CONTENT_MAP_OVERLAP}
      */
     CLEAR_CONTENT_MAP_OVERLAP,
@@ -330,15 +336,15 @@ public enum TestData {
     KEY_CONTENT_LIST,
 
     /**
-     * A tag list with just a single file in it. The entry named "test.txt" is
-     * {@link #FILE_CONTENT}.
+     * A tag list with just a single file in it. The entry named "test.txt" as
+     * {@link #KEY_CONTENT}.
      */
     TAG_FILE,
 
     /**
-     * A tag list with two files in it. The entry named "hello.txt" is
-     * {@link #FILE_CONTENT}, the entry named "test.dat" is
-     * {@link #FILE_CONTENT_40}.
+     * A tag list with two files in it. the entry named "hello.txt" as
+     * {@link #KEY_CONTENT}, the entry named "test.dat" as
+     * {@link #KEY_CONTENT_40}.
      */
     TAG_FILES,
 

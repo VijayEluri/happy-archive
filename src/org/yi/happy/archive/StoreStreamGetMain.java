@@ -60,14 +60,13 @@ public class StoreStreamGetMain implements MainCommand {
     @Override
     @RestoreLoop
     public void run() throws IOException {
-        FragmentOutputStream target = new FragmentOutputStream(out);
-
         FullKey key = FullKeyParse.parseFullKey(args.get(0));
         RestoreEngine engine = new RestoreEngine(key);
 
         /*
          * do the work
          */
+        FragmentOutputStream target = new FragmentOutputStream(out);
         while (true) {
             boolean progress = false;
             while (engine.findReady()) {

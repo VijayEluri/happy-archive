@@ -1,14 +1,12 @@
 package org.yi.happy.archive;
 
 import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
@@ -20,98 +18,89 @@ import org.yi.happy.archive.test_data.TestData;
  * Tests for {@link StoreFileGetMain}.
  */
 public class StoreFileGetMainTest {
-    private static final Bytes D = new Bytes("0123456789");
     private static final String N = "out";
-    private static final TestData MAP = TestData.KEY_CONTENT_MAP;
-    private static final TestData C1 = TestData.KEY_CONTENT_1;
-    private static final TestData C2 = TestData.KEY_CONTENT_2;
 
     /**
-     * an expected good run.
+     * The simple run. Everything is ready.
      * 
      * @throws IOException
      */
     @Test
-    public void test1() throws IOException {
+    public void testSimple() throws IOException {
+        final TestData C = TestData.KEY_CONTENT;
+        final TestData F = TestData.FILE_CONTENT;
+
         final FragmentSaveMemory target = new FragmentSaveMemory();
+
         final MapClearBlockSource store = new MapClearBlockSource();
+        store.put(C);
+
+        List<String> args = strs(key(C), N);
+        new StoreFileGetMain(store, target, null, args).run();
+
+        assertArrayEquals(raw(F), target.get(N));
+    }
+
+    /**
+     * When not everything is ready, the not ready handler is called.
+     * 
+     * @throws IOException
+     */
+    @Test
+    public void testNotReady() throws IOException {
+        final TestData M = TestData.KEY_CONTENT_MAP;
+        final TestData C1 = TestData.KEY_CONTENT_1;
+        final TestData C2 = TestData.KEY_CONTENT_2;
+        final TestData F = TestData.FILE_CONTENT_MAP;
+
+        final FragmentSaveMemory target = new FragmentSaveMemory();
+
+        final MapClearBlockSource source = new MapClearBlockSource();
 
         NotReadyHandler notReady = new NotReadyHandler() {
+            private int call = 0;
+
             @Override
             public void onNotReady(RestoreEngine engine, boolean progress)
                     throws IOException {
-                state.onNotReady(engine, progress);
-            }
-
-            private NotReadyHandler state = new NotReadyHandler() {
-                @Override
-                public void onNotReady(RestoreEngine engine, boolean progress)
-                        throws IOException {
+                call++;
+                if (call == 1) {
                     assertFalse(progress);
-
-                    assertEquals(keyList(MAP), engine.getNeeded());
-
-                    /*
-                     * add the map block to the store
-                     */
-                    store.put(MAP);
-
-                    state = state2;
+                    source.put(M);
+                    return;
                 }
-            };
-
-            private final NotReadyHandler state2 = new NotReadyHandler() {
-                @Override
-                public void onNotReady(RestoreEngine engine, boolean progress)
-                        throws IOException {
+                if (call == 2) {
                     assertTrue(progress);
-
-                    assertEquals(keyList(C1, C2), engine.getNeeded());
-
-                    store.put(C2);
-
-                    state = state3;
+                    source.put(C1);
+                    return;
                 }
-            };
-
-            private final NotReadyHandler state3 = new NotReadyHandler() {
-                @Override
-                public void onNotReady(RestoreEngine engine, boolean progress)
-                        throws IOException {
+                if (call == 3) {
                     assertTrue(progress);
-
-                    assertEquals(keyList(C1), engine.getNeeded());
-
-                    store.put(C1);
-
-                    state = state4;
+                    return;
                 }
-            };
-
-            private final NotReadyHandler state4 = new NotReadyHandler() {
-                @Override
-                public void onNotReady(RestoreEngine engine, boolean progress)
-                        throws IOException {
-                    fail();
+                if (call == 4) {
+                    assertFalse(progress);
+                    source.put(C2);
+                    return;
                 }
-            };
-
+                fail();
+            }
         };
 
-        List<String> args = list(key(MAP).toString(), N);
-        new StoreFileGetMain(store, target, notReady, args).run();
+        List<String> args = strs(key(M), N);
+        new StoreFileGetMain(source, target, notReady, args).run();
 
-        assertArrayEquals(D.toByteArray(), target.get(N));
+        assertArrayEquals(raw(F), target.get(N));
     }
 
-    private static <T> List<T> list(T... items) {
-        return Arrays.asList(items);
+    private static byte[] raw(TestData item) throws IOException {
+        return item.getBytes();
     }
 
-    private static List<FullKey> keyList(TestData... items) {
-        List<FullKey> out = new ArrayList<FullKey>();
-        for (TestData item : items) {
-            out.add(key(item));
+    private static List<String> strs(Object... items) {
+        List<String> out = new ArrayList<String>();
+        for (Object item : items) {
+            out.add(item.toString());
         }
         return out;
     }
@@ -119,5 +108,4 @@ public class StoreFileGetMainTest {
     private static FullKey key(TestData item) {
         return item.getFullKey();
     }
-
 }

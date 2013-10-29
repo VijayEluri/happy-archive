@@ -57,8 +57,7 @@ public class StoreFileGetMain implements MainCommand {
     public void run() throws IOException {
         FullKey key = FullKeyParse.parseFullKey(args.get(0));
         String path = args.get(1);
-
-        RestoreEngine engine = new RestoreEngine(key);
+        RestoreEngine engine = new RestoreEngine(path, key);
 
         try {
             /*
