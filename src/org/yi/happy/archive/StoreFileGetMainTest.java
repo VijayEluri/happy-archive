@@ -7,16 +7,24 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
+import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
  * Tests for {@link StoreFileGetMain}.
  */
 public class StoreFileGetMainTest {
+    private static final Bytes D = new Bytes("0123456789");
+    private static final String N = "out";
+    private static final TestData MAP = TestData.KEY_CONTENT_MAP;
+    private static final TestData C1 = TestData.KEY_CONTENT_1;
+    private static final TestData C2 = TestData.KEY_CONTENT_2;
+
     /**
      * an expected good run.
      * 
@@ -24,11 +32,6 @@ public class StoreFileGetMainTest {
      */
     @Test
     public void test1() throws IOException {
-        /*
-         * NOTE this is not strictly speaking a unit test since there are two
-         * layers of objects in use to exercise the functionality.
-         */
-
         final FragmentSaveMemory target = new FragmentSaveMemory();
         final MapClearBlockSource store = new MapClearBlockSource();
         final NeedCapture needHandler = new NeedCapture();
@@ -47,13 +50,12 @@ public class StoreFileGetMainTest {
                     /*
                      * check the request list
                      */
-                    assertEquals(Arrays.asList(TestData.KEY_CONTENT_MAP
-                            .getLocatorKey()), needHandler.getKeys());
+                    assertEquals(keyList(MAP), needHandler.getKeys());
 
                     /*
                      * add the map block to the store
                      */
-                    store.put(TestData.KEY_CONTENT_MAP);
+                    store.put(MAP);
 
                     state = state2;
                 }
@@ -67,15 +69,12 @@ public class StoreFileGetMainTest {
                     /*
                      * check the request list
                      */
-                    assertEquals(Arrays.asList(
-                            TestData.KEY_CONTENT_1.getLocatorKey(),
-                            TestData.KEY_CONTENT_2.getLocatorKey()),
-                            needHandler.getKeys());
+                    assertEquals(keyList(C1, C2), needHandler.getKeys());
 
                     /*
                      * add the second part
                      */
-                    store.put(TestData.KEY_CONTENT_2);
+                    store.put(C2);
 
                     state = state3;
                 }
@@ -89,13 +88,12 @@ public class StoreFileGetMainTest {
                     /*
                      * check the request list
                      */
-                    assertEquals(Arrays.asList(TestData.KEY_CONTENT_1
-                            .getLocatorKey()), needHandler.getKeys());
+                    assertEquals(keyList(C1), needHandler.getKeys());
 
                     /*
                      * add the first part
                      */
-                    store.put(TestData.KEY_CONTENT_1);
+                    store.put(C1);
 
                     state = state4;
                 }
@@ -110,11 +108,23 @@ public class StoreFileGetMainTest {
 
         };
 
-        List<String> args = Arrays.asList(TestData.KEY_CONTENT_MAP.getFullKey()
-                .toString(), "out");
+        List<String> args = list(MAP.getFullKey().toString(), N);
         new StoreFileGetMain(store, target, waitHandler, needHandler, args)
                 .run();
 
-        assertArrayEquals(ByteString.toUtf8("0123456789"), target.get("out"));
+        assertArrayEquals(D.toByteArray(), target.get(N));
     }
+
+    private <T> List<T> list(T... items) {
+        return Arrays.asList(items);
+    }
+
+    private List<LocatorKey> keyList(TestData... items) {
+        List<LocatorKey> out = new ArrayList<LocatorKey>();
+        for (TestData item : items) {
+            out.add(item.getLocatorKey());
+        }
+        return out;
+    }
+
 }
