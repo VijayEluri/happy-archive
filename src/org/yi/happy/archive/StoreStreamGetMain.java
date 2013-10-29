@@ -25,10 +25,9 @@ import org.yi.happy.archive.restore.RestoreEngine;
 @UsesOutput("file")
 public class StoreStreamGetMain implements MainCommand {
     private final OutputStream out;
-    private final WaitHandler waitHandler;
     private final BlockStore store;
-    private final NeedHandler needHandler;
     private final List<String> args;
+    private final NotReadyHandler notReady;
 
     /**
      * create.
@@ -48,8 +47,7 @@ public class StoreStreamGetMain implements MainCommand {
             WaitHandler waitHandler, NeedHandler needHandler, List<String> args) {
         this.store = store;
         this.out = out;
-        this.waitHandler = waitHandler;
-        this.needHandler = needHandler;
+        this.notReady = new NotReadyNeedAndWait(needHandler, waitHandler);
         this.args = args;
     }
 
@@ -66,8 +64,6 @@ public class StoreStreamGetMain implements MainCommand {
     public void run() throws IOException {
         FragmentOutputStream target = new FragmentOutputStream(out);
         ClearBlockSource source = new StorageClearBlockSource(store);
-        NotReadyHandler notReady = new NotReadyNeedAndWait(needHandler,
-                waitHandler);
 
         FullKey key = FullKeyParse.parseFullKey(args.get(0));
 

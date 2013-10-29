@@ -20,9 +20,9 @@ import org.yi.happy.archive.restore.RestoreEngine;
 @UsesArgs({ "key", "output" })
 public class StoreFileGetMain implements MainCommand {
     private final List<String> args;
-    private final NeedHandler needHandler;
     private ClearBlockSource source;
     private FragmentSave target;
+    private final NotReadyNeedAndWait notReady;
 
     /**
      * create.
@@ -42,8 +42,8 @@ public class StoreFileGetMain implements MainCommand {
             WaitHandler waitHandler, NeedHandler needHandler, List<String> args) {
         this.source = source;
         this.target = target;
-        this.waitHandler = waitHandler;
-        this.needHandler = needHandler;
+        this.notReady = new NotReadyNeedAndWait(needHandler, waitHandler);
+
         this.args = args;
     }
 
@@ -58,9 +58,6 @@ public class StoreFileGetMain implements MainCommand {
     @Override
     @RestoreLoop
     public void run() throws IOException {
-        NotReadyHandler notReady = new NotReadyNeedAndWait(needHandler,
-                waitHandler);
-
         FullKey key = FullKeyParse.parseFullKey(args.get(0));
         String path = args.get(1);
 
@@ -99,6 +96,4 @@ public class StoreFileGetMain implements MainCommand {
             target.close();
         }
     }
-
-    private WaitHandler waitHandler;
 }
