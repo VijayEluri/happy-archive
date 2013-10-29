@@ -13,7 +13,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
-import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.restore.RestoreEngine;
 import org.yi.happy.archive.test_data.TestData;
@@ -33,7 +32,6 @@ public class StoreStreamGetMainTest {
      * @throws IOException
      */
     @Test
-    @SmellsMessy
     public void test1() throws IOException {
         /*
          * NOTE this is not strictly speaking a unit test since there are two

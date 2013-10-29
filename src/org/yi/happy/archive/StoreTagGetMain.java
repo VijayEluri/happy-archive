@@ -89,7 +89,7 @@ public class StoreTagGetMain implements MainCommand {
             }
 
             /*
-             * TODO there is also a type=dir where the content is a tag list.
+             * XXX there is also a type=dir where the content is a tag list.
              */
         }
 
