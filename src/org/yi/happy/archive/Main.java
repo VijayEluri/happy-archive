@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.yi.happy.annotate.EntryPoint;
+import org.yi.happy.annotate.GlobalOutput;
 import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.commandLine.MyEnv;
 import org.yi.happy.archive.commandLine.Requirement;
@@ -14,6 +15,7 @@ import org.yi.happy.archive.commandLine.RequirementLoader;
 /**
  * The top level entry point that dispatches to the sub-commands.
  */
+@GlobalOutput
 public class Main {
     private static final Map<String, Class<? extends MainCommand>> commands;
     static {

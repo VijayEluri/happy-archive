@@ -9,12 +9,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.zip.GZIPInputStream;
 
+import org.yi.happy.annotate.GlobalFilesystem;
+import org.yi.happy.annotate.GlobalOutput;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.file_system.RealFileSystem;
 
 /**
  * Experimental command to populate a HSQL database with indexes.
  */
+@GlobalFilesystem
+@GlobalOutput
 public class MakeIndexDatabaseMain implements MainCommand {
     /**
      * make a database from all the indexes in /Users/happy/archive.d/. this
