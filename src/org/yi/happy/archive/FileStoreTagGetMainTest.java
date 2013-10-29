@@ -7,10 +7,12 @@ import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Arrays;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
+import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.key.LocatorKey;
@@ -20,6 +22,14 @@ import org.yi.happy.archive.test_data.TestData;
  * Tests for {@link FileStoreTagGetMain}.
  */
 public class FileStoreTagGetMainTest {
+    private static final TestData IN = TestData.TAG_FILES;
+    private static final TestData D1 = TestData.FILE_CONTENT;
+    private static final TestData D2 = TestData.FILE_CONTENT_40;
+    private static final TestData C1 = TestData.KEY_CONTENT;
+    private static final TestData C2 = TestData.KEY_CONTENT_40;
+    private static final String N1 = "hello.txt";
+    private static final String N2 = "test.dat";
+
     /**
      * restore two files, with all the data already available.
      * 
@@ -27,12 +37,12 @@ public class FileStoreTagGetMainTest {
      */
     @Test
     public void test1() throws IOException {
-        ByteArrayInputStream in = new ByteArrayInputStream(
-                TestData.TAG_FILES.getBytes());
-        FileSystem fs = new FakeFileSystem();
         BlockStore store = new StorageMemory();
-        store.put(TestData.KEY_CONTENT.getEncodedBlock());
-        store.put(TestData.KEY_CONTENT_40.getEncodedBlock());
+        FileSystem fs = new FakeFileSystem();
+        InputStream in = input(IN);
+
+        store.put(block(C1));
+        store.put(block(C2));
 
         WaitHandler waitHandler = new WaitHandler() {
             @Override
@@ -43,10 +53,8 @@ public class FileStoreTagGetMainTest {
 
         new FileStoreTagGetMain(store, fs, waitHandler, in, null).run();
 
-        assertArrayEquals(TestData.FILE_CONTENT.getBytes(),
-                fs.load("hello.txt"));
-        assertArrayEquals(TestData.FILE_CONTENT_40.getBytes(),
-                fs.load("test.dat"));
+        assertArrayEquals(raw(D1), fs.load(N1));
+        assertArrayEquals(raw(D2), fs.load(N2));
     }
 
     /**
@@ -56,8 +64,7 @@ public class FileStoreTagGetMainTest {
      */
     @Test
     public void test2() throws IOException {
-        ByteArrayInputStream in = new ByteArrayInputStream(
-                TestData.TAG_FILES.getBytes());
+        InputStream in = input(IN);
         final FileSystem fs = new FakeFileSystem();
         final BlockStore store = new StorageMemory();
         final NeedCapture needHandler = new NeedCapture();
@@ -72,13 +79,11 @@ public class FileStoreTagGetMainTest {
                 @Override
                 public void doWait(boolean progress) throws IOException {
                     assertFalse(progress);
-                    List<LocatorKey> want = Arrays.asList(
-                            TestData.KEY_CONTENT.getLocatorKey(),
-                            TestData.KEY_CONTENT_40.getLocatorKey());
+                    List<LocatorKey> want = keyList(C1, C2);
                     assertEquals(want, needHandler.getKeys());
 
-                    store.put(TestData.KEY_CONTENT.getEncodedBlock());
-                    store.put(TestData.KEY_CONTENT_40.getEncodedBlock());
+                    store.put(block(C1));
+                    store.put(block(C2));
 
                     state = state1;
                 }
@@ -94,9 +99,31 @@ public class FileStoreTagGetMainTest {
 
         new FileStoreTagGetMain(store, fs, waitHandler, in, needHandler).run();
 
-        assertArrayEquals(TestData.FILE_CONTENT.getBytes(),
-                fs.load("hello.txt"));
-        assertArrayEquals(TestData.FILE_CONTENT_40.getBytes(),
-                fs.load("test.dat"));
+        assertArrayEquals(raw(D1), fs.load(N1));
+        assertArrayEquals(raw(D2), fs.load(N2));
+    }
+
+    private ByteArrayInputStream input(TestData item) throws IOException {
+        return new ByteArrayInputStream(item.getBytes());
+    }
+
+    private byte[] raw(TestData item) throws IOException {
+        return item.getBytes();
+    }
+
+    private EncodedBlock block(TestData item) throws IOException {
+        return item.getEncodedBlock();
+    }
+
+    private LocatorKey key(TestData item) {
+        return item.getLocatorKey();
+    }
+
+    private List<LocatorKey> keyList(TestData... items) {
+        List<LocatorKey> out = new ArrayList<LocatorKey>();
+        for (TestData item : items) {
+            out.add(key(item));
+        }
+        return out;
     }
 }

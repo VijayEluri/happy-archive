@@ -336,19 +336,20 @@ public enum TestData {
     TAG_FILE,
 
     /**
-     * A tag list with two files in it. The entry named "test.txt" is
+     * A tag list with two files in it. The entry named "hello.txt" is
      * {@link #FILE_CONTENT}, the entry named "test.dat" is
      * {@link #FILE_CONTENT_40}.
      */
     TAG_FILES,
 
     /**
-     * The body of {@link #CLEAR_CONTENT}.
+     * The body of {@link #CLEAR_CONTENT}. The text "hello\n".
      */
     FILE_CONTENT,
 
     /**
-     * The body of {@link #CLEAR_CONTENT_40}.
+     * The body of {@link #CLEAR_CONTENT_40}. The text "01234" repeated 8 times,
+     * for a total of 40 bytes.
      */
     FILE_CONTENT_40,
 
