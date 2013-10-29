@@ -14,7 +14,6 @@ import java.util.List;
 
 import org.junit.Test;
 import org.yi.happy.annotate.SmellsMessy;
-import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.restore.RestoreEngine;
 import org.yi.happy.archive.test_data.TestData;
@@ -41,7 +40,7 @@ public class StoreStreamGetMainTest {
          * layers of objects in use to exercise the functionality.
          */
 
-        final BlockStore store = new StorageMemory();
+        final MapClearBlockSource source = new MapClearBlockSource();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
         NotReadyHandler notReady = new NotReadyHandler() {
@@ -59,7 +58,7 @@ public class StoreStreamGetMainTest {
 
                     assertEquals(keyList(MAP), engine.getNeeded());
 
-                    store.put(block(MAP));
+                    source.put(MAP);
 
                     state = state2;
                 }
@@ -73,7 +72,7 @@ public class StoreStreamGetMainTest {
 
                     assertEquals(keyList(C1, C2), engine.getNeeded());
 
-                    store.put(block(C2));
+                    source.put(C2);
 
                     state = state3;
                 }
@@ -87,7 +86,7 @@ public class StoreStreamGetMainTest {
 
                     assertEquals(keyList(C1, C2), engine.getNeeded());
 
-                    store.put(block(C1));
+                    source.put(C1);
 
                     state = state4;
                 }
@@ -103,7 +102,7 @@ public class StoreStreamGetMainTest {
         };
 
         List<String> args = Arrays.asList(key(MAP).toString());
-        new StoreStreamGetMain(store, out, notReady, args).run();
+        new StoreStreamGetMain(source, out, notReady, args).run();
 
         assertArrayEquals(D.toByteArray(), out.toByteArray());
     }
@@ -118,9 +117,5 @@ public class StoreStreamGetMainTest {
 
     private static FullKey key(TestData item) {
         return item.getFullKey();
-    }
-
-    private static EncodedBlock block(TestData item) throws IOException {
-        return item.getEncodedBlock();
     }
 }
