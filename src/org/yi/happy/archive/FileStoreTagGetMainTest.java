@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
-import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.key.LocatorKey;
@@ -37,12 +36,12 @@ public class FileStoreTagGetMainTest {
      */
     @Test
     public void test1() throws IOException {
-        BlockStore store = new StorageMemory();
+        MapClearBlockSource source = new MapClearBlockSource();
         FileSystem fs = new FakeFileSystem();
         InputStream in = input(IN);
 
-        store.put(block(C1));
-        store.put(block(C2));
+        source.put(C1);
+        source.put(C2);
 
         WaitHandler waitHandler = new WaitHandler() {
             @Override
@@ -51,7 +50,7 @@ public class FileStoreTagGetMainTest {
             }
         };
 
-        new FileStoreTagGetMain(store, fs, waitHandler, in, null).run();
+        new FileStoreTagGetMain(source, fs, waitHandler, in, null).run();
 
         assertArrayEquals(raw(D1), fs.load(N1));
         assertArrayEquals(raw(D2), fs.load(N2));
@@ -66,7 +65,7 @@ public class FileStoreTagGetMainTest {
     public void test2() throws IOException {
         InputStream in = input(IN);
         final FileSystem fs = new FakeFileSystem();
-        final BlockStore store = new StorageMemory();
+        final MapClearBlockSource source = new MapClearBlockSource();
         final NeedCapture needHandler = new NeedCapture();
 
         WaitHandler waitHandler = new WaitHandler() {
@@ -79,11 +78,12 @@ public class FileStoreTagGetMainTest {
                 @Override
                 public void doWait(boolean progress) throws IOException {
                     assertFalse(progress);
+
                     List<LocatorKey> want = keyList(C1, C2);
                     assertEquals(want, needHandler.getKeys());
 
-                    store.put(block(C1));
-                    store.put(block(C2));
+                    source.put(C1);
+                    source.put(C2);
 
                     state = state1;
                 }
@@ -97,7 +97,7 @@ public class FileStoreTagGetMainTest {
             };
         };
 
-        new FileStoreTagGetMain(store, fs, waitHandler, in, needHandler).run();
+        new FileStoreTagGetMain(source, fs, waitHandler, in, needHandler).run();
 
         assertArrayEquals(raw(D1), fs.load(N1));
         assertArrayEquals(raw(D2), fs.load(N2));
@@ -109,10 +109,6 @@ public class FileStoreTagGetMainTest {
 
     private byte[] raw(TestData item) throws IOException {
         return item.getBytes();
-    }
-
-    private EncodedBlock block(TestData item) throws IOException {
-        return item.getEncodedBlock();
     }
 
     private LocatorKey key(TestData item) {

@@ -30,13 +30,13 @@ public class FileStoreTagGetMain implements MainCommand {
     private final WaitHandler waitHandler;
     private final InputStream in;
     private final NeedHandler needHandler;
-    private final BlockStore store;
+    private final ClearBlockSource source;
 
     /**
-     * initialize.
+     * set up.
      * 
-     * @param store
-     *            the block store to use
+     * @param source
+     *            the block source to use
      * @param fs
      *            the file system to use.
      * @param waitHandler
@@ -50,9 +50,9 @@ public class FileStoreTagGetMain implements MainCommand {
      * @param out
      *            what to use for standard output.
      */
-    public FileStoreTagGetMain(BlockStore store, FileSystem fs,
+    public FileStoreTagGetMain(ClearBlockSource source, FileSystem fs,
             WaitHandler waitHandler, InputStream in, NeedHandler needHandler) {
-        this.store = store;
+        this.source = source;
         this.fs = fs;
         this.waitHandler = waitHandler;
         this.in = in;
@@ -109,7 +109,6 @@ public class FileStoreTagGetMain implements MainCommand {
              */
         }
 
-        ClearBlockSource source = new StorageClearBlockSource(store);
         FragmentSave target = new FragmentSaveFileSystem(fs);
 
         try {
