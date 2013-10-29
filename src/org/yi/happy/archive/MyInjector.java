@@ -72,19 +72,7 @@ public class MyInjector {
      * @return the object.
      */
     public static NotReadyHandler injectNotReadyHandler(ApplicationScope scope) {
-        return new NotReadyNeedAndWait(injectNeedHandler(scope),
-                injectWaitHandler(scope));
-    }
-
-    /**
-     * get a {@link NeedHandler}.
-     * 
-     * @param scope
-     *            the scope object.
-     * @return the object.
-     */
-    public static NeedHandler injectNeedHandler(ApplicationScope scope) {
-        return new NeedWriter(injectNeedFile(scope));
+        return new NotReadyPostAndWait(injectNeedFile(scope));
     }
 
     /**
@@ -118,17 +106,6 @@ public class MyInjector {
      */
     public static InputStream injectInput(ApplicationScope scope) {
         return System.in;
-    }
-
-    /**
-     * get a {@link WaitHandler}.
-     * 
-     * @param scope
-     *            the scope object.
-     * @return the object.
-     */
-    public static WaitHandler injectWaitHandler(ApplicationScope scope) {
-        return new WaitHandlerProgressiveDelay();
     }
 
     /**
