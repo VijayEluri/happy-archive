@@ -2,10 +2,8 @@ package org.yi.happy.archive;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.yi.happy.annotate.DuplicatedLogic;
 import org.yi.happy.annotate.RestoreLoop;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.commandLine.UsesArgs;
@@ -14,7 +12,6 @@ import org.yi.happy.archive.commandLine.UsesOutput;
 import org.yi.happy.archive.commandLine.UsesStore;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.FullKeyParse;
-import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.restore.RestoreEngine;
 
 /**
@@ -69,6 +66,9 @@ public class StoreStreamGetMain implements MainCommand {
     public void run() throws IOException {
         FragmentOutputStream target = new FragmentOutputStream(out);
         ClearBlockSource source = new StorageClearBlockSource(store);
+        NotReadyHandler notReady = new NotReadyNeedAndWait(needHandler,
+                waitHandler);
+
         FullKey key = FullKeyParse.parseFullKey(args.get(0));
 
         RestoreEngine engine = new RestoreEngine(key);
@@ -96,19 +96,7 @@ public class StoreStreamGetMain implements MainCommand {
                 break;
             }
 
-            notReady(engine, progress);
+            notReady.onNotReady(engine, progress);
         }
-    }
-
-    @DuplicatedLogic("with FileStoreTagGetMain.notReady")
-    private void notReady(RestoreEngine engine, boolean progress)
-            throws IOException {
-        List<LocatorKey> keys = new ArrayList<LocatorKey>();
-        for (FullKey key : engine.getNeeded()) {
-            keys.add(key.toLocatorKey());
-        }
-        needHandler.post(keys);
-
-        waitHandler.doWait(progress);
     }
 }
