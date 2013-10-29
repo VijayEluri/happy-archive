@@ -20,9 +20,9 @@ import org.yi.happy.archive.restore.RestoreEngine;
 @UsesArgs({ "key", "output" })
 public class StoreFileGetMain implements MainCommand {
     private final List<String> args;
-    private ClearBlockSource source;
-    private FragmentSave target;
-    private final NotReadyNeedAndWait notReady;
+    private final ClearBlockSource source;
+    private final FragmentSave target;
+    private final NotReadyHandler notReady;
 
     /**
      * create.
@@ -31,19 +31,16 @@ public class StoreFileGetMain implements MainCommand {
      *            the block source.
      * @param target
      *            the fragment target.
-     * @param waitHandler
-     *            what to do when it is time to wait for data.
-     * @param needHandler
-     *            where to post the needed keys.
+     * @param notReady
+     *            what to do when no needed blocks are ready.
      * @param args
      *            the non-option command line arguments.
      */
     public StoreFileGetMain(ClearBlockSource source, FragmentSave target,
-            WaitHandler waitHandler, NeedHandler needHandler, List<String> args) {
+            NotReadyHandler notReady, List<String> args) {
         this.source = source;
         this.target = target;
-        this.notReady = new NotReadyNeedAndWait(needHandler, waitHandler);
-
+        this.notReady = notReady;
         this.args = args;
     }
 

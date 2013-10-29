@@ -12,7 +12,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
-import org.yi.happy.archive.key.LocatorKey;
+import org.yi.happy.archive.key.FullKey;
+import org.yi.happy.archive.restore.RestoreEngine;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
@@ -34,23 +35,21 @@ public class StoreFileGetMainTest {
     public void test1() throws IOException {
         final FragmentSaveMemory target = new FragmentSaveMemory();
         final MapClearBlockSource store = new MapClearBlockSource();
-        final NeedCapture needHandler = new NeedCapture();
 
-        WaitHandler waitHandler = new WaitHandler() {
+        NotReadyHandler notReady = new NotReadyHandler() {
             @Override
-            public void doWait(boolean progress) throws IOException {
-                state.doWait(progress);
+            public void onNotReady(RestoreEngine engine, boolean progress)
+                    throws IOException {
+                state.onNotReady(engine, progress);
             }
 
-            private WaitHandler state = new WaitHandler() {
+            private NotReadyHandler state = new NotReadyHandler() {
                 @Override
-                public void doWait(boolean progress) throws IOException {
+                public void onNotReady(RestoreEngine engine, boolean progress)
+                        throws IOException {
                     assertFalse(progress);
 
-                    /*
-                     * check the request list
-                     */
-                    assertEquals(keyList(MAP), needHandler.getKeys());
+                    assertEquals(keyList(MAP), engine.getNeeded());
 
                     /*
                      * add the map block to the store
@@ -61,70 +60,64 @@ public class StoreFileGetMainTest {
                 }
             };
 
-            private final WaitHandler state2 = new WaitHandler() {
+            private final NotReadyHandler state2 = new NotReadyHandler() {
                 @Override
-                public void doWait(boolean progress) throws IOException {
+                public void onNotReady(RestoreEngine engine, boolean progress)
+                        throws IOException {
                     assertTrue(progress);
 
-                    /*
-                     * check the request list
-                     */
-                    assertEquals(keyList(C1, C2), needHandler.getKeys());
+                    assertEquals(keyList(C1, C2), engine.getNeeded());
 
-                    /*
-                     * add the second part
-                     */
                     store.put(C2);
 
                     state = state3;
                 }
             };
 
-            private final WaitHandler state3 = new WaitHandler() {
+            private final NotReadyHandler state3 = new NotReadyHandler() {
                 @Override
-                public void doWait(boolean progress) throws IOException {
+                public void onNotReady(RestoreEngine engine, boolean progress)
+                        throws IOException {
                     assertTrue(progress);
 
-                    /*
-                     * check the request list
-                     */
-                    assertEquals(keyList(C1), needHandler.getKeys());
+                    assertEquals(keyList(C1), engine.getNeeded());
 
-                    /*
-                     * add the first part
-                     */
                     store.put(C1);
 
                     state = state4;
                 }
             };
 
-            private final WaitHandler state4 = new WaitHandler() {
+            private final NotReadyHandler state4 = new NotReadyHandler() {
                 @Override
-                public void doWait(boolean progress) {
+                public void onNotReady(RestoreEngine engine, boolean progress)
+                        throws IOException {
                     fail();
                 }
             };
 
         };
 
-        List<String> args = list(MAP.getFullKey().toString(), N);
-        new StoreFileGetMain(store, target, waitHandler, needHandler, args)
-                .run();
+        List<String> args = list(key(MAP).toString(), N);
+        new StoreFileGetMain(store, target, notReady, args).run();
 
         assertArrayEquals(D.toByteArray(), target.get(N));
     }
 
-    private <T> List<T> list(T... items) {
+    private static <T> List<T> list(T... items) {
         return Arrays.asList(items);
     }
 
-    private List<LocatorKey> keyList(TestData... items) {
-        List<LocatorKey> out = new ArrayList<LocatorKey>();
+    private static List<FullKey> keyList(TestData... items) {
+        List<FullKey> out = new ArrayList<FullKey>();
         for (TestData item : items) {
-            out.add(item.getLocatorKey());
+            out.add(key(item));
         }
         return out;
+    }
+
+    private static FullKey key(TestData item) {
+        return item.getFullKey();
     }
 
 }

@@ -319,8 +319,7 @@ public class MyInjector {
      *            the scope object.
      * @return the object.
      */
-    public static MainCommand injectStoreStreamGetMain(
-            ApplicationScope scope) {
+    public static MainCommand injectStoreStreamGetMain(ApplicationScope scope) {
         return new StoreStreamGetMain(injectBlockStore(scope),
                 injectOutput(scope), injectWaitHandler(scope),
                 injectNeedHandler(scope), injectArgs(scope));
@@ -358,8 +357,8 @@ public class MyInjector {
      */
     public static MainCommand injectStoreFileGetMain(ApplicationScope scope) {
         return new StoreFileGetMain(injectClearBlockSource(scope),
-                injectFragmentSave(scope), injectWaitHandler(scope),
-                injectNeedHandler(scope), injectArgs(scope));
+                injectFragmentSave(scope), injectNotReadyHandler(scope),
+                injectArgs(scope));
     }
 
     @GlobalFilesystem
