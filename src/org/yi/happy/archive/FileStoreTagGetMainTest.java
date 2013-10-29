@@ -38,6 +38,7 @@ public class FileStoreTagGetMainTest {
     public void test1() throws IOException {
         MapClearBlockSource source = new MapClearBlockSource();
         FileSystem fs = new FakeFileSystem();
+        FragmentSave target = new FragmentSaveFileSystem(fs);
         InputStream in = input(IN);
 
         source.put(C1);
@@ -50,7 +51,8 @@ public class FileStoreTagGetMainTest {
             }
         };
 
-        new FileStoreTagGetMain(source, fs, waitHandler, in, null).run();
+        new FileStoreTagGetMain(source, target, fs, waitHandler, in, null)
+                .run();
 
         assertArrayEquals(raw(D1), fs.load(N1));
         assertArrayEquals(raw(D2), fs.load(N2));
@@ -65,6 +67,7 @@ public class FileStoreTagGetMainTest {
     public void test2() throws IOException {
         InputStream in = input(IN);
         final FileSystem fs = new FakeFileSystem();
+        FragmentSave target = new FragmentSaveFileSystem(fs);
         final MapClearBlockSource source = new MapClearBlockSource();
         final NeedCapture needHandler = new NeedCapture();
 
@@ -97,7 +100,8 @@ public class FileStoreTagGetMainTest {
             };
         };
 
-        new FileStoreTagGetMain(source, fs, waitHandler, in, needHandler).run();
+        new FileStoreTagGetMain(source, target, fs, waitHandler, in,
+                needHandler).run();
 
         assertArrayEquals(raw(D1), fs.load(N1));
         assertArrayEquals(raw(D2), fs.load(N2));
