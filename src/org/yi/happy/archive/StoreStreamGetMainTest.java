@@ -8,17 +8,26 @@ import static org.junit.Assert.fail;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
 import org.yi.happy.annotate.SmellsMessy;
+import org.yi.happy.archive.block.EncodedBlock;
+import org.yi.happy.archive.key.FullKey;
+import org.yi.happy.archive.restore.RestoreEngine;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
  * Tests for {@link StoreStreamGetMain}.
  */
 public class StoreStreamGetMainTest {
+    private static final TestData MAP = TestData.KEY_CONTENT_MAP;
+    private static final TestData C1 = TestData.KEY_CONTENT_1;
+    private static final TestData C2 = TestData.KEY_CONTENT_2;
+    private static final Bytes D = new Bytes("0123456789");
+
     /**
      * an expected good run.
      * 
@@ -33,93 +42,85 @@ public class StoreStreamGetMainTest {
          */
 
         final BlockStore store = new StorageMemory();
-        final NeedCapture needHandler = new NeedCapture();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        WaitHandler waitHandler = new WaitHandler() {
+        NotReadyHandler notReady = new NotReadyHandler() {
             @Override
-            public void doWait(boolean progress) throws IOException {
-                state.doWait(progress);
+            public void onNotReady(RestoreEngine engine, boolean progress)
+                    throws IOException {
+                state.onNotReady(engine, progress);
             }
 
-            private WaitHandler state = new WaitHandler() {
+            private NotReadyHandler state = new NotReadyHandler() {
                 @Override
-                public void doWait(boolean progress) throws IOException {
+                public void onNotReady(RestoreEngine engine, boolean progress)
+                        throws IOException {
                     assertFalse(progress);
 
-                    /*
-                     * check the request list
-                     */
-                    assertEquals(Arrays.asList(TestData.KEY_CONTENT_MAP
-                            .getLocatorKey()), needHandler.getKeys());
+                    assertEquals(keyList(MAP), engine.getNeeded());
 
-                    /*
-                     * add the map block to the store
-                     */
-                    store.put(TestData.KEY_CONTENT_MAP.getEncodedBlock());
+                    store.put(block(MAP));
 
                     state = state2;
                 }
             };
 
-            private final WaitHandler state2 = new WaitHandler() {
+            private NotReadyHandler state2 = new NotReadyHandler() {
                 @Override
-                public void doWait(boolean progress) throws IOException {
+                public void onNotReady(RestoreEngine engine, boolean progress)
+                        throws IOException {
                     assertTrue(progress);
 
-                    /*
-                     * check the request list
-                     */
-                    assertEquals(Arrays.asList(
-                            TestData.KEY_CONTENT_1.getLocatorKey(),
-                            TestData.KEY_CONTENT_2.getLocatorKey()),
-                            needHandler.getKeys());
+                    assertEquals(keyList(C1, C2), engine.getNeeded());
 
-                    /*
-                     * add the second part
-                     */
-                    store.put(TestData.KEY_CONTENT_2.getEncodedBlock());
+                    store.put(block(C2));
 
                     state = state3;
                 }
             };
 
-            private final WaitHandler state3 = new WaitHandler() {
+            private NotReadyHandler state3 = new NotReadyHandler() {
                 @Override
-                public void doWait(boolean progress) throws IOException {
+                public void onNotReady(RestoreEngine engine, boolean progress)
+                        throws IOException {
                     assertFalse(progress);
 
-                    /*
-                     * check the request list
-                     */
-                    assertEquals(Arrays.asList(
-                            TestData.KEY_CONTENT_1.getLocatorKey(),
-                            TestData.KEY_CONTENT_2.getLocatorKey()),
-                            needHandler.getKeys());
+                    assertEquals(keyList(C1, C2), engine.getNeeded());
 
-                    /*
-                     * add the first part
-                     */
-                    store.put(TestData.KEY_CONTENT_1.getEncodedBlock());
+                    store.put(block(C1));
 
                     state = state4;
                 }
             };
 
-            private final WaitHandler state4 = new WaitHandler() {
+            private NotReadyHandler state4 = new NotReadyHandler() {
                 @Override
-                public void doWait(boolean progress) {
+                public void onNotReady(RestoreEngine engine, boolean progress)
+                        throws IOException {
                     fail();
                 }
             };
-
         };
 
-        List<String> args = Arrays.asList(TestData.KEY_CONTENT_MAP.getFullKey()
-                .toString());
-        new StoreStreamGetMain(store, out, waitHandler, needHandler, args)
-                .run();
+        List<String> args = Arrays.asList(key(MAP).toString());
+        new StoreStreamGetMain(store, out, notReady, args).run();
 
-        assertArrayEquals(ByteString.toUtf8("0123456789"), out.toByteArray());
+        assertArrayEquals(D.toByteArray(), out.toByteArray());
+    }
+
+    private static List<FullKey> keyList(TestData... items) {
+        List<FullKey> out = new ArrayList<FullKey>();
+        for (TestData item : items) {
+            out.add(key(item));
+        }
+        return out;
+    }
+
+    private static FullKey key(TestData item) {
+        return item.getFullKey();
+    }
+
+    private static EncodedBlock block(TestData item) throws IOException {
+        return item.getEncodedBlock();
     }
 }

@@ -36,18 +36,16 @@ public class StoreStreamGetMain implements MainCommand {
      *            the block store to use.
      * @param out
      *            where to send the stream.
-     * @param waitHandler
-     *            what to do when no blocks are ready.
-     * @param needHandler
-     *            where to post the needed keys.
+     * @param notReady
+     *            what to do when no needed blocks are ready.
      * @param args
      *            the non-option command line arguments.
      */
     public StoreStreamGetMain(BlockStore store, OutputStream out,
-            WaitHandler waitHandler, NeedHandler needHandler, List<String> args) {
+            NotReadyHandler notReady, List<String> args) {
         this.store = store;
         this.out = out;
-        this.notReady = new NotReadyNeedAndWait(needHandler, waitHandler);
+        this.notReady = notReady;
         this.args = args;
     }
 

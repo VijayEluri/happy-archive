@@ -321,8 +321,8 @@ public class MyInjector {
      */
     public static MainCommand injectStoreStreamGetMain(ApplicationScope scope) {
         return new StoreStreamGetMain(injectBlockStore(scope),
-                injectOutput(scope), injectWaitHandler(scope),
-                injectNeedHandler(scope), injectArgs(scope));
+                injectOutput(scope), injectNotReadyHandler(scope),
+                injectArgs(scope));
     }
 
     /**
