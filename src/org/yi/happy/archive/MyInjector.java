@@ -127,7 +127,7 @@ public class MyInjector {
      * @return the object.
      */
     public static MainCommand injectShowEnvMain(ApplicationScope scope) {
-        return new ShowEnvMain(injectEnv(scope));
+        return new ShowEnvMain(injectEnv(scope), injectOutput(scope));
     }
 
     /**
