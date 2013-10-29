@@ -1,5 +1,7 @@
 package org.yi.happy.archive;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
@@ -15,10 +17,10 @@ public class FragmentSaveFile implements FragmentSave {
 
     @Override
     public void save(String path, Fragment fragment) throws IOException {
-        if(path == null) {
+        if (path == null) {
             throw new NullPointerException();
         }
-        
+
         if (file != null && !fileName.equals(path)) {
             file.close();
             file = null;
@@ -26,7 +28,16 @@ public class FragmentSaveFile implements FragmentSave {
         }
 
         if (file == null) {
-            file = new RandomAccessFile(path, "rw");
+            try {
+                file = new RandomAccessFile(path, "rw");
+            } catch (FileNotFoundException e) {
+                // attempt recovery
+                File f = new File(path).getParentFile();
+                if (f == null || (!f.mkdirs() && !f.isDirectory())) {
+                    throw e;
+                }
+                file = new RandomAccessFile(path, "rw");
+            }
             fileName = path;
         }
 

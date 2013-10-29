@@ -1,5 +1,6 @@
 package org.yi.happy.archive;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.yi.happy.archive.file_system.FileSystem;
@@ -37,7 +38,14 @@ public class FragmentSaveFileSystem implements FragmentSave {
         }
 
         if (file == null) {
-            file = fs.openRandomOutputFile(path);
+            try {
+                file = fs.openRandomOutputFile(path);
+            } catch (FileNotFoundException e) {
+                // attempt recovery
+                fs.mkparentdir(path);
+                file = fs.openRandomOutputFile(path);
+            }
+
             fileName = path;
         }
 
