@@ -20,20 +20,20 @@ public class Main {
         Map<String, Class<? extends MainCommand>> c;
         c = new LinkedHashMap<String, Class<? extends MainCommand>>();
 
-        c.put("file-get", FileStoreFileGetMain.class);
+        c.put("file-get", StoreFileGetMain.class);
         c.put("make-index-db", MakeIndexDatabaseMain.class);
         c.put("decode", DecodeBlockMain.class);
         c.put("encode", EncodeContentMain.class);
         c.put("verify", VerifyMain.class);
-        c.put("block-put", FileStoreBlockPutMain.class);
-        c.put("stream-put", FileStoreStreamPutMain.class);
-        c.put("stream-get", FileStoreStreamGetMain.class);
-        c.put("tag-put", FileStoreTagPutMain.class);
-        c.put("tag-add", FileStoreTagAddMain.class);
-        c.put("tag-get", FileStoreTagGetMain.class);
+        c.put("block-put", StoreBlockPutMain.class);
+        c.put("stream-put", StoreStreamPutMain.class);
+        c.put("stream-get", StoreStreamGetMain.class);
+        c.put("tag-put", StoreTagPutMain.class);
+        c.put("tag-add", StoreTagAddMain.class);
+        c.put("tag-get", StoreTagGetMain.class);
         c.put("backup-list", LocalCandidateListMain.class);
         c.put("backup-critical-list", CriticalListMain.class);
-        c.put("store-list", FileStoreListMain.class);
+        c.put("store-list", StoreListMain.class);
         c.put("store-remove", StoreRemoveMain.class);
         c.put("index-search", IndexSearchMain.class);
         c.put("index-volume", IndexVolumeMain.class);

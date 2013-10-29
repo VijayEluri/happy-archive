@@ -1,7 +1,6 @@
 package org.yi.happy.archive;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +9,6 @@ import org.yi.happy.annotate.RestoreLoop;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesNeed;
-import org.yi.happy.archive.commandLine.UsesOutput;
 import org.yi.happy.archive.commandLine.UsesStore;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.FullKeyParse;
@@ -18,85 +16,87 @@ import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.restore.RestoreEngine;
 
 /**
- * Fetch a stream, the blocks may not all available in the file store, so the
- * ones that are needed are put in a list, and the process continues to be
- * retried until all the needed blocks become available.
+ * get a file from a file store.
  */
 @UsesStore
 @UsesNeed
-@UsesArgs({ "key" })
-@UsesOutput("file")
-public class FileStoreStreamGetMain implements MainCommand {
-    private final OutputStream out;
-    private final WaitHandler waitHandler;
-    private final BlockStore store;
-    private final NeedHandler needHandler;
+@UsesArgs({ "key", "output" })
+public class StoreFileGetMain implements MainCommand {
     private final List<String> args;
+    private final NeedHandler needHandler;
+    private ClearBlockSource source;
+    private FragmentSave target;
 
     /**
      * create.
      * 
-     * @param store
-     *            the block store to use.
-     * @param out
-     *            where to send the stream.
+     * @param source
+     *            the block source.
+     * @param target
+     *            the fragment target.
      * @param waitHandler
-     *            what to do when no blocks are ready.
+     *            what to do when it is time to wait for data.
      * @param needHandler
      *            where to post the needed keys.
      * @param args
      *            the non-option command line arguments.
      */
-    public FileStoreStreamGetMain(BlockStore store, OutputStream out,
+    public StoreFileGetMain(ClearBlockSource source, FragmentSave target,
             WaitHandler waitHandler, NeedHandler needHandler, List<String> args) {
-        this.store = store;
-        this.out = out;
+        this.source = source;
+        this.target = target;
         this.waitHandler = waitHandler;
         this.needHandler = needHandler;
         this.args = args;
     }
 
     /**
-     * restore a stream.
+     * get a file from a file store.
      * 
      * @param env
-     *            the block store, where to write the pending block list, the
-     *            full key to fetch.
+     *            the file store, where to write the pending list, the key to
+     *            fetch, the output file name.
      * @throws IOException
      */
     @Override
     @RestoreLoop
     public void run() throws IOException {
-        FragmentOutputStream target = new FragmentOutputStream(out);
-        ClearBlockSource source = new StorageClearBlockSource(store);
         FullKey key = FullKeyParse.parseFullKey(args.get(0));
+        String path = args.get(1);
 
         RestoreEngine engine = new RestoreEngine(key);
 
-        /*
-         * do the work
-         */
-        while (true) {
-            boolean progress = false;
-            while (engine.findReady()) {
-                Block block = source.get(engine.getKey());
-                if (block == null) {
+        try {
+            /*
+             * do the work
+             */
+            while (true) {
+                boolean progress = false;
+                engine.start();
+                while (engine.findReady()) {
+                    Block block = source.get(engine.getKey());
+                    if (block == null) {
+                        engine.skip();
+                        continue;
+                    }
+
+                    Fragment part = engine.step(block);
+                    progress = true;
+
+                    if (part != null) {
+                        target.save(path, part);
+                    }
+                }
+
+                if (engine.isDone()) {
                     break;
                 }
 
-                Fragment part = engine.step(block);
-                progress = true;
-
-                if (part != null) {
-                    target.write(part);
-                }
+                target.close();
+                notReady(engine, progress);
             }
-
-            if (engine.isDone()) {
-                break;
-            }
-
-            notReady(engine, progress);
+        } finally {
+            target.close();
         }
     }
 
@@ -111,4 +111,6 @@ public class FileStoreStreamGetMain implements MainCommand {
 
         waitHandler.doWait(progress);
     }
+
+    private WaitHandler waitHandler;
 }

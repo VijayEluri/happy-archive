@@ -24,7 +24,7 @@ import org.yi.happy.archive.tag.TagStreamIterator;
 @UsesStore
 @UsesNeed
 @UsesInput("tag-list")
-public class FileStoreTagGetMain implements MainCommand {
+public class StoreTagGetMain implements MainCommand {
     private final WaitHandler waitHandler;
     private final InputStream in;
     private final NeedHandler needHandler;
@@ -49,7 +49,7 @@ public class FileStoreTagGetMain implements MainCommand {
      * @param out
      *            what to use for standard output.
      */
-    public FileStoreTagGetMain(ClearBlockSource source, FragmentSave target,
+    public StoreTagGetMain(ClearBlockSource source, FragmentSave target,
             WaitHandler waitHandler, InputStream in, NeedHandler needHandler) {
         this.source = source;
         this.target = target;

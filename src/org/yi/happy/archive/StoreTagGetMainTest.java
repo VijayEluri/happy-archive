@@ -16,9 +16,9 @@ import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
- * Tests for {@link FileStoreTagGetMain}.
+ * Tests for {@link StoreTagGetMain}.
  */
-public class FileStoreTagGetMainTest {
+public class StoreTagGetMainTest {
     private static final TestData IN = TestData.TAG_FILES;
     private static final TestData D1 = TestData.FILE_CONTENT;
     private static final TestData D2 = TestData.FILE_CONTENT_40;
@@ -48,7 +48,7 @@ public class FileStoreTagGetMainTest {
             }
         };
 
-        new FileStoreTagGetMain(source, target, waitHandler, in, null).run();
+        new StoreTagGetMain(source, target, waitHandler, in, null).run();
 
         assertArrayEquals(raw(D1), target.get(N1));
         assertArrayEquals(raw(D2), target.get(N2));
@@ -95,7 +95,7 @@ public class FileStoreTagGetMainTest {
             };
         };
 
-        new FileStoreTagGetMain(source, target, waitHandler, in, needHandler)
+        new StoreTagGetMain(source, target, waitHandler, in, needHandler)
                 .run();
 
         assertArrayEquals(raw(D1), target.get(N1));

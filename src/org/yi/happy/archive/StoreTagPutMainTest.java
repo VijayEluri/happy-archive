@@ -16,9 +16,9 @@ import org.yi.happy.archive.tag.TagParser;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
- * Tests for {@link FileStoreTagPutMain}.
+ * Tests for {@link StoreTagPutMain}.
  */
-public class FileStoreTagPutMainTest {
+public class StoreTagPutMainTest {
     /**
      * store a named file
      * 
@@ -34,7 +34,7 @@ public class FileStoreTagPutMainTest {
         PrintStream out = new PrintStream(out0);
 
         List<String> args = Arrays.asList("test.txt");
-        new FileStoreTagPutMain(store, fs, out, args).run();
+        new StoreTagPutMain(store, fs, out, args).run();
 
         out.flush();
 
@@ -62,7 +62,7 @@ public class FileStoreTagPutMainTest {
         PrintStream out = new PrintStream(out0);
 
         List<String> args = Arrays.asList("test.txt");
-        new FileStoreTagPutMain(store, fs, out, args).run();
+        new StoreTagPutMain(store, fs, out, args).run();
 
         out.flush();
 

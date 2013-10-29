@@ -18,14 +18,14 @@ import org.yi.happy.archive.file_system.RealFileSystem;
 public class MyInjector {
 
     /**
-     * get a {@link FileStoreTagPutMain}.
+     * get a {@link StoreTagPutMain}.
      * 
      * @param scope
      *            the scope object.
      * @return the object.
      */
-    public static MainCommand injectFileStoreTagPutMain(ApplicationScope scope) {
-        return new FileStoreTagPutMain(injectBlockStore(scope),
+    public static MainCommand injectStoreTagPutMain(ApplicationScope scope) {
+        return new StoreTagPutMain(injectBlockStore(scope),
                 injectFileSystem(scope), injectOutput(scope), injectArgs(scope));
     }
 
@@ -52,14 +52,14 @@ public class MyInjector {
     }
 
     /**
-     * get a {@link FileStoreTagGetMain}
+     * get a {@link StoreTagGetMain}
      * 
      * @param scope
      *            the scope object.
      * @return the object.
      */
-    public static MainCommand injectFileStoreTagGetMain(ApplicationScope scope) {
-        return new FileStoreTagGetMain(injectClearBlockSource(scope),
+    public static MainCommand injectStoreTagGetMain(ApplicationScope scope) {
+        return new StoreTagGetMain(injectClearBlockSource(scope),
                 injectFragmentSave(scope), injectWaitHandler(scope),
                 injectInput(scope), injectNeedHandler(scope));
     }
@@ -156,15 +156,14 @@ public class MyInjector {
     }
 
     /**
-     * get a {@link FileStoreListMain}.
+     * get a {@link StoreListMain}.
      * 
      * @param scope
      *            the scope object.
      * @return the object.
      */
-    public static MainCommand injectFileStoreListMain(ApplicationScope scope) {
-        return new FileStoreListMain(injectBlockStore(scope),
-                injectOutput(scope));
+    public static MainCommand injectStoreListMain(ApplicationScope scope) {
+        return new StoreListMain(injectBlockStore(scope), injectOutput(scope));
     }
 
     /**
@@ -277,54 +276,53 @@ public class MyInjector {
     }
 
     /**
-     * get a {@link FileStoreTagAddMain}.
+     * get a {@link StoreTagAddMain}.
      * 
      * @param scope
      *            the scope object.
      * @return the object.
      */
-    public static MainCommand injectFileStoreTagAddMain(ApplicationScope scope) {
-        return new FileStoreTagAddMain(injectBlockStore(scope),
+    public static MainCommand injectStoreTagAddMain(ApplicationScope scope) {
+        return new StoreTagAddMain(injectBlockStore(scope),
                 injectFileSystem(scope));
     }
 
     /**
-     * get a {@link FileStoreStreamPutMain}.
+     * get a {@link StoreStreamPutMain}.
      * 
      * @param scope
      *            the scope object.
      * @return the object.
      */
-    public static MainCommand injectFileStoreStreamPutMain(
-            ApplicationScope scope) {
-        return new FileStoreStreamPutMain(injectBlockStore(scope),
+    public static MainCommand injectStoreStreamPutMain(ApplicationScope scope) {
+        return new StoreStreamPutMain(injectBlockStore(scope),
                 injectFileSystem(scope), injectInput(scope),
                 injectOutput(scope));
     }
 
     /**
-     * get a {@link FileStoreStreamGetMain}.
+     * get a {@link StoreStreamGetMain}.
      * 
      * @param scope
      *            the scope object.
      * @return the object.
      */
-    public static MainCommand injectFileStoreStreamGetMain(
+    public static MainCommand injectStoreStreamGetMain(
             ApplicationScope scope) {
-        return new FileStoreStreamGetMain(injectBlockStore(scope),
+        return new StoreStreamGetMain(injectBlockStore(scope),
                 injectOutput(scope), injectWaitHandler(scope),
                 injectNeedHandler(scope), injectArgs(scope));
     }
 
     /**
-     * get a {@link FileStoreBlockPutMain}.
+     * get a {@link StoreBlockPutMain}.
      * 
      * @param scope
      *            the scope object.
      * @return the object.
      */
-    public static MainCommand injectFileStoreBlockPutMain(ApplicationScope scope) {
-        return new FileStoreBlockPutMain(injectBlockStore(scope),
+    public static MainCommand injectStoreBlockPutMain(ApplicationScope scope) {
+        return new StoreBlockPutMain(injectBlockStore(scope),
                 injectFileSystem(scope), injectArgs(scope));
     }
 
@@ -340,14 +338,14 @@ public class MyInjector {
     }
 
     /**
-     * get a {@link FileStoreFileGetMain}.
+     * get a {@link StoreFileGetMain}.
      * 
      * @param scope
      *            the scope object.
      * @return the object.
      */
-    public static MainCommand injectFileStoreFileGetMain(ApplicationScope scope) {
-        return new FileStoreFileGetMain(injectClearBlockSource(scope),
+    public static MainCommand injectStoreFileGetMain(ApplicationScope scope) {
+        return new StoreFileGetMain(injectClearBlockSource(scope),
                 injectFragmentSave(scope), injectWaitHandler(scope),
                 injectNeedHandler(scope), injectArgs(scope));
     }

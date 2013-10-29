@@ -21,7 +21,7 @@ import org.yi.happy.archive.tag.TagStreamIterator;
 @UsesStore
 @UsesInput("tag-list")
 @UsesOutput("tag-list")
-public class FileStoreTagAddMain implements MainCommand {
+public class StoreTagAddMain implements MainCommand {
     private final BlockStore store;
     private final FileSystem fs;
 
@@ -31,7 +31,7 @@ public class FileStoreTagAddMain implements MainCommand {
      * @param fs
      *            the file system to use.
      */
-    public FileStoreTagAddMain(BlockStore store, FileSystem fs) {
+    public StoreTagAddMain(BlockStore store, FileSystem fs) {
         this.store = store;
         this.fs = fs;
     }

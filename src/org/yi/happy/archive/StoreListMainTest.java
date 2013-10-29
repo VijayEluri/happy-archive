@@ -10,9 +10,9 @@ import org.junit.Test;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
- * Tests for {@link FileStoreListMain}.
+ * Tests for {@link StoreListMain}.
  */
-public class FileStoreListMainTest {
+public class StoreListMainTest {
     /**
      * A good run.
      * 
@@ -28,7 +28,7 @@ public class FileStoreListMainTest {
         ByteArrayOutputStream out0 = new ByteArrayOutputStream();
         PrintStream out = new PrintStream(out0, true);
 
-        new FileStoreListMain(store, out).run();
+        new StoreListMain(store, out).run();
 
         String want = TestData.KEY_CONTENT.getLocatorKey() + "\n"
                 + TestData.KEY_CONTENT_2.getLocatorKey() + "\n"

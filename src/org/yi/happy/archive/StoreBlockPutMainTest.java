@@ -12,10 +12,10 @@ import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
- * Tests for {@link FileStoreBlockPutMain}.
+ * Tests for {@link StoreBlockPutMain}.
  */
 @NeedFailureTest
-public class FileStoreBlockPutMainTest {
+public class StoreBlockPutMainTest {
     /**
      * A normal good usage test.
      * 
@@ -28,7 +28,7 @@ public class FileStoreBlockPutMainTest {
         fs.save("block.dat", TestData.KEY_CONTENT.getBytes());
 
         List<String> args = Arrays.asList("block.dat");
-        new FileStoreBlockPutMain(store, fs, args).run();
+        new StoreBlockPutMain(store, fs, args).run();
 
         assertTrue(store.contains(TestData.KEY_CONTENT.getLocatorKey()));
     }

@@ -6,32 +6,35 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
+import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
- * Tests for {@link FileStoreFileGetMain}.
+ * Tests for {@link StoreStreamGetMain}.
  */
-public class FileStoreFileGetMainTest {
+public class StoreStreamGetMainTest {
     /**
      * an expected good run.
      * 
      * @throws IOException
      */
     @Test
+    @SmellsMessy
     public void test1() throws IOException {
         /*
          * NOTE this is not strictly speaking a unit test since there are two
          * layers of objects in use to exercise the functionality.
          */
 
-        final FragmentSaveMemory target = new FragmentSaveMemory();
-        final MapClearBlockSource store = new MapClearBlockSource();
+        final BlockStore store = new StorageMemory();
         final NeedCapture needHandler = new NeedCapture();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
 
         WaitHandler waitHandler = new WaitHandler() {
             @Override
@@ -53,7 +56,7 @@ public class FileStoreFileGetMainTest {
                     /*
                      * add the map block to the store
                      */
-                    store.put(TestData.KEY_CONTENT_MAP);
+                    store.put(TestData.KEY_CONTENT_MAP.getEncodedBlock());
 
                     state = state2;
                 }
@@ -75,7 +78,7 @@ public class FileStoreFileGetMainTest {
                     /*
                      * add the second part
                      */
-                    store.put(TestData.KEY_CONTENT_2);
+                    store.put(TestData.KEY_CONTENT_2.getEncodedBlock());
 
                     state = state3;
                 }
@@ -84,18 +87,20 @@ public class FileStoreFileGetMainTest {
             private final WaitHandler state3 = new WaitHandler() {
                 @Override
                 public void doWait(boolean progress) throws IOException {
-                    assertTrue(progress);
+                    assertFalse(progress);
 
                     /*
                      * check the request list
                      */
-                    assertEquals(Arrays.asList(TestData.KEY_CONTENT_1
-                            .getLocatorKey()), needHandler.getKeys());
+                    assertEquals(Arrays.asList(
+                            TestData.KEY_CONTENT_1.getLocatorKey(),
+                            TestData.KEY_CONTENT_2.getLocatorKey()),
+                            needHandler.getKeys());
 
                     /*
                      * add the first part
                      */
-                    store.put(TestData.KEY_CONTENT_1);
+                    store.put(TestData.KEY_CONTENT_1.getEncodedBlock());
 
                     state = state4;
                 }
@@ -111,10 +116,10 @@ public class FileStoreFileGetMainTest {
         };
 
         List<String> args = Arrays.asList(TestData.KEY_CONTENT_MAP.getFullKey()
-                .toString(), "out");
-        new FileStoreFileGetMain(store, target, waitHandler, needHandler, args)
+                .toString());
+        new StoreStreamGetMain(store, out, waitHandler, needHandler, args)
                 .run();
 
-        assertArrayEquals(ByteString.toUtf8("0123456789"), target.get("out"));
+        assertArrayEquals(ByteString.toUtf8("0123456789"), out.toByteArray());
     }
 }

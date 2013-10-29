@@ -22,7 +22,7 @@ import org.yi.happy.archive.tag.TagOutputStream;
 @UsesStore
 @UsesArgs({ "file..." })
 @UsesOutput("tag-list")
-public class FileStoreTagPutMain implements MainCommand {
+public class StoreTagPutMain implements MainCommand {
 
     private final FileSystem fs;
     private final PrintStream out;
@@ -41,7 +41,7 @@ public class FileStoreTagPutMain implements MainCommand {
      * @param args
      *            the non-option arguments.
      */
-    public FileStoreTagPutMain(BlockStore store, FileSystem fs,
+    public StoreTagPutMain(BlockStore store, FileSystem fs,
             PrintStream out, List<String> args) {
         this.store = store;
         this.fs = fs;

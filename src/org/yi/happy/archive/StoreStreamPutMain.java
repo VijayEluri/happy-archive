@@ -18,7 +18,7 @@ import org.yi.happy.archive.file_system.FileSystem;
 @UsesStore
 @UsesInput("file")
 @UsesOutput("key")
-public class FileStoreStreamPutMain implements MainCommand {
+public class StoreStreamPutMain implements MainCommand {
     private InputStream in;
     private PrintStream out;
     private final BlockStore store;
@@ -35,7 +35,7 @@ public class FileStoreStreamPutMain implements MainCommand {
      * @param out
      *            the stream to write the result.
      */
-    public FileStoreStreamPutMain(BlockStore store, FileSystem fs,
+    public StoreStreamPutMain(BlockStore store, FileSystem fs,
             InputStream in, PrintStream out) {
         this.store = store;
         this.in = in;

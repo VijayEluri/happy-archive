@@ -13,9 +13,9 @@ import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
- * Tests for {@link FileStoreStreamPutMain}.
+ * Tests for {@link StoreStreamPutMain}.
  */
-public class FileStoreStreamPutMainTest {
+public class StoreStreamPutMainTest {
     /**
      * an expected good store.
      * 
@@ -28,7 +28,7 @@ public class FileStoreStreamPutMainTest {
         CapturePrintStream out = CapturePrintStream.create();
         BlockStore store = new StorageMemory();
 
-        new FileStoreStreamPutMain(store, fs, in, out).run();
+        new StoreStreamPutMain(store, fs, in, out).run();
 
         assertEquals(TestData.KEY_CONTENT_AES128.getFullKey() + "\n", out
                 .toString());

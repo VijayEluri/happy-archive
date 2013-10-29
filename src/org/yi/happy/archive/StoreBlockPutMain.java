@@ -14,7 +14,7 @@ import org.yi.happy.archive.file_system.FileSystem;
  */
 @UsesStore
 @UsesArgs({ "block..." })
-public class FileStoreBlockPutMain implements MainCommand {
+public class StoreBlockPutMain implements MainCommand {
     private final FileSystem fs;
     private final BlockStore store;
     private final List<String> args;
@@ -29,7 +29,7 @@ public class FileStoreBlockPutMain implements MainCommand {
      * @param args
      *            the non-option arguments.
      */
-    public FileStoreBlockPutMain(BlockStore store, FileSystem fs,
+    public StoreBlockPutMain(BlockStore store, FileSystem fs,
             List<String> args) {
         this.store = store;
         this.fs = fs;

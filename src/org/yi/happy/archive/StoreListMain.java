@@ -12,7 +12,7 @@ import org.yi.happy.archive.key.LocatorKey;
  */
 @UsesStore
 @UsesOutput("key-list")
-public class FileStoreListMain implements MainCommand {
+public class StoreListMain implements MainCommand {
 
     private final PrintStream out;
     private final BlockStore store;
@@ -28,7 +28,7 @@ public class FileStoreListMain implements MainCommand {
      *            the output stream.
      * @param err
      */
-    public FileStoreListMain(BlockStore store, PrintStream out) {
+    public StoreListMain(BlockStore store, PrintStream out) {
         this.store = store;
         this.out = out;
     }
