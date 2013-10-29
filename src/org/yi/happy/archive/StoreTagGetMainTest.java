@@ -12,7 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
-import org.yi.happy.archive.key.LocatorKey;
+import org.yi.happy.archive.key.FullKey;
+import org.yi.happy.archive.restore.RestoreEngine;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
@@ -20,12 +21,12 @@ import org.yi.happy.archive.test_data.TestData;
  */
 public class StoreTagGetMainTest {
     private static final TestData IN = TestData.TAG_FILES;
-    private static final TestData D1 = TestData.FILE_CONTENT;
-    private static final TestData D2 = TestData.FILE_CONTENT_40;
-    private static final TestData C1 = TestData.KEY_CONTENT;
-    private static final TestData C2 = TestData.KEY_CONTENT_40;
     private static final String N1 = "hello.txt";
+    private static final TestData C1 = TestData.KEY_CONTENT;
+    private static final TestData D1 = TestData.FILE_CONTENT;
     private static final String N2 = "test.dat";
+    private static final TestData C2 = TestData.KEY_CONTENT_40;
+    private static final TestData D2 = TestData.FILE_CONTENT_40;
 
     /**
      * restore two files, with all the data already available.
@@ -41,14 +42,7 @@ public class StoreTagGetMainTest {
         source.put(C1);
         source.put(C2);
 
-        WaitHandler waitHandler = new WaitHandler() {
-            @Override
-            public void doWait(boolean progress) throws IOException {
-                fail();
-            }
-        };
-
-        new StoreTagGetMain(source, target, waitHandler, in, null).run();
+        new StoreTagGetMain(source, target, null, in).run();
 
         assertArrayEquals(raw(D1), target.get(N1));
         assertArrayEquals(raw(D2), target.get(N2));
@@ -64,21 +58,21 @@ public class StoreTagGetMainTest {
         InputStream in = input(IN);
         FragmentSaveMemory target = new FragmentSaveMemory();
         final MapClearBlockSource source = new MapClearBlockSource();
-        final NeedCapture needHandler = new NeedCapture();
 
-        WaitHandler waitHandler = new WaitHandler() {
+        NotReadyHandler notReady = new NotReadyHandler() {
             @Override
-            public void doWait(boolean progress) throws IOException {
-                state.doWait(progress);
+            public void onNotReady(RestoreEngine engine, boolean progress)
+                    throws IOException {
+                state.onNotReady(engine, progress);
             }
-
-            private WaitHandler state = new WaitHandler() {
+            
+            private NotReadyHandler state = new NotReadyHandler() {
                 @Override
-                public void doWait(boolean progress) throws IOException {
+                public void onNotReady(RestoreEngine engine, boolean progress)
+                        throws IOException {
                     assertFalse(progress);
 
-                    List<LocatorKey> want = keyList(C1, C2);
-                    assertEquals(want, needHandler.getKeys());
+                    assertEquals(keyList(C1, C2), engine.getNeeded());
 
                     source.put(C1);
                     source.put(C2);
@@ -87,16 +81,16 @@ public class StoreTagGetMainTest {
                 }
             };
 
-            private WaitHandler state1 = new WaitHandler() {
+            private NotReadyHandler state1 = new NotReadyHandler() {
                 @Override
-                public void doWait(boolean progress) throws IOException {
+                public void onNotReady(RestoreEngine engine, boolean progress)
+                        throws IOException {
                     fail();
                 }
             };
         };
-
-        new StoreTagGetMain(source, target, waitHandler, in, needHandler)
-                .run();
+        
+        new StoreTagGetMain(source, target, notReady, in).run();
 
         assertArrayEquals(raw(D1), target.get(N1));
         assertArrayEquals(raw(D2), target.get(N2));
@@ -110,12 +104,12 @@ public class StoreTagGetMainTest {
         return item.getBytes();
     }
 
-    private LocatorKey key(TestData item) {
-        return item.getLocatorKey();
+    private FullKey key(TestData item) {
+        return item.getFullKey();
     }
 
-    private List<LocatorKey> keyList(TestData... items) {
-        List<LocatorKey> out = new ArrayList<LocatorKey>();
+    private List<FullKey> keyList(TestData... items) {
+        List<FullKey> out = new ArrayList<FullKey>();
         for (TestData item : items) {
             out.add(key(item));
         }

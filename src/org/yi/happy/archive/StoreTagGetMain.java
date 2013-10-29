@@ -21,11 +21,10 @@ import org.yi.happy.archive.tag.TagStreamIterator;
 @UsesNeed
 @UsesInput("tag-list")
 public class StoreTagGetMain implements MainCommand {
-    private final WaitHandler waitHandler;
     private final InputStream in;
-    private final NeedHandler needHandler;
     private final ClearBlockSource source;
     private final FragmentSave target;
+    private final NotReadyHandler notReady;
 
     /**
      * set up.
@@ -34,24 +33,19 @@ public class StoreTagGetMain implements MainCommand {
      *            the block source to use.
      * @param target
      *            where to save the fragments.
-     * @param waitHandler
-     *            what to do when waiting is needed.
+     * @param notReady
+     *            what to do when no needed blocks are ready.
      * @param in
      *            what to use for standard input.
-     * @param needHandler
-     *            what to do when there are blocks needed.
      * @param env
      *            the invocation environment.
-     * @param out
-     *            what to use for standard output.
      */
     public StoreTagGetMain(ClearBlockSource source, FragmentSave target,
-            WaitHandler waitHandler, InputStream in, NeedHandler needHandler) {
+            NotReadyHandler notReady, InputStream in) {
         this.source = source;
         this.target = target;
-        this.waitHandler = waitHandler;
+        this.notReady = notReady;
         this.in = in;
-        this.needHandler = needHandler;
     }
 
     /**
@@ -64,9 +58,6 @@ public class StoreTagGetMain implements MainCommand {
     @Override
     @RestoreLoop
     public void run() throws IOException {
-        NotReadyHandler notReady = new NotReadyNeedAndWait(needHandler,
-                waitHandler);
-
         RestoreEngine engine = new RestoreEngine();
 
         for (Tag i : new TagStreamIterator(in)) {

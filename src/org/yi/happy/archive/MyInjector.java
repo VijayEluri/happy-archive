@@ -60,8 +60,20 @@ public class MyInjector {
      */
     public static MainCommand injectStoreTagGetMain(ApplicationScope scope) {
         return new StoreTagGetMain(injectClearBlockSource(scope),
-                injectFragmentSave(scope), injectWaitHandler(scope),
-                injectInput(scope), injectNeedHandler(scope));
+                injectFragmentSave(scope), injectNotReadyHandler(scope),
+                injectInput(scope));
+    }
+
+    /**
+     * get a {@link NotReadyHandler}
+     * 
+     * @param scope
+     *            the scope object.
+     * @return the object.
+     */
+    public static NotReadyHandler injectNotReadyHandler(ApplicationScope scope) {
+        return new NotReadyNeedAndWait(injectNeedHandler(scope),
+                injectWaitHandler(scope));
     }
 
     /**
