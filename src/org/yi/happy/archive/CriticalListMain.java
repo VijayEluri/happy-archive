@@ -1,6 +1,7 @@
 package org.yi.happy.archive;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -26,6 +27,8 @@ import org.yi.happy.archive.key.LocatorKey;
 public class CriticalListMain implements MainCommand {
     private final BlockStore store;
     private final IndexSearch indexSearch;
+    private final PrintStream out;
+    private final PrintStream err;
 
     /**
      * Set up the command to make a candidate list from a local store and local
@@ -35,10 +38,17 @@ public class CriticalListMain implements MainCommand {
      *            the store.
      * @param indexSearch
      *            the index searching interface.
+     * @param out
+     *            the output stream.
+     * @param err
+     *            the error stream.
      */
-    public CriticalListMain(BlockStore store, IndexSearch indexSearch) {
+    public CriticalListMain(BlockStore store, IndexSearch indexSearch,
+            PrintStream out, PrintStream err) {
         this.store = store;
         this.indexSearch = indexSearch;
+        this.out = out;
+        this.err = err;
     }
 
     /**
@@ -71,7 +81,7 @@ public class CriticalListMain implements MainCommand {
 
             @Override
             public void gotException(Throwable cause) {
-                System.err.println(cause.getMessage());
+                err.println(cause.getMessage());
             }
 
         });
@@ -101,7 +111,7 @@ public class CriticalListMain implements MainCommand {
             });
 
             for (LocatorKey i : out) {
-                System.out.println(i);
+                this.out.println(i);
             }
         }
     }

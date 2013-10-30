@@ -416,7 +416,8 @@ public class MyInjector {
      */
     public static MainCommand injectCriticalListMain(ApplicationScope scope) {
         return new CriticalListMain(injectBlockStore(scope),
-                injectIndexSearch(scope));
+                injectIndexSearch(scope), injectOutput(scope),
+                injectError(scope));
     }
 
     /**
