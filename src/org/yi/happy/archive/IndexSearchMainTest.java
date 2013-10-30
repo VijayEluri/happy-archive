@@ -45,7 +45,7 @@ public class IndexSearchMainTest {
         CapturePrintStream out = CapturePrintStream.create();
         IndexSearch indexSearch = new IndexSearch(index);
         List<String> args = Arrays.asList(R);
-        new IndexSearchMain(fs, out, indexSearch, args).run();
+        new IndexSearchMain(fs, out, null, indexSearch, args).run();
 
         StringBuilder sb = new StringBuilder();
         sb.append(V0 + "\t" + V00 + "\t" + N0 + "\t" + key(K0) + "\n");
@@ -85,7 +85,7 @@ public class IndexSearchMainTest {
         CapturePrintStream out = CapturePrintStream.create();
         IndexSearch indexSearch = new IndexSearch(index);
         List<String> args = Arrays.asList(R);
-        new IndexSearchMain(fs, out, indexSearch, args).run();
+        new IndexSearchMain(fs, out, null, indexSearch, args).run();
 
         StringBuilder sb = new StringBuilder();
         sb.append(V0 + "\t" + V00 + "\t" + N0 + "\t" + key(K0) + "\n");
@@ -124,7 +124,7 @@ public class IndexSearchMainTest {
         CapturePrintStream out = CapturePrintStream.create();
         IndexSearch indexSearch = new IndexSearch(index);
         List<String> args = Arrays.asList(R);
-        new IndexSearchMain(fs, out, indexSearch, args).run();
+        new IndexSearchMain(fs, out, null, indexSearch, args).run();
 
         StringBuilder sb = new StringBuilder();
         sb.append(V0 + "\t" + V00 + "\t" + N0 + "\t" + key(K0) + "\n");

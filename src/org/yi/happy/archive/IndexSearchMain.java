@@ -28,6 +28,7 @@ public class IndexSearchMain implements MainCommand {
     private final PrintStream out;
     private final IndexSearch indexSearch;
     private final List<String> args;
+    private final PrintStream err;
 
     /**
      * create with context.
@@ -35,16 +36,19 @@ public class IndexSearchMain implements MainCommand {
      * @param fs
      *            the file system.
      * @param out
-     *            the output.
+     *            the output stream.
+     * @param err
+     *            the error stream.
      * @param indexSearch
      *            the index searching interface.
      * @param args
      *            the non-option command line arguments.
      */
-    public IndexSearchMain(FileSystem fs, PrintStream out,
+    public IndexSearchMain(FileSystem fs, PrintStream out, PrintStream err,
             IndexSearch indexSearch, List<String> args) {
         this.fs = fs;
         this.out = out;
+        this.err = err;
         this.indexSearch = indexSearch;
         this.args = args;
     }
@@ -72,7 +76,7 @@ public class IndexSearchMain implements MainCommand {
 
             @Override
             public void gotException(Throwable cause) {
-                System.err.println(cause.getMessage());
+                err.println(cause.getMessage());
             }
         });
 

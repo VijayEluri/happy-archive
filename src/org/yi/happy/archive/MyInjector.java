@@ -164,8 +164,8 @@ public class MyInjector {
      */
     public static MainCommand injectIndexSearchMain(ApplicationScope scope) {
         return new IndexSearchMain(injectFileSystem(scope),
-                injectOutput(scope), injectIndexSearch(scope),
-                injectArgs(scope));
+                injectOutput(scope), injectError(scope),
+                injectIndexSearch(scope), injectArgs(scope));
     }
 
     /**
@@ -357,8 +357,7 @@ public class MyInjector {
      *            the scope object.
      * @return the object.
      */
-    public static ClearBlockSource injectClearBlockSource(
-            ApplicationScope scope) {
+    public static ClearBlockSource injectClearBlockSource(ApplicationScope scope) {
         return new StorageClearBlockSource(injectBlockStore(scope));
     }
 
