@@ -26,23 +26,30 @@ public class IndexSearchMainTest {
      * @throws InterruptedException
      */
     @Test
-    public void test1() throws IOException, InterruptedException,
+    public void testOneIndex() throws IOException, InterruptedException,
             ExecutionException {
-        String mapKey = TestData.KEY_CONTENT_MAP.getLocatorKey().toString();
+        String V = "index";
+        String V0 = "onsite";
+        String V00 = "01";
+        String R = "request";
+        TestData I = TestData.INDEX_MAP;
+        TestData K0 = TestData.KEY_CONTENT_MAP;
+        String N0 = "00.dat";
 
         FileSystem fs = new FakeFileSystem();
-        fs.mkdir("index");
-        fs.mkdir("index/onsite");
-        fs.save("index/onsite/01", TestData.INDEX_MAP.getBytes());
-        fs.save("request", ByteString.toUtf8(mapKey + "\n"));
+        fs.mkdir(V);
+        fs.mkdir(V + "/" + V0);
+        fs.save(V + "/" + V0 + "/" + V00, raw(I));
+        fs.save(R, raw(key(K0) + "\n"));
         CapturePrintStream out = CapturePrintStream.create();
 
-        IndexSearch indexSearch = new IndexSearch(fs, "index");
-        List<String> args = Arrays.asList("request");
+        IndexSearch indexSearch = new IndexSearch(fs, V);
+        List<String> args = Arrays.asList(R);
         new IndexSearchMain(fs, out, indexSearch, args).run();
 
-        String o = out.toString();
-        assertEquals("onsite\t01\t00.dat\t" + mapKey + "\n", o);
+        StringBuilder sb = new StringBuilder();
+        sb.append(V0 + "\t" + V00 + "\t" + N0 + "\t" + key(K0) + "\n");
+        assertEquals(sb.toString(), out.toString());
     }
 
     /**
@@ -53,26 +60,35 @@ public class IndexSearchMainTest {
      * @throws InterruptedException
      */
     @Test
-    public void test2() throws IOException, InterruptedException,
+    public void testTwoIndex() throws IOException, InterruptedException,
             ExecutionException {
-        String mapKey = TestData.KEY_CONTENT_MAP.getLocatorKey().toString();
+        String V = "index";
+        String V0 = "offsite";
+        String V00 = "02";
+        String V1 = "onsite";
+        String V10 = "01";
+        String R = "request";
+        TestData I = TestData.INDEX_MAP;
+        TestData K0 = TestData.KEY_CONTENT_MAP;
+        String N0 = "00.dat";
 
         FileSystem fs = new FakeFileSystem();
-        fs.mkdir("index");
-        fs.mkdir("index/onsite");
-        fs.save("index/onsite/01", TestData.INDEX_MAP.getBytes());
-        fs.mkdir("index/offsite");
-        fs.save("index/offsite/02", TestData.INDEX_MAP.getBytes());
-        fs.save("request", ByteString.toUtf8(mapKey + "\n"));
+        fs.mkdir(V);
+        fs.mkdir(V + "/" + V1);
+        fs.save(V + "/" + V1 + "/" + V10, raw(I));
+        fs.mkdir(V + "/" + V0);
+        fs.save(V + "/" + V0 + "/" + V00, raw(I));
+        fs.save(R, raw(key(K0) + "\n"));
         CapturePrintStream out = CapturePrintStream.create();
 
-        IndexSearch indexSearch = new IndexSearch(fs, "index");
-        List<String> args = Arrays.asList("request");
+        IndexSearch indexSearch = new IndexSearch(fs, V);
+        List<String> args = Arrays.asList(R);
         new IndexSearchMain(fs, out, indexSearch, args).run();
 
-        String o = out.toString();
-        assertEquals("offsite\t02\t00.dat\t" + mapKey + "\n"
-                + "onsite\t01\t00.dat\t" + mapKey + "\n", o);
+        StringBuilder sb = new StringBuilder();
+        sb.append(V0 + "\t" + V00 + "\t" + N0 + "\t" + key(K0) + "\n");
+        sb.append(V1 + "\t" + V10 + "\t" + N0 + "\t" + key(K0) + "\n");
+        assertEquals(sb.toString(), out.toString());
     }
 
     /**
@@ -83,29 +99,39 @@ public class IndexSearchMainTest {
      * @throws InterruptedException
      */
     @Test
-    public void test3() throws IOException, InterruptedException,
+    public void testMultipleKeys() throws IOException, InterruptedException,
             ExecutionException {
-        String mapKey = TestData.KEY_CONTENT_MAP.getLocatorKey().toString();
-        String partKey = TestData.KEY_CONTENT_1.getLocatorKey().toString();
+        String V = "index";
+        String V0 = "offsite";
+        String V00 = "02";
+        String V1 = "onsite";
+        String V10 = "01";
+        String R = "request";
+        TestData I = TestData.INDEX_MAP;
+        TestData K0 = TestData.KEY_CONTENT_MAP;
+        String N0 = "00.dat";
+        TestData K1 = TestData.KEY_CONTENT_1;
+        String N1 = "01.dat";
 
         FileSystem fs = new FakeFileSystem();
-        fs.mkdir("index");
-        fs.mkdir("index/onsite");
-        fs.save("index/onsite/01", TestData.INDEX_MAP.getBytes());
-        fs.mkdir("index/offsite");
-        fs.save("index/offsite/02", TestData.INDEX_MAP.getBytes());
-        fs.save("request", ByteString.toUtf8(mapKey + "\n" + partKey + "\n"));
+        fs.mkdir(V);
+        fs.mkdir(V + "/" + V1);
+        fs.save(V + "/" + V1 + "/" + V10, raw(I));
+        fs.mkdir(V + "/" + V0);
+        fs.save(V + "/" + V0 + "/" + V00, raw(I));
+        fs.save(R, raw(key(K0) + "\n" + key(K1) + "\n"));
         CapturePrintStream out = CapturePrintStream.create();
 
-        IndexSearch indexSearch = new IndexSearch(fs, "index");
-        List<String> args = Arrays.asList("request");
+        IndexSearch indexSearch = new IndexSearch(fs, V);
+        List<String> args = Arrays.asList(R);
         new IndexSearchMain(fs, out, indexSearch, args).run();
 
-        String o = out.toString();
-        assertEquals("offsite\t02\t00.dat\t" + mapKey + "\n"
-                + "offsite\t02\t01.dat\t" + partKey + "\n"
-                + "onsite\t01\t00.dat\t" + mapKey + "\n"
-                + "onsite\t01\t01.dat\t" + partKey + "\n", o);
+        StringBuilder sb = new StringBuilder();
+        sb.append(V0 + "\t" + V00 + "\t" + N0 + "\t" + key(K0) + "\n");
+        sb.append(V0 + "\t" + V00 + "\t" + N1 + "\t" + key(K1) + "\n");
+        sb.append(V1 + "\t" + V10 + "\t" + N0 + "\t" + key(K0) + "\n");
+        sb.append(V1 + "\t" + V10 + "\t" + N1 + "\t" + key(K1) + "\n");
+        assertEquals(sb.toString(), out.toString());
     }
 
     /**
@@ -116,29 +142,41 @@ public class IndexSearchMainTest {
      * @throws InterruptedException
      */
     @Test
-    public void test4() throws IOException, InterruptedException,
+    public void testCompressedIndex() throws IOException, InterruptedException,
             ExecutionException {
-        String mapKey = TestData.KEY_CONTENT_MAP.getLocatorKey().toString();
-        String partKey = TestData.KEY_CONTENT_1.getLocatorKey().toString();
+        String N = "index";
+        String V0 = "offsite";
+        String V00 = "02";
+        String V00Z = "02.gz";
+        String V1 = "onsite";
+        String V10 = "01";
+        String V10Z = "01.gz";
+        String R = "request";
+        TestData IZ = TestData.INDEX_MAP_GZ;
+        TestData K0 = TestData.KEY_CONTENT_MAP;
+        String N0 = "00.dat";
+        TestData K1 = TestData.KEY_CONTENT_1;
+        String N1 = "01.dat";
 
         FileSystem fs = new FakeFileSystem();
-        fs.mkdir("index");
-        fs.mkdir("index/onsite");
-        fs.save("index/onsite/01.gz", TestData.INDEX_MAP_GZ.getBytes());
-        fs.mkdir("index/offsite");
-        fs.save("index/offsite/02.gz", TestData.INDEX_MAP_GZ.getBytes());
-        fs.save("request", ByteString.toUtf8(mapKey + "\n" + partKey + "\n"));
+        fs.mkdir(N);
+        fs.mkdir(N + "/" + V0);
+        fs.save(N + "/" + V0 + "/" + V00Z, raw(IZ));
+        fs.mkdir(N + "/" + V1);
+        fs.save(N + "/" + V1 + "/" + V10Z, raw(IZ));
+        fs.save(R, raw(key(K0) + "\n" + key(K1) + "\n"));
         CapturePrintStream out = CapturePrintStream.create();
 
         IndexSearch indexSearch = new IndexSearch(fs, "index");
         List<String> args = Arrays.asList("request");
         new IndexSearchMain(fs, out, indexSearch, args).run();
 
-        String o = out.toString();
-        assertEquals("offsite\t02\t00.dat\t" + mapKey + "\n"
-                + "offsite\t02\t01.dat\t" + partKey + "\n"
-                + "onsite\t01\t00.dat\t" + mapKey + "\n"
-                + "onsite\t01\t01.dat\t" + partKey + "\n", o);
+        StringBuilder sb = new StringBuilder();
+        sb.append(V0 + "\t" + V00 + "\t" + N0 + "\t" + key(K0) + "\n");
+        sb.append(V0 + "\t" + V00 + "\t" + N1 + "\t" + key(K1) + "\n");
+        sb.append(V1 + "\t" + V10 + "\t" + N0 + "\t" + key(K0) + "\n");
+        sb.append(V1 + "\t" + V10 + "\t" + N1 + "\t" + key(K1) + "\n");
+        assertEquals(sb.toString(), out.toString());
     }
 
     /**
@@ -148,21 +186,41 @@ public class IndexSearchMainTest {
      */
     @Test
     public void skipFiles() throws Exception {
-        String mapKey = TestData.KEY_CONTENT_MAP.getLocatorKey().toString();
+        String V = "index";
+        String V0 = "onsite";
+        String V00 = "01";
+        String F0 = "strayfile";
+        String R = "request";
+        TestData I = TestData.INDEX_MAP;
+        TestData K0 = TestData.KEY_CONTENT_MAP;
+        String N0 = "00.dat";
 
         FileSystem fs = new FakeFileSystem();
-        fs.mkdir("index");
-        fs.save("index/strayfile", new byte[0]);
-        fs.mkdir("index/onsite");
-        fs.save("index/onsite/01", TestData.INDEX_MAP.getBytes());
-        fs.save("request", ByteString.toUtf8(mapKey + "\n"));
+        fs.mkdir(V);
+        fs.mkdir(V + "/" + V0);
+        fs.save(V + "/" + V0 + "/" + V00, raw(I));
+        fs.save(V + "/" + F0, new byte[0]);
+        fs.save(R, raw(key(K0) + "\n"));
         CapturePrintStream out = CapturePrintStream.create();
 
-        IndexSearch indexSearch = new IndexSearch(fs, "index");
-        List<String> args = Arrays.asList("request");
+        IndexSearch indexSearch = new IndexSearch(fs, V);
+        List<String> args = Arrays.asList(R);
         new IndexSearchMain(fs, out, indexSearch, args).run();
 
-        String o = out.toString();
-        assertEquals("onsite\t01\t00.dat\t" + mapKey + "\n", o);
+        StringBuilder sb = new StringBuilder();
+        sb.append(V0 + "\t" + V00 + "\t" + N0 + "\t" + key(K0) + "\n");
+        assertEquals(sb.toString(), out.toString());
+    }
+
+    private static String key(TestData item) {
+        return item.getLocatorKey().toString();
+    }
+
+    private static byte[] raw(TestData item) throws IOException {
+        return item.getBytes();
+    }
+
+    private static byte[] raw(String item) throws IOException {
+        return ByteString.toUtf8(item);
     }
 }
