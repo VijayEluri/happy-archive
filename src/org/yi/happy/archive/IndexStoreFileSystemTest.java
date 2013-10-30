@@ -118,6 +118,31 @@ public class IndexStoreFileSystemTest {
         assertEquals(text(I), load(index, V0, V01));
     }
 
+    /**
+     * If there is a stray file in the index, then it is ignored.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testStrayFile() throws Exception {
+        String V = "index";
+        String V0 = "onsite";
+        String V00 = "01";
+        String V1 = "strayfile";
+        TestData I = TestData.INDEX_MAP;
+
+        FileSystem fs = new FakeFileSystem();
+        fs.mkdir(V);
+        fs.mkdir(V + "/" + V0);
+        fs.save(V + "/" + V0 + "/" + V00, raw(I));
+        fs.save(V + "/" + V1, raw(I));
+
+        IndexStore index = new IndexStoreFileSystem(fs, V);
+
+        assertEquals(list(V0), index.listVolumeSets());
+        assertEquals(list(V00), index.listVolumeNames(V0));
+    }
+
     private String load(IndexStore index, String volumeSet, String volumeName)
             throws IOException {
         Reader in = index.open(volumeSet, volumeName);

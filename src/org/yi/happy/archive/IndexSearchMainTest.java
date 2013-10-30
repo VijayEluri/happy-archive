@@ -28,7 +28,6 @@ public class IndexSearchMainTest {
     @Test
     public void testOneIndex() throws IOException, InterruptedException,
             ExecutionException {
-        String V = "index";
         String V0 = "onsite";
         String V00 = "01";
         String R = "request";
@@ -36,14 +35,14 @@ public class IndexSearchMainTest {
         TestData K0 = TestData.KEY_CONTENT_MAP;
         String N0 = "00.dat";
 
-        FileSystem fs = new FakeFileSystem();
-        fs.mkdir(V);
-        fs.mkdir(V + "/" + V0);
-        fs.save(V + "/" + V0 + "/" + V00, raw(I));
-        fs.save(R, raw(key(K0) + "\n"));
-        CapturePrintStream out = CapturePrintStream.create();
 
-        IndexStore index = new IndexStoreFileSystem(fs, V);
+        IndexStoreMemory index = new IndexStoreMemory();
+        index.addVolume(V0, V00, text(I));
+
+        FileSystem fs = new FakeFileSystem();
+        fs.save(R, raw(key(K0) + "\n"));
+
+        CapturePrintStream out = CapturePrintStream.create();
         IndexSearch indexSearch = new IndexSearch(index);
         List<String> args = Arrays.asList(R);
         new IndexSearchMain(fs, out, indexSearch, args).run();
@@ -51,6 +50,10 @@ public class IndexSearchMainTest {
         StringBuilder sb = new StringBuilder();
         sb.append(V0 + "\t" + V00 + "\t" + N0 + "\t" + key(K0) + "\n");
         assertEquals(sb.toString(), out.toString());
+    }
+
+    private String text(TestData item) throws IOException {
+        return ByteString.fromUtf8(raw(item));
     }
 
     /**
@@ -63,7 +66,6 @@ public class IndexSearchMainTest {
     @Test
     public void testTwoIndex() throws IOException, InterruptedException,
             ExecutionException {
-        String V = "index";
         String V0 = "offsite";
         String V00 = "02";
         String V1 = "onsite";
@@ -73,16 +75,14 @@ public class IndexSearchMainTest {
         TestData K0 = TestData.KEY_CONTENT_MAP;
         String N0 = "00.dat";
 
-        FileSystem fs = new FakeFileSystem();
-        fs.mkdir(V);
-        fs.mkdir(V + "/" + V1);
-        fs.save(V + "/" + V1 + "/" + V10, raw(I));
-        fs.mkdir(V + "/" + V0);
-        fs.save(V + "/" + V0 + "/" + V00, raw(I));
-        fs.save(R, raw(key(K0) + "\n"));
-        CapturePrintStream out = CapturePrintStream.create();
+        IndexStoreMemory index = new IndexStoreMemory();
+        index.addVolume(V0, V00, text(I));
+        index.addVolume(V1, V10, text(I));
 
-        IndexStore index = new IndexStoreFileSystem(fs, V);
+        FileSystem fs = new FakeFileSystem();
+        fs.save(R, raw(key(K0) + "\n"));
+
+        CapturePrintStream out = CapturePrintStream.create();
         IndexSearch indexSearch = new IndexSearch(index);
         List<String> args = Arrays.asList(R);
         new IndexSearchMain(fs, out, indexSearch, args).run();
@@ -103,7 +103,6 @@ public class IndexSearchMainTest {
     @Test
     public void testMultipleKeys() throws IOException, InterruptedException,
             ExecutionException {
-        String V = "index";
         String V0 = "offsite";
         String V00 = "02";
         String V1 = "onsite";
@@ -115,16 +114,14 @@ public class IndexSearchMainTest {
         TestData K1 = TestData.KEY_CONTENT_1;
         String N1 = "01.dat";
 
-        FileSystem fs = new FakeFileSystem();
-        fs.mkdir(V);
-        fs.mkdir(V + "/" + V1);
-        fs.save(V + "/" + V1 + "/" + V10, raw(I));
-        fs.mkdir(V + "/" + V0);
-        fs.save(V + "/" + V0 + "/" + V00, raw(I));
-        fs.save(R, raw(key(K0) + "\n" + key(K1) + "\n"));
-        CapturePrintStream out = CapturePrintStream.create();
+        IndexStoreMemory index = new IndexStoreMemory();
+        index.addVolume(V0, V00, text(I));
+        index.addVolume(V1, V10, text(I));
 
-        IndexStore index = new IndexStoreFileSystem(fs, V);
+        FileSystem fs = new FakeFileSystem();
+        fs.save(R, raw(key(K0) + "\n" + key(K1) + "\n"));
+
+        CapturePrintStream out = CapturePrintStream.create();
         IndexSearch indexSearch = new IndexSearch(index);
         List<String> args = Arrays.asList(R);
         new IndexSearchMain(fs, out, indexSearch, args).run();
@@ -134,86 +131,6 @@ public class IndexSearchMainTest {
         sb.append(V0 + "\t" + V00 + "\t" + N1 + "\t" + key(K1) + "\n");
         sb.append(V1 + "\t" + V10 + "\t" + N0 + "\t" + key(K0) + "\n");
         sb.append(V1 + "\t" + V10 + "\t" + N1 + "\t" + key(K1) + "\n");
-        assertEquals(sb.toString(), out.toString());
-    }
-
-    /**
-     * search for two keys with two compressed indexes.
-     * 
-     * @throws IOException
-     * @throws ExecutionException
-     * @throws InterruptedException
-     */
-    @Test
-    public void testCompressedIndex() throws IOException, InterruptedException,
-            ExecutionException {
-        String V = "index";
-        String V0 = "offsite";
-        String V00 = "02";
-        String V00Z = "02.gz";
-        String V1 = "onsite";
-        String V10 = "01";
-        String V10Z = "01.gz";
-        String R = "request";
-        TestData IZ = TestData.INDEX_MAP_GZ;
-        TestData K0 = TestData.KEY_CONTENT_MAP;
-        String N0 = "00.dat";
-        TestData K1 = TestData.KEY_CONTENT_1;
-        String N1 = "01.dat";
-
-        FileSystem fs = new FakeFileSystem();
-        fs.mkdir(V);
-        fs.mkdir(V + "/" + V0);
-        fs.save(V + "/" + V0 + "/" + V00Z, raw(IZ));
-        fs.mkdir(V + "/" + V1);
-        fs.save(V + "/" + V1 + "/" + V10Z, raw(IZ));
-        fs.save(R, raw(key(K0) + "\n" + key(K1) + "\n"));
-        CapturePrintStream out = CapturePrintStream.create();
-
-        IndexStore index = new IndexStoreFileSystem(fs, V);
-        IndexSearch indexSearch = new IndexSearch(index);
-        List<String> args = Arrays.asList("request");
-        new IndexSearchMain(fs, out, indexSearch, args).run();
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(V0 + "\t" + V00 + "\t" + N0 + "\t" + key(K0) + "\n");
-        sb.append(V0 + "\t" + V00 + "\t" + N1 + "\t" + key(K1) + "\n");
-        sb.append(V1 + "\t" + V10 + "\t" + N0 + "\t" + key(K0) + "\n");
-        sb.append(V1 + "\t" + V10 + "\t" + N1 + "\t" + key(K1) + "\n");
-        assertEquals(sb.toString(), out.toString());
-    }
-
-    /**
-     * If there is a stray file in the index, then it is ignored.
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void skipFiles() throws Exception {
-        String V = "index";
-        String V0 = "onsite";
-        String V00 = "01";
-        String F0 = "strayfile";
-        String R = "request";
-        TestData I = TestData.INDEX_MAP;
-        TestData K0 = TestData.KEY_CONTENT_MAP;
-        String N0 = "00.dat";
-
-        FileSystem fs = new FakeFileSystem();
-        fs.mkdir(V);
-        fs.mkdir(V + "/" + V0);
-        fs.save(V + "/" + V0 + "/" + V00, raw(I));
-        fs.save(V + "/" + F0, new byte[0]);
-        fs.save(R, raw(key(K0) + "\n"));
-        CapturePrintStream out = CapturePrintStream.create();
-
-        IndexStore index = new IndexStoreFileSystem(fs, V);
-        IndexSearch indexSearch = new IndexSearch(index);
-        List<String> args = Arrays.asList(R);
-        new IndexSearchMain(fs, out, indexSearch, args).run();
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(V0 + "\t" + V00 + "\t" + N0 + "\t" + key(K0) + "\n");
         assertEquals(sb.toString(), out.toString());
     }
 
