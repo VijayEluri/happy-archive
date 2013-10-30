@@ -66,9 +66,9 @@ public class IndexStoreFileSystemTest {
     @Test
     public void testList() throws Exception {
         String V = "index";
-        String V0 = "onsite";
+        String V0 = "offsite";
         String V00 = "01";
-        String V1 = "offsite";
+        String V1 = "onsite";
         String V10 = "02";
         TestData I = TestData.INDEX_MAP;
 

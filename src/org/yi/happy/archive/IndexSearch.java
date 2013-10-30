@@ -1,7 +1,7 @@
 package org.yi.happy.archive;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.Reader;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.zip.GZIPInputStream;
 
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.key.LocatorKey;
@@ -22,8 +21,7 @@ import org.yi.happy.archive.key.LocatorKeyParse;
  * The index search algorithm.
  */
 public class IndexSearch {
-    private final FileSystem fs;
-    private final String indexBase;
+    private final IndexStore index;
 
     /**
      * create the searcher with context.
@@ -34,8 +32,7 @@ public class IndexSearch {
      *            the base path of the index.
      */
     public IndexSearch(FileSystem fs, String indexBase) {
-        this.fs = fs;
-        this.indexBase = indexBase;
+        this.index = new IndexStoreFileSystem(fs, indexBase);
     }
 
     /**
@@ -56,8 +53,7 @@ public class IndexSearch {
         /*
          * get the tasks
          */
-        List<Callable<List<SearchResult>>> tasks = getSearchTasks(indexBase,
-                want);
+        List<Callable<List<SearchResult>>> tasks = getSearchTasks(want);
 
         /*
          * launch tasks
@@ -84,32 +80,26 @@ public class IndexSearch {
         exec.shutdown();
     }
 
-    private List<Callable<List<SearchResult>>> getSearchTasks(String path,
+    private List<Callable<List<SearchResult>>> getSearchTasks(
             final Set<LocatorKey> want) throws IOException {
-        final List<Callable<List<SearchResult>>> out = new ArrayList<Callable<List<SearchResult>>>();
-
-        new IndexFileTree(fs, path).accept(new IndexFileTree.Visitor() {
-            @Override
-            public void visit(FileSystem fs, String fileName, String volumeSet,
-                    String volumeName) throws IOException {
-                SearchVolume task = new SearchVolume(fileName, volumeSet,
-                        volumeName, want);
+        final List<Callable<List<SearchResult>>> out;
+        out = new ArrayList<Callable<List<SearchResult>>>();
+        for (String set : index.listVolumeSets()) {
+            for (String name : index.listVolumeNames(set)) {
+                SearchVolume task = new SearchVolume(set, name, want);
                 out.add(task);
             }
-        });
-
+        }
         return out;
     }
 
     private class SearchVolume implements Callable<List<SearchResult>> {
-        private final String fileName;
         private final String volumeSet;
         private final String volumeName;
         private final Set<LocatorKey> want;
 
-        public SearchVolume(String fileName, String volumeSet,
-                String volumeName, Set<LocatorKey> want) {
-            this.fileName = fileName;
+        public SearchVolume(String volumeSet, String volumeName,
+                Set<LocatorKey> want) {
             this.volumeSet = volumeSet;
             this.volumeName = volumeName;
             this.want = want;
@@ -118,13 +108,9 @@ public class IndexSearch {
         @Override
         public List<SearchResult> call() throws Exception {
             List<SearchResult> out = new ArrayList<SearchResult>();
-            String volumeName = this.volumeName;
 
-            InputStream in0 = fs.openInputStream(fileName);
+            Reader in0 = index.open(volumeSet, volumeName);
             try {
-                if (fileName.endsWith(".gz")) {
-                    in0 = new GZIPInputStream(in0);
-                }
                 LineCursor in = new LineCursor(in0);
                 while (in.next()) {
                     String[] line = in.get().split("\t", -1);
@@ -226,6 +212,5 @@ public class IndexSearch {
         public LocatorKey getKey() {
             return key;
         }
-
     }
 }

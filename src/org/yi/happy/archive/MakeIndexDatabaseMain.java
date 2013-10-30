@@ -1,13 +1,12 @@
 package org.yi.happy.archive;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.Reader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.zip.GZIPInputStream;
 
 import org.yi.happy.annotate.GlobalFilesystem;
 import org.yi.happy.annotate.GlobalOutput;
@@ -31,8 +30,7 @@ public class MakeIndexDatabaseMain implements MainCommand {
      * @throws IOException
      */
     @Override
-    public void run() throws ClassNotFoundException,
-            SQLException, IOException {
+    public void run() throws ClassNotFoundException, SQLException, IOException {
         /*
          * XXX hacked together, needs to be cleaned
          */
@@ -56,35 +54,26 @@ public class MakeIndexDatabaseMain implements MainCommand {
 
         FileSystem fs = new RealFileSystem();
         String path = "/Users/happy/archive.d/index";
-
-        new IndexFileTree(fs, path).accept(new IndexFileTree.Visitor() {
-            @Override
-            public void visit(FileSystem fs, String fileName, String volumeSet,
-                    String volumeName) throws IOException {
-                try {
-                    process(fs, conn, fileName, volumeSet, volumeName);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
+        IndexStore index = new IndexStoreFileSystem(fs, path);
+        for (String volumeSet : index.listVolumeSets()) {
+            for (String volumeName : index.listVolumeNames(volumeSet)) {
+                process(index, conn, volumeSet, volumeName);
             }
-        });
+        }
 
         st.execute("shutdown");
         conn.close();
     }
 
-    private static void process(FileSystem fs, Connection conn,
-            String fileName, String volumeSet, String volumeName)
-            throws IOException, SQLException {
+    private static void process(IndexStore index, Connection conn,
+            String volumeSet, String volumeName) throws IOException,
+            SQLException {
         PreparedStatement st = conn.prepareStatement("insert into index_line("
                 + "volume_set, volume_name," + " file_name, key)"
                 + " values (?, ?, ?, ?)");
 
-        InputStream in0 = fs.openInputStream(fileName);
+        Reader in0 = index.open(volumeSet, volumeName);
         try {
-            if (fileName.endsWith(".gz")) {
-                in0 = new GZIPInputStream(in0);
-            }
             LineCursor in = new LineCursor(in0);
             while (in.next()) {
                 String[] line = in.get().split("\t", -1);

@@ -43,6 +43,7 @@ public class IndexStoreFileSystem implements IndexStore {
                 }
             }
         }
+        Collections.sort(out);
         return out;
     }
 
