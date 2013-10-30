@@ -17,6 +17,26 @@ import org.yi.happy.archive.key.LocatorKeyParse;
 @GlobalFilesystem
 public class FileBlockStoreIterator implements Iterator<LocatorKey> {
     /**
+     * base/n
+     */
+    private final Queue<File> layer1 = new ArrayDeque<File>();
+
+    /**
+     * base/n/nn
+     */
+    private final Queue<File> layer2 = new ArrayDeque<File>();
+
+    /**
+     * base/n/nn/nnn
+     */
+    private final Queue<File> layer3 = new ArrayDeque<File>();
+
+    /**
+     * key
+     */
+    private final Queue<LocatorKey> level4 = new ArrayDeque<LocatorKey>();
+
+    /**
      * Set up an iterator over a file block store.
      * 
      * @param base
@@ -102,10 +122,4 @@ public class FileBlockStoreIterator implements Iterator<LocatorKey> {
     public void remove() {
         throw new UnsupportedOperationException();
     }
-
-    private Queue<File> layer1 = new ArrayDeque<File>();
-    private Queue<File> layer2 = new ArrayDeque<File>();
-    private Queue<File> layer3 = new ArrayDeque<File>();
-    private Queue<LocatorKey> level4 = new ArrayDeque<LocatorKey>();
-
 }
