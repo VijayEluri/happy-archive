@@ -58,14 +58,14 @@ public class ApplicationScope {
     /**
      * @return the value of the need option.
      */
-    public String getNeedFile() {
+    public String getNeed() {
         return env.getNeed();
     }
 
     /**
      * @return the value of the index option.
      */
-    public String getIndexPath() {
+    public String getIndex() {
         return env.getIndex();
     }
 }

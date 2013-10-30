@@ -72,7 +72,7 @@ public class MyInjector {
      * @return the object.
      */
     public static NotReadyHandler injectNotReadyHandler(ApplicationScope scope) {
-        return new NotReadyPostAndWait(injectNeedFile(scope));
+        return new NotReadyPostAndWait(injectNeed(scope));
     }
 
     /**
@@ -82,8 +82,8 @@ public class MyInjector {
      *            the scope object.
      * @return the file name.
      */
-    public static String injectNeedFile(ApplicationScope scope) {
-        return scope.getNeedFile();
+    public static String injectNeed(ApplicationScope scope) {
+        return scope.getNeed();
     }
 
     /**
@@ -338,12 +338,26 @@ public class MyInjector {
                 injectArgs(scope));
     }
 
+    /**
+     * get a {@link FragmentSave}.
+     * 
+     * @param scope
+     *            the scope object.
+     * @return the object.
+     */
     @GlobalFilesystem
-    private static FragmentSave injectFragmentSave(ApplicationScope scope) {
+    public static FragmentSave injectFragmentSave(ApplicationScope scope) {
         return new FragmentSaveFile();
     }
 
-    private static ClearBlockSource injectClearBlockSource(
+    /**
+     * get a {@link ClearBlockSource}.
+     * 
+     * @param scope
+     *            the scope object.
+     * @return the object.
+     */
+    public static ClearBlockSource injectClearBlockSource(
             ApplicationScope scope) {
         return new StorageClearBlockSource(injectBlockStore(scope));
     }
@@ -368,7 +382,19 @@ public class MyInjector {
      */
     @GlobalFilesystem
     public static File injectStoreFile(ApplicationScope scope) {
-        return new File(scope.getStore());
+        return new File(injectStore(scope));
+    }
+
+    /**
+     * get the base of the store.
+     * 
+     * @param scope
+     *            the scope object.
+     * @return the object.
+     */
+    @GlobalFilesystem
+    public static String injectStore(ApplicationScope scope) {
+        return scope.getStore();
     }
 
     /**
@@ -402,7 +428,7 @@ public class MyInjector {
      * @return the object.
      */
     public static IndexSearch injectIndexSearch(ApplicationScope scope) {
-        return new IndexSearch(injectFileSystem(scope), injectIndexPath(scope));
+        return new IndexSearch(injectFileSystem(scope), injectIndex(scope));
     }
 
     /**
@@ -412,8 +438,8 @@ public class MyInjector {
      *            the scope object.
      * @return the path.
      */
-    public static String injectIndexPath(ApplicationScope scope) {
-        return scope.getIndexPath();
+    public static String injectIndex(ApplicationScope scope) {
+        return scope.getIndex();
     }
 
     /**
