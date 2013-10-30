@@ -5,14 +5,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Iterator;
 
 import org.yi.happy.annotate.GlobalFilesystem;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.key.LocatorKey;
-import org.yi.happy.archive.key.LocatorKeyParse;
 
 /**
  * A block store that uses the file system to store the blocks.
@@ -61,39 +59,6 @@ public class FileBlockStore implements BlockStore {
         } catch (IllegalArgumentException e) {
             // TODO remove the corrupted file
             throw new DecodeException(e);
-        }
-    }
-
-    @Override
-    public <T extends Throwable> void visit(BlockStoreVisitor<T> visitor)
-            throws T {
-        visit(visitor, base, 3);
-    }
-
-    private <T extends Throwable> void visit(BlockStoreVisitor<T> visitor,
-            File path, int levels) throws T {
-        if (!path.isDirectory()) {
-            return;
-        }
-
-        String[] names = path.list();
-        if (names == null) {
-            // should not happen
-            return;
-        }
-        Arrays.sort(names);
-
-        if (levels > 0) {
-            for (String name : names) {
-                visit(visitor, new File(path, name), levels - 1);
-            }
-            return;
-        }
-
-        for (String name : names) {
-            String[] part = name.split("-", 2);
-            LocatorKey key = LocatorKeyParse.parseLocatorKey(part[1], part[0]);
-            visitor.accept(key);
         }
     }
 

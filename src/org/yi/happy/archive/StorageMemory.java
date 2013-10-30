@@ -48,18 +48,6 @@ public class StorageMemory implements BlockStore {
     }
 
     @Override
-    public <T extends Throwable> void visit(BlockStoreVisitor<T> visitor)
-            throws T {
-        final List<LocatorKey> keys = new ArrayList<LocatorKey>(data.keySet());
-        keys.addAll(broken);
-        Collections.sort(keys);
-
-        for (LocatorKey key : keys) {
-            visitor.accept(key);
-        }
-    }
-
-    @Override
     public void remove(LocatorKey key) throws IOException {
         broken.remove(key);
         data.remove(key);

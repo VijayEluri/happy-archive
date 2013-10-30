@@ -28,13 +28,9 @@ public class StorageMemoryTest {
         store.put(TestData.KEY_CONTENT_2.getEncodedBlock());
 
         final List<LocatorKey> keys = new ArrayList<LocatorKey>();
-        BlockStoreVisitor<RuntimeException> visitor = new BlockStoreVisitor<RuntimeException>() {
-            @Override
-            public void accept(LocatorKey key) {
-                keys.add(key);
-            }
-        };
-        store.visit(visitor);
+        for (LocatorKey key : store) {
+            keys.add(key);
+        }
 
         assertEquals(Arrays.asList(TestData.KEY_CONTENT.getLocatorKey(),
                 TestData.KEY_CONTENT_2.getLocatorKey(), TestData.KEY_CONTENT_1

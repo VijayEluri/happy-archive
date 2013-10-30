@@ -55,12 +55,9 @@ public class CriticalListMain implements MainCommand {
          * load list of keys in store.
          */
         final Set<LocatorKey> want = new HashSet<LocatorKey>();
-        store.visit(new BlockStoreVisitor<RuntimeException>() {
-            @Override
-            public void accept(LocatorKey key) throws RuntimeException {
-                want.add(key);
-            }
-        });
+        for (LocatorKey key : store) {
+            want.add(key);
+        }
 
         /*
          * find keys in index.

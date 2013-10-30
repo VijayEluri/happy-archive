@@ -32,19 +32,6 @@ public interface BlockStore extends Iterable<LocatorKey> {
     EncodedBlock get(LocatorKey key) throws IOException;
 
     /**
-     * Visit all the keys in the store.
-     * 
-     * @param <T>
-     *            the type of the exceptions that can be thrown from the
-     *            visitor.
-     * 
-     * @param visitor
-     *            the visitor that is visiting the keys in the store.
-     * @throws T
-     */
-    <T extends Throwable> void visit(BlockStoreVisitor<T> visitor) throws T;
-
-    /**
      * Test if the store appears to contain the given key.
      * 
      * @param key
@@ -75,7 +62,7 @@ public interface BlockStore extends Iterable<LocatorKey> {
 
     /**
      * Iterate over all the keys in the store. The keys will be returned in
-     * default order.
+     * default sort order.
      * 
      * @return the {@link Iterator}.
      */
