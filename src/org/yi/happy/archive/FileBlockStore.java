@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Iterator;
 
 import org.yi.happy.annotate.GlobalFilesystem;
 import org.yi.happy.archive.block.EncodedBlock;
@@ -135,5 +136,10 @@ public class FileBlockStore implements BlockStore {
     public long getTime(LocatorKey key) throws IOException {
         File file = makeFile(key);
         return file.lastModified();
+    }
+
+    @Override
+    public Iterator<LocatorKey> iterator() {
+        return new FileBlockStoreIterator(base);
     }
 }

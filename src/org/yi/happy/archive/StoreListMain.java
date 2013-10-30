@@ -42,12 +42,9 @@ public class StoreListMain implements MainCommand {
      */
     @Override
     public void run() throws IOException {
-        store.visit(new BlockStoreVisitor<IOException>() {
-            @Override
-            public void accept(LocatorKey key) throws IOException {
-                out.println(key);
-            }
-        });
+        for (LocatorKey key : store) {
+            out.println(key);
+        }
         out.flush();
     }
 }

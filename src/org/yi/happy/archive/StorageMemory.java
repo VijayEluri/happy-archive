@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -79,5 +80,13 @@ public class StorageMemory implements BlockStore {
     public void putBroken(LocatorKey key) {
         data.remove(key);
         broken.add(key);
+    }
+
+    @Override
+    public Iterator<LocatorKey> iterator() {
+        List<LocatorKey> keys = new ArrayList<LocatorKey>(data.keySet());
+        keys.addAll(broken);
+        Collections.sort(keys);
+        return keys.iterator();
     }
 }

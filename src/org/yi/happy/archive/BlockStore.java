@@ -1,6 +1,7 @@
 package org.yi.happy.archive;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.key.LocatorKey;
@@ -8,7 +9,7 @@ import org.yi.happy.archive.key.LocatorKey;
 /**
  * A block storage service.
  */
-public interface BlockStore {
+public interface BlockStore extends Iterable<LocatorKey> {
     /**
      * put a block into the store.
      * 
@@ -71,4 +72,13 @@ public interface BlockStore {
      * @throws IOException
      */
     long getTime(LocatorKey key) throws IOException;
+
+    /**
+     * Iterate over all the keys in the store. The keys will be returned in
+     * default order.
+     * 
+     * @return the {@link Iterator}.
+     */
+    @Override
+    public Iterator<LocatorKey> iterator();
 }
