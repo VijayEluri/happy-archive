@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Reader;
 
 /**
  * Utility methods for doing common operations {@link InputStream} and
@@ -91,5 +92,28 @@ public class Streams {
      */
     public static byte[] load(InputStream in, int limit) throws IOException {
         return load(new InputStreamLimit(in, limit));
+    }
+
+    /**
+     * Load the entire content of the given reader into a string.
+     * 
+     * @param in
+     *            the reader to read from.
+     * @return the characters loaded.
+     * @throws IOException
+     */
+    public static String load(Reader in) throws IOException {
+        StringBuilder out = new StringBuilder();
+        char[] buff = new char[BUFFER_SIZE];
+        while (true) {
+            int n = in.read(buff);
+
+            if (n < 0) {
+                break;
+            }
+
+            out.append(buff, 0, n);
+        }
+        return out.toString();
     }
 }

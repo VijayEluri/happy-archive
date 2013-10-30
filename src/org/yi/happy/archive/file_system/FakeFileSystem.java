@@ -71,7 +71,11 @@ public class FakeFileSystem implements FileSystem {
 
     @Override
     public InputStream openInputStream(String name) throws IOException {
-        return new ByteArrayInputStream(files.get(name));
+        byte[] data = files.get(name);
+        if (data == null) {
+            throw new FileNotFoundException();
+        }
+        return new ByteArrayInputStream(data);
     }
 
     @Override
