@@ -10,9 +10,11 @@ import java.util.List;
 import org.junit.Test;
 import org.yi.happy.annotate.NeedFailureTest;
 import org.yi.happy.archive.crypto.DigestFactory;
+import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.crypto.Digests;
 import org.yi.happy.archive.file_system.FakeFileSystem;
 import org.yi.happy.archive.file_system.FileSystem;
+import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
@@ -27,35 +29,35 @@ public class IndexVolumeMainTest {
      */
     @Test
     public void test1() throws IOException {
+        TestData K0 = TestData.KEY_CONTENT;
+        TestData K1 = TestData.KEY_CONTENT_1;
+        String NB = "image";
+        String N0 = "00.dat";
+        String N1 = "01.dat";
+
         FileSystem fs = new FakeFileSystem();
 
-        fs.mkdir("image");
-        fs.save("image/00.dat", TestData.KEY_CONTENT.getBytes());
-        fs.save("image/01.dat", TestData.KEY_CONTENT_1.getBytes());
+        fs.mkdir(NB);
+        fs.save(NB + "/" + N0, raw(K0));
+        fs.save(NB + "/" + N1, raw(K1));
 
         CapturePrintStream out = CapturePrintStream.create();
 
-        List<String> args = Arrays.asList("image");
+        List<String> args = Arrays.asList(NB);
         new IndexVolumeMain(fs, out, null, args).run();
 
         StringBuilder sb = new StringBuilder();
-        sb.append("00.dat\tplain\t");
-        sb.append(TestData.KEY_CONTENT.getLocatorKey());
-        sb.append("\t");
-        sb.append(Base16.encode(Digests.digestData(DigestFactory
-                .getProvider("sha-256"), TestData.KEY_CONTENT.getBytes())));
-        sb.append("\t");
-        sb.append(Integer.toString(TestData.KEY_CONTENT.getBytes().length));
-        sb.append("\n");
+        sb.append(N0).append("\t");
+        sb.append("plain").append("\t");
+        sb.append(key(K0)).append("\t");
+        sb.append(hash(K0)).append("\t");
+        sb.append(size(K0)).append("\n");
 
-        sb.append("01.dat\tplain\t");
-        sb.append(TestData.KEY_CONTENT_1.getLocatorKey());
-        sb.append("\t");
-        sb.append(Base16.encode(Digests.digestData(DigestFactory
-                .getProvider("sha-256"), TestData.KEY_CONTENT_1.getBytes())));
-        sb.append("\t");
-        sb.append(Integer.toString(TestData.KEY_CONTENT_1.getBytes().length));
-        sb.append("\n");
+        sb.append(N1).append("\t");
+        sb.append("plain").append("\t");
+        sb.append(key(K1)).append("\t");
+        sb.append(hash(K1)).append("\t");
+        sb.append(size(K1)).append("\n");
 
         assertEquals(sb.toString(), out.toString());
     }
@@ -67,30 +69,50 @@ public class IndexVolumeMainTest {
      */
     @Test
     public void test2() throws IOException {
+        TestData K0 = TestData.FILE_EMPTY;
+        TestData K1 = TestData.KEY_CONTENT_1;
+        String NB = "image";
+        String N0 = "00.dat";
+        String N1 = "01.dat";
+
         FileSystem fs = new FakeFileSystem();
 
-        fs.mkdir("image");
-        fs.save("image/00.dat", TestData.FILE_EMPTY.getBytes());
-        fs.save("image/01.dat", TestData.KEY_CONTENT_1.getBytes());
+        fs.mkdir(NB);
+        fs.save(NB + "/" + N0, raw(K0));
+        fs.save(NB + "/" + N1, raw(K1));
 
         CapturePrintStream out = CapturePrintStream.create();
         CapturePrintStream err = CapturePrintStream.create();
 
-        List<String> args = Arrays.asList("image");
+        List<String> args = Arrays.asList(NB);
         new IndexVolumeMain(fs, out, err, args).run();
 
         StringBuilder sb = new StringBuilder();
-        sb.append("01.dat\tplain\t");
-        sb.append(TestData.KEY_CONTENT_1.getLocatorKey());
-        sb.append("\t");
-        sb.append(Base16.encode(Digests.digestData(DigestFactory
-                .getProvider("sha-256"), TestData.KEY_CONTENT_1.getBytes())));
-        sb.append("\t");
-        sb.append(Integer.toString(TestData.KEY_CONTENT_1.getBytes().length));
-        sb.append("\n");
+        sb.append(N1).append("\t");
+        sb.append("plain").append("\t");
+        sb.append(key(K1)).append("\t");
+        sb.append(hash(K1)).append("\t");
+        sb.append(size(K1)).append("\n");
 
         assertEquals(sb.toString(), out.toString());
 
         assertTrue(err.size() != 0);
+    }
+
+    private static LocatorKey key(TestData item) {
+        return item.getLocatorKey();
+    }
+
+    private static String hash(TestData item) throws IOException {
+        DigestProvider sha256 = DigestFactory.getProvider("sha-256");
+        return Base16.encode(Digests.digestData(sha256, raw(item)));
+    }
+
+    private static String size(TestData item) throws IOException {
+        return Integer.toString(raw(item).length);
+    }
+
+    private static byte[] raw(TestData item) throws IOException {
+        return item.getBytes();
     }
 }
