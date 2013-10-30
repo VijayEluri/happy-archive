@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.List;
 
+import org.yi.happy.annotate.DuplicatedLogic;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.commandLine.UsesArgs;
@@ -52,6 +53,7 @@ public class IndexCheckMain implements MainCommand {
     }
 
     @Override
+    @DuplicatedLogic("with IndexVolumeMain.process")
     public void run() throws Exception {
         String imagePath = args.get(0);
 

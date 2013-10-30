@@ -5,6 +5,7 @@ import java.io.PrintStream;
 import java.util.Collections;
 import java.util.List;
 
+import org.yi.happy.annotate.DuplicatedLogic;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.commandLine.UsesArgs;
@@ -69,6 +70,7 @@ public class IndexVolumeMain implements MainCommand {
         }
     }
 
+    @DuplicatedLogic("with IndexCheckMain.run")
     private void process(String path, String name) throws IOException {
         if (fs.isDir(path)) {
             processDir(path, name);
