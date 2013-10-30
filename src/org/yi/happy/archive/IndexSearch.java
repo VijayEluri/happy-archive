@@ -13,7 +13,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.key.LocatorKeyParse;
 
@@ -26,13 +25,11 @@ public class IndexSearch {
     /**
      * create the searcher with context.
      * 
-     * @param fs
-     *            the file system.
-     * @param indexBase
-     *            the base path of the index.
+     * @param index
+     *            the index store.
      */
-    public IndexSearch(FileSystem fs, String indexBase) {
-        this.index = new IndexStoreFileSystem(fs, indexBase);
+    public IndexSearch(IndexStore index) {
+        this.index = index;
     }
 
     /**

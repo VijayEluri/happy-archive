@@ -43,7 +43,8 @@ public class IndexSearchMainTest {
         fs.save(R, raw(key(K0) + "\n"));
         CapturePrintStream out = CapturePrintStream.create();
 
-        IndexSearch indexSearch = new IndexSearch(fs, V);
+        IndexStore index = new IndexStoreFileSystem(fs, V);
+        IndexSearch indexSearch = new IndexSearch(index);
         List<String> args = Arrays.asList(R);
         new IndexSearchMain(fs, out, indexSearch, args).run();
 
@@ -81,7 +82,8 @@ public class IndexSearchMainTest {
         fs.save(R, raw(key(K0) + "\n"));
         CapturePrintStream out = CapturePrintStream.create();
 
-        IndexSearch indexSearch = new IndexSearch(fs, V);
+        IndexStore index = new IndexStoreFileSystem(fs, V);
+        IndexSearch indexSearch = new IndexSearch(index);
         List<String> args = Arrays.asList(R);
         new IndexSearchMain(fs, out, indexSearch, args).run();
 
@@ -122,7 +124,8 @@ public class IndexSearchMainTest {
         fs.save(R, raw(key(K0) + "\n" + key(K1) + "\n"));
         CapturePrintStream out = CapturePrintStream.create();
 
-        IndexSearch indexSearch = new IndexSearch(fs, V);
+        IndexStore index = new IndexStoreFileSystem(fs, V);
+        IndexSearch indexSearch = new IndexSearch(index);
         List<String> args = Arrays.asList(R);
         new IndexSearchMain(fs, out, indexSearch, args).run();
 
@@ -144,7 +147,7 @@ public class IndexSearchMainTest {
     @Test
     public void testCompressedIndex() throws IOException, InterruptedException,
             ExecutionException {
-        String N = "index";
+        String V = "index";
         String V0 = "offsite";
         String V00 = "02";
         String V00Z = "02.gz";
@@ -159,15 +162,16 @@ public class IndexSearchMainTest {
         String N1 = "01.dat";
 
         FileSystem fs = new FakeFileSystem();
-        fs.mkdir(N);
-        fs.mkdir(N + "/" + V0);
-        fs.save(N + "/" + V0 + "/" + V00Z, raw(IZ));
-        fs.mkdir(N + "/" + V1);
-        fs.save(N + "/" + V1 + "/" + V10Z, raw(IZ));
+        fs.mkdir(V);
+        fs.mkdir(V + "/" + V0);
+        fs.save(V + "/" + V0 + "/" + V00Z, raw(IZ));
+        fs.mkdir(V + "/" + V1);
+        fs.save(V + "/" + V1 + "/" + V10Z, raw(IZ));
         fs.save(R, raw(key(K0) + "\n" + key(K1) + "\n"));
         CapturePrintStream out = CapturePrintStream.create();
 
-        IndexSearch indexSearch = new IndexSearch(fs, "index");
+        IndexStore index = new IndexStoreFileSystem(fs, V);
+        IndexSearch indexSearch = new IndexSearch(index);
         List<String> args = Arrays.asList("request");
         new IndexSearchMain(fs, out, indexSearch, args).run();
 
@@ -203,7 +207,8 @@ public class IndexSearchMainTest {
         fs.save(R, raw(key(K0) + "\n"));
         CapturePrintStream out = CapturePrintStream.create();
 
-        IndexSearch indexSearch = new IndexSearch(fs, V);
+        IndexStore index = new IndexStoreFileSystem(fs, V);
+        IndexSearch indexSearch = new IndexSearch(index);
         List<String> args = Arrays.asList(R);
         new IndexSearchMain(fs, out, indexSearch, args).run();
 

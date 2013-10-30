@@ -428,7 +428,19 @@ public class MyInjector {
      * @return the object.
      */
     public static IndexSearch injectIndexSearch(ApplicationScope scope) {
-        return new IndexSearch(injectFileSystem(scope), injectIndex(scope));
+        return new IndexSearch(injectIndexStore(scope));
+    }
+
+    /**
+     * get a {@link IndexStore}.
+     * 
+     * @param scope
+     *            the scope object.
+     * @return the object.
+     */
+    public static IndexStore injectIndexStore(ApplicationScope scope) {
+        return new IndexStoreFileSystem(injectFileSystem(scope),
+                injectIndex(scope));
     }
 
     /**
