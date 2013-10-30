@@ -417,6 +417,18 @@ public class MyInjector {
     }
 
     /**
+     * get a {@link IndexCheckMain}.
+     * 
+     * @param scope
+     *            the scope object.
+     * @return the object.
+     */
+    public static IndexCheckMain injectIndexCheckMain(ApplicationScope scope) {
+        return new IndexCheckMain(injectFileSystem(scope), injectInput(scope),
+                injectOutput(scope), injectError(scope), injectArgs(scope));
+    }
+
+    /**
      * get the command to implementation map.
      * 
      * @param scope

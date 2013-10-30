@@ -39,6 +39,7 @@ public class Main {
         c.put("store-remove", StoreRemoveMain.class);
         c.put("index-search", IndexSearchMain.class);
         c.put("index-volume", IndexVolumeMain.class);
+        c.put("index-check", IndexCheckMain.class);
         c.put("build-image", BuildImageMain.class);
         c.put("volume-get", VolumeGetMain.class);
         c.put("show-env", ShowEnvMain.class);
