@@ -3,14 +3,12 @@ package org.yi.happy.archive;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+import java.io.InputStream;
 
 import org.junit.Test;
 import org.yi.happy.archive.block.EncodedBlock;
-import org.yi.happy.archive.file_system.FileStoreMemory;
-import org.yi.happy.archive.file_system.FileStore;
 import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.test_data.TestData;
 
@@ -22,8 +20,6 @@ public class StoreRemoveMainTest {
     private static TestData C2 = TestData.KEY_CONTENT_1;
     private static TestData C3 = TestData.KEY_CONTENT_2;
 
-    private static String N = "flush.lst";
-
     /**
      * check an expected good case.
      * 
@@ -31,19 +27,18 @@ public class StoreRemoveMainTest {
      */
     @Test
     public void test1() throws IOException {
-        FileStore fs = new FileStoreMemory();
-        BlockStore store = new BlockStoreMemory();
-        store.put(block(C1));
-        store.put(block(C2));
-        store.put(block(C3));
-        fs.put(N, ByteString.toUtf8(key(C2) + "\n" + key(C3) + "\n"));
+        BlockStore blocks = new BlockStoreMemory();
+        blocks.put(block(C1));
+        blocks.put(block(C2));
+        blocks.put(block(C3));
 
-        List<String> args = Arrays.asList(N);
-        new StoreRemoveMain(store, fs, args).run();
+        InputStream in = input(key(C2) + "\n" + key(C3) + "\n");
 
-        assertTrue(store.contains(key(C1)));
-        assertFalse(store.contains(key(C2)));
-        assertFalse(store.contains(key(C3)));
+        new StoreRemoveMain(blocks, in).run();
+
+        assertTrue(blocks.contains(key(C1)));
+        assertFalse(blocks.contains(key(C2)));
+        assertFalse(blocks.contains(key(C3)));
     }
 
     private static EncodedBlock block(TestData item) throws IOException {
@@ -52,5 +47,10 @@ public class StoreRemoveMainTest {
 
     private static LocatorKey key(TestData item) {
         return item.getLocatorKey();
+    }
+
+    private static InputStream input(String text) {
+        byte[] bytes = ByteString.toUtf8(text);
+        return new ByteArrayInputStream(bytes);
     }
 }

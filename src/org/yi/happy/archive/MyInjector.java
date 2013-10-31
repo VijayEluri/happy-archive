@@ -141,8 +141,7 @@ public class MyInjector {
      * @return the object.
      */
     public static MainCommand injectStoreRemoveMain(ApplicationScope scope) {
-        return new StoreRemoveMain(injectBlockStore(scope),
-                injectFileStore(scope), injectArgs(scope));
+        return new StoreRemoveMain(injectBlockStore(scope), injectInput(scope));
     }
 
     /**
