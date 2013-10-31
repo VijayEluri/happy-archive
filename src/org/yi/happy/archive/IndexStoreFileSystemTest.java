@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
-import org.yi.happy.archive.file_system.FakeFileSystem;
+import org.yi.happy.archive.file_system.FileSystemMemory;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.test_data.TestData;
 
@@ -26,7 +26,7 @@ public class IndexStoreFileSystemTest {
         String V = "index";
         String V0 = "onsite";
 
-        FileSystem fs = new FakeFileSystem();
+        FileSystem fs = new FileSystemMemory();
         fs.mkdir(V);
 
         IndexStore index = new IndexStoreFileSystem(fs, V);
@@ -47,7 +47,7 @@ public class IndexStoreFileSystemTest {
         String V = "index";
         String V0 = "onsite";
 
-        FileSystem fs = new FakeFileSystem();
+        FileSystem fs = new FileSystemMemory();
         fs.mkdir(V);
         fs.mkdir(V + "/" + V0);
 
@@ -72,7 +72,7 @@ public class IndexStoreFileSystemTest {
         String V10 = "02";
         TestData I = TestData.INDEX_MAP;
 
-        FileSystem fs = new FakeFileSystem();
+        FileSystem fs = new FileSystemMemory();
         fs.mkdir(V);
         fs.mkdir(V + "/" + V0);
         fs.save(V + "/" + V0 + "/" + V00, raw(I));
@@ -104,7 +104,7 @@ public class IndexStoreFileSystemTest {
         TestData I = TestData.INDEX_MAP;
         TestData IZ = TestData.INDEX_MAP_GZ;
 
-        FileSystem fs = new FakeFileSystem();
+        FileSystem fs = new FileSystemMemory();
         fs.mkdir(V);
         fs.mkdir(V + "/" + V0);
         fs.save(V + "/" + V0 + "/" + V00, raw(I));
@@ -131,7 +131,7 @@ public class IndexStoreFileSystemTest {
         String V1 = "strayfile";
         TestData I = TestData.INDEX_MAP;
 
-        FileSystem fs = new FakeFileSystem();
+        FileSystem fs = new FileSystemMemory();
         fs.mkdir(V);
         fs.mkdir(V + "/" + V0);
         fs.save(V + "/" + V0 + "/" + V00, raw(I));

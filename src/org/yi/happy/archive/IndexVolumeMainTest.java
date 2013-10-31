@@ -12,7 +12,7 @@ import org.yi.happy.annotate.NeedFailureTest;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.crypto.Digests;
-import org.yi.happy.archive.file_system.FakeFileSystem;
+import org.yi.happy.archive.file_system.FileSystemMemory;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.test_data.TestData;
@@ -35,7 +35,7 @@ public class IndexVolumeMainTest {
         String N0 = "00.dat";
         String N1 = "01.dat";
 
-        FileSystem fs = new FakeFileSystem();
+        FileSystem fs = new FileSystemMemory();
 
         fs.mkdir(NB);
         fs.save(NB + "/" + N0, raw(K0));
@@ -75,7 +75,7 @@ public class IndexVolumeMainTest {
         String N0 = "00.dat";
         String N1 = "01.dat";
 
-        FileSystem fs = new FakeFileSystem();
+        FileSystem fs = new FileSystemMemory();
 
         fs.mkdir(NB);
         fs.save(NB + "/" + N0, raw(K0));

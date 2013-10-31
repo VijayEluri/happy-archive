@@ -8,7 +8,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 
 import org.junit.Test;
-import org.yi.happy.archive.file_system.FakeFileSystem;
+import org.yi.happy.archive.file_system.FileSystemMemory;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.test_data.TestData;
 
@@ -24,7 +24,7 @@ public class VolumeGetMainTest {
      */
     @Test
     public void test1() throws UnsupportedOperationException, IOException {
-        FileSystem fs = new FakeFileSystem();
+        FileSystem fs = new FileSystemMemory();
         fs.mkdir("/media");
         fs.save("/media/00.dat", TestData.KEY_CONTENT_MAP.getBytes());
         InputStream in = new ByteArrayInputStream("00.dat\n".getBytes("UTF-8"));

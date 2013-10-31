@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.junit.Test;
 import org.yi.happy.annotate.SmellsMessy;
-import org.yi.happy.archive.file_system.FakeFileSystem;
+import org.yi.happy.archive.file_system.FileSystemMemory;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
@@ -23,7 +23,7 @@ public class DecodeBlockMainTest {
     @Test
     @SmellsMessy
     public void test1() throws Exception {
-        FakeFileSystem fs = new FakeFileSystem();
+        FileSystemMemory fs = new FileSystemMemory();
         fs.save("test.dat", TestData.KEY_BLOB.getBytes());
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 

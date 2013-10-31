@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
-import org.yi.happy.archive.file_system.FakeFileSystem;
+import org.yi.happy.archive.file_system.FileSystemMemory;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.key.ContentLocatorKey;
 import org.yi.happy.archive.key.HashValue;
@@ -25,7 +25,7 @@ public class BuildImageMainTest {
      */
     @Test
     public void test1() throws IOException {
-        FileSystem fs = new FakeFileSystem();
+        FileSystem fs = new FileSystemMemory();
         BlockStore store = new BlockStoreMemory();
         store.put(TestData.KEY_CONTENT.getEncodedBlock());
         CapturePrintStream out = CapturePrintStream.create();
@@ -49,7 +49,7 @@ public class BuildImageMainTest {
      */
     @Test
     public void test2() throws IOException {
-        FileSystem fs = new FakeFileSystem();
+        FileSystem fs = new FileSystemMemory();
         BlockStore store = new BlockStoreMemory();
         store.put(TestData.KEY_CONTENT.getEncodedBlock());
         store.put(TestData.KEY_CONTENT_1.getEncodedBlock());
@@ -76,7 +76,7 @@ public class BuildImageMainTest {
      */
     @Test
     public void testBrokenBlockInStore() throws IOException {
-        FileSystem fs = new FakeFileSystem();
+        FileSystem fs = new FileSystemMemory();
         BlockStoreMemory store = new BlockStoreMemory();
         store.put(TestData.KEY_CONTENT.getEncodedBlock());
         store.put(TestData.KEY_CONTENT_1.getEncodedBlock());

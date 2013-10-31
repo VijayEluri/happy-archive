@@ -9,7 +9,7 @@ import java.util.Map;
 import org.yi.happy.annotate.GlobalFilesystem;
 import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.file_system.FileSystem;
-import org.yi.happy.archive.file_system.RealFileSystem;
+import org.yi.happy.archive.file_system.FileSystemFile;
 
 /**
  * The dependency injector for this project, this gives me much more flexibility
@@ -48,7 +48,7 @@ public class MyInjector {
      * @return the object.
      */
     public static FileSystem injectFileSystem(ApplicationScope scope) {
-        return new RealFileSystem();
+        return new FileSystemFile();
     }
 
     /**

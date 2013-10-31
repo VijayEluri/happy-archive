@@ -11,7 +11,7 @@ import java.sql.Statement;
 import org.yi.happy.annotate.GlobalFilesystem;
 import org.yi.happy.annotate.GlobalOutput;
 import org.yi.happy.archive.file_system.FileSystem;
-import org.yi.happy.archive.file_system.RealFileSystem;
+import org.yi.happy.archive.file_system.FileSystemFile;
 
 /**
  * Experimental command to populate a HSQL database with indexes.
@@ -52,7 +52,7 @@ public class MakeIndexDatabaseMain implements MainCommand {
 
         conn.setAutoCommit(false);
 
-        FileSystem fs = new RealFileSystem();
+        FileSystem fs = new FileSystemFile();
         String path = "/Users/happy/archive.d/index";
         IndexStore index = new IndexStoreFileSystem(fs, path);
         for (String volumeSet : index.listVolumeSets()) {

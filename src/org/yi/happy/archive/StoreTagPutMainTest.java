@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
-import org.yi.happy.archive.file_system.FakeFileSystem;
+import org.yi.happy.archive.file_system.FileSystemMemory;
 import org.yi.happy.archive.file_system.FileSystem;
 import org.yi.happy.archive.tag.Tag;
 import org.yi.happy.archive.tag.TagParser;
@@ -26,7 +26,7 @@ public class StoreTagPutMainTest {
      */
     @Test
     public void test1() throws IOException {
-        FileSystem fs = new FakeFileSystem();
+        FileSystem fs = new FileSystemMemory();
         fs.save("test.txt", TestData.FILE_CONTENT.getBytes());
         BlockStore store = new BlockStoreMemory();
 
@@ -54,7 +54,7 @@ public class StoreTagPutMainTest {
      */
     @Test
     public void test2() throws IOException {
-        FileSystem fs = new FakeFileSystem();
+        FileSystem fs = new FileSystemMemory();
         fs.save("test.txt", TestData.FILE_CONTENT.getBytes());
         BlockStore store = new BlockStoreMemory();
 

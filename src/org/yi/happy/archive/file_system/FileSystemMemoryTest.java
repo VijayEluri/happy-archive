@@ -19,11 +19,11 @@ import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.ByteString;
 
 /**
- * Tests for {@link FakeFileSystem}.
+ * Tests for {@link FileSystemMemory}.
  */
 @SmellsMessy(/* TODO use some builders */)
-public class FakeFileSystemTest {
-    private FakeFileSystem fake;
+public class FileSystemMemoryTest {
+    private FileSystemMemory fake;
     private FileSystem real;
 
     /**
@@ -31,7 +31,7 @@ public class FakeFileSystemTest {
      */
     @Before
     public void before() {
-        fake = new FakeFileSystem();
+        fake = new FileSystemMemory();
         real = fake;
     }
 

@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
  * A fake file system for testing. This should behave just like a real file
  * system given the same calls under the same conditions.
  */
-public class FakeFileSystem implements FileSystem {
+public class FileSystemMemory implements FileSystem {
 
     private Map<String, byte[]> files = new HashMap<String, byte[]>();
 
@@ -24,7 +24,7 @@ public class FakeFileSystem implements FileSystem {
     /**
      * Create the fake file system, initially empty.
      */
-    public FakeFileSystem() {
+    public FileSystemMemory() {
         files.put("", DIR);
     }
 
