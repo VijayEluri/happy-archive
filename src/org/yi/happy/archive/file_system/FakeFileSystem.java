@@ -148,11 +148,6 @@ public class FakeFileSystem implements FileSystem {
     }
 
     @Override
-    public boolean exists(String path) {
-        return files.containsKey(path);
-    }
-
-    @Override
     public List<String> list(String path) throws IOException {
         if (!isDir(path)) {
             throw new IOException();

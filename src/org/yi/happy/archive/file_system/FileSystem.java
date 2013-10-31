@@ -92,17 +92,6 @@ public interface FileSystem {
     public void rename(String from, String to) throws IOException;
 
     /**
-     * check for existence of a path.
-     * 
-     * @param path
-     *            the path to check for.
-     * @return true if the path exists, false if the path does not exist.
-     * @throws IOException
-     *             if an error occurs.
-     */
-    boolean exists(String path) throws IOException;
-
-    /**
      * List the names in a directory.
      * 
      * @param path

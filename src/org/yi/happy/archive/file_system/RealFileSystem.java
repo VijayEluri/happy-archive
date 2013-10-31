@@ -82,11 +82,6 @@ public class RealFileSystem implements FileSystem {
     }
 
     @Override
-    public boolean exists(String path) throws IOException {
-        return new File(path).exists();
-    }
-
-    @Override
     public List<String> list(String path) throws IOException {
         String[] names = new File(path).list();
         if (names == null) {

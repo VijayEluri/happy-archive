@@ -194,7 +194,7 @@ public class FakeFileSystemTest {
         real.rename("a", "b");
 
         assertArrayEquals(new byte[0], real.load("b"));
-        assertFalse(real.exists("a"));
+        assertFalse(real.isFile("a"));
     }
 
     /**
@@ -239,7 +239,7 @@ public class FakeFileSystemTest {
         real.rename("a", "b");
 
         assertArrayEquals(new byte[] { 1 }, real.load("b"));
-        assertFalse(real.exists("a"));
+        assertFalse(real.isFile("a"));
     }
 
     /**
@@ -269,7 +269,7 @@ public class FakeFileSystemTest {
         real.rename("a", "b/a");
 
         assertArrayEquals(new byte[] {}, real.load("b/a"));
-        assertFalse(real.exists("a"));
+        assertFalse(real.isFile("a"));
     }
 
     /**
@@ -336,7 +336,7 @@ public class FakeFileSystemTest {
     public void testMkdirAbsolute() throws IOException {
         real.mkdir("/a");
 
-        assertTrue(real.exists("/a"));
+        assertTrue(real.isDir("/a"));
     }
 
     /**
