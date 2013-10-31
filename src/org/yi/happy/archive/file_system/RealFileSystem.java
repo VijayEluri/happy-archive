@@ -73,15 +73,6 @@ public class RealFileSystem implements FileSystem {
     }
 
     @Override
-    public void rename(String from, String to) throws IOException {
-        boolean success = new File(from).renameTo(new File(to));
-
-        if (!success) {
-            throw new IOException();
-        }
-    }
-
-    @Override
     public List<String> list(String path) throws IOException {
         String[] names = new File(path).list();
         if (names == null) {

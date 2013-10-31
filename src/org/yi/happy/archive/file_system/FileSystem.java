@@ -80,18 +80,6 @@ public interface FileSystem {
     boolean mkdir(String path) throws IOException;
 
     /**
-     * rename a file.
-     * 
-     * @param from
-     *            the old name.
-     * @param to
-     *            the new name.
-     * @throws IOException
-     *             if the file can not be renamed.
-     */
-    public void rename(String from, String to) throws IOException;
-
-    /**
      * List the names in a directory.
      * 
      * @param path
