@@ -17,7 +17,7 @@ import org.yi.happy.archive.key.LocatorKey;
  * A storage driver backed by memory. So far this could probably be replaced
  * with a logging StoreBlock implementation.
  */
-public class StorageMemory implements BlockStore {
+public class BlockStoreMemory implements BlockStore {
     private Map<LocatorKey, EncodedBlock> data = new HashMap<LocatorKey, EncodedBlock>();
     private Set<LocatorKey> broken = new HashSet<LocatorKey>();
 

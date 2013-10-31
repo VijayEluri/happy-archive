@@ -24,7 +24,7 @@ public class StoreBlockPutMainTest {
     @Test
     public void test1() throws IOException {
         FakeFileSystem fs = new FakeFileSystem();
-        StorageMemory store = new StorageMemory();
+        BlockStoreMemory store = new BlockStoreMemory();
         fs.save("block.dat", TestData.KEY_CONTENT.getBytes());
 
         List<String> args = Arrays.asList("block.dat");

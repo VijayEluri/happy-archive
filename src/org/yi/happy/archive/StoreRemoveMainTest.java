@@ -32,7 +32,7 @@ public class StoreRemoveMainTest {
     @Test
     public void test1() throws IOException {
         FileSystem fs = new FakeFileSystem();
-        BlockStore store = new StorageMemory();
+        BlockStore store = new BlockStoreMemory();
         store.put(block(C1));
         store.put(block(C2));
         store.put(block(C3));

@@ -24,7 +24,7 @@ public class StoreListMainTest {
      */
     @Test
     public void test1() throws IOException {
-        BlockStore store = new StorageMemory();
+        BlockStore store = new BlockStoreMemory();
         store.put(block(C1));
         store.put(block(C2));
         store.put(block(C3));

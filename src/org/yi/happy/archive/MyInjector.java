@@ -370,7 +370,7 @@ public class MyInjector {
      * @return the object.
      */
     public static BlockStore injectBlockStore(ApplicationScope scope) {
-        return new FileBlockStore(injectStoreFile(scope));
+        return new BlockStoreFile(injectStoreFile(scope));
     }
 
     /**

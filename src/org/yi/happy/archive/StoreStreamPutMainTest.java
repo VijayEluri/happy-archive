@@ -26,7 +26,7 @@ public class StoreStreamPutMainTest {
         FileSystem fs = new FakeFileSystem();
         InputStream in = new ByteArrayInputStream(ByteString.toBytes("hello\n"));
         CapturePrintStream out = CapturePrintStream.create();
-        BlockStore store = new StorageMemory();
+        BlockStore store = new BlockStoreMemory();
 
         new StoreStreamPutMain(store, fs, in, out).run();
 

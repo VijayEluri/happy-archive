@@ -12,9 +12,9 @@ import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
- * Tests for {@link StorageMemory}.
+ * Tests for {@link BlockStoreMemory}.
  */
-public class StorageMemoryTest {
+public class BlockStoreMemoryTest {
     /**
      * Check out iteration over the keys.
      * 
@@ -22,7 +22,7 @@ public class StorageMemoryTest {
      */
     @Test
     public void test1() throws IOException {
-        BlockStore store = new StorageMemory();
+        BlockStore store = new BlockStoreMemory();
         store.put(TestData.KEY_CONTENT.getEncodedBlock());
         store.put(TestData.KEY_CONTENT_1.getEncodedBlock());
         store.put(TestData.KEY_CONTENT_2.getEncodedBlock());

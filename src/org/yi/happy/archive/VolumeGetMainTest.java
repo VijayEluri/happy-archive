@@ -28,7 +28,7 @@ public class VolumeGetMainTest {
         fs.mkdir("/media");
         fs.save("/media/00.dat", TestData.KEY_CONTENT_MAP.getBytes());
         InputStream in = new ByteArrayInputStream("00.dat\n".getBytes("UTF-8"));
-        BlockStore store = new StorageMemory();
+        BlockStore store = new BlockStoreMemory();
 
         new VolumeGetMain(store, fs, in, null, Arrays.asList("/media")).run();
 

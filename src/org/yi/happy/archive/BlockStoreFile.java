@@ -16,7 +16,7 @@ import org.yi.happy.archive.key.LocatorKey;
  * A block store that uses the file system to store the blocks.
  */
 @GlobalFilesystem
-public class FileBlockStore implements BlockStore {
+public class BlockStoreFile implements BlockStore {
     private final File base;
 
     /**
@@ -27,7 +27,7 @@ public class FileBlockStore implements BlockStore {
      * @param base
      *            the base path to use.
      */
-    public FileBlockStore(File base) {
+    public BlockStoreFile(File base) {
         this.base = base;
     }
 
@@ -105,6 +105,6 @@ public class FileBlockStore implements BlockStore {
 
     @Override
     public Iterator<LocatorKey> iterator() {
-        return new FileBlockStoreIterator(base);
+        return new BlockStoreFileIterator(base);
     }
 }

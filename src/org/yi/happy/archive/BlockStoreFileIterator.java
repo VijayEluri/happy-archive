@@ -15,7 +15,7 @@ import org.yi.happy.archive.key.LocatorKeyParse;
  * An iterator over a file block store.
  */
 @GlobalFilesystem
-public class FileBlockStoreIterator implements Iterator<LocatorKey> {
+public class BlockStoreFileIterator implements Iterator<LocatorKey> {
     /**
      * base/n
      */
@@ -42,7 +42,7 @@ public class FileBlockStoreIterator implements Iterator<LocatorKey> {
      * @param base
      *            the base of the store.
      */
-    public FileBlockStoreIterator(File base) {
+    public BlockStoreFileIterator(File base) {
         String[] names = base.list();
         if (names == null) {
             throw new IllegalStateException();

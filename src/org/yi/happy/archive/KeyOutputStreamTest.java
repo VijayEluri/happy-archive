@@ -23,7 +23,7 @@ public class KeyOutputStreamTest {
     @Test
     public void testWrite() throws IOException {
         BlockEncoder e = BlockEncoderFactory.getContentOldDefault();
-        StorageMemory s = new StorageMemory();
+        BlockStoreMemory s = new BlockStoreMemory();
         KeyOutputStream out = new KeyOutputStream(new StoreBlockStorage(e, s));
 
         byte[] data = "0123401234".getBytes();
@@ -48,7 +48,7 @@ public class KeyOutputStreamTest {
     @Test
     public void testWrite2() throws IOException {
         BlockEncoder e = BlockEncoderFactory.getContentDefault();
-        StorageMemory s = new StorageMemory();
+        BlockStoreMemory s = new BlockStoreMemory();
         KeyOutputStream out = new KeyOutputStream(new StoreBlockStorage(e, s));
 
         out.write("hello\n".getBytes());
@@ -67,7 +67,7 @@ public class KeyOutputStreamTest {
     @Test(expected = IOException.class)
     public void testWriteAfterClose() throws IOException {
         BlockEncoder e = BlockEncoderFactory.getContentDefault();
-        StorageMemory s = new StorageMemory();
+        BlockStoreMemory s = new BlockStoreMemory();
         KeyOutputStream out = new KeyOutputStream(new StoreBlockStorage(e, s));
 
         out.close();
@@ -83,7 +83,7 @@ public class KeyOutputStreamTest {
     @Test
     public void testCloseAgain() throws IOException {
         BlockEncoder e = BlockEncoderFactory.getContentDefault();
-        StorageMemory s = new StorageMemory();
+        BlockStoreMemory s = new BlockStoreMemory();
         KeyOutputStream out = new KeyOutputStream(new StoreBlockStorage(e, s));
 
         out.write("hello\n".getBytes());
@@ -102,7 +102,7 @@ public class KeyOutputStreamTest {
     @Test
     public void testSetSplitSize() throws IOException {
         BlockEncoder e = BlockEncoderFactory.getContentOldDefault();
-        StorageMemory s = new StorageMemory();
+        BlockStoreMemory s = new BlockStoreMemory();
         KeyOutputStream out = new KeyOutputStream(new StoreBlockStorage(e, s));
 
         out.setSplitSize(512);

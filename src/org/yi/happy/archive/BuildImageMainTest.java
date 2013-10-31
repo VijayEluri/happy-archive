@@ -26,7 +26,7 @@ public class BuildImageMainTest {
     @Test
     public void test1() throws IOException {
         FileSystem fs = new FakeFileSystem();
-        BlockStore store = new StorageMemory();
+        BlockStore store = new BlockStoreMemory();
         store.put(TestData.KEY_CONTENT.getEncodedBlock());
         CapturePrintStream out = CapturePrintStream.create();
         fs.save("outstanding",
@@ -50,7 +50,7 @@ public class BuildImageMainTest {
     @Test
     public void test2() throws IOException {
         FileSystem fs = new FakeFileSystem();
-        BlockStore store = new StorageMemory();
+        BlockStore store = new BlockStoreMemory();
         store.put(TestData.KEY_CONTENT.getEncodedBlock());
         store.put(TestData.KEY_CONTENT_1.getEncodedBlock());
         CapturePrintStream out = CapturePrintStream.create();
@@ -77,7 +77,7 @@ public class BuildImageMainTest {
     @Test
     public void testBrokenBlockInStore() throws IOException {
         FileSystem fs = new FakeFileSystem();
-        StorageMemory store = new StorageMemory();
+        BlockStoreMemory store = new BlockStoreMemory();
         store.put(TestData.KEY_CONTENT.getEncodedBlock());
         store.put(TestData.KEY_CONTENT_1.getEncodedBlock());
 

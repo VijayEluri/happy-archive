@@ -28,7 +28,7 @@ public class StoreTagPutMainTest {
     public void test1() throws IOException {
         FileSystem fs = new FakeFileSystem();
         fs.save("test.txt", TestData.FILE_CONTENT.getBytes());
-        BlockStore store = new StorageMemory();
+        BlockStore store = new BlockStoreMemory();
 
         ByteArrayOutputStream out0 = new ByteArrayOutputStream();
         PrintStream out = new PrintStream(out0);
@@ -56,7 +56,7 @@ public class StoreTagPutMainTest {
     public void test2() throws IOException {
         FileSystem fs = new FakeFileSystem();
         fs.save("test.txt", TestData.FILE_CONTENT.getBytes());
-        BlockStore store = new StorageMemory();
+        BlockStore store = new BlockStoreMemory();
 
         ByteArrayOutputStream out0 = new ByteArrayOutputStream();
         PrintStream out = new PrintStream(out0);
