@@ -153,39 +153,6 @@ public class FakeFileSystem implements FileSystem {
     }
 
     @Override
-    public RandomOutputFile openRandomOutputFile(final String path)
-            throws IOException {
-        /*
-         * TODO extract parent check to a method
-         */
-        if (path.contains("/")
-                && files.get(path.replaceAll("/[^/]*$", "")) != DIR) {
-            throw new FileNotFoundException("parent does not exist or is"
-                    + " not a folder");
-        }
-
-        if (files.get(path) == DIR) {
-            throw new IOException();
-        }
-
-        byte[] bytes = files.get(path);
-        if (bytes == null) {
-            bytes = new byte[0];
-        }
-
-        FakeRandomOutputFile f = new FakeRandomOutputFile(bytes);
-
-        f.setCloseListener(new FakeRandomOutputFile.CloseListener() {
-            @Override
-            public void onClose(byte[] data) {
-                files.put(path, data);
-            }
-        });
-
-        return f;
-    }
-
-    @Override
     public List<String> list(String path) throws IOException {
         if (!isDir(path)) {
             throw new IOException();
@@ -224,16 +191,6 @@ public class FakeFileSystem implements FileSystem {
     }
 
     @Override
-    public boolean delete(String path) throws IOException {
-        if (files.get(path) == DIR) {
-            throw new IOException();
-        }
-        boolean out = files.containsKey(path);
-        files.remove(path);
-        return out;
-    }
-
-    @Override
     public boolean isFile(String path) {
         byte[] data = files.get(path);
 
@@ -245,22 +202,5 @@ public class FakeFileSystem implements FileSystem {
         }
 
         return true;
-    }
-
-    @Override
-    public FileObject resolve(String path) {
-        return new FakeFileObject(this, path);
-    }
-
-    @Override
-    public long getModificationTime(String fileName) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public boolean mkparentdir(String path) {
-        // TODO Auto-generated method stub
-        return false;
     }
 }

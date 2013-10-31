@@ -273,39 +273,6 @@ public class FakeFileSystemTest {
     }
 
     /**
-     * when I open a random output file and write bytes to it; then the bytes
-     * are in the file.
-     * 
-     * @throws IOException
-     */
-    @Test
-    public void randomWrite() throws IOException {
-        RandomOutputFile f = real.openRandomOutputFile("a");
-        f.writeAt(0, new byte[] { 0, 1 });
-        f.close();
-
-        assertArrayEquals(new byte[] { 0, 1 }, real.load("a"));
-    }
-
-    /**
-     * given an existing file; when I open the file as a random output file and
-     * over write the start of it; then only the first part of the file is
-     * changed.
-     * 
-     * @throws IOException
-     */
-    @Test
-    public void randomWrite2() throws IOException {
-        real.save("a", new byte[] { 1, 2, 3 });
-
-        RandomOutputFile f = real.openRandomOutputFile("a");
-        f.writeAt(0, new byte[] { 0, 1 });
-        f.close();
-
-        assertArrayEquals(new byte[] { 0, 1, 3 }, real.load("a"));
-    }
-
-    /**
      * List the current directory with one item.
      * 
      * @throws IOException

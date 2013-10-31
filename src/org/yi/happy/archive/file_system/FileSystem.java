@@ -103,17 +103,6 @@ public interface FileSystem {
     boolean exists(String path) throws IOException;
 
     /**
-     * open a file for random output.
-     * 
-     * @param path
-     *            the file to open.
-     * @return the file opened for random output.
-     * @throws IOException
-     *             on error.
-     */
-    RandomOutputFile openRandomOutputFile(String path) throws IOException;
-
-    /**
      * List the names in a directory.
      * 
      * @param path
@@ -134,17 +123,6 @@ public interface FileSystem {
     boolean isDir(String path);
 
     /**
-     * Delete a file.
-     * 
-     * @param path
-     *            the file to delete.
-     * @return true if the file was deleted.
-     * @throws IOException
-     *             if the file can not be deleted.
-     */
-    boolean delete(String path) throws IOException;
-
-    /**
      * check that a path exists and is a file.
      * 
      * @param path
@@ -152,34 +130,4 @@ public interface FileSystem {
      * @return true if the path exists and is a file.
      */
     boolean isFile(String path);
-
-    /**
-     * Get a file object for a path.
-     * 
-     * @param path
-     *            the path to get the file object for.
-     * @return the file object for the path.
-     * 
-     */
-    FileObject resolve(String path);
-
-    /**
-     * Get the modification time for a file.
-     * 
-     * @param fileName
-     *            the file to get the modification time of.
-     * @return the modification time for a file in milliseconds since epoch.
-     */
-    long getModificationTime(String fileName);
-
-    /**
-     * Make the parent directories for the given path.
-     * 
-     * @param path
-     *            the path to the find to make the parent directory for.
-     * @return true if the directory was created, false if it exists.
-     * @throws IOException
-     *             if the directory can not be created.
-     */
-    boolean mkparentdir(String path) throws IOException;
 }

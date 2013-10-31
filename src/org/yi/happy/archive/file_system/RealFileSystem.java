@@ -87,12 +87,6 @@ public class RealFileSystem implements FileSystem {
     }
 
     @Override
-    public RandomOutputFile openRandomOutputFile(String path)
-            throws IOException {
-        return new RealRandomOutputFile(path);
-    }
-
-    @Override
     public List<String> list(String path) throws IOException {
         String[] names = new File(path).list();
         if (names == null) {
@@ -107,45 +101,7 @@ public class RealFileSystem implements FileSystem {
     }
 
     @Override
-    public boolean delete(String path) throws IOException {
-        File f = new File(path);
-        if (!f.exists()) {
-            return false;
-        }
-        if (f.delete()) {
-            return true;
-        }
-        throw new IOException();
-    }
-
-    @Override
     public boolean isFile(String path) {
         return new File(path).isFile();
-    }
-
-    @Override
-    public FileObject resolve(String path) {
-        return new RealFileObject(this, path);
-    }
-
-    @Override
-    public long getModificationTime(String fileName) {
-        return new File(fileName).lastModified();
-    }
-
-    @Override
-    public boolean mkparentdir(String path) throws IOException {
-        File f = new File(path);
-        f = f.getParentFile();
-
-        if (f.mkdirs()) {
-            return true;
-        }
-
-        if (f.isDirectory()) {
-            return false;
-        }
-
-        throw new IOException();
     }
 }
