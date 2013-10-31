@@ -13,7 +13,6 @@ import org.yi.happy.archive.commandLine.UsesOutput;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.crypto.Digests;
-import org.yi.happy.archive.file_system.FileStore;
 
 /**
  * Index a volume that has been burned.

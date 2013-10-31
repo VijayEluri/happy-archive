@@ -8,7 +8,6 @@ import org.yi.happy.archive.commandLine.UsesInput;
 import org.yi.happy.archive.commandLine.UsesOutput;
 import org.yi.happy.archive.commandLine.UsesStore;
 import org.yi.happy.archive.crypto.DigestFactory;
-import org.yi.happy.archive.file_system.FileStore;
 import org.yi.happy.archive.tag.Tag;
 import org.yi.happy.archive.tag.TagBuilder;
 import org.yi.happy.archive.tag.TagOutputStream;

@@ -1,4 +1,4 @@
-package org.yi.happy.archive.file_system;
+package org.yi.happy.archive;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -16,7 +16,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yi.happy.annotate.SmellsMessy;
-import org.yi.happy.archive.ByteString;
 
 /**
  * Tests for {@link FileStoreMemory}.

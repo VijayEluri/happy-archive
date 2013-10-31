@@ -8,8 +8,6 @@ import java.io.InputStream;
 import java.util.Arrays;
 
 import org.junit.Test;
-import org.yi.happy.archive.file_system.FileStoreMemory;
-import org.yi.happy.archive.file_system.FileStore;
 import org.yi.happy.archive.test_data.TestData;
 
 /**

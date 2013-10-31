@@ -9,8 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
-import org.yi.happy.archive.file_system.FileStoreMemory;
-import org.yi.happy.archive.file_system.FileStore;
 import org.yi.happy.archive.tag.Tag;
 import org.yi.happy.archive.tag.TagParser;
 import org.yi.happy.archive.test_data.TestData;

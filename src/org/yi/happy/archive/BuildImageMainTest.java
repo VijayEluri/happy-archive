@@ -13,8 +13,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yi.happy.archive.block.EncodedBlock;
-import org.yi.happy.archive.file_system.FileStore;
-import org.yi.happy.archive.file_system.FileStoreMemory;
 import org.yi.happy.archive.key.ContentLocatorKey;
 import org.yi.happy.archive.key.HashValue;
 import org.yi.happy.archive.key.LocatorKey;

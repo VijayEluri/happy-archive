@@ -11,7 +11,6 @@ import org.yi.happy.archive.block.encoder.BlockEncoderResult;
 import org.yi.happy.archive.block.parser.BlockParse;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesOutput;
-import org.yi.happy.archive.file_system.FileStore;
 
 /**
  * command line tool to encode a content block. The clear data is read from the

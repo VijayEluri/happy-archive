@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
-import org.yi.happy.archive.file_system.FileStore;
 
 /**
  * An {@link IndexStore} in a {@link FileStore}.

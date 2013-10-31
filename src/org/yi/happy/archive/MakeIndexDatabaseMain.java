@@ -10,8 +10,6 @@ import java.sql.Statement;
 
 import org.yi.happy.annotate.GlobalFilesystem;
 import org.yi.happy.annotate.GlobalOutput;
-import org.yi.happy.archive.file_system.FileStore;
-import org.yi.happy.archive.file_system.FileStoreFile;
 
 /**
  * Experimental command to populate a HSQL database with indexes.

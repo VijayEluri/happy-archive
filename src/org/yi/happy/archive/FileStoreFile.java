@@ -1,4 +1,4 @@
-package org.yi.happy.archive.file_system;
+package org.yi.happy.archive;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.yi.happy.annotate.GlobalFilesystem;
-import org.yi.happy.archive.Streams;
 
 /**
  * A {@link FileStore} in the global file system.

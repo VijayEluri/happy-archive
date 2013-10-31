@@ -12,8 +12,6 @@ import org.yi.happy.annotate.NeedFailureTest;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.crypto.Digests;
-import org.yi.happy.archive.file_system.FileStore;
-import org.yi.happy.archive.file_system.FileStoreMemory;
 import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.test_data.TestData;
 
