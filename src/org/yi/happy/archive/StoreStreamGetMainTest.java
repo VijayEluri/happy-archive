@@ -29,7 +29,7 @@ public class StoreStreamGetMainTest {
         final TestData C = TestData.KEY_CONTENT;
         final TestData F = TestData.FILE_CONTENT;
 
-        MapClearBlockSource source = new MapClearBlockSource();
+        ClearBlockSourceMemory source = new ClearBlockSourceMemory();
         source.put(C);
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -52,7 +52,7 @@ public class StoreStreamGetMainTest {
         final TestData C2 = TestData.KEY_CONTENT_2;
         final TestData F = TestData.FILE_CONTENT_MAP;
 
-        final MapClearBlockSource source = new MapClearBlockSource();
+        final ClearBlockSourceMemory source = new ClearBlockSourceMemory();
 
         NotReadyHandler notReady = new NotReadyHandler() {
             private int call = 0;

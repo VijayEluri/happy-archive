@@ -11,7 +11,7 @@ import org.yi.happy.archive.test_data.TestData;
 /**
  * A trivial block retrieval method for testing.
  */
-public class MapClearBlockSource implements ClearBlockSource {
+public class ClearBlockSourceMemory implements ClearBlockSource {
 
     private Map<FullKey, Block> map = new HashMap<FullKey, Block>();
 

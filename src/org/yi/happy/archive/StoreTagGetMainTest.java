@@ -32,7 +32,7 @@ public class StoreTagGetMainTest {
      */
     @Test
     public void testSimple() throws IOException {
-        MapClearBlockSource source = new MapClearBlockSource();
+        ClearBlockSourceMemory source = new ClearBlockSourceMemory();
         source.put(C1);
         source.put(C2);
 
@@ -54,7 +54,7 @@ public class StoreTagGetMainTest {
      */
     @Test
     public void testNotReady() throws IOException {
-        final MapClearBlockSource source = new MapClearBlockSource();
+        final ClearBlockSourceMemory source = new ClearBlockSourceMemory();
         FragmentSaveMemory target = new FragmentSaveMemory();
 
         NotReadyHandler notReady = new NotReadyHandler() {

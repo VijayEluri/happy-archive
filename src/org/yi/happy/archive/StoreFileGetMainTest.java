@@ -32,7 +32,7 @@ public class StoreFileGetMainTest {
 
         final FragmentSaveMemory target = new FragmentSaveMemory();
 
-        final MapClearBlockSource store = new MapClearBlockSource();
+        final ClearBlockSourceMemory store = new ClearBlockSourceMemory();
         store.put(C);
 
         List<String> args = strs(key(C), N);
@@ -55,7 +55,7 @@ public class StoreFileGetMainTest {
 
         final FragmentSaveMemory target = new FragmentSaveMemory();
 
-        final MapClearBlockSource source = new MapClearBlockSource();
+        final ClearBlockSourceMemory source = new ClearBlockSourceMemory();
 
         NotReadyHandler notReady = new NotReadyHandler() {
             private int call = 0;

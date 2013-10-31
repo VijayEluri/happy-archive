@@ -10,7 +10,7 @@ import org.yi.happy.archive.key.FullKey;
 /**
  * Block retrieval and decoding service that connects to a block store.
  */
-public class StorageClearBlockSource implements ClearBlockSource {
+public class ClearBlockSourceStore implements ClearBlockSource {
 
     /**
      * create attached to a storage object
@@ -18,7 +18,7 @@ public class StorageClearBlockSource implements ClearBlockSource {
      * @param storage
      *            the storage object
      */
-    public StorageClearBlockSource(BlockStore storage) {
+    public ClearBlockSourceStore(BlockStore storage) {
         this.storage = storage;
     }
 

@@ -359,7 +359,7 @@ public class MyInjector {
      * @return the object.
      */
     public static ClearBlockSource injectClearBlockSource(ApplicationScope scope) {
-        return new StorageClearBlockSource(injectBlockStore(scope));
+        return new ClearBlockSourceStore(injectBlockStore(scope));
     }
 
     /**

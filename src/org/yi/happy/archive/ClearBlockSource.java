@@ -22,6 +22,8 @@ public interface ClearBlockSource {
      * @throws IOException
      *             if the block is available but fetching or decoding failed,
      *             and it is expected that trying again will continue to fail.
+     *             For example, a block that loads and parses but does not
+     *             decode with this key.
      */
     public Block get(FullKey key) throws IOException;
 }
