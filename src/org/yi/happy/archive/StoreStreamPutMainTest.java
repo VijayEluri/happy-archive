@@ -21,12 +21,11 @@ public class StoreStreamPutMainTest {
      */
     @Test
     public void test1() throws IOException {
-        FileStore fs = new FileStoreMemory();
         InputStream in = new ByteArrayInputStream(ByteString.toBytes("hello\n"));
         CapturePrintStream out = CapturePrintStream.create();
         BlockStore store = new BlockStoreMemory();
 
-        new StoreStreamPutMain(store, fs, in, out).run();
+        new StoreStreamPutMain(store, in, out).run();
 
         assertEquals(TestData.KEY_CONTENT_AES128.getFullKey() + "\n", out
                 .toString());

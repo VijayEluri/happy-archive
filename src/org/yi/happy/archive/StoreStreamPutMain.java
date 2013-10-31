@@ -34,8 +34,7 @@ public class StoreStreamPutMain implements MainCommand {
      * @param out
      *            the stream to write the result.
      */
-    public StoreStreamPutMain(BlockStore store, FileStore fs,
-            InputStream in, PrintStream out) {
+    public StoreStreamPutMain(BlockStore store, InputStream in, PrintStream out) {
         this.store = store;
         this.in = in;
         this.out = out;

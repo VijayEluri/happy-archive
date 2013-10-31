@@ -282,7 +282,7 @@ public class MyInjector {
      */
     public static MainCommand injectStoreStreamPutMain(ApplicationScope scope) {
         return new StoreStreamPutMain(injectBlockStore(scope),
-                injectFileStore(scope), injectInput(scope), injectOutput(scope));
+                injectInput(scope), injectOutput(scope));
     }
 
     /**
