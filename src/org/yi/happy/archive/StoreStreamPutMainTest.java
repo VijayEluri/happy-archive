@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.junit.Test;
-import org.yi.happy.archive.file_system.FileSystemMemory;
-import org.yi.happy.archive.file_system.FileSystem;
+import org.yi.happy.archive.file_system.FileStoreMemory;
+import org.yi.happy.archive.file_system.FileStore;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
@@ -23,7 +23,7 @@ public class StoreStreamPutMainTest {
      */
     @Test
     public void test1() throws IOException {
-        FileSystem fs = new FileSystemMemory();
+        FileStore fs = new FileStoreMemory();
         InputStream in = new ByteArrayInputStream(ByteString.toBytes("hello\n"));
         CapturePrintStream out = CapturePrintStream.create();
         BlockStore store = new BlockStoreMemory();

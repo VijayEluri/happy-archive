@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
-import org.yi.happy.archive.file_system.FileSystemMemory;
+import org.yi.happy.archive.file_system.FileStoreMemory;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
@@ -21,8 +21,8 @@ public class EncodeContentMainTest {
      */
     @Test
     public void test1() throws Exception {
-        FileSystemMemory fs = new FileSystemMemory();
-        fs.save("in.dat", TestData.CLEAR_CONTENT.getBytes());
+        FileStoreMemory fs = new FileStoreMemory();
+        fs.put("in.dat", TestData.CLEAR_CONTENT.getBytes());
         CapturePrintStream out = CapturePrintStream.create();
 
         List<String> args = Arrays.asList("in.dat", "out.dat");
@@ -32,6 +32,6 @@ public class EncodeContentMainTest {
                 TestData.KEY_CONTENT_AES128.getFullKey().toString() + "\n", out
                 .toString());
         assertArrayEquals(TestData.KEY_CONTENT_AES128.getBytes(), fs
-                .load("out.dat"));
+                .get("out.dat"));
     }
 }

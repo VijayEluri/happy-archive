@@ -9,8 +9,8 @@ import java.util.concurrent.ExecutionException;
 
 import org.junit.Test;
 import org.yi.happy.annotate.NeedFailureTest;
-import org.yi.happy.archive.file_system.FileSystemMemory;
-import org.yi.happy.archive.file_system.FileSystem;
+import org.yi.happy.archive.file_system.FileStoreMemory;
+import org.yi.happy.archive.file_system.FileStore;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
@@ -39,8 +39,8 @@ public class IndexSearchMainTest {
         IndexStoreMemory index = new IndexStoreMemory();
         index.addVolume(V0, V00, text(I));
 
-        FileSystem fs = new FileSystemMemory();
-        fs.save(R, raw(key(K0) + "\n"));
+        FileStore fs = new FileStoreMemory();
+        fs.put(R, raw(key(K0) + "\n"));
 
         CapturePrintStream out = CapturePrintStream.create();
         IndexSearch indexSearch = new IndexSearch(index);
@@ -79,8 +79,8 @@ public class IndexSearchMainTest {
         index.addVolume(V0, V00, text(I));
         index.addVolume(V1, V10, text(I));
 
-        FileSystem fs = new FileSystemMemory();
-        fs.save(R, raw(key(K0) + "\n"));
+        FileStore fs = new FileStoreMemory();
+        fs.put(R, raw(key(K0) + "\n"));
 
         CapturePrintStream out = CapturePrintStream.create();
         IndexSearch indexSearch = new IndexSearch(index);
@@ -118,8 +118,8 @@ public class IndexSearchMainTest {
         index.addVolume(V0, V00, text(I));
         index.addVolume(V1, V10, text(I));
 
-        FileSystem fs = new FileSystemMemory();
-        fs.save(R, raw(key(K0) + "\n" + key(K1) + "\n"));
+        FileStore fs = new FileStoreMemory();
+        fs.put(R, raw(key(K0) + "\n" + key(K1) + "\n"));
 
         CapturePrintStream out = CapturePrintStream.create();
         IndexSearch indexSearch = new IndexSearch(index);

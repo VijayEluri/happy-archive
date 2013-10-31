@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesStore;
-import org.yi.happy.archive.file_system.FileSystem;
+import org.yi.happy.archive.file_system.FileStore;
 import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.key.LocatorKeyParse;
 
@@ -17,7 +17,7 @@ import org.yi.happy.archive.key.LocatorKeyParse;
 @UsesArgs("key-list")
 public class StoreRemoveMain implements MainCommand {
 
-    private final FileSystem fs;
+    private final FileStore fs;
     private final BlockStore store;
     private final List<String> args;
 
@@ -31,7 +31,7 @@ public class StoreRemoveMain implements MainCommand {
      * @param args
      *            the non-option command line arguments.
      */
-    public StoreRemoveMain(BlockStore store, FileSystem fs, List<String> args) {
+    public StoreRemoveMain(BlockStore store, FileStore fs, List<String> args) {
         this.store = store;
         this.fs = fs;
         this.args = args;
@@ -46,7 +46,7 @@ public class StoreRemoveMain implements MainCommand {
      */
     @Override
     public void run() throws IOException {
-        InputStream in = fs.openInputStream(args.get(0));
+        InputStream in = fs.getStream(args.get(0));
         try {
             LineCursor line = new LineCursor(in);
             while (line.next()) {

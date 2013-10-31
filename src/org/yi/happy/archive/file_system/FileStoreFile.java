@@ -2,6 +2,7 @@ package org.yi.happy.archive.file_system;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,13 +13,13 @@ import org.yi.happy.annotate.GlobalFilesystem;
 import org.yi.happy.archive.Streams;
 
 /**
- * An implementation of {@link FileSystem} that acts on the real file system.
+ * A {@link FileStore} in the global file system.
  */
 @GlobalFilesystem
-public class FileSystemFile implements FileSystem {
+public class FileStoreFile implements FileStore {
 
     @Override
-    public byte[] load(String name) throws IOException {
+    public byte[] get(String name) throws IOException {
         FileInputStream in = new FileInputStream(name);
         try {
             return Streams.load(in);
@@ -28,7 +29,7 @@ public class FileSystemFile implements FileSystem {
     }
 
     @Override
-    public byte[] load(String name, int limit) throws IOException {
+    public byte[] get(String name, int limit) throws IOException {
         FileInputStream in = new FileInputStream(name);
         try {
             return Streams.load(in, limit);
@@ -38,12 +39,12 @@ public class FileSystemFile implements FileSystem {
     }
 
     @Override
-    public InputStream openInputStream(String name) throws IOException {
+    public InputStream getStream(String name) throws IOException {
         return new FileInputStream(name);
     }
 
     @Override
-    public void save(String name, byte[] bytes) throws IOException {
+    public void put(String name, byte[] bytes) throws IOException {
         FileOutputStream out = new FileOutputStream(name);
         try {
             out.write(bytes);
@@ -53,22 +54,17 @@ public class FileSystemFile implements FileSystem {
     }
 
     @Override
-    public String join(String base, String name) {
-        return new File(base, name).getPath();
-    }
-
-    @Override
-    public boolean mkdir(String path) throws IOException {
+    public boolean putDir(String path) throws IOException {
         File f = new File(path);
-
+    
         if (f.mkdir()) {
             return true;
         }
-
+    
         if (f.isDirectory()) {
             return false;
         }
-
+    
         throw new IOException();
     }
 
@@ -76,18 +72,18 @@ public class FileSystemFile implements FileSystem {
     public List<String> list(String path) throws IOException {
         String[] names = new File(path).list();
         if (names == null) {
-            throw new IOException();
+            throw new FileNotFoundException();
         }
         return Arrays.asList(names);
     }
 
     @Override
-    public boolean isDir(String path) {
-        return new File(path).isDirectory();
+    public boolean isFile(String path) {
+        return new File(path).isFile();
     }
 
     @Override
-    public boolean isFile(String path) {
-        return new File(path).isFile();
+    public boolean isDir(String path) {
+        return new File(path).isDirectory();
     }
 }

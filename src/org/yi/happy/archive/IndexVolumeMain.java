@@ -13,7 +13,7 @@ import org.yi.happy.archive.commandLine.UsesOutput;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.crypto.Digests;
-import org.yi.happy.archive.file_system.FileSystem;
+import org.yi.happy.archive.file_system.FileStore;
 
 /**
  * Index a volume that has been burned.
@@ -22,7 +22,7 @@ import org.yi.happy.archive.file_system.FileSystem;
 @UsesOutput("index")
 public class IndexVolumeMain implements MainCommand {
 
-    private final FileSystem fs;
+    private final FileStore fs;
     private final PrintStream out;
     private final DigestProvider digest;
     private final PrintStream err;
@@ -40,7 +40,7 @@ public class IndexVolumeMain implements MainCommand {
      * @param args
      *            the non-option arguments.
      */
-    public IndexVolumeMain(FileSystem fs, PrintStream out, PrintStream err,
+    public IndexVolumeMain(FileStore fs, PrintStream out, PrintStream err,
             List<String> args) {
         this.fs = fs;
         this.out = out;
@@ -63,7 +63,7 @@ public class IndexVolumeMain implements MainCommand {
             List<String> names = fs.list(args.get(0));
             Collections.sort(names);
             for (String name : names) {
-                process(fs.join(args.get(0), name), name);
+                process(args.get(0) + "/" + name, name);
             }
         } finally {
             out.flush();
@@ -78,7 +78,7 @@ public class IndexVolumeMain implements MainCommand {
         }
 
         try {
-            byte[] data = fs.load(path, Blocks.MAX_SIZE);
+            byte[] data = fs.get(path, Blocks.MAX_SIZE);
             EncodedBlock block = EncodedBlockParse.parse(data);
 
             String key = block.getKey().toString();
@@ -99,7 +99,7 @@ public class IndexVolumeMain implements MainCommand {
         List<String> names = fs.list(path);
         Collections.sort(names);
         for (String name : names) {
-            process(fs.join(path, name), base + "/" + name);
+            process(path + "/" + name, base + "/" + name);
         }
     }
 }

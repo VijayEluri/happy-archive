@@ -9,8 +9,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
-import org.yi.happy.archive.file_system.FileSystemMemory;
-import org.yi.happy.archive.file_system.FileSystem;
+import org.yi.happy.archive.file_system.FileStoreMemory;
+import org.yi.happy.archive.file_system.FileStore;
 import org.yi.happy.archive.tag.Tag;
 import org.yi.happy.archive.tag.TagParser;
 import org.yi.happy.archive.test_data.TestData;
@@ -26,8 +26,8 @@ public class StoreTagPutMainTest {
      */
     @Test
     public void test1() throws IOException {
-        FileSystem fs = new FileSystemMemory();
-        fs.save("test.txt", TestData.FILE_CONTENT.getBytes());
+        FileStore fs = new FileStoreMemory();
+        fs.put("test.txt", TestData.FILE_CONTENT.getBytes());
         BlockStore store = new BlockStoreMemory();
 
         ByteArrayOutputStream out0 = new ByteArrayOutputStream();
@@ -54,8 +54,8 @@ public class StoreTagPutMainTest {
      */
     @Test
     public void test2() throws IOException {
-        FileSystem fs = new FileSystemMemory();
-        fs.save("test.txt", TestData.FILE_CONTENT.getBytes());
+        FileStore fs = new FileStoreMemory();
+        fs.put("test.txt", TestData.FILE_CONTENT.getBytes());
         BlockStore store = new BlockStoreMemory();
 
         ByteArrayOutputStream out0 = new ByteArrayOutputStream();

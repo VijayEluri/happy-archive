@@ -9,8 +9,8 @@ import java.util.List;
 
 import org.junit.Test;
 import org.yi.happy.archive.block.EncodedBlock;
-import org.yi.happy.archive.file_system.FileSystemMemory;
-import org.yi.happy.archive.file_system.FileSystem;
+import org.yi.happy.archive.file_system.FileStoreMemory;
+import org.yi.happy.archive.file_system.FileStore;
 import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.test_data.TestData;
 
@@ -31,12 +31,12 @@ public class StoreRemoveMainTest {
      */
     @Test
     public void test1() throws IOException {
-        FileSystem fs = new FileSystemMemory();
+        FileStore fs = new FileStoreMemory();
         BlockStore store = new BlockStoreMemory();
         store.put(block(C1));
         store.put(block(C2));
         store.put(block(C3));
-        fs.save(N, ByteString.toUtf8(key(C2) + "\n" + key(C3) + "\n"));
+        fs.put(N, ByteString.toUtf8(key(C2) + "\n" + key(C3) + "\n"));
 
         List<String> args = Arrays.asList(N);
         new StoreRemoveMain(store, fs, args).run();

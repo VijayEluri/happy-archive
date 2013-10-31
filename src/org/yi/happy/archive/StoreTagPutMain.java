@@ -12,7 +12,7 @@ import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesOutput;
 import org.yi.happy.archive.commandLine.UsesStore;
 import org.yi.happy.archive.crypto.DigestFactory;
-import org.yi.happy.archive.file_system.FileSystem;
+import org.yi.happy.archive.file_system.FileStore;
 import org.yi.happy.archive.tag.TagBuilder;
 import org.yi.happy.archive.tag.TagOutputStream;
 
@@ -24,7 +24,7 @@ import org.yi.happy.archive.tag.TagOutputStream;
 @UsesOutput("tag-list")
 public class StoreTagPutMain implements MainCommand {
 
-    private final FileSystem fs;
+    private final FileStore fs;
     private final PrintStream out;
     private final BlockStore store;
     private final List<String> args;
@@ -41,7 +41,7 @@ public class StoreTagPutMain implements MainCommand {
      * @param args
      *            the non-option arguments.
      */
-    public StoreTagPutMain(BlockStore store, FileSystem fs,
+    public StoreTagPutMain(BlockStore store, FileStore fs,
             PrintStream out, List<String> args) {
         this.store = store;
         this.fs = fs;
@@ -76,7 +76,7 @@ public class StoreTagPutMain implements MainCommand {
                     DigestOutputStream o2 = new DigestOutputStream(
                             DigestFactory.getProvider("sha-256").get());
                     TeeOutputStream o = new TeeOutputStream(o1, o2);
-                    InputStream in = fs.openInputStream(arg);
+                    InputStream in = fs.getStream(arg);
                     try {
                         Streams.copy(in, o);
                     } finally {

@@ -8,14 +8,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
-import org.yi.happy.archive.file_system.FileSystemMemory;
-import org.yi.happy.archive.file_system.FileSystem;
+import org.yi.happy.archive.file_system.FileStoreMemory;
+import org.yi.happy.archive.file_system.FileStore;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
- * Tests for {@link IndexStoreFileSystem}.
+ * Tests for {@link IndexStoreFileStore}.
  */
-public class IndexStoreFileSystemTest {
+public class IndexStoreFileStoreTest {
     /**
      * List the volume indexes. When the store is empty.
      * 
@@ -26,10 +26,10 @@ public class IndexStoreFileSystemTest {
         String V = "index";
         String V0 = "onsite";
 
-        FileSystem fs = new FileSystemMemory();
-        fs.mkdir(V);
+        FileStore fs = new FileStoreMemory();
+        fs.putDir(V);
 
-        IndexStore index = new IndexStoreFileSystem(fs, V);
+        IndexStore index = new IndexStoreFileStore(fs, V);
 
         assertEquals(list(), index.listVolumeSets());
 
@@ -47,11 +47,11 @@ public class IndexStoreFileSystemTest {
         String V = "index";
         String V0 = "onsite";
 
-        FileSystem fs = new FileSystemMemory();
-        fs.mkdir(V);
-        fs.mkdir(V + "/" + V0);
+        FileStore fs = new FileStoreMemory();
+        fs.putDir(V);
+        fs.putDir(V + "/" + V0);
 
-        IndexStore index = new IndexStoreFileSystem(fs, V);
+        IndexStore index = new IndexStoreFileStore(fs, V);
 
         assertEquals(list(V0), index.listVolumeSets());
         assertEquals(list(), index.listVolumeNames(V0));
@@ -72,14 +72,14 @@ public class IndexStoreFileSystemTest {
         String V10 = "02";
         TestData I = TestData.INDEX_MAP;
 
-        FileSystem fs = new FileSystemMemory();
-        fs.mkdir(V);
-        fs.mkdir(V + "/" + V0);
-        fs.save(V + "/" + V0 + "/" + V00, raw(I));
-        fs.mkdir(V + "/" + V1);
-        fs.save(V + "/" + V1 + "/" + V10, raw(I));
+        FileStore fs = new FileStoreMemory();
+        fs.putDir(V);
+        fs.putDir(V + "/" + V0);
+        fs.put(V + "/" + V0 + "/" + V00, raw(I));
+        fs.putDir(V + "/" + V1);
+        fs.put(V + "/" + V1 + "/" + V10, raw(I));
 
-        IndexStore index = new IndexStoreFileSystem(fs, V);
+        IndexStore index = new IndexStoreFileStore(fs, V);
 
         assertEquals(list(V0, V1), index.listVolumeSets());
         assertEquals(list(V00), index.listVolumeNames(V0));
@@ -104,14 +104,14 @@ public class IndexStoreFileSystemTest {
         TestData I = TestData.INDEX_MAP;
         TestData IZ = TestData.INDEX_MAP_GZ;
 
-        FileSystem fs = new FileSystemMemory();
-        fs.mkdir(V);
-        fs.mkdir(V + "/" + V0);
-        fs.save(V + "/" + V0 + "/" + V00, raw(I));
-        fs.mkdir(V + "/" + V0);
-        fs.save(V + "/" + V0 + "/" + V01Z, raw(IZ));
+        FileStore fs = new FileStoreMemory();
+        fs.putDir(V);
+        fs.putDir(V + "/" + V0);
+        fs.put(V + "/" + V0 + "/" + V00, raw(I));
+        fs.putDir(V + "/" + V0);
+        fs.put(V + "/" + V0 + "/" + V01Z, raw(IZ));
 
-        IndexStore index = new IndexStoreFileSystem(fs, V);
+        IndexStore index = new IndexStoreFileStore(fs, V);
 
         assertEquals(list(V00, V01), index.listVolumeNames(V0));
         assertEquals(text(I), load(index, V0, V00));
@@ -131,13 +131,13 @@ public class IndexStoreFileSystemTest {
         String V1 = "strayfile";
         TestData I = TestData.INDEX_MAP;
 
-        FileSystem fs = new FileSystemMemory();
-        fs.mkdir(V);
-        fs.mkdir(V + "/" + V0);
-        fs.save(V + "/" + V0 + "/" + V00, raw(I));
-        fs.save(V + "/" + V1, raw(I));
+        FileStore fs = new FileStoreMemory();
+        fs.putDir(V);
+        fs.putDir(V + "/" + V0);
+        fs.put(V + "/" + V0 + "/" + V00, raw(I));
+        fs.put(V + "/" + V1, raw(I));
 
-        IndexStore index = new IndexStoreFileSystem(fs, V);
+        IndexStore index = new IndexStoreFileStore(fs, V);
 
         assertEquals(list(V0), index.listVolumeSets());
         assertEquals(list(V00), index.listVolumeNames(V0));

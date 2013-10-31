@@ -8,8 +8,8 @@ import java.util.Map;
 
 import org.yi.happy.annotate.GlobalFilesystem;
 import org.yi.happy.archive.commandLine.Env;
-import org.yi.happy.archive.file_system.FileSystem;
-import org.yi.happy.archive.file_system.FileSystemFile;
+import org.yi.happy.archive.file_system.FileStore;
+import org.yi.happy.archive.file_system.FileStoreFile;
 
 /**
  * The dependency injector for this project, this gives me much more flexibility
@@ -26,7 +26,7 @@ public class MyInjector {
      */
     public static MainCommand injectStoreTagPutMain(ApplicationScope scope) {
         return new StoreTagPutMain(injectBlockStore(scope),
-                injectFileSystem(scope), injectOutput(scope), injectArgs(scope));
+                injectFileStore(scope), injectOutput(scope), injectArgs(scope));
     }
 
     /**
@@ -41,14 +41,14 @@ public class MyInjector {
     }
 
     /**
-     * get a {@link FileSystem}.
+     * get a {@link FileStore}.
      * 
      * @param scope
      *            the scope object.
      * @return the object.
      */
-    public static FileSystem injectFileSystem(ApplicationScope scope) {
-        return new FileSystemFile();
+    public static FileStore injectFileStore(ApplicationScope scope) {
+        return new FileStoreFile();
     }
 
     /**
@@ -142,7 +142,7 @@ public class MyInjector {
      */
     public static MainCommand injectStoreRemoveMain(ApplicationScope scope) {
         return new StoreRemoveMain(injectBlockStore(scope),
-                injectFileSystem(scope), injectArgs(scope));
+                injectFileStore(scope), injectArgs(scope));
     }
 
     /**
@@ -164,7 +164,7 @@ public class MyInjector {
      * @return the object.
      */
     public static MainCommand injectIndexSearchMain(ApplicationScope scope) {
-        return new IndexSearchMain(injectFileSystem(scope),
+        return new IndexSearchMain(injectFileStore(scope),
                 injectOutput(scope), injectError(scope),
                 injectIndexSearch(scope), injectArgs(scope));
     }
@@ -177,7 +177,7 @@ public class MyInjector {
      * @return the object.
      */
     public static MainCommand injectIndexVolumeMain(ApplicationScope scope) {
-        return new IndexVolumeMain(injectFileSystem(scope),
+        return new IndexVolumeMain(injectFileStore(scope),
                 injectOutput(scope), injectError(scope), injectArgs(scope));
     }
 
@@ -190,7 +190,7 @@ public class MyInjector {
      */
     public static MainCommand injectBuildImageMain(ApplicationScope scope) {
         return new BuildImageMain(injectBlockStore(scope),
-                injectFileSystem(scope), injectOutput(scope),
+                injectFileStore(scope), injectOutput(scope),
                 injectError(scope), injectArgs(scope));
     }
 
@@ -225,7 +225,7 @@ public class MyInjector {
      */
     public static MainCommand injectVolumeGetMain(ApplicationScope scope) {
         return new VolumeGetMain(injectBlockStore(scope),
-                injectFileSystem(scope), injectInput(scope),
+                injectFileStore(scope), injectInput(scope),
                 injectError(scope), injectArgs(scope));
     }
 
@@ -237,7 +237,7 @@ public class MyInjector {
      * @return the object.
      */
     public static MainCommand injectVerifyMain(ApplicationScope scope) {
-        return new VerifyMain(injectFileSystem(scope), injectOutput(scope),
+        return new VerifyMain(injectFileStore(scope), injectOutput(scope),
                 injectArgs(scope));
     }
 
@@ -249,7 +249,7 @@ public class MyInjector {
      * @return the object.
      */
     public static MainCommand injectEncodeContentMain(ApplicationScope scope) {
-        return new EncodeContentMain(injectFileSystem(scope),
+        return new EncodeContentMain(injectFileStore(scope),
                 injectOutput(scope), injectArgs(scope));
     }
 
@@ -261,7 +261,7 @@ public class MyInjector {
      * @return the object.
      */
     public static MainCommand injectDecodeBlockMain(ApplicationScope scope) {
-        return new DecodeBlockMain(injectFileSystem(scope),
+        return new DecodeBlockMain(injectFileStore(scope),
                 injectOutput(scope), injectArgs(scope));
     }
 
@@ -274,7 +274,7 @@ public class MyInjector {
      */
     public static MainCommand injectStoreTagAddMain(ApplicationScope scope) {
         return new StoreTagAddMain(injectBlockStore(scope),
-                injectFileSystem(scope));
+                injectFileStore(scope));
     }
 
     /**
@@ -286,7 +286,7 @@ public class MyInjector {
      */
     public static MainCommand injectStoreStreamPutMain(ApplicationScope scope) {
         return new StoreStreamPutMain(injectBlockStore(scope),
-                injectFileSystem(scope), injectInput(scope),
+                injectFileStore(scope), injectInput(scope),
                 injectOutput(scope));
     }
 
@@ -312,7 +312,7 @@ public class MyInjector {
      */
     public static MainCommand injectStoreBlockPutMain(ApplicationScope scope) {
         return new StoreBlockPutMain(injectBlockStore(scope),
-                injectFileSystem(scope), injectArgs(scope));
+                injectFileStore(scope), injectArgs(scope));
     }
 
     /**
@@ -440,7 +440,7 @@ public class MyInjector {
      * @return the object.
      */
     public static IndexStore injectIndexStore(ApplicationScope scope) {
-        return new IndexStoreFileSystem(injectFileSystem(scope),
+        return new IndexStoreFileStore(injectFileStore(scope),
                 injectIndex(scope));
     }
 
@@ -463,7 +463,7 @@ public class MyInjector {
      * @return the object.
      */
     public static IndexCheckMain injectIndexCheckMain(ApplicationScope scope) {
-        return new IndexCheckMain(injectFileSystem(scope), injectInput(scope),
+        return new IndexCheckMain(injectFileStore(scope), injectInput(scope),
                 injectOutput(scope), injectError(scope), injectArgs(scope));
     }
 

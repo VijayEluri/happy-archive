@@ -13,7 +13,7 @@ import org.yi.happy.archive.IndexSearch.SearchResult;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesIndex;
 import org.yi.happy.archive.commandLine.UsesOutput;
-import org.yi.happy.archive.file_system.FileSystem;
+import org.yi.happy.archive.file_system.FileStore;
 import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.key.LocatorKeyParse;
 
@@ -24,7 +24,7 @@ import org.yi.happy.archive.key.LocatorKeyParse;
 @UsesArgs("key-list")
 @UsesOutput("result")
 public class IndexSearchMain implements MainCommand {
-    private final FileSystem fs;
+    private final FileStore fs;
     private final PrintStream out;
     private final IndexSearch indexSearch;
     private final List<String> args;
@@ -44,7 +44,7 @@ public class IndexSearchMain implements MainCommand {
      * @param args
      *            the non-option command line arguments.
      */
-    public IndexSearchMain(FileSystem fs, PrintStream out, PrintStream err,
+    public IndexSearchMain(FileStore fs, PrintStream out, PrintStream err,
             IndexSearch indexSearch, List<String> args) {
         this.fs = fs;
         this.out = out;
@@ -86,7 +86,7 @@ public class IndexSearchMain implements MainCommand {
     private Set<LocatorKey> loadRequestSet(String path) throws IOException {
         Set<LocatorKey> out = new HashSet<LocatorKey>();
 
-        InputStream in0 = fs.openInputStream(path);
+        InputStream in0 = fs.getStream(path);
         try {
             LineCursor in = new LineCursor(in0);
             while (in.next()) {

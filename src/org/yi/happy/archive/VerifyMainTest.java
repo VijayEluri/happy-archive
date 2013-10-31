@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
-import org.yi.happy.archive.file_system.FileSystemMemory;
+import org.yi.happy.archive.file_system.FileStoreMemory;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
@@ -21,8 +21,8 @@ public class VerifyMainTest {
     @Test
     public void testOk() throws Exception {
         CapturePrintStream out = CapturePrintStream.create();
-        FileSystemMemory fs = new FileSystemMemory();
-        fs.save(TestData.KEY_CONTENT.getFileName(), TestData.KEY_CONTENT
+        FileStoreMemory fs = new FileStoreMemory();
+        fs.put(TestData.KEY_CONTENT.getFileName(), TestData.KEY_CONTENT
                 .getBytes());
 
         List<String> args = Arrays.asList(TestData.KEY_CONTENT.getFileName());
@@ -40,7 +40,7 @@ public class VerifyMainTest {
     @Test
     public void testMissing() throws Exception {
         CapturePrintStream out = CapturePrintStream.create();
-        FileSystemMemory fs = new FileSystemMemory();
+        FileStoreMemory fs = new FileStoreMemory();
 
         List<String> args = Arrays.asList("file.dat");
         VerifyMain app = new VerifyMain(fs, out, args);

@@ -13,7 +13,7 @@ import org.yi.happy.archive.commandLine.UsesOutput;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.crypto.Digests;
-import org.yi.happy.archive.file_system.FileSystem;
+import org.yi.happy.archive.file_system.FileStore;
 
 /**
  * Check that the files on a volume are still readable. Do this by building a
@@ -23,7 +23,7 @@ import org.yi.happy.archive.file_system.FileSystem;
 @UsesInput("index")
 @UsesOutput("index")
 public class IndexCheckMain implements MainCommand {
-    private final FileSystem fs;
+    private final FileStore fs;
     private final InputStream in;
     private final PrintStream out;
     private final PrintStream err;
@@ -43,7 +43,7 @@ public class IndexCheckMain implements MainCommand {
      * @param args
      *            the arguments to use.
      */
-    public IndexCheckMain(FileSystem fs, InputStream in, PrintStream out,
+    public IndexCheckMain(FileStore fs, InputStream in, PrintStream out,
             PrintStream err, List<String> args) {
         this.fs = fs;
         this.in = in;
@@ -63,9 +63,9 @@ public class IndexCheckMain implements MainCommand {
         while (line.next()) {
             try {
                 String name = line.get().split("\t")[0];
-                String path = fs.join(imagePath, name);
+                String path = imagePath + "/" + name;
 
-                byte[] data = fs.load(path, Blocks.MAX_SIZE);
+                byte[] data = fs.get(path, Blocks.MAX_SIZE);
                 EncodedBlock block = EncodedBlockParse.parse(data);
 
                 String key = block.getKey().toString();

@@ -19,19 +19,19 @@ import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.ByteString;
 
 /**
- * Tests for {@link FileSystemMemory}.
+ * Tests for {@link FileStoreMemory}.
  */
 @SmellsMessy(/* TODO use some builders */)
 public class FileSystemMemoryTest {
-    private FileSystemMemory fake;
-    private FileSystem real;
+    private FileStoreMemory fake;
+    private FileStore real;
 
     /**
      * setup.
      */
     @Before
     public void before() {
-        fake = new FileSystemMemory();
+        fake = new FileStoreMemory();
         real = fake;
     }
 
@@ -51,9 +51,9 @@ public class FileSystemMemoryTest {
      */
     @Test
     public void testLoad() throws IOException {
-        real.save("test.dat", new byte[0]);
+        real.put("test.dat", new byte[0]);
 
-        byte[] data = real.load("test.dat");
+        byte[] data = real.get("test.dat");
 
         assertArrayEquals(new byte[0], data);
     }
@@ -65,9 +65,9 @@ public class FileSystemMemoryTest {
      */
     @Test
     public void testLoad2() throws IOException {
-        real.save("test.dat", new byte[5]);
+        real.put("test.dat", new byte[5]);
 
-        byte[] data = real.load("test.dat");
+        byte[] data = real.get("test.dat");
 
         assertArrayEquals(new byte[5], data);
     }
@@ -79,9 +79,9 @@ public class FileSystemMemoryTest {
      */
     @Test(expected = IOException.class)
     public void testLoadLimit() throws IOException {
-        real.save("test.dat", ByteString.toUtf8("Hello\n"));
+        real.put("test.dat", ByteString.toUtf8("Hello\n"));
 
-        real.load("test.dat", 5);
+        real.get("test.dat", 5);
     }
 
     /**
@@ -91,9 +91,9 @@ public class FileSystemMemoryTest {
      */
     @Test
     public void testOpenInput() throws Exception {
-        real.save("test.dat", ByteString.toUtf8("Hello\n"));
+        real.put("test.dat", ByteString.toUtf8("Hello\n"));
 
-        InputStream in = real.openInputStream("test.dat");
+        InputStream in = real.getStream("test.dat");
 
         assertNotNull(in);
         byte[] data = new byte[10];
@@ -107,7 +107,7 @@ public class FileSystemMemoryTest {
      */
     @Test(expected = FileNotFoundException.class)
     public void testNeedParentBeforeChildren() throws IOException {
-        real.save("a/b", new byte[0]);
+        real.put("a/b", new byte[0]);
     }
 
     /**
@@ -117,7 +117,7 @@ public class FileSystemMemoryTest {
      */
     @Test(expected = IOException.class)
     public void testNeedParentBeforeChildren2() throws IOException {
-        real.mkdir("a/b");
+        real.putDir("a/b");
     }
 
     /**
@@ -127,7 +127,7 @@ public class FileSystemMemoryTest {
      */
     @Test
     public void testMkdir() throws IOException {
-        boolean out = real.mkdir("a");
+        boolean out = real.putDir("a");
 
         assertEquals(true, out);
     }
@@ -139,9 +139,9 @@ public class FileSystemMemoryTest {
      */
     @Test
     public void testMkdir2() throws IOException {
-        real.mkdir("a");
+        real.putDir("a");
 
-        boolean out = real.mkdir("a");
+        boolean out = real.putDir("a");
 
         assertEquals(false, out);
     }
@@ -153,9 +153,9 @@ public class FileSystemMemoryTest {
      */
     @Test(expected = IOException.class)
     public void testMkdir3() throws IOException {
-        real.save("a", new byte[0]);
+        real.put("a", new byte[0]);
 
-        real.mkdir("a");
+        real.putDir("a");
     }
 
     /**
@@ -165,9 +165,9 @@ public class FileSystemMemoryTest {
      */
     @Test(expected = IOException.class)
     public void testMkdir4() throws IOException {
-        real.save("a", new byte[0]);
+        real.put("a", new byte[0]);
 
-        real.mkdir("a/b");
+        real.putDir("a/b");
     }
 
     /**
@@ -177,9 +177,9 @@ public class FileSystemMemoryTest {
      */
     @Test(expected = IOException.class)
     public void testMkdir5() throws IOException {
-        real.mkdir("a");
+        real.putDir("a");
 
-        real.save("a", new byte[0]);
+        real.put("a", new byte[0]);
     }
 
     /**
@@ -189,7 +189,7 @@ public class FileSystemMemoryTest {
      */
     @Test
     public void testList1() throws IOException {
-        real.mkdir("a");
+        real.putDir("a");
 
         List<String> have = real.list("");
 
@@ -203,26 +203,12 @@ public class FileSystemMemoryTest {
      */
     @Test
     public void testList2() throws IOException {
-        real.mkdir("a");
-        real.mkdir("a/b");
+        real.putDir("a");
+        real.putDir("a/b");
 
         List<String> have = real.list("a");
 
         assertEquals(Arrays.asList("b"), have);
-    }
-
-    /**
-     * List the current directory with one item.
-     * 
-     * @throws IOException
-     */
-    @Test
-    public void testList3() throws IOException {
-        real.mkdir("a");
-
-        List<String> have = real.list(".");
-
-        assertEquals(Arrays.asList("a"), have);
     }
 
     /**
@@ -232,7 +218,7 @@ public class FileSystemMemoryTest {
      */
     @Test(expected = IOException.class)
     public void listOnFile() throws IOException {
-        real.save("a", new byte[0]);
+        real.put("a", new byte[0]);
 
         real.list("a");
     }
@@ -244,7 +230,7 @@ public class FileSystemMemoryTest {
      */
     @Test
     public void testMkdirAbsolute() throws IOException {
-        real.mkdir("/a");
+        real.putDir("/a");
 
         assertTrue(real.isDir("/a"));
     }
@@ -256,7 +242,7 @@ public class FileSystemMemoryTest {
      */
     @Test
     public void testIsDir1() throws IOException {
-        real.mkdir("a");
+        real.putDir("a");
 
         assertTrue(real.isDir("a"));
     }
@@ -268,7 +254,7 @@ public class FileSystemMemoryTest {
      */
     @Test
     public void testIsDir2() throws IOException {
-        real.save("a", new byte[0]);
+        real.put("a", new byte[0]);
 
         assertFalse(real.isDir("a"));
     }
@@ -290,21 +276,9 @@ public class FileSystemMemoryTest {
      */
     @Test
     public void testIsFile1() throws IOException {
-        real.mkdir("a");
+        real.putDir("a");
 
         assertFalse(real.isFile("a"));
-    }
-
-    /**
-     * A path ending in a slash that is a directory is a directory.
-     * 
-     * @throws IOException
-     */
-    @Test
-    public void directoryWithSlashIsDirectory() throws IOException {
-        real.mkdir("a");
-
-        assertTrue(real.isDir("a/"));
     }
 
     /**
@@ -314,7 +288,7 @@ public class FileSystemMemoryTest {
      */
     @Test
     public void testIsFile2() throws IOException {
-        real.save("a", new byte[0]);
+        real.put("a", new byte[0]);
 
         assertTrue(real.isFile("a"));
     }

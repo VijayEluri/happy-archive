@@ -9,7 +9,7 @@ import org.yi.happy.archive.block.encoder.BlockEncoderFactory;
 import org.yi.happy.archive.commandLine.UsesInput;
 import org.yi.happy.archive.commandLine.UsesOutput;
 import org.yi.happy.archive.commandLine.UsesStore;
-import org.yi.happy.archive.file_system.FileSystem;
+import org.yi.happy.archive.file_system.FileStore;
 
 /**
  * given the base name of a file store on the command line, and a stream on
@@ -35,7 +35,7 @@ public class StoreStreamPutMain implements MainCommand {
      * @param out
      *            the stream to write the result.
      */
-    public StoreStreamPutMain(BlockStore store, FileSystem fs,
+    public StoreStreamPutMain(BlockStore store, FileStore fs,
             InputStream in, PrintStream out) {
         this.store = store;
         this.in = in;

@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
- * Tests for {@link IndexStoreFileSystem}.
+ * Tests for {@link IndexStoreFileStore}.
  */
 public class IndexStoreMemoryTest {
     /**

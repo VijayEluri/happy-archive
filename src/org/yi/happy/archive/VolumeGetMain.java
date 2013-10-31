@@ -10,7 +10,7 @@ import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesInput;
 import org.yi.happy.archive.commandLine.UsesStore;
-import org.yi.happy.archive.file_system.FileSystem;
+import org.yi.happy.archive.file_system.FileStore;
 
 /**
  * load a list of files from a volume into a store.
@@ -20,7 +20,7 @@ import org.yi.happy.archive.file_system.FileSystem;
 @UsesInput("file-list")
 public class VolumeGetMain implements MainCommand {
 
-    private final FileSystem fs;
+    private final FileStore fs;
     private final InputStream in;
     private final PrintStream err;
     private final BlockStore store;
@@ -40,7 +40,7 @@ public class VolumeGetMain implements MainCommand {
      * @param args
      *            the non-option command line arguments.
      */
-    public VolumeGetMain(BlockStore store, FileSystem fs, InputStream in,
+    public VolumeGetMain(BlockStore store, FileStore fs, InputStream in,
             PrintStream err, List<String> args) {
         this.store = store;
         this.fs = fs;
@@ -61,7 +61,7 @@ public class VolumeGetMain implements MainCommand {
         LineCursor in = new LineCursor(this.in);
         while (in.next()) {
             try {
-                byte[] data = fs.load(fs.join(args.get(0), in.get()),
+                byte[] data = fs.get(args.get(0) + "/" + in.get(),
                         Blocks.MAX_SIZE);
                 EncodedBlock b = EncodedBlockParse.parse(data);
                 store.put(b);

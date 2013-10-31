@@ -10,7 +10,7 @@ import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesOutput;
-import org.yi.happy.archive.file_system.FileSystem;
+import org.yi.happy.archive.file_system.FileStore;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.FullKeyParse;
 
@@ -22,7 +22,7 @@ import org.yi.happy.archive.key.FullKeyParse;
 @UsesArgs({ "input", "key" })
 @UsesOutput("output")
 public class DecodeBlockMain implements MainCommand {
-    private final FileSystem fs;
+    private final FileStore fs;
     private final OutputStream out;
     private final List<String> args;
 
@@ -36,7 +36,7 @@ public class DecodeBlockMain implements MainCommand {
      * @param args
      *            the non-option arguments.
      */
-    public DecodeBlockMain(FileSystem fs, OutputStream out, List<String> args) {
+    public DecodeBlockMain(FileStore fs, OutputStream out, List<String> args) {
         this.fs = fs;
         this.out = out;
         this.args = args;
@@ -52,7 +52,7 @@ public class DecodeBlockMain implements MainCommand {
     @Override
     @SmellsMessy
     public void run() throws IOException {
-        EncodedBlock b = EncodedBlockParse.parse(fs.load(args.get(0),
+        EncodedBlock b = EncodedBlockParse.parse(fs.get(args.get(0),
                 Blocks.MAX_SIZE));
         FullKey k = FullKeyParse.parseFullKey(args.get(1));
         Block d = b.decode(k);

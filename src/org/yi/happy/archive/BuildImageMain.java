@@ -11,7 +11,7 @@ import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesOutput;
 import org.yi.happy.archive.commandLine.UsesStore;
-import org.yi.happy.archive.file_system.FileSystem;
+import org.yi.happy.archive.file_system.FileStore;
 import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.key.LocatorKeyParse;
 
@@ -24,7 +24,7 @@ import org.yi.happy.archive.key.LocatorKeyParse;
 @UsesOutput("size")
 public class BuildImageMain implements MainCommand {
 
-    private final FileSystem fs;
+    private final FileStore fs;
     private final PrintStream out;
     private final PrintStream err;
     private final BlockStore store;
@@ -44,7 +44,7 @@ public class BuildImageMain implements MainCommand {
      * @param args
      *            the parameters.
      */
-    public BuildImageMain(BlockStore store, FileSystem fs, PrintStream out,
+    public BuildImageMain(BlockStore store, FileStore fs, PrintStream out,
             PrintStream err, List<String> args) {
         this.store = store;
         this.fs = fs;
@@ -64,7 +64,7 @@ public class BuildImageMain implements MainCommand {
     @SmellsMessy
     @MagicLiteral
     public void run() throws IOException {
-        InputStream in0 = fs.openInputStream(args.get(0));
+        InputStream in0 = fs.getStream(args.get(0));
         int limit = Integer.parseInt(args.get(2));
         IsoEstimate size = new IsoEstimate();
         int count = 0;
@@ -87,7 +87,7 @@ public class BuildImageMain implements MainCommand {
                     size.remove(data.length);
                     break;
                 }
-                fs.save(args.get(1) + "/"
+                fs.put(args.get(1) + "/"
                         + String.format("%08x.dat", count), data);
                 count++;
             }

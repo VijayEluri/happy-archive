@@ -5,36 +5,29 @@ import java.io.InputStream;
 import java.util.List;
 
 /**
- * A file system interface.
+ * A file storage service. The file paths components are '/' separated.
  */
-public interface FileSystem {
+public interface FileStore {
+    /**
+     * The path component separator.
+     */
+    String SEPARATOR = "/";
 
     /**
      * load a file.
      * 
-     * @param name
+     * @param path
      *            the file to load.
      * @return the bytes of the file.
      * @throws IOException
      *             if the file can not be loaded.
      */
-    byte[] load(String name) throws IOException;
-
-    /**
-     * open a file for reading as a stream.
-     * 
-     * @param name
-     *            the file to open.
-     * @return an open input stream.
-     * @throws IOException
-     *             if the file can not be opened.
-     */
-    InputStream openInputStream(String name) throws IOException;
+    byte[] get(String path) throws IOException;
 
     /**
      * load a file if it is smaller than limit.
      * 
-     * @param name
+     * @param path
      *            the name of the file to load.
      * @param limit
      *            the limit at which an error is raised.
@@ -42,30 +35,30 @@ public interface FileSystem {
      * @throws IOException
      *             if the file can not be loaded, or is too large.
      */
-    byte[] load(String name, int limit) throws IOException;
+    byte[] get(String path, int limit) throws IOException;
+
+    /**
+     * open a file for reading as a stream.
+     * 
+     * @param path
+     *            the file to open.
+     * @return an open input stream.
+     * @throws IOException
+     *             if the file can not be opened.
+     */
+    InputStream getStream(String path) throws IOException;
 
     /**
      * save a file.
      * 
-     * @param name
+     * @param path
      *            the name of the file to save.
-     * @param bytes
+     * @param content
      *            the bytes to save in the file.
      * @throws IOException
      *             on error.
      */
-    void save(String name, byte[] bytes) throws IOException;
-
-    /**
-     * join two file names.
-     * 
-     * @param base
-     *            the base file name.
-     * @param name
-     *            the file name to resolve from the base.
-     * @return the joined file name.
-     */
-    String join(String base, String name);
+    void put(String path, byte[] content) throws IOException;
 
     /**
      * ensure that a directory exists.
@@ -77,7 +70,7 @@ public interface FileSystem {
      * @throws IOException
      *             if the directory can not be created.
      */
-    boolean mkdir(String path) throws IOException;
+    boolean putDir(String path) throws IOException;
 
     /**
      * List the names in a directory.
@@ -91,15 +84,6 @@ public interface FileSystem {
     List<String> list(String path) throws IOException;
 
     /**
-     * check that a path exists and is a directory.
-     * 
-     * @param path
-     *            the path to check.
-     * @return true if the path exists and is a directory.
-     */
-    boolean isDir(String path);
-
-    /**
      * check that a path exists and is a file.
      * 
      * @param path
@@ -107,4 +91,13 @@ public interface FileSystem {
      * @return true if the path exists and is a file.
      */
     boolean isFile(String path);
+
+    /**
+     * check that a path exists and is a directory.
+     * 
+     * @param path
+     *            the path to check.
+     * @return true if the path exists and is a directory.
+     */
+    boolean isDir(String path);
 }

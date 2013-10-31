@@ -9,7 +9,7 @@ import org.yi.happy.archive.block.parser.BlockParse;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesOutput;
-import org.yi.happy.archive.file_system.FileSystem;
+import org.yi.happy.archive.file_system.FileStore;
 
 /**
  * Verify that a set of blocks in files load, parse, and validate.
@@ -18,7 +18,7 @@ import org.yi.happy.archive.file_system.FileSystem;
 @UsesOutput("result")
 public class VerifyMain implements MainCommand {
 
-    private final FileSystem fileSystem;
+    private final FileStore fileSystem;
     private final PrintStream out;
     private final List<String> args;
 
@@ -32,7 +32,7 @@ public class VerifyMain implements MainCommand {
      * @param args
      *            the non-option arguments on the command line.
      */
-    public VerifyMain(FileSystem fileSystem, PrintStream out, List<String> args) {
+    public VerifyMain(FileStore fileSystem, PrintStream out, List<String> args) {
         this.fileSystem = fileSystem;
         this.out = out;
         this.args = args;
@@ -54,7 +54,7 @@ public class VerifyMain implements MainCommand {
                 /*
                  * load the file
                  */
-                byte[] data = fileSystem.load(arg, Blocks.MAX_SIZE);
+                byte[] data = fileSystem.get(arg, Blocks.MAX_SIZE);
 
                 /*
                  * parse into a block

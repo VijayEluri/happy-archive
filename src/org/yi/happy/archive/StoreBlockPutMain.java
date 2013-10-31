@@ -7,7 +7,7 @@ import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesStore;
-import org.yi.happy.archive.file_system.FileSystem;
+import org.yi.happy.archive.file_system.FileStore;
 
 /**
  * put a block in the store.
@@ -15,7 +15,7 @@ import org.yi.happy.archive.file_system.FileSystem;
 @UsesStore
 @UsesArgs({ "block..." })
 public class StoreBlockPutMain implements MainCommand {
-    private final FileSystem fs;
+    private final FileStore fs;
     private final BlockStore store;
     private final List<String> args;
 
@@ -29,7 +29,7 @@ public class StoreBlockPutMain implements MainCommand {
      * @param args
      *            the non-option arguments.
      */
-    public StoreBlockPutMain(BlockStore store, FileSystem fs,
+    public StoreBlockPutMain(BlockStore store, FileStore fs,
             List<String> args) {
         this.store = store;
         this.fs = fs;
@@ -46,7 +46,7 @@ public class StoreBlockPutMain implements MainCommand {
     @Override
     public void run() throws IOException {
         for (String arg : args) {
-            EncodedBlock b = EncodedBlockParse.parse(fs.load(arg,
+            EncodedBlock b = EncodedBlockParse.parse(fs.get(arg,
                     Blocks.MAX_SIZE));
             store.put(b);
         }

@@ -11,7 +11,7 @@ import org.yi.happy.archive.block.encoder.BlockEncoderResult;
 import org.yi.happy.archive.block.parser.BlockParse;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesOutput;
-import org.yi.happy.archive.file_system.FileSystem;
+import org.yi.happy.archive.file_system.FileStore;
 
 /**
  * command line tool to encode a content block. The clear data is read from the
@@ -22,7 +22,7 @@ import org.yi.happy.archive.file_system.FileSystem;
 @UsesArgs({ "input", "output" })
 @UsesOutput("key")
 public class EncodeContentMain implements MainCommand {
-    private final FileSystem fs;
+    private final FileStore fs;
     private final PrintStream out;
     private final List<String> args;
 
@@ -35,7 +35,7 @@ public class EncodeContentMain implements MainCommand {
      * @param args
      *            the non-option arguments.
      */
-    public EncodeContentMain(FileSystem fs, PrintStream out, List<String> args) {
+    public EncodeContentMain(FileStore fs, PrintStream out, List<String> args) {
         this.fs = fs;
         this.out = out;
         this.args = args;
@@ -52,10 +52,10 @@ public class EncodeContentMain implements MainCommand {
     public void run() throws IOException {
         BlockEncoder encoder = BlockEncoderFactory.getContentDefault();
 
-        Block block = BlockParse.parse(fs.load(args.get(0),
+        Block block = BlockParse.parse(fs.get(args.get(0),
                 Blocks.MAX_SIZE));
         BlockEncoderResult e = encoder.encode(block);
-        fs.save(args.get(1), e.getBlock().asBytes());
+        fs.put(args.get(1), e.getBlock().asBytes());
 
         out.println(e.getKey());
     }

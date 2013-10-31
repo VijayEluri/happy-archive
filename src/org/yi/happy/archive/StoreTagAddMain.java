@@ -8,7 +8,7 @@ import org.yi.happy.archive.commandLine.UsesInput;
 import org.yi.happy.archive.commandLine.UsesOutput;
 import org.yi.happy.archive.commandLine.UsesStore;
 import org.yi.happy.archive.crypto.DigestFactory;
-import org.yi.happy.archive.file_system.FileSystem;
+import org.yi.happy.archive.file_system.FileStore;
 import org.yi.happy.archive.tag.Tag;
 import org.yi.happy.archive.tag.TagBuilder;
 import org.yi.happy.archive.tag.TagOutputStream;
@@ -23,7 +23,7 @@ import org.yi.happy.archive.tag.TagStreamIterator;
 @UsesOutput("tag-list")
 public class StoreTagAddMain implements MainCommand {
     private final BlockStore store;
-    private final FileSystem fs;
+    private final FileStore fs;
 
     /**
      * @param store
@@ -31,7 +31,7 @@ public class StoreTagAddMain implements MainCommand {
      * @param fs
      *            the file system to use.
      */
-    public StoreTagAddMain(BlockStore store, FileSystem fs) {
+    public StoreTagAddMain(BlockStore store, FileStore fs) {
         this.store = store;
         this.fs = fs;
     }
@@ -63,7 +63,7 @@ public class StoreTagAddMain implements MainCommand {
         }
     }
 
-    private static Tag process(Tag tag, StoreBlockStorage s, FileSystem fs)
+    private static Tag process(Tag tag, StoreBlockStorage s, FileStore fs)
             throws IOException {
         if (tag.get("data") != null) {
             return tag;
@@ -87,7 +87,7 @@ public class StoreTagAddMain implements MainCommand {
         DigestOutputStream o2 = new DigestOutputStream(DigestFactory
                 .getProvider("sha-256").get());
         TeeOutputStream o = new TeeOutputStream(o1, o2);
-        InputStream in = fs.openInputStream(name);
+        InputStream in = fs.getStream(name);
         try {
             Streams.copy(in, o);
         } finally {
