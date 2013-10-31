@@ -189,8 +189,8 @@ public class MyInjector {
      */
     public static MainCommand injectBuildImageMain(ApplicationScope scope) {
         return new BuildImageMain(injectBlockStore(scope),
-                injectFileStore(scope), injectOutput(scope),
-                injectError(scope), injectArgs(scope));
+                injectFileStore(scope), injectInput(scope),
+                injectOutput(scope), injectError(scope), injectArgs(scope));
     }
 
     /**
