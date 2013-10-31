@@ -395,7 +395,7 @@ public enum TestData {
      * @return the file name of the data for this item.
      */
     public String getFileName() {
-        return name().toLowerCase().replace('_', '-') + ".bin";
+        return name().toLowerCase().replace('_', '-') + ".bytes";
     }
 
     /**
