@@ -1,0 +1,26 @@
+#!/bin/sh
+export ARCHIVE_HOME=/Users/happy/archive.d
+
+export CLASSPATH=/Users/happy/Documents/workspace/happy-archive/bin
+for x in /Users/happy/Documents/workspace/happy-archive/lib/*; do
+  CLASSPATH=$CLASSPATH:$x
+done
+
+cmd="$1"
+shift
+case "$cmd" in
+flush|do-backup|file-info|tag-copy-data-by-hash)
+	"$0-$cmd" "$@"
+	;;
+'')
+	java org.yi.happy.archive.Main
+	echo flush
+	echo do-backup
+	echo file-info
+	echo tag-copy-data-by-hash
+	;;
+*)
+	#java -Xmx1000m org.yi.happy.archive.Main "$cmd" "$@"
+	java org.yi.happy.archive.Main "$cmd" "$@"
+	;;
+esac

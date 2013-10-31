@@ -1,0 +1,170 @@
+#!/bin/sh
+
+if [ "$1" == "" ]; then
+  echo "need at least volume set";
+  exit 0;
+fi
+
+set="$1"
+name=`date +%Y-%m-%d-%H%M`
+
+# make temporary space
+tmp=/tmp/$$
+mkdir $tmp || exit 1;
+cleanup() { rm -r -f "$tmp"; }
+trap "cleanup" EXIT
+
+dvddev="`hdiutil burn -list | 
+  sed -ne '/ via USB / {n; p;}' |
+  cut -f 2`"
+
+state="make file image"
+while true; do
+  case "$state" in
+  "make file image") 
+    # get the candidate list
+    echo "making the candidate list"
+    ~/archive backup-list $set > $tmp/key-list \
+      || break
+
+    # make image
+    echo "collecting the blocks"
+    mkdir $tmp/image
+    ~/archive build-image $tmp/image 4700 \
+      < $tmp/key-list > $tmp/image-size \
+      || break
+
+    state="decide to burn"
+    ;;
+  "decide to burn") 
+    read count size full < $tmp/image-size
+    if [ "$full" != "full" ]; then
+      echo "there may not be enough data to fill the volume: $size MB"
+      echo "press enter to continue or ctrl-c to abort"
+      read
+    fi
+    state="make iso image"
+    ;;
+  "make iso image")
+    mkisofs -o $tmp/image.iso $tmp/image
+    rm -rf $tmp/image &
+    state="burn image"
+    ;;
+  "burn image")
+    #hdiutil burn -device "$dvddev" -noeject -noverifyburn $tmp/image.iso
+    hdiutil burn -noeject -noverifyburn $tmp/image.iso
+    status=$?
+    if [ "$status" = "0" ]; then
+      state="verify disk"
+    else
+      state="choose recovery action"
+    fi
+    ;;
+  "verify disk")
+    rm $tmp/image.iso &
+
+    # wait for the disk to be mounted
+    if ! test -d /Volumes/CDROM; then
+      echo "waiting for cdrom..."
+      while ! test -d /Volumes/CDROM; do sleep 1 ; done
+      echo "done waiting."
+    fi
+
+    # verify disk
+    ~/archive index-volume /Volumes/CDROM > ~/archive.d/index/$set/$name
+    echo "done creating disk: $set $name"
+    break
+    ;;
+  "choose recovery action")
+    echo "the burn failed, how would you like to recover?"
+    echo "1) enter a shell"
+    echo "2) search for the dvd burner"
+    echo "3) try the burn again"
+    echo "4) verify the disk anyways"
+    echo "5) abort"
+    read choice
+    case "$choice" in
+      1)
+        state="enter shell"
+        ;;
+      2)
+        state="search for burner"
+        ;;
+      3)
+        state="burn image"
+        ;;
+      4)
+        state="verify disk"
+        ;;
+      5)
+        break
+        ;;
+    esac
+    ;;
+  "enter shell")
+    export tmp dvddev
+    echo 'the working files are in $tmp'
+    echo 'the burn command is: hdiutil burn -device "$dvddev" -noeject -noverifyburn $tmp/image.iso'
+    echo 'there will be options to burn or verify the disk when the shell is exited'
+    PS1="(fix burn) $PS1" bash
+    echo "what next?"
+    echo " 1) enter a shell"
+    echo " 2) burn the disk"
+    echo "(3) verify the disk"
+    echo " 4) abort"
+    read choice
+    case "$choice" in
+      1)
+        state="enter shell"
+        ;;
+      2)
+        state="burn disk"
+        ;;
+      3|*)
+        state="verify disk"
+        ;;
+      4)
+        break
+        ;;
+    esac
+    ;;
+  "search for burner")
+    dvddev="`hdiutil burn -list | 
+      sed -ne '/ via USB / {n; p;}' |
+      cut -f 2`"
+    if [ "$dvddev" ]; then
+      echo "USB DVD burner found"
+    else
+      echo "did not find USB DVD burner"
+    fi
+    echo "what next?"
+    echo " 1) enter a shell"
+    echo " 2) search for the dvd burner"
+    echo "(3) burn the disk"
+    echo " 4) verify the disk"
+    echo " 5) abort"
+    read choice
+    case "$choice" in
+      1)
+        state="enter shell"
+        ;;
+      2)
+        state="search for burner"
+        ;;
+      3|*)
+        state="burn image"
+        ;;
+      4)
+        state="verify disk"
+        ;;
+      5)
+        break
+        ;;
+    esac
+    ;;
+  *)
+    echo "invalid state \"$state\""
+    break
+    ;;
+  esac
+done

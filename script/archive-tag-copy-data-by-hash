@@ -1,0 +1,50 @@
+#!/usr/bin/perl -w
+use strict;
+
+my %h;
+
+for my $file (@ARGV) {
+    local *IN;
+    open(IN, "<", $file) or do {
+	warn "could not open $file $!";
+	next;
+    };
+
+    my $hash = undef;
+    my $data = undef;
+    while(<IN>) {
+	if(m{^hash=(.*)$}) {
+	    $hash = $1;
+	}
+	if(m{^data=(.*)$}) {
+	    $data = $1;
+	}
+	if(m{^$}) {
+	    if(defined $hash and defined $data) {
+		$h{$hash} = $data;
+	    }
+	    $hash = undef;
+	    $data = undef;
+	}
+    }
+}
+
+my $hash;
+my $data;
+while(<STDIN>) {
+    if(m{^hash=(.*)$}) {
+	$hash = $1;
+    }
+    if(m{^data=(.*)$}) {
+	$data = $1;
+    }
+    if(m{^$}) {
+	if(defined $hash and not defined $data and exists $h{$hash}) {
+	    print "data=" . $h{$hash} . "\n";
+	}
+	$hash = undef;
+	$data = undef;
+    }
+    print $_;
+}
+

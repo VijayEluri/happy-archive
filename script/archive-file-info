@@ -1,0 +1,62 @@
+#!/usr/bin/perl -w
+use strict;
+use Digest::SHA;
+
+my $digest = Digest::SHA->new(256);
+
+sub process_name;
+sub process_file;
+sub process_dir;
+sub process_link;
+
+for my $file (@ARGV) {
+    my @attr = [ "name", $file ];
+
+    my @stat = lstat $file;
+    if(@stat) {
+	push @attr, [ "mode", sprintf('0%04o', $stat[2] & 07777) ];
+	push @attr, [ "uid", $stat[4] ];
+	push @attr, [ "gid", $stat[5] ];
+	push @attr, [ "mtime", sprintf('0x%x', $stat[9]) ];
+
+	if(-f _) {
+            push @attr, [ "type", "file" ];
+            push @attr, [ "size", $stat[7] ];
+	    $digest->addfile($file, "b");
+	    push @attr, [ "hash", "sha-256:" . $digest->hexdigest() ];
+	}
+	elsif(-d _) {
+	    push @attr, [ "type", "dir" ];
+	}
+       	elsif(-l _) {
+	    push @attr, [ "type", "link" ];
+	    push @attr, [ "target", readlink($file) ];
+	}
+       	elsif(-p _) {
+	    push @attr, [ "type", "pipe" ];
+	}
+       	elsif(-S _) {
+	    push @attr, [ "type", "socket" ];
+	}
+       	elsif(-b _) {
+	    push @attr, [ "type", "blockdev" ];
+	    push @attr, [ "device", sprintf('%04x', $stat[6]) ];
+	}
+	elsif(-c _) {
+	    push @attr, [ "type", "chardev" ];
+	    push @attr, [ "device", sprintf('%04x', $stat[6]) ];
+	}
+	else {
+	    push @attr, [ "type", "other" ];
+	}
+    }
+
+    print join "\n", map {
+	join "=", map {
+	    local $_ = $_;
+	    s{([%=\x00-\x19\x7f-\xff])}{sprintf('%%%02x', ord($1))}egs;
+	    s{^( )}{sprintf('%%%02x', ord($1))}e;
+	    $_;
+	} @$_;
+    } @attr, [ ], [ ];
+}

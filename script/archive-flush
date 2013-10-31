@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# make temporary space
+tmp=/tmp/$$
+mkdir $tmp || exit 1;
+cleanup() { rm -r -f "$tmp"; }
+trap "cleanup" EXIT
+
+# do the work
+~/archive store-list |
+  ~/archive index-search > $tmp/volumes.grid
+grep $'^onsite\t' $tmp/volumes.grid | 
+  cut -f 4 | sort > $tmp/on-onsite.lst
+grep $'^offsite\t' $tmp/volumes.grid |
+  cut -f 4 | sort > $tmp/on-offsite.lst
+comm -12 $tmp/on-onsite.lst $tmp/on-offsite.lst > $tmp/flush.lst
+~/archive store-remove < $tmp/flush.lst
