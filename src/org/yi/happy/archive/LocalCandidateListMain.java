@@ -1,6 +1,7 @@
 package org.yi.happy.archive;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -25,8 +26,10 @@ import org.yi.happy.archive.key.LocatorKey;
 @UsesOutput("key-list")
 public class LocalCandidateListMain implements MainCommand {
     private final BlockStore store;
-    private final List<String> args;
     private final IndexSearch indexSearch;
+    private final PrintStream out;
+    private final PrintStream err;
+    private final List<String> args;
 
     /**
      * Set up the command to make a candidate list from a local store and local
@@ -36,13 +39,19 @@ public class LocalCandidateListMain implements MainCommand {
      *            the store.
      * @param indexSearch
      *            the index search interface.
+     * @param out
+     *            the output stream.
+     * @param err
+     *            the error stream.
      * @param args
      *            the non-option arguments.
      */
     public LocalCandidateListMain(BlockStore store, IndexSearch indexSearch,
-            List<String> args) {
+            PrintStream out, PrintStream err, List<String> args) {
         this.store = store;
         this.indexSearch = indexSearch;
+        this.out = out;
+        this.err = err;
         this.args = args;
     }
 
@@ -82,7 +91,7 @@ public class LocalCandidateListMain implements MainCommand {
 
             @Override
             public void gotException(Throwable cause) {
-                System.err.println(cause.getMessage());
+                err.println(cause.getMessage());
             }
         });
 
@@ -113,7 +122,7 @@ public class LocalCandidateListMain implements MainCommand {
             });
 
             for (LocatorKey i : out) {
-                System.out.println(i);
+                this.out.println(i);
             }
         }
 
@@ -132,7 +141,7 @@ public class LocalCandidateListMain implements MainCommand {
             });
 
             for (LocatorKey i : out) {
-                System.out.println(i);
+                this.out.println(i);
             }
         }
     }

@@ -129,7 +129,8 @@ public class MyInjector {
     public static MainCommand injectLocalCandidateListMain(
             ApplicationScope scope) {
         return new LocalCandidateListMain(injectBlockStore(scope),
-                injectIndexSearch(scope), injectArgs(scope));
+                injectIndexSearch(scope), injectOutput(scope),
+                injectError(scope), injectArgs(scope));
     }
 
     /**
