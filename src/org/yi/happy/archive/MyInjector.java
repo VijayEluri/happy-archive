@@ -164,9 +164,8 @@ public class MyInjector {
      * @return the object.
      */
     public static MainCommand injectIndexSearchMain(ApplicationScope scope) {
-        return new IndexSearchMain(injectFileStore(scope),
-                injectOutput(scope), injectError(scope),
-                injectIndexSearch(scope), injectArgs(scope));
+        return new IndexSearchMain(injectInput(scope), injectOutput(scope),
+                injectError(scope), injectIndexSearch(scope));
     }
 
     /**
@@ -177,8 +176,8 @@ public class MyInjector {
      * @return the object.
      */
     public static MainCommand injectIndexVolumeMain(ApplicationScope scope) {
-        return new IndexVolumeMain(injectFileStore(scope),
-                injectOutput(scope), injectError(scope), injectArgs(scope));
+        return new IndexVolumeMain(injectFileStore(scope), injectOutput(scope),
+                injectError(scope), injectArgs(scope));
     }
 
     /**
@@ -225,8 +224,8 @@ public class MyInjector {
      */
     public static MainCommand injectVolumeGetMain(ApplicationScope scope) {
         return new VolumeGetMain(injectBlockStore(scope),
-                injectFileStore(scope), injectInput(scope),
-                injectError(scope), injectArgs(scope));
+                injectFileStore(scope), injectInput(scope), injectError(scope),
+                injectArgs(scope));
     }
 
     /**
@@ -261,8 +260,8 @@ public class MyInjector {
      * @return the object.
      */
     public static MainCommand injectDecodeBlockMain(ApplicationScope scope) {
-        return new DecodeBlockMain(injectFileStore(scope),
-                injectOutput(scope), injectArgs(scope));
+        return new DecodeBlockMain(injectFileStore(scope), injectOutput(scope),
+                injectArgs(scope));
     }
 
     /**
@@ -286,8 +285,7 @@ public class MyInjector {
      */
     public static MainCommand injectStoreStreamPutMain(ApplicationScope scope) {
         return new StoreStreamPutMain(injectBlockStore(scope),
-                injectFileStore(scope), injectInput(scope),
-                injectOutput(scope));
+                injectFileStore(scope), injectInput(scope), injectOutput(scope));
     }
 
     /**

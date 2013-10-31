@@ -4,16 +4,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
-import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.IndexSearch.SearchResult;
-import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesIndex;
+import org.yi.happy.archive.commandLine.UsesInput;
 import org.yi.happy.archive.commandLine.UsesOutput;
-import org.yi.happy.archive.file_system.FileStore;
 import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.key.LocatorKeyParse;
 
@@ -21,36 +18,32 @@ import org.yi.happy.archive.key.LocatorKeyParse;
  * search indexes for keys.
  */
 @UsesIndex
-@UsesArgs("key-list")
+@UsesInput("key-list")
 @UsesOutput("result")
 public class IndexSearchMain implements MainCommand {
-    private final FileStore fs;
     private final PrintStream out;
     private final IndexSearch indexSearch;
-    private final List<String> args;
     private final PrintStream err;
+    private final InputStream in;
 
     /**
      * create with context.
      * 
-     * @param fs
-     *            the file system.
+     * @param in
+     *            the input stream.
      * @param out
      *            the output stream.
      * @param err
      *            the error stream.
      * @param indexSearch
-     *            the index searching interface.
-     * @param args
-     *            the non-option command line arguments.
+     *            the index search interface.
      */
-    public IndexSearchMain(FileStore fs, PrintStream out, PrintStream err,
-            IndexSearch indexSearch, List<String> args) {
-        this.fs = fs;
+    public IndexSearchMain(InputStream in, PrintStream out, PrintStream err,
+            IndexSearch indexSearch) {
+        this.in = in;
         this.out = out;
         this.err = err;
         this.indexSearch = indexSearch;
-        this.args = args;
     }
 
     /**
@@ -63,12 +56,11 @@ public class IndexSearchMain implements MainCommand {
      * @throws InterruptedException
      */
     @Override
-    @SmellsMessy
     public void run() throws IOException, InterruptedException,
             ExecutionException {
-        Set<LocatorKey> want = loadRequestSet(args.get(0));
+        Set<LocatorKey> keys = loadKeyList();
 
-        indexSearch.search(want, new IndexSearch.Handler() {
+        indexSearch.search(keys, new IndexSearch.Handler() {
             @Override
             public void gotResult(SearchResult result) {
                 out.println(result);
@@ -83,19 +75,12 @@ public class IndexSearchMain implements MainCommand {
         out.flush();
     }
 
-    private Set<LocatorKey> loadRequestSet(String path) throws IOException {
-        Set<LocatorKey> out = new HashSet<LocatorKey>();
-
-        InputStream in0 = fs.getStream(path);
-        try {
-            LineCursor in = new LineCursor(in0);
-            while (in.next()) {
-                out.add(LocatorKeyParse.parseLocatorKey(in.get()));
-            }
-        } finally {
-            in0.close();
+    private Set<LocatorKey> loadKeyList() throws IOException {
+        Set<LocatorKey> keys = new HashSet<LocatorKey>();
+        LineCursor line = new LineCursor(in);
+        while (line.next()) {
+            keys.add(LocatorKeyParse.parseLocatorKey(line.get()));
         }
-
-        return out;
+        return keys;
     }
 }
