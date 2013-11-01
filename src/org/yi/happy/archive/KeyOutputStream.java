@@ -21,6 +21,105 @@ public class KeyOutputStream extends OutputStream {
     private BytesBuilder buffer = new BytesBuilder();
 
     /**
+     * a layer in the output map, this is a list of keys and the offset from the
+     * start of the layer of the map that they apply.
+     * 
+     * In the final output of a large data stream there will be a tree of
+     * layers, the tree of layers is built from the bottom up, as the top layer
+     * gets full a new parent layer is added.
+     */
+    private class Layer {
+        /**
+         * the total size of all the keys in this layer.
+         */
+        public long totalSize = 0;
+    
+        /**
+         * the data for this layer so far
+         */
+        public MapBlockBuilder map = new MapBlockBuilder();
+    
+        /**
+         * the only key in the layer (null if there are multiple)
+         */
+        public FullKey onlyKey;
+    
+        /**
+         * the higher level map in the tree.
+         */
+        public Layer parent;
+    
+        /**
+         * put a key into the map
+         * 
+         * @param fullKey
+         *            the key to add
+         * @param size
+         *            how much data is represented by this key
+         * @throws IOException
+         */
+        public void put(FullKey fullKey, long size) throws IOException {
+            MapBlock.Entry add = new MapBlock.Entry(fullKey, totalSize);
+    
+            if (map.getSize() + add.getEntrySize() > splitSize) {
+                flushMap();
+            }
+    
+            if (totalSize == 0) {
+                onlyKey = fullKey;
+            } else {
+                onlyKey = null;
+            }
+    
+            map.add(add);
+            totalSize += size;
+        }
+    
+        /**
+         * flush a map layer.
+         * 
+         * @param index
+         *            the layer to flush
+         * @throws IOException
+         */
+        public void flushMap() throws IOException {
+            if (map.count() == 0) {
+                throw new IllegalStateException("flusing empty map block");
+            }
+    
+            if (onlyKey != null) {
+                /*
+                 * if there is only one key in the map push it up as is, this is
+                 * a special case for close.
+                 */
+                if (parent == null) {
+                    throw new IllegalStateException();
+                }
+                parent.put(onlyKey, totalSize);
+            } else {
+                FullKey fullKey = target.put(map.create());
+                if (parent == null) {
+                    parent = new Layer();
+                }
+                parent.put(fullKey, totalSize);
+            }
+    
+            /*
+             * prepare for the next key to be stored.
+             */
+            totalSize = 0;
+            onlyKey = null;
+            map = new MapBlockBuilder();
+        }
+    }
+
+    /**
+     * the map block tree that is being built, it is a single link list from the
+     * leaf up to the root for the currently open path.
+     */
+    private Layer layer = null;
+
+    /**
      * while open this is null, when the stream is closed this is the full key
      * to the base of the map.
      */
@@ -88,7 +187,11 @@ public class KeyOutputStream extends OutputStream {
     private void flushBlock() throws IOException {
         Bytes data = buffer.create();
         FullKey fullKey = storeDataBlock(data);
-        putMap(fullKey, data.getSize());
+
+        if (layer == null) {
+            layer = new Layer();
+        }
+        layer.put(fullKey, data.getSize());
 
         buffer = new BytesBuilder();
     }
@@ -96,24 +199,6 @@ public class KeyOutputStream extends OutputStream {
     private FullKey storeDataBlock(Bytes data) throws IOException {
         DataBlock dataBlock = new DataBlock(data);
         return target.put(dataBlock);
-    }
-
-    /**
-     * put a key into the map blocks.
-     * 
-     * @param fullKey
-     *            the key to add to the maps.
-     * @param size
-     *            the size of the data the key represents.
-     * @throws IOException
-     *             on error.
-     */
-    private void putMap(FullKey fullKey, long size) throws IOException {
-        if (maps == null) {
-            maps = new Layer();
-        }
-
-        maps.put(fullKey, size);
     }
 
     /**
@@ -158,7 +243,7 @@ public class KeyOutputStream extends OutputStream {
             return;
         }
 
-        if (maps == null) {
+        if (layer == null) {
             fullKey = storeDataBlock(buffer.create());
             buffer = null;
             return;
@@ -170,110 +255,12 @@ public class KeyOutputStream extends OutputStream {
 
         flushBlock();
 
-        while (maps.parent != null) {
-            maps.flush();
-            maps = maps.parent;
+        while (layer.parent != null) {
+            layer.flushMap();
+            layer = layer.parent;
         }
 
-        fullKey = target.put(maps.map.create());
-        maps = null;
-    }
-
-    /**
-     * the map block tree that is being built, it is a single link list from the
-     * leaf up to the root for the currently open path.
-     */
-    private Layer maps = null;
-
-    /**
-     * a layer in the output map, this is a list of keys and the offset from the
-     * start of the layer of the map that they apply.
-     * 
-     * In the final output of a large data stream there will be a tree of
-     * layers, the tree of layers is built from the bottom up, as the top layer
-     * gets full a new parent layer is added.
-     */
-    private class Layer {
-        /**
-         * the total size of all the keys in this layer.
-         */
-        public long totalSize = 0;
-
-        /**
-         * the data for this layer so far
-         */
-        public MapBlockBuilder map = new MapBlockBuilder();
-
-        /**
-         * the only key in the layer (null if there are multiple)
-         */
-        public FullKey onlyKey;
-
-        public Layer parent;
-
-        /**
-         * put a key into the map
-         * 
-         * @param index
-         *            the layer of the map to put it in
-         * @param fullKey
-         *            the key to add
-         * @param size
-         *            how much data is represented by this key
-         * @throws IOException
-         */
-        public void put(FullKey fullKey, long size) throws IOException {
-            MapBlock.Entry add = new MapBlock.Entry(fullKey, totalSize);
-
-            if (map.getSize() + add.getEntrySize() > splitSize) {
-                flush();
-            }
-
-            if (totalSize == 0) {
-                onlyKey = fullKey;
-            } else {
-                onlyKey = null;
-            }
-
-            map.add(add);
-            totalSize += size;
-        }
-
-        /**
-         * flush a map layer.
-         * 
-         * @param index
-         *            the layer to flush
-         * @throws IOException
-         */
-        public void flush() throws IOException {
-            if (map.count() == 0) {
-                throw new IllegalStateException("flusing empty map block");
-            }
-
-            if (onlyKey != null) {
-                /*
-                 * if there is only one key in the map push it up as is, this is
-                 * a special case for close.
-                 */
-                if (parent == null) {
-                    throw new IllegalStateException();
-                }
-                parent.put(onlyKey, totalSize);
-            } else {
-                FullKey fullKey = target.put(map.create());
-                if (parent == null) {
-                    parent = new Layer();
-                }
-                parent.put(fullKey, totalSize);
-            }
-
-            /*
-             * prepare for the next key to be stored.
-             */
-            totalSize = 0;
-            onlyKey = null;
-            map = new MapBlockBuilder();
-        }
+        fullKey = target.put(layer.map.create());
+        layer = null;
     }
 }
