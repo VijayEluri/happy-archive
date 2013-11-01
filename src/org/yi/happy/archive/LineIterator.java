@@ -2,6 +2,8 @@ package org.yi.happy.archive;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -27,6 +29,17 @@ public class LineIterator implements Iterable<String>, Iterator<String> {
         } else {
             this.in = new BufferedReader(in);
         }
+    }
+
+    /**
+     * Set up to iterate over an {@link InputStream}. the stream is read as
+     * UTF-8 text.
+     * 
+     * @param in
+     * @throws IOException
+     */
+    public LineIterator(InputStream in) throws IOException {
+        this(new InputStreamReader(in, "UTF-8"));
     }
 
     @Override

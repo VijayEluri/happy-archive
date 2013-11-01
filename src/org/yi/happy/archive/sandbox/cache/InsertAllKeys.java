@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.yi.happy.archive.LineCursor;
+import org.yi.happy.archive.LineIterator;
 
 /**
  * An experiment where all the keys are loaded into a HSQLDB.
@@ -43,15 +43,14 @@ public class InsertAllKeys {
 
                 try {
                     FileReader in = new FileReader("/Users/happy/tmp/keys.txt");
-                    LineCursor l = new LineCursor(in);
-                    while (l.next()) {
+                    for (String l : new LineIterator(in)) {
                         long now = System.currentTimeMillis();
                         if (now - time > 3000) {
                             time = now;
                             System.out.println(time + " " + count);
                         }
 
-                        st.setString(1, l.get());
+                        st.setString(1, l);
                         st.execute();
                         count++;
 

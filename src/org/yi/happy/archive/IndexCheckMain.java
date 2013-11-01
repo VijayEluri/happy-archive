@@ -58,10 +58,9 @@ public class IndexCheckMain implements MainCommand {
 
         DigestProvider digest = DigestFactory.getProvider("sha-256");
 
-        LineCursor line = new LineCursor(in);
-        while (line.next()) {
+        for (String line : new LineIterator(in)) {
             try {
-                String name = line.get().split("\t")[0];
+                String name = line.split("\t")[0];
                 String path = imagePath + "/" + name;
 
                 byte[] data = fs.get(path, Blocks.MAX_SIZE);

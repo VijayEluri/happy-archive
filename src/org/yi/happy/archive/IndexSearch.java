@@ -108,9 +108,8 @@ public class IndexSearch {
 
             Reader in0 = index.open(volumeSet, volumeName);
             try {
-                LineCursor in = new LineCursor(in0);
-                while (in.next()) {
-                    String[] line = in.get().split("\t", -1);
+                for (String line0 : new LineIterator(in0)) {
+                    String[] line = line0.split("\t", -1);
                     if (line.length < 3) {
                         throw new IndexOutOfBoundsException("short line in "
                                 + volumeSet + "/" + volumeName);

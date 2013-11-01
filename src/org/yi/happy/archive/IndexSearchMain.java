@@ -77,9 +77,8 @@ public class IndexSearchMain implements MainCommand {
 
     private Set<LocatorKey> loadKeyList() throws IOException {
         Set<LocatorKey> keys = new HashSet<LocatorKey>();
-        LineCursor line = new LineCursor(in);
-        while (line.next()) {
-            keys.add(LocatorKeyParse.parseLocatorKey(line.get()));
+        for (String line : new LineIterator(in)) {
+            keys.add(LocatorKeyParse.parseLocatorKey(line));
         }
         return keys;
     }

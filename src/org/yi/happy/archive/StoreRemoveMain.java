@@ -39,9 +39,8 @@ public class StoreRemoveMain implements MainCommand {
      */
     @Override
     public void run() throws IOException {
-        LineCursor line = new LineCursor(in);
-        while (line.next()) {
-            LocatorKey key = LocatorKeyParse.parseLocatorKey(line.get());
+        for (String line : new LineIterator(in)) {
+            LocatorKey key = LocatorKeyParse.parseLocatorKey(line);
             blocks.remove(key);
         }
     }

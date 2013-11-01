@@ -53,6 +53,9 @@ public class MapBlockBuilder {
         return size;
     }
 
+    /**
+     * @return the number of entries.
+     */
     public int count() {
         return entries.size();
     }

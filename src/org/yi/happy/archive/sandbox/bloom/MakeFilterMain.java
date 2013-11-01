@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.BitSet;
 
 import org.yi.happy.archive.ByteString;
-import org.yi.happy.archive.LineCursor;
+import org.yi.happy.archive.LineIterator;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.crypto.DigestProvider;
 import org.yi.happy.archive.crypto.Digests;
@@ -34,7 +34,6 @@ public class MakeFilterMain {
 
         BitSet s = new BitSet(SIZE);
 
-
         DigestProvider d = DigestFactory.getProvider("sha-256");
 
         SimpleTimer time = new SimpleTimer();
@@ -44,10 +43,8 @@ public class MakeFilterMain {
         // "/Users/happy/archive.d/index/onsite/2008-12-11-2103");
 
         try {
-            LineCursor l = new LineCursor(in);
-
-            while (l.next()) {
-                String k0 = l.get().split("\t")[2];
+            for (String l : new LineIterator(in)) {
+                String k0 = l.split("\t")[2];
                 byte[] hash = Digests.expandKey(d, ByteString.toUtf8(k0), 48);
 
                 int h = 0;
@@ -76,14 +73,11 @@ public class MakeFilterMain {
 
         int found = 0;
         int total = 0;
-        
+
         in = new FileInputStream("/Users/happy/tmp/store.lst");
         try {
-            LineCursor l = new LineCursor(in);
-
-            while (l.next()) {
-                byte[] hash = Digests.expandKey(d, ByteString.toUtf8(l.get()),
-                        24);
+            for (String l : new LineIterator(in)) {
+                byte[] hash = Digests.expandKey(d, ByteString.toUtf8(l), 24);
 
                 int h = 0;
                 h <<= 8;

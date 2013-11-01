@@ -57,11 +57,9 @@ public class VolumeGetMain implements MainCommand {
      */
     @Override
     public void run() throws IOException {
-        LineCursor in = new LineCursor(this.in);
-        while (in.next()) {
+        for (String line : new LineIterator(in)) {
             try {
-                byte[] data = fs.get(args.get(0) + "/" + in.get(),
-                        Blocks.MAX_SIZE);
+                byte[] data = fs.get(args.get(0) + "/" + line, Blocks.MAX_SIZE);
                 EncodedBlock b = EncodedBlockParse.parse(data);
                 store.put(b);
             } catch (Exception e) {

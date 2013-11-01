@@ -74,9 +74,8 @@ public class BuildImageMain implements MainCommand {
         IsoEstimate size = new IsoEstimate();
         int count = 0;
 
-        LineCursor lines = new LineCursor(in);
-        while (lines.next()) {
-            LocatorKey key = LocatorKeyParse.parseLocatorKey(lines.get());
+        for (String line : new LineIterator(in)) {
+            LocatorKey key = LocatorKeyParse.parseLocatorKey(line);
             EncodedBlock block;
             try {
                 block = store.get(key);

@@ -72,9 +72,8 @@ public class MakeIndexDatabaseMain implements MainCommand {
 
         Reader in0 = index.open(volumeSet, volumeName);
         try {
-            LineCursor in = new LineCursor(in0);
-            while (in.next()) {
-                String[] line = in.get().split("\t", -1);
+            for (String in : new LineIterator(in0)) {
+                String[] line = in.split("\t", -1);
 
                 if (!line[1].equals("plain")) {
                     continue;
