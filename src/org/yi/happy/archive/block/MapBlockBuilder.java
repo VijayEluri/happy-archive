@@ -11,12 +11,14 @@ import org.yi.happy.archive.key.FullKey;
 public class MapBlockBuilder {
 
     private List<MapBlock.Entry> entries;
+    private int size;
 
     /**
      * Create a builder o help create a {@link MapBlock}.
      */
     public MapBlockBuilder() {
         entries = new ArrayList<MapBlock.Entry>();
+        size = 0;
     }
 
     /**
@@ -29,11 +31,29 @@ public class MapBlockBuilder {
     }
 
     /**
+     * @param entry
+     */
+    public void add(MapBlock.Entry entry) {
+        entries.add(entry);
+        size += entry.getEntrySize();
+    }
+
+    /**
      * @param key
      * @param offset
      */
     public void add(FullKey key, long offset) {
-        MapBlock.Entry entry = new MapBlock.Entry(key, offset);
-        entries.add(entry);
+        add(new MapBlock.Entry(key, offset));
+    }
+
+    /**
+     * @return the total size of the entries in bytes.
+     */
+    public int getSize() {
+        return size;
+    }
+
+    public int count() {
+        return entries.size();
     }
 }

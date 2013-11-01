@@ -21,8 +21,20 @@ public class MapBlock extends AbstractBlock implements Block {
      * An entry in the block.
      */
     public static class Entry {
+        /**
+         * the key field.
+         */
         private final FullKey key;
+
+        /**
+         * the offset field.
+         */
         private final long offset;
+
+        /**
+         * the size of this entry in bytes.
+         */
+        private final int entrySize;
 
         /**
          * get the key part of the entry.
@@ -56,6 +68,46 @@ public class MapBlock extends AbstractBlock implements Block {
             super();
             this.key = key;
             this.offset = offset;
+
+            byte[] k = ByteString.toUtf8(key.toString());
+            byte[] o = ByteString.toUtf8(Long.toString(offset));
+            entrySize = k.length + 1 + o.length + 1;
+        }
+
+        /**
+         * @return the size of this entry in bytes.
+         */
+        public int getEntrySize() {
+            return entrySize;
+        }
+
+        /**
+         * copy all the bytes from this entry.
+         * 
+         * @param dest
+         *            the destination byte array.
+         * @param destPos
+         *            the position in the destination byte array to copy to.
+         * @return the number of bytes copied (the size of this entry in bytes).
+         */
+        public int getBytes(byte[] dest, int destPos) {
+            byte[] src;
+
+            src = ByteString.toUtf8(key.toString());
+            System.arraycopy(src, 0, dest, destPos, src.length);
+            destPos += src.length;
+
+            dest[destPos] = FIELD_SEPARATOR;
+            destPos++;
+
+            src = ByteString.toUtf8(Long.toString(offset));
+            System.arraycopy(src, 0, dest, destPos, src.length);
+            destPos += src.length;
+
+            dest[destPos] = RECORD_SEPARATOR;
+            destPos++;
+
+            return entrySize;
         }
     }
 
@@ -74,10 +126,8 @@ public class MapBlock extends AbstractBlock implements Block {
         this.entries = Collections.unmodifiableList(entries);
 
         int size = 0;
-        for (Entry i : entries) {
-            byte[] k = ByteString.toUtf8(i.getKey().toString());
-            byte[] o = ByteString.toUtf8("" + i.getOffset());
-            size += k.length + 1 + o.length + 1;
+        for (Entry entry : entries) {
+            size += entry.getEntrySize();
         }
         this.size = size;
     }
@@ -95,19 +145,9 @@ public class MapBlock extends AbstractBlock implements Block {
     @Override
     public Bytes getBody() {
         byte[] out = new byte[size];
-        int i = 0;
-        for (Entry j : entries) {
-            byte[] k = ByteString.toUtf8(j.getKey().toString());
-            byte[] o = ByteString.toUtf8(Long.toString(j.getOffset()));
-
-            System.arraycopy(k, 0, out, i, k.length);
-            i += k.length;
-            out[i] = FIELD_SEPARATOR;
-            i++;
-            System.arraycopy(o, 0, out, i, o.length);
-            i += o.length;
-            out[i] = RECORD_SEPARATOR;
-            i++;
+        int pos = 0;
+        for (Entry entry : entries) {
+            pos += entry.getBytes(out, pos);
         }
         return new Bytes(out);
     }

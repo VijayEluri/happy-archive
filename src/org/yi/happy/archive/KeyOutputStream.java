@@ -1,11 +1,11 @@
 package org.yi.happy.archive;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
 import org.yi.happy.archive.block.DataBlock;
-import org.yi.happy.archive.block.GenericBlock;
+import org.yi.happy.archive.block.MapBlock;
+import org.yi.happy.archive.block.MapBlockBuilder;
 import org.yi.happy.archive.key.FullKey;
 
 /**
@@ -18,7 +18,7 @@ public class KeyOutputStream extends OutputStream {
      * the accumulating block in the stream. This will only be empty before data
      * starts being written, and after a close.
      */
-    private ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+    private BytesBuilder buffer = new BytesBuilder();
 
     /**
      * while open this is null, when the stream is closed this is the full key
@@ -50,11 +50,11 @@ public class KeyOutputStream extends OutputStream {
             throw new ClosedException();
         }
 
-        if (buffer.size() == splitSize) {
+        if (buffer.getSize() == splitSize) {
             flushBlock();
         }
 
-        buffer.write(b);
+        buffer.add(b);
     }
 
     /**
@@ -66,10 +66,10 @@ public class KeyOutputStream extends OutputStream {
             throw new ClosedException();
         }
 
-        int left = splitSize - buffer.size();
+        int left = splitSize - buffer.getSize();
 
         while (len > left) {
-            buffer.write(b, off, left);
+            buffer.add(b, off, left);
             flushBlock();
 
             off += left;
@@ -77,7 +77,7 @@ public class KeyOutputStream extends OutputStream {
             left = splitSize;
         }
 
-        buffer.write(b, off, len);
+        buffer.add(b, off, len);
     }
 
     /**
@@ -86,47 +86,16 @@ public class KeyOutputStream extends OutputStream {
      * @throws IOException
      */
     private void flushBlock() throws IOException {
-        byte[] data = buffer.toByteArray();
-
+        Bytes data = buffer.create();
         FullKey fullKey = storeDataBlock(data);
+        putMap(fullKey, data.getSize());
 
-        putMap(fullKey, data.length);
-
-        buffer.reset();
+        buffer = new BytesBuilder();
     }
 
-    /**
-     * store a map block in the store.
-     * 
-     * @param data
-     *            the data
-     * @param isMap
-     *            true if this is a map block
-     * @return the full key of the stored block
-     * @throws IOException
-     *             on error.
-     */
-    private FullKey storeMapBlock(byte[] data) throws IOException {
-        /*
-         * XXX there should be a map block type that I could just store.
-         */
-        GenericBlock b = GenericBlock.create(new Bytes(data), "type", "map",
-                "size", "" + data.length);
-
-        return target.put(b);
-    }
-
-    /**
-     * Store a data block in the store.
-     * 
-     * @param data
-     *            the bytes for the data block.
-     * @return the full key of the stored block.
-     * @throws IOException
-     *             on error.
-     */
-    private FullKey storeDataBlock(byte[] data) throws IOException {
-        return target.put(new DataBlock(new Bytes(data)));
+    private FullKey storeDataBlock(Bytes data) throws IOException {
+        DataBlock dataBlock = new DataBlock(data);
+        return target.put(dataBlock);
     }
 
     /**
@@ -173,7 +142,7 @@ public class KeyOutputStream extends OutputStream {
             throw new IllegalStateException();
         }
 
-        if (buffer.size() != 0) {
+        if (buffer.getSize() != 0) {
             throw new IllegalStateException();
         }
 
@@ -190,7 +159,7 @@ public class KeyOutputStream extends OutputStream {
         }
 
         if (maps == null) {
-            fullKey = storeDataBlock(buffer.toByteArray());
+            fullKey = storeDataBlock(buffer.create());
             buffer = null;
             return;
         }
@@ -206,7 +175,7 @@ public class KeyOutputStream extends OutputStream {
             maps = maps.parent;
         }
 
-        fullKey = storeMapBlock(maps.map.toByteArray());
+        fullKey = target.put(maps.map.create());
         maps = null;
     }
 
@@ -233,7 +202,7 @@ public class KeyOutputStream extends OutputStream {
         /**
          * the data for this layer so far
          */
-        public final ByteArrayOutputStream map = new ByteArrayOutputStream();
+        public MapBlockBuilder map = new MapBlockBuilder();
 
         /**
          * the only key in the layer (null if there are multiple)
@@ -254,9 +223,9 @@ public class KeyOutputStream extends OutputStream {
          * @throws IOException
          */
         public void put(FullKey fullKey, long size) throws IOException {
-            byte[] add = ByteString.toUtf8(fullKey + "\t" + totalSize + "\n");
+            MapBlock.Entry add = new MapBlock.Entry(fullKey, totalSize);
 
-            if (map.size() + add.length > splitSize) {
+            if (map.getSize() + add.getEntrySize() > splitSize) {
                 flush();
             }
 
@@ -266,7 +235,7 @@ public class KeyOutputStream extends OutputStream {
                 onlyKey = null;
             }
 
-            map.write(add);
+            map.add(add);
             totalSize += size;
         }
 
@@ -278,7 +247,7 @@ public class KeyOutputStream extends OutputStream {
          * @throws IOException
          */
         public void flush() throws IOException {
-            if (map.size() == 0) {
+            if (map.count() == 0) {
                 throw new IllegalStateException("flusing empty map block");
             }
 
@@ -292,7 +261,7 @@ public class KeyOutputStream extends OutputStream {
                 }
                 parent.put(onlyKey, totalSize);
             } else {
-                FullKey fullKey = storeMapBlock(map.toByteArray());
+                FullKey fullKey = target.put(map.create());
                 if (parent == null) {
                     parent = new Layer();
                 }
@@ -304,7 +273,7 @@ public class KeyOutputStream extends OutputStream {
              */
             totalSize = 0;
             onlyKey = null;
-            map.reset();
+            map = new MapBlockBuilder();
         }
     }
 }
