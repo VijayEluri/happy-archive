@@ -8,7 +8,7 @@ import org.yi.happy.archive.key.FullKey;
 /**
  * A service which encodes and stores blocks.
  */
-public interface StoreBlock {
+public interface ClearBlockTarget {
 
     /**
      * Encode and store a block.
@@ -19,6 +19,6 @@ public interface StoreBlock {
      * @throws IOException
      *             on storage error.
      */
-    FullKey storeBlock(Block block) throws IOException;
+    FullKey put(Block block) throws IOException;
 
 }

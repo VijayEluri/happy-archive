@@ -51,7 +51,7 @@ public class StoreStreamPutMain implements MainCommand {
     public void run() throws IOException {
         BlockEncoder encoder = BlockEncoderFactory.getContentDefault();
 
-        KeyOutputStream s = new KeyOutputStream(new StoreBlockStorage(encoder,
+        KeyOutputStream s = new KeyOutputStream(new ClearBlockTargetStore(encoder,
                 store));
 
         Streams.copy(in, s);

@@ -47,7 +47,7 @@ public class StoreTagAddMain implements MainCommand {
              * do the work
              */
 
-            StoreBlockStorage s = new StoreBlockStorage(
+            ClearBlockTargetStore s = new ClearBlockTargetStore(
                     BlockEncoderFactory.getContentDefault(), store);
 
             TagOutputStream out = new TagOutputStream(System.out);
@@ -62,7 +62,7 @@ public class StoreTagAddMain implements MainCommand {
         }
     }
 
-    private static Tag process(Tag tag, StoreBlockStorage s, FileStore fs)
+    private static Tag process(Tag tag, ClearBlockTargetStore s, FileStore fs)
             throws IOException {
         if (tag.get("data") != null) {
             return tag;

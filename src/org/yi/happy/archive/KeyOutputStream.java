@@ -29,16 +29,16 @@ public class KeyOutputStream extends OutputStream {
     /**
      * where to send blocks for encoding and storage.
      */
-    private final StoreBlock store;
+    private final ClearBlockTarget target;
 
     /**
      * create with the storage object.
      * 
-     * @param store
+     * @param target
      *            where blocks are to be stored
      */
-    public KeyOutputStream(StoreBlock store) {
-        this.store = store;
+    public KeyOutputStream(ClearBlockTarget target) {
+        this.target = target;
     }
 
     /**
@@ -113,7 +113,7 @@ public class KeyOutputStream extends OutputStream {
         GenericBlock b = GenericBlock.create(new Bytes(data), "type", "map",
                 "size", "" + data.length);
 
-        return store.storeBlock(b);
+        return target.put(b);
     }
 
     /**
@@ -126,7 +126,7 @@ public class KeyOutputStream extends OutputStream {
      *             on error.
      */
     private FullKey storeDataBlock(byte[] data) throws IOException {
-        return store.storeBlock(new DataBlock(new Bytes(data)));
+        return target.put(new DataBlock(new Bytes(data)));
     }
 
     /**

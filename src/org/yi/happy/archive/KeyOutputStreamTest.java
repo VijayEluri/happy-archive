@@ -24,7 +24,7 @@ public class KeyOutputStreamTest {
     public void testWrite() throws IOException {
         BlockEncoder e = BlockEncoderFactory.getContentOldDefault();
         BlockStoreMemory s = new BlockStoreMemory();
-        KeyOutputStream out = new KeyOutputStream(new StoreBlockStorage(e, s));
+        KeyOutputStream out = new KeyOutputStream(new ClearBlockTargetStore(e, s));
 
         byte[] data = "0123401234".getBytes();
         out.write(data);
@@ -49,7 +49,7 @@ public class KeyOutputStreamTest {
     public void testWrite2() throws IOException {
         BlockEncoder e = BlockEncoderFactory.getContentDefault();
         BlockStoreMemory s = new BlockStoreMemory();
-        KeyOutputStream out = new KeyOutputStream(new StoreBlockStorage(e, s));
+        KeyOutputStream out = new KeyOutputStream(new ClearBlockTargetStore(e, s));
 
         out.write("hello\n".getBytes());
         out.close();
@@ -68,7 +68,7 @@ public class KeyOutputStreamTest {
     public void testWriteAfterClose() throws IOException {
         BlockEncoder e = BlockEncoderFactory.getContentDefault();
         BlockStoreMemory s = new BlockStoreMemory();
-        KeyOutputStream out = new KeyOutputStream(new StoreBlockStorage(e, s));
+        KeyOutputStream out = new KeyOutputStream(new ClearBlockTargetStore(e, s));
 
         out.close();
         out.write("hi".getBytes());
@@ -84,7 +84,7 @@ public class KeyOutputStreamTest {
     public void testCloseAgain() throws IOException {
         BlockEncoder e = BlockEncoderFactory.getContentDefault();
         BlockStoreMemory s = new BlockStoreMemory();
-        KeyOutputStream out = new KeyOutputStream(new StoreBlockStorage(e, s));
+        KeyOutputStream out = new KeyOutputStream(new ClearBlockTargetStore(e, s));
 
         out.write("hello\n".getBytes());
         out.close();
@@ -103,7 +103,7 @@ public class KeyOutputStreamTest {
     public void testSetSplitSize() throws IOException {
         BlockEncoder e = BlockEncoderFactory.getContentOldDefault();
         BlockStoreMemory s = new BlockStoreMemory();
-        KeyOutputStream out = new KeyOutputStream(new StoreBlockStorage(e, s));
+        KeyOutputStream out = new KeyOutputStream(new ClearBlockTargetStore(e, s));
 
         out.setSplitSize(512);
         byte[] data = new byte[2048];

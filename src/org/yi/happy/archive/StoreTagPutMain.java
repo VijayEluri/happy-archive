@@ -64,7 +64,7 @@ public class StoreTagPutMain implements MainCommand {
              * do the work
              */
 
-            StoreBlockStorage s = new StoreBlockStorage(
+            ClearBlockTargetStore s = new ClearBlockTargetStore(
                     BlockEncoderFactory.getContentDefault(), store);
 
             TagOutputStream out = new TagOutputStream(this.out);
