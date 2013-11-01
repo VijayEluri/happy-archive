@@ -32,7 +32,7 @@ public class BlockStoreFile implements BlockStore {
     }
 
     @Override
-    public void put(EncodedBlock block) throws IOException {
+    public LocatorKey put(EncodedBlock block) throws IOException {
         LocatorKey key = block.getKey();
         File file = makeFile(key);
         file.getParentFile().mkdirs();
@@ -42,6 +42,7 @@ public class BlockStoreFile implements BlockStore {
         } finally {
             out.close();
         }
+        return key;
     }
 
     @Override

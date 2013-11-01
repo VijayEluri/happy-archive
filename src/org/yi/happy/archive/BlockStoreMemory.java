@@ -22,9 +22,11 @@ public class BlockStoreMemory implements BlockStore {
     private Set<LocatorKey> broken = new HashSet<LocatorKey>();
 
     @Override
-    public void put(EncodedBlock block) throws IOException {
-        broken.remove(block.getKey());
-        data.put(block.getKey(), block);
+    public LocatorKey put(EncodedBlock block) throws IOException {
+        LocatorKey key = block.getKey();
+        broken.remove(key);
+        data.put(key, block);
+        return key;
     }
 
     /**

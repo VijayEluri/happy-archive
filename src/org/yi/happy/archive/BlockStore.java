@@ -15,10 +15,11 @@ public interface BlockStore extends Iterable<LocatorKey> {
      * 
      * @param block
      *            the block to put into the store.
+     * @return the key to fetch the block.
      * @throws IOException
      *             if an error occurred putting the block in the store.
      */
-    void put(EncodedBlock block) throws IOException;
+    LocatorKey put(EncodedBlock block) throws IOException;
 
     /**
      * get a block from the store.
