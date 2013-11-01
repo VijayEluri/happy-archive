@@ -21,7 +21,7 @@ import org.yi.happy.annotate.SmellsMessy;
  * Tests for {@link FileStoreMemory}.
  */
 @SmellsMessy(/* TODO use some builders */)
-public class FileSystemMemoryTest {
+public class FileStoreMemoryTest {
     private FileStoreMemory fake;
     private FileStore real;
 
