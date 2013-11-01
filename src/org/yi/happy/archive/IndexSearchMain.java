@@ -68,7 +68,7 @@ public class IndexSearchMain implements MainCommand {
 
             @Override
             public void gotException(Throwable cause) {
-                err.println(cause.getMessage());
+                cause.printStackTrace(err);
             }
         });
 

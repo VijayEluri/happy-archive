@@ -3,6 +3,8 @@ package org.yi.happy.archive;
 import java.io.File;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
@@ -381,7 +383,7 @@ public class MyInjector {
     }
 
     /**
-     * get the base of the store.
+     * get the base path of the block store using files.
      * 
      * @param scope
      *            the scope object.
@@ -472,5 +474,41 @@ public class MyInjector {
     public static Map<String, Class<? extends MainCommand>> injectCommands(
             ApplicationScope scope) {
         return scope.getCommands();
+    }
+
+    /**
+     * Dynamically call an inject method. Calls the method name ("inject" +
+     * name), giving the scope object and casts the result to type.
+     * 
+     * @param <T>
+     *            the return type.
+     * @param type
+     *            the return type.
+     * @param name
+     *            the rest of the inject method name. the method called will be
+     *            ("inject" + name).
+     * @param scope
+     *            the scope object.
+     * @return the object.
+     * @throws ProvisionException
+     *             on any {@link Exception}s.
+     */
+    public static <T> T inject(Class<T> type, String name,
+            ApplicationScope scope) throws ProvisionException {
+        try {
+            name = "inject" + name;
+            Method method = MyInjector.class.getMethod(name,
+                    ApplicationScope.class);
+            Object object = method.invoke(null, scope);
+            return type.cast(object);
+        } catch (InvocationTargetException e) {
+            Throwable ex = e.getCause();
+            if (ex instanceof ProvisionException) {
+                throw (ProvisionException) ex;
+            }
+            throw new ProvisionException(ex);
+        } catch (Exception e) {
+            throw new ProvisionException(e);
+        }
     }
 }

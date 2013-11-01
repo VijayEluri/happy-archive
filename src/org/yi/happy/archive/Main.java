@@ -1,6 +1,5 @@
 package org.yi.happy.archive;
 
-import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -113,13 +112,8 @@ public class Main {
     }
 
     private static MainCommand getCommandObject(
-            Class<? extends MainCommand> cls, ApplicationScope scope)
-            throws Exception {
-        String name = cls.getSimpleName();
-        Method injectMethod = MyInjector.class.getMethod("inject" + name,
-                ApplicationScope.class);
-        Object out = injectMethod.invoke(null, scope);
-        return cls.cast(out);
+            Class<? extends MainCommand> type, ApplicationScope scope) {
+        return MyInjector.inject(type, type.getSimpleName(), scope);
     }
 
     private static void help() {

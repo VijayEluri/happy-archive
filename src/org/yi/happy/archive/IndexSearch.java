@@ -111,6 +111,10 @@ public class IndexSearch {
                 LineCursor in = new LineCursor(in0);
                 while (in.next()) {
                     String[] line = in.get().split("\t", -1);
+                    if (line.length < 3) {
+                        throw new IndexOutOfBoundsException("short line in "
+                                + volumeSet + "/" + volumeName);
+                    }
                     LocatorKey key = LocatorKeyParse.parseLocatorKey(line[2]);
                     if (want.contains(key)) {
                         String fileName = line[0];
