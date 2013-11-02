@@ -50,13 +50,13 @@ public class IndexSearch {
         /*
          * get the tasks
          */
-        List<Callable<List<SearchResult>>> tasks = getSearchTasks(want);
+        List<Callable<List<IndexSearchResult>>> tasks = getSearchTasks(want);
 
         /*
          * launch tasks
          */
-        Queue<Future<List<SearchResult>>> results = new ArrayDeque<Future<List<SearchResult>>>();
-        for (Callable<List<SearchResult>> task : tasks) {
+        Queue<Future<List<IndexSearchResult>>> results = new ArrayDeque<Future<List<IndexSearchResult>>>();
+        for (Callable<List<IndexSearchResult>> task : tasks) {
             results.add(exec.submit(task));
         }
 
@@ -64,9 +64,9 @@ public class IndexSearch {
          * process results
          */
         while (results.isEmpty() == false) {
-            Future<List<SearchResult>> result = results.remove();
+            Future<List<IndexSearchResult>> result = results.remove();
             try {
-                for (SearchResult i : result.get()) {
+                for (IndexSearchResult i : result.get()) {
                     handler.gotResult(i);
                 }
             } catch (ExecutionException e) {
@@ -77,10 +77,10 @@ public class IndexSearch {
         exec.shutdown();
     }
 
-    private List<Callable<List<SearchResult>>> getSearchTasks(
+    private List<Callable<List<IndexSearchResult>>> getSearchTasks(
             final Set<LocatorKey> want) throws IOException {
-        final List<Callable<List<SearchResult>>> out;
-        out = new ArrayList<Callable<List<SearchResult>>>();
+        final List<Callable<List<IndexSearchResult>>> out;
+        out = new ArrayList<Callable<List<IndexSearchResult>>>();
         for (String set : index.listVolumeSets()) {
             for (String name : index.listVolumeNames(set)) {
                 SearchVolume task = new SearchVolume(set, name, want);
@@ -90,7 +90,7 @@ public class IndexSearch {
         return out;
     }
 
-    private class SearchVolume implements Callable<List<SearchResult>> {
+    private class SearchVolume implements Callable<List<IndexSearchResult>> {
         private final String volumeSet;
         private final String volumeName;
         private final Set<LocatorKey> want;
@@ -103,8 +103,8 @@ public class IndexSearch {
         }
 
         @Override
-        public List<SearchResult> call() throws Exception {
-            List<SearchResult> out = new ArrayList<SearchResult>();
+        public List<IndexSearchResult> call() throws Exception {
+            List<IndexSearchResult> out = new ArrayList<IndexSearchResult>();
 
             Reader in0 = index.open(volumeSet, volumeName);
             try {
@@ -117,7 +117,7 @@ public class IndexSearch {
                     LocatorKey key = LocatorKeyParse.parseLocatorKey(line[2]);
                     if (want.contains(key)) {
                         String fileName = line[0];
-                        out.add(new SearchResult(volumeSet, volumeName,
+                        out.add(new IndexSearchResult(volumeSet, volumeName,
                                 fileName, key));
                     }
                 }
@@ -139,7 +139,7 @@ public class IndexSearch {
          * @param result
          *            the search result.
          */
-        void gotResult(SearchResult result);
+        void gotResult(IndexSearchResult result);
 
         /**
          * Called for each search failure.
@@ -148,69 +148,5 @@ public class IndexSearch {
          *            the cause of the failure.
          */
         void gotException(Throwable cause);
-    }
-
-    /**
-     * A search result data object.
-     */
-    public static class SearchResult {
-
-        private final String volumeSet;
-        private final String volumeName;
-        private final String fileName;
-        private final LocatorKey key;
-
-        /**
-         * create.
-         * 
-         * @param volumeSet
-         *            the volume set.
-         * @param volumeName
-         *            the volume name.
-         * @param fileName
-         *            the file name.
-         * @param key
-         *            the locator key.
-         */
-        public SearchResult(String volumeSet, String volumeName,
-                String fileName, LocatorKey key) {
-            this.volumeSet = volumeSet;
-            this.volumeName = volumeName;
-            this.fileName = fileName;
-            this.key = key;
-        }
-
-        @Override
-        public String toString() {
-            return volumeSet + "\t" + volumeName + "\t" + fileName + "\t" + key;
-        }
-
-        /**
-         * @return the volume set for this entry.
-         */
-        public String getVolumeSet() {
-            return volumeSet;
-        }
-
-        /**
-         * @return the volume name for this entry.
-         */
-        public String getVolumeName() {
-            return volumeName;
-        }
-
-        /**
-         * @return the file name within the volume for this entry.
-         */
-        public String getFileName() {
-            return fileName;
-        }
-
-        /**
-         * @return the key for this entry.
-         */
-        public LocatorKey getKey() {
-            return key;
-        }
     }
 }

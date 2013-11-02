@@ -12,4 +12,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
 public @interface NeedFailureTest {
+    /**
+     * @return the situations where failure may happen.
+     */
+    String[] value() default {};
 }

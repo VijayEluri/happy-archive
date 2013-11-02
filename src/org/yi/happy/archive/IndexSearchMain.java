@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
-import org.yi.happy.archive.IndexSearch.SearchResult;
 import org.yi.happy.archive.commandLine.UsesIndex;
 import org.yi.happy.archive.commandLine.UsesInput;
 import org.yi.happy.archive.commandLine.UsesOutput;
@@ -62,7 +61,7 @@ public class IndexSearchMain implements MainCommand {
 
         indexSearch.search(keys, new IndexSearch.Handler() {
             @Override
-            public void gotResult(SearchResult result) {
+            public void gotResult(IndexSearchResult result) {
                 out.println(result);
             }
 

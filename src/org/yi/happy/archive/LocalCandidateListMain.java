@@ -82,7 +82,7 @@ public class LocalCandidateListMain implements MainCommand {
         final Set<LocatorKey> exists = new HashSet<LocatorKey>();
         indexSearch.search(want, new IndexSearch.Handler() {
             @Override
-            public void gotResult(IndexSearch.SearchResult result) {
+            public void gotResult(IndexSearchResult result) {
                 exists.add(result.getKey());
                 if (result.getVolumeSet().equals(volumeSet)) {
                     have.add(result.getKey());
