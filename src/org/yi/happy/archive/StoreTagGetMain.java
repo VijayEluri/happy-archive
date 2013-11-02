@@ -12,7 +12,7 @@ import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.FullKeyParse;
 import org.yi.happy.archive.restore.RestoreEngine;
 import org.yi.happy.archive.tag.Tag;
-import org.yi.happy.archive.tag.TagStreamIterator;
+import org.yi.happy.archive.tag.TagIterator;
 
 /**
  * A program to restore tags.
@@ -60,7 +60,7 @@ public class StoreTagGetMain implements MainCommand {
     public void run() throws IOException {
         RestoreEngine engine = new RestoreEngine();
 
-        for (Tag i : new TagStreamIterator(in)) {
+        for (Tag i : new TagIterator(in)) {
             String name = i.get("name");
             if (name == null) {
                 continue;

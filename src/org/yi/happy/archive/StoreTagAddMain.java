@@ -3,6 +3,8 @@ package org.yi.happy.archive;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.yi.happy.annotate.GlobalInput;
+import org.yi.happy.annotate.GlobalOutput;
 import org.yi.happy.archive.block.encoder.BlockEncoderFactory;
 import org.yi.happy.archive.commandLine.UsesInput;
 import org.yi.happy.archive.commandLine.UsesOutput;
@@ -10,8 +12,8 @@ import org.yi.happy.archive.commandLine.UsesStore;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.tag.Tag;
 import org.yi.happy.archive.tag.TagBuilder;
+import org.yi.happy.archive.tag.TagIterator;
 import org.yi.happy.archive.tag.TagOutputStream;
-import org.yi.happy.archive.tag.TagStreamIterator;
 
 /**
  * A filter that takes a tag stream, and for files where the data field is not
@@ -20,6 +22,8 @@ import org.yi.happy.archive.tag.TagStreamIterator;
 @UsesStore
 @UsesInput("tag-list")
 @UsesOutput("tag-list")
+@GlobalInput
+@GlobalOutput
 public class StoreTagAddMain implements MainCommand {
     private final BlockStore store;
     private final FileStore fs;
@@ -51,9 +55,8 @@ public class StoreTagAddMain implements MainCommand {
                     BlockEncoderFactory.getContentDefault(), store);
 
             TagOutputStream out = new TagOutputStream(System.out);
-            TagStreamIterator in = new TagStreamIterator(System.in);
 
-            for (Tag tag : in) {
+            for (Tag tag : new TagIterator(System.in)) {
                 tag = process(tag, s, fs);
                 out.write(tag);
             }
