@@ -1,4 +1,4 @@
-package org.yi.happy.archive;
+package org.yi.happy.archive.index;
 
 import static org.junit.Assert.assertEquals;
 
@@ -8,6 +8,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
+import org.yi.happy.archive.ByteString;
+import org.yi.happy.archive.FileStore;
+import org.yi.happy.archive.FileStoreMemory;
+import org.yi.happy.archive.Streams;
 import org.yi.happy.archive.test_data.TestData;
 
 /**

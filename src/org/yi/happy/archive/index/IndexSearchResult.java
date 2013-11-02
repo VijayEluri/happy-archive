@@ -1,4 +1,4 @@
-package org.yi.happy.archive;
+package org.yi.happy.archive.index;
 
 import org.yi.happy.archive.key.LocatorKey;
 

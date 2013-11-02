@@ -1,4 +1,4 @@
-package org.yi.happy.archive;
+package org.yi.happy.archive.index;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

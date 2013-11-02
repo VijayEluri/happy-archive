@@ -10,6 +10,8 @@ import java.util.concurrent.ExecutionException;
 import org.yi.happy.archive.commandLine.UsesIndex;
 import org.yi.happy.archive.commandLine.UsesInput;
 import org.yi.happy.archive.commandLine.UsesOutput;
+import org.yi.happy.archive.index.IndexSearch;
+import org.yi.happy.archive.index.IndexSearchResult;
 import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.key.LocatorKeyParse;
 

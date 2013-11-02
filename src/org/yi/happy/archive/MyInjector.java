@@ -10,6 +10,9 @@ import java.util.Map;
 
 import org.yi.happy.annotate.GlobalFilesystem;
 import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.index.IndexSearch;
+import org.yi.happy.archive.index.IndexStore;
+import org.yi.happy.archive.index.IndexStoreFileStore;
 
 /**
  * The dependency injector for this project, this gives me much more flexibility

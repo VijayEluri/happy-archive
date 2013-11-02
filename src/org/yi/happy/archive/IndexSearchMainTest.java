@@ -9,6 +9,8 @@ import java.io.InputStream;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.yi.happy.archive.index.IndexSearch;
+import org.yi.happy.archive.index.IndexStoreMemory;
 import org.yi.happy.archive.test_data.TestData;
 
 /**
