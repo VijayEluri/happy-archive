@@ -15,52 +15,45 @@ public abstract class AbstractBlock implements Block {
      */
     @Override
     public byte[] asBytes() {
-        Map<String, String> m = getMeta();
-        Bytes b = getBody();
+        Map<String, String> meta = getMeta();
+        Bytes body = getBody();
 
         /*
          * calculate the size and gather the header bytes.
          */
-        byte[][] p = new byte[m.size() * 2][];
-        /**
-         * index into the part list
-         */
+        byte[][] parts = new byte[meta.size() * 2][];
         int i = 0;
-        /**
-         * number of bytes.
-         */
-        int n = 0;
-        for (Map.Entry<String, String> j : m.entrySet()) {
-            p[i] = ByteString.toUtf8(j.getKey());
-            n += p[i].length;
-            n += SEPARATOR.getSize();
-            i++;
-            p[i] = ByteString.toUtf8(j.getValue());
-            n += p[i].length;
-            n += ENDL.getSize();
-            i++;
+        int offset = 0;
+        for (Map.Entry<String, String> entry : meta.entrySet()) {
+            parts[i] = ByteString.toUtf8(entry.getKey());
+            offset += parts[i].length;
+            offset += SEPARATOR.getSize();
+            parts[i + 1] = ByteString.toUtf8(entry.getValue());
+            offset += parts[i + 1].length;
+            offset += ENDL.getSize();
+            i += 2;
         }
-        n += ENDL.getSize();
-        n += b.getSize();
+        offset += ENDL.getSize();
+        offset += body.getSize();
 
         /*
          * fill in the output.
          */
-        byte[] out = new byte[n];
-        n = 0;
-        for (i = 0; i < p.length; i += 2) {
-            System.arraycopy(p[i], 0, out, n, p[i].length);
-            n += p[i].length;
-            SEPARATOR.getBytes(out, n);
-            n += SEPARATOR.getSize();
-            System.arraycopy(p[i + 1], 0, out, n, p[i + 1].length);
-            n += p[i + 1].length;
-            ENDL.getBytes(out, n);
-            n += ENDL.getSize();
+        byte[] out = new byte[offset];
+        offset = 0;
+        for (i = 0; i < parts.length; i += 2) {
+            System.arraycopy(parts[i], 0, out, offset, parts[i].length);
+            offset += parts[i].length;
+            SEPARATOR.getBytes(out, offset);
+            offset += SEPARATOR.getSize();
+            System.arraycopy(parts[i + 1], 0, out, offset, parts[i + 1].length);
+            offset += parts[i + 1].length;
+            ENDL.getBytes(out, offset);
+            offset += ENDL.getSize();
         }
-        ENDL.getBytes(out, n);
-        n += ENDL.getSize();
-        b.getBytes(out, n);
+        ENDL.getBytes(out, offset);
+        offset += ENDL.getSize();
+        body.getBytes(out, offset);
         return out;
     }
 
