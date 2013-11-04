@@ -5,6 +5,8 @@ import java.io.PrintStream;
 import java.util.List;
 
 import org.yi.happy.annotate.DuplicatedLogic;
+import org.yi.happy.archive.block.BlobEncodedBlock;
+import org.yi.happy.archive.block.ContentEncodedBlock;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.commandLine.UsesArgs;
@@ -52,16 +54,21 @@ public class IndexCheckMain implements MainCommand {
     }
 
     @Override
-    @DuplicatedLogic("with IndexVolumeMain.process")
+    @DuplicatedLogic("with IndexVolumeMain.process, and internally")
     public void run() throws Exception {
         String imagePath = args.get(0);
 
         DigestProvider digest = DigestFactory.getProvider("sha-256");
 
+        String prevName = null;
         for (String line : new LineIterator(in)) {
             try {
                 String name = line.split("\t")[0];
                 String path = imagePath + "/" + name;
+                if (name.equals(prevName)) {
+                    continue;
+                }
+                prevName = name;
 
                 byte[] data = fs.get(path, Blocks.MAX_SIZE);
                 EncodedBlock block = EncodedBlockParse.parse(data);
@@ -75,6 +82,24 @@ public class IndexCheckMain implements MainCommand {
 
                 out.println(name + "\t" + "plain" + "\t" + key + "\t" + hash
                         + "\t" + size);
+
+                /*
+                 * to-blob
+                 */
+                if (block instanceof ContentEncodedBlock) {
+                    block = new BlobEncodedBlock(block.getDigest(),
+                            block.getCipher(), block.getBody());
+
+                    key = block.getKey().toString();
+
+                    data = block.asBytes();
+
+                    hash = Base16.encode(Digests.digestData(digest, data));
+                    size = Integer.toString(data.length);
+
+                    out.println(name + "\t" + "to-blob" + "\t" + key + "\t"
+                            + hash + "\t" + size);
+                }
             } catch (Exception e) {
                 e.printStackTrace(err);
             }

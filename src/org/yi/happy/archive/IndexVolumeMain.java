@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.yi.happy.annotate.DuplicatedLogic;
+import org.yi.happy.archive.block.BlobEncodedBlock;
+import org.yi.happy.archive.block.ContentEncodedBlock;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.commandLine.UsesArgs;
@@ -69,7 +71,7 @@ public class IndexVolumeMain implements MainCommand {
         }
     }
 
-    @DuplicatedLogic("with IndexCheckMain.run")
+    @DuplicatedLogic("with IndexCheckMain.run, and internally")
     private void process(String path, String name) throws IOException {
         if (fs.isDir(path)) {
             processDir(path, name);
@@ -89,6 +91,24 @@ public class IndexVolumeMain implements MainCommand {
 
             out.println(name + "\t" + "plain" + "\t" + key + "\t" + hash + "\t"
                     + size);
+
+            /*
+             * to-blob
+             */
+            if (block instanceof ContentEncodedBlock) {
+                block = new BlobEncodedBlock(block.getDigest(),
+                        block.getCipher(), block.getBody());
+
+                key = block.getKey().toString();
+
+                data = block.asBytes();
+
+                hash = Base16.encode(Digests.digestData(digest, data));
+                size = Integer.toString(data.length);
+
+                out.println(name + "\t" + "to-blob" + "\t" + key + "\t" + hash
+                        + "\t" + size);
+            }
         } catch (Exception e) {
             e.printStackTrace(err);
         }
