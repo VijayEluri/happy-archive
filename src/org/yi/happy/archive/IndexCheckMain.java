@@ -1,5 +1,6 @@
 package org.yi.happy.archive;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.List;
@@ -100,6 +101,8 @@ public class IndexCheckMain implements MainCommand {
                     out.println(name + "\t" + "to-blob" + "\t" + key + "\t"
                             + hash + "\t" + size);
                 }
+            } catch (IOException e) {
+                err.println("Unable to read: " + prevName);
             } catch (Exception e) {
                 e.printStackTrace(err);
             }
