@@ -121,6 +121,9 @@ public class Main {
             System.out.print(name);
 
             Requirement req = RequirementLoader.load(commands.get(name));
+            if (req.getUsesNeed()) {
+                System.out.print(" --need=key-list");
+            }
             for (String arg : req.getUsesArgs()) {
                 System.out.print(" " + arg);
             }
