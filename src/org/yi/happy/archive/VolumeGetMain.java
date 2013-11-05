@@ -9,12 +9,12 @@ import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesInput;
-import org.yi.happy.archive.commandLine.UsesStore;
+import org.yi.happy.archive.commandLine.UsesBlockStore;
 
 /**
  * load a list of files from a volume into a store.
  */
-@UsesStore
+@UsesBlockStore
 @UsesArgs({ "volume-path" })
 @UsesInput("file-list")
 public class VolumeGetMain implements MainCommand {

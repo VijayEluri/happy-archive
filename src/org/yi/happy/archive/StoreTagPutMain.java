@@ -10,7 +10,7 @@ import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.block.encoder.BlockEncoderFactory;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesOutput;
-import org.yi.happy.archive.commandLine.UsesStore;
+import org.yi.happy.archive.commandLine.UsesBlockStore;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.tag.TagBuilder;
 import org.yi.happy.archive.tag.TagOutputStream;
@@ -18,7 +18,7 @@ import org.yi.happy.archive.tag.TagOutputStream;
 /**
  * Store files in a file store, printing out tags.
  */
-@UsesStore
+@UsesBlockStore
 @UsesArgs({ "file..." })
 @UsesOutput("tag-list")
 public class StoreTagPutMain implements MainCommand {

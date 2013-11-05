@@ -59,7 +59,7 @@ public class EnvHandlerTest {
         commandParseEngine.parse("show-env", "--store", "somewhere");
 
         Env want = new EnvBuilder().withCommand("show-env")
-                .withStore("somewhere").create();
+                .withBlockStore("somewhere").create();
         assertEquals(want, envBuilder.create());
     }
 
@@ -74,7 +74,7 @@ public class EnvHandlerTest {
         commandParseEngine.parse("show-env", "--store", "somewhere", "file");
 
         Env want = new EnvBuilder().withCommand("show-env")
-                .withStore("somewhere").addArgument("file").create();
+                .withBlockStore("somewhere").addArgument("file").create();
         assertEquals(want, envBuilder.create());
     }
 

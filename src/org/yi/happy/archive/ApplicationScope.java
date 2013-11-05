@@ -45,7 +45,7 @@ public class ApplicationScope {
      * @return the value of the store option.
      */
     public String getStore() {
-        return env.getStore();
+        return env.getBlockStore();
     }
 
     /**
@@ -66,6 +66,6 @@ public class ApplicationScope {
      * @return the value of the index option.
      */
     public String getIndex() {
-        return env.getIndex();
+        return env.getIndexStore();
     }
 }

@@ -8,7 +8,7 @@ import org.yi.happy.annotate.GlobalOutput;
 import org.yi.happy.archive.block.encoder.BlockEncoderFactory;
 import org.yi.happy.archive.commandLine.UsesInput;
 import org.yi.happy.archive.commandLine.UsesOutput;
-import org.yi.happy.archive.commandLine.UsesStore;
+import org.yi.happy.archive.commandLine.UsesBlockStore;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.tag.Tag;
 import org.yi.happy.archive.tag.TagBuilder;
@@ -19,7 +19,7 @@ import org.yi.happy.archive.tag.TagOutputStream;
  * A filter that takes a tag stream, and for files where the data field is not
  * filled in, the file is stored and the field filled in.
  */
-@UsesStore
+@UsesBlockStore
 @UsesInput("tag-list")
 @UsesOutput("tag-list")
 @GlobalInput

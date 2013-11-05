@@ -8,13 +8,13 @@ import org.yi.happy.archive.block.encoder.BlockEncoder;
 import org.yi.happy.archive.block.encoder.BlockEncoderFactory;
 import org.yi.happy.archive.commandLine.UsesInput;
 import org.yi.happy.archive.commandLine.UsesOutput;
-import org.yi.happy.archive.commandLine.UsesStore;
+import org.yi.happy.archive.commandLine.UsesBlockStore;
 
 /**
  * given the base name of a file store on the command line, and a stream on
  * stdin, store the stream, and print out the resulting key.
  */
-@UsesStore
+@UsesBlockStore
 @UsesInput("file")
 @UsesOutput("key")
 public class StoreStreamPutMain implements MainCommand {

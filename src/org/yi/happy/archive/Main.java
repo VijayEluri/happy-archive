@@ -78,12 +78,12 @@ public class Main {
     }
 
     private static void explain(Requirement req, Env env) {
-        if (req.getUsesStore() && env.hasNoStore()) {
-            System.err.println("missing option --store store-path");
+        if (req.getUsesBlockStore() && env.hasNoBlockStore()) {
+            System.err.println("missing option --block-store path");
         }
 
-        if (req.getUsesIndex() && env.hasNoIndex()) {
-            System.err.println("missing option --index index-path");
+        if (req.getUsesIndexStore() && env.hasNoIndexStore()) {
+            System.err.println("missing option --index-store path");
         }
 
         if (req.getUsesNeed() && env.hasNoNeed()) {

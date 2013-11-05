@@ -48,14 +48,14 @@ public class Requirement {
     /**
      * @return true if the store option is used.
      */
-    public boolean getUsesStore() {
+    public boolean getUsesBlockStore() {
         return usesStore;
     }
 
     /**
      * @return true if the index option is used.
      */
-    public boolean getUsesIndex() {
+    public boolean getUsesIndexStore() {
         return usesIndex;
     }
 

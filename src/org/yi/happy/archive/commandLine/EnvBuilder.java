@@ -42,7 +42,7 @@ public class EnvBuilder {
         return home == null;
     }
 
-    private String store = null;
+    private String blockStore = null;
 
     /**
      * build the {@link Env} object with the given store.
@@ -51,12 +51,12 @@ public class EnvBuilder {
      *            the store to use.
      * @return this
      */
-    public EnvBuilder withStore(String store) {
-        this.store = store;
+    public EnvBuilder withBlockStore(String store) {
+        this.blockStore = store;
         return this;
     }
 
-    private String index = null;
+    private String indexStore = null;
 
     /**
      * build the {@link Env} object with the given index.
@@ -65,8 +65,8 @@ public class EnvBuilder {
      *            the index to use.
      * @return this
      */
-    public EnvBuilder withIndex(String index) {
-        this.index = index;
+    public EnvBuilder withIndexStore(String index) {
+        this.indexStore = index;
         return this;
     }
 
@@ -105,7 +105,7 @@ public class EnvBuilder {
      * @return the resulting {@link Env} object.
      */
     public Env create() {
-        return new Env(home, store, index, need, command, arguments);
+        return new Env(home, blockStore, indexStore, need, command, arguments);
     }
 
     /**
@@ -118,8 +118,8 @@ public class EnvBuilder {
     /**
      * @return true if home has not been set.
      */
-    public boolean hasNoStore() {
-        return store == null;
+    public boolean hasNoBlockStore() {
+        return blockStore == null;
     }
 
     /**
@@ -132,8 +132,8 @@ public class EnvBuilder {
     /**
      * @return true if index has not been set.
      */
-    public boolean hasNoIndex() {
-        return index == null;
+    public boolean hasNoIndexStore() {
+        return indexStore == null;
     }
 
 }

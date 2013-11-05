@@ -11,7 +11,7 @@ import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesInput;
 import org.yi.happy.archive.commandLine.UsesOutput;
-import org.yi.happy.archive.commandLine.UsesStore;
+import org.yi.happy.archive.commandLine.UsesBlockStore;
 import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.key.LocatorKeyParse;
 
@@ -19,7 +19,7 @@ import org.yi.happy.archive.key.LocatorKeyParse;
  * Build an image of a backup disk. The set of files that will be burned to a
  * backup disk.
  */
-@UsesStore
+@UsesBlockStore
 @UsesArgs({ "image-path", "size-mb" })
 @UsesInput("key-list")
 @UsesOutput("size")

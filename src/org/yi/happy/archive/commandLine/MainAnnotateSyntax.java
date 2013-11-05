@@ -71,10 +71,10 @@ public class MainAnnotateSyntax {
             System.out.println(name + ":");
             Requirement req = process(commands.get(name));
 
-            if (req.getUsesIndex()) {
+            if (req.getUsesIndexStore()) {
                 System.out.println("  option --store store-path");
             }
-            if (req.getUsesIndex()) {
+            if (req.getUsesIndexStore()) {
                 System.out.println("  option --index index-path");
             }
             if (req.getUsesNeed()) {
@@ -104,12 +104,12 @@ public class MainAnnotateSyntax {
                 continue;
             }
 
-            if (a.annotationType() == UsesStore.class) {
+            if (a.annotationType() == UsesBlockStore.class) {
                 req.withUsesStore();
                 continue;
             }
 
-            if (a.annotationType() == UsesIndex.class) {
+            if (a.annotationType() == UsesIndexStore.class) {
                 req.withUsesIndex();
                 continue;
             }

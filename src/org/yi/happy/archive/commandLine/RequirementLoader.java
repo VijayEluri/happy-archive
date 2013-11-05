@@ -26,12 +26,12 @@ public class RequirementLoader {
                 continue;
             }
 
-            if (a.annotationType() == UsesStore.class) {
+            if (a.annotationType() == UsesBlockStore.class) {
                 req.withUsesStore();
                 continue;
             }
 
-            if (a.annotationType() == UsesIndex.class) {
+            if (a.annotationType() == UsesIndexStore.class) {
                 req.withUsesIndex();
                 continue;
             }
@@ -65,11 +65,11 @@ public class RequirementLoader {
      * @return true if the requirements are met.
      */
     public static boolean check(Requirement requirement, Env env) {
-        if (requirement.getUsesIndex() && env.hasNoIndex()) {
+        if (requirement.getUsesIndexStore() && env.hasNoIndexStore()) {
             return false;
         }
 
-        if (requirement.getUsesStore() && env.hasNoStore()) {
+        if (requirement.getUsesBlockStore() && env.hasNoBlockStore()) {
             return false;
         }
 

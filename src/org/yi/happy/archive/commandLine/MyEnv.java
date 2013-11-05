@@ -31,12 +31,12 @@ public class MyEnv {
 
         new CommandParseEngine(new EnvHandler(env)).parse(args);
 
-        if (env.hasNoStore() && env.hasHome()) {
-            env.withStore(env.getHome() + File.separator + "store");
+        if (env.hasNoBlockStore() && env.hasHome()) {
+            env.withBlockStore(env.getHome() + File.separator + "block");
         }
 
-        if (env.hasNoIndex() && env.hasHome()) {
-            env.withIndex(env.getHome() + File.separator + "index");
+        if (env.hasNoIndexStore() && env.hasHome()) {
+            env.withIndexStore(env.getHome() + File.separator + "index");
         }
 
         return env.create();

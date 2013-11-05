@@ -4,14 +4,14 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.yi.happy.archive.commandLine.UsesInput;
-import org.yi.happy.archive.commandLine.UsesStore;
+import org.yi.happy.archive.commandLine.UsesBlockStore;
 import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.key.LocatorKeyParse;
 
 /**
  * Remove keys from the store.
  */
-@UsesStore
+@UsesBlockStore
 @UsesInput("key-list")
 public class StoreRemoveMain implements MainCommand {
     private final BlockStore blocks;

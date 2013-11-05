@@ -9,7 +9,7 @@ import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesNeed;
 import org.yi.happy.archive.commandLine.UsesOutput;
-import org.yi.happy.archive.commandLine.UsesStore;
+import org.yi.happy.archive.commandLine.UsesBlockStore;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.FullKeyParse;
 import org.yi.happy.archive.restore.RestoreEngine;
@@ -19,7 +19,7 @@ import org.yi.happy.archive.restore.RestoreEngine;
  * ones that are needed are put in a list, and the process continues to be
  * retried until all the needed blocks become available.
  */
-@UsesStore
+@UsesBlockStore
 @UsesNeed
 @UsesArgs({ "key" })
 @UsesOutput("file")

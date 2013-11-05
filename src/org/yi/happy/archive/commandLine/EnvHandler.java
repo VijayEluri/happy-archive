@@ -56,13 +56,13 @@ public class EnvHandler implements CommandParseHandler {
             return;
         }
 
-        if (name.equals("store")) {
-            env.withStore(value);
+        if (name.equals("block-store")) {
+            env.withBlockStore(value);
             return;
         }
 
-        if (name.equals("index")) {
-            env.withIndex(value);
+        if (name.equals("index-store")) {
+            env.withIndexStore(value);
             return;
         }
 

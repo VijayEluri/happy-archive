@@ -10,8 +10,8 @@ import java.util.List;
  */
 public class Env {
     private final String home;
-    private final String store;
-    private final String index;
+    private final String blockStore;
+    private final String indexStore;
     private final String need;
     private final String command;
     private final List<String> arguments;
@@ -21,9 +21,9 @@ public class Env {
      * 
      * @param home
      *            the archive data home directory.
-     * @param store
+     * @param blockStore
      *            the base of the block store.
-     * @param index
+     * @param indexStore
      *            the base of the index store.
      * @param need
      *            the needed block list file name.
@@ -32,11 +32,11 @@ public class Env {
      * @param arguments
      *            the rest of the arguments.
      */
-    public Env(String home, String store, String index, String need,
+    public Env(String home, String blockStore, String indexStore, String need,
             String command, List<String> arguments) {
         this.home = home;
-        this.store = store;
-        this.index = index;
+        this.blockStore = blockStore;
+        this.indexStore = indexStore;
         this.need = need;
         this.command = command;
 
@@ -54,15 +54,15 @@ public class Env {
     /**
      * @return the location of the block store.
      */
-    public String getStore() {
-        return store;
+    public String getBlockStore() {
+        return blockStore;
     }
 
     /**
      * @return the location of the index store.
      */
-    public String getIndex() {
-        return index;
+    public String getIndexStore() {
+        return indexStore;
     }
 
     /**
@@ -88,9 +88,9 @@ public class Env {
 
     @Override
     public String toString() {
-        return "Env [home=" + home + ", store=" + store + ", index=" + index
-                + ", need=" + need + ", command=" + command + ", arguments="
-                + arguments + "]";
+        return "Env [home=" + home + ", blockStore=" + blockStore
+                + ", indexStore=" + indexStore + ", need=" + need
+                + ", command=" + command + ", arguments=" + arguments + "]";
     }
 
     /**
@@ -103,8 +103,8 @@ public class Env {
     /**
      * @return true if there is no store set.
      */
-    public boolean hasNoStore() {
-        return store == null;
+    public boolean hasNoBlockStore() {
+        return blockStore == null;
     }
 
     /**
@@ -131,8 +131,8 @@ public class Env {
     /**
      * @return true if there is no index set.
      */
-    public boolean hasNoIndex() {
-        return index == null;
+    public boolean hasNoIndexStore() {
+        return indexStore == null;
     }
 
     /**
@@ -152,9 +152,11 @@ public class Env {
                 + ((arguments == null) ? 0 : arguments.hashCode());
         result = prime * result + ((command == null) ? 0 : command.hashCode());
         result = prime * result + ((home == null) ? 0 : home.hashCode());
-        result = prime * result + ((index == null) ? 0 : index.hashCode());
+        result = prime * result
+                + ((indexStore == null) ? 0 : indexStore.hashCode());
         result = prime * result + ((need == null) ? 0 : need.hashCode());
-        result = prime * result + ((store == null) ? 0 : store.hashCode());
+        result = prime * result
+                + ((blockStore == null) ? 0 : blockStore.hashCode());
         return result;
     }
 
@@ -182,20 +184,20 @@ public class Env {
                 return false;
         } else if (!home.equals(other.home))
             return false;
-        if (index == null) {
-            if (other.index != null)
+        if (indexStore == null) {
+            if (other.indexStore != null)
                 return false;
-        } else if (!index.equals(other.index))
+        } else if (!indexStore.equals(other.indexStore))
             return false;
         if (need == null) {
             if (other.need != null)
                 return false;
         } else if (!need.equals(other.need))
             return false;
-        if (store == null) {
-            if (other.store != null)
+        if (blockStore == null) {
+            if (other.blockStore != null)
                 return false;
-        } else if (!store.equals(other.store))
+        } else if (!blockStore.equals(other.blockStore))
             return false;
         return true;
     }

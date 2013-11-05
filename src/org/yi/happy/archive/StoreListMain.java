@@ -4,13 +4,13 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 import org.yi.happy.archive.commandLine.UsesOutput;
-import org.yi.happy.archive.commandLine.UsesStore;
+import org.yi.happy.archive.commandLine.UsesBlockStore;
 import org.yi.happy.archive.key.LocatorKey;
 
 /**
  * A command line program to list the contents of store.
  */
-@UsesStore
+@UsesBlockStore
 @UsesOutput("key-list")
 public class StoreListMain implements MainCommand {
 

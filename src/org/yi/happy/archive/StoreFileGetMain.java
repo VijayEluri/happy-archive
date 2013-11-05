@@ -7,7 +7,7 @@ import org.yi.happy.annotate.RestoreLoop;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesNeed;
-import org.yi.happy.archive.commandLine.UsesStore;
+import org.yi.happy.archive.commandLine.UsesBlockStore;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.FullKeyParse;
 import org.yi.happy.archive.restore.RestoreEngine;
@@ -15,7 +15,7 @@ import org.yi.happy.archive.restore.RestoreEngine;
 /**
  * get a file from a file store.
  */
-@UsesStore
+@UsesBlockStore
 @UsesNeed
 @UsesArgs({ "key", "output" })
 public class StoreFileGetMain implements MainCommand {

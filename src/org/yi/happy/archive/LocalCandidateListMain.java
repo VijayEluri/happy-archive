@@ -12,9 +12,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.yi.happy.archive.commandLine.UsesArgs;
-import org.yi.happy.archive.commandLine.UsesIndex;
+import org.yi.happy.archive.commandLine.UsesIndexStore;
 import org.yi.happy.archive.commandLine.UsesOutput;
-import org.yi.happy.archive.commandLine.UsesStore;
+import org.yi.happy.archive.commandLine.UsesBlockStore;
 import org.yi.happy.archive.index.IndexSearch;
 import org.yi.happy.archive.index.IndexSearchResult;
 import org.yi.happy.archive.key.LocatorKey;
@@ -22,8 +22,8 @@ import org.yi.happy.archive.key.LocatorKey;
 /**
  * Make a candidate list from a local store and local index.
  */
-@UsesStore
-@UsesIndex
+@UsesBlockStore
+@UsesIndexStore
 @UsesArgs({ "volume-set" })
 @UsesOutput("key-list")
 public class LocalCandidateListMain implements MainCommand {
