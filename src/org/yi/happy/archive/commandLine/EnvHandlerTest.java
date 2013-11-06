@@ -56,7 +56,7 @@ public class EnvHandlerTest {
     @Test
     public void testWithOption() throws CommandParseException {
 
-        commandParseEngine.parse("show-env", "--store", "somewhere");
+        commandParseEngine.parse("show-env", "--block-store", "somewhere");
 
         Env want = new EnvBuilder().withCommand("show-env")
                 .withBlockStore("somewhere").create();
@@ -71,7 +71,7 @@ public class EnvHandlerTest {
     @Test
     public void testWithOptionAndFile() throws CommandParseException {
 
-        commandParseEngine.parse("show-env", "--store", "somewhere", "file");
+        commandParseEngine.parse("show-env", "--block-store", "somewhere", "file");
 
         Env want = new EnvBuilder().withCommand("show-env")
                 .withBlockStore("somewhere").addArgument("file").create();

@@ -51,11 +51,27 @@ public class IndexVolumeMainTest {
         sb.append(hash(K0)).append("\t");
         sb.append(size(K0)).append("\n");
 
+        sb.append(N0).append("\t");
+        sb.append("to-blob").append("\t");
+        sb.append("blob:200cf5031a53e822c3a29726b73a401600faacf2875f42")
+                .append("0dfe34bf87db03e5b0").append("\t");
+        sb.append("c7928f3f207daffa4ee575aa4fc7c2b566765ee09333107668e")
+                .append("b03d3b84187ee").append("\t");
+        sb.append("177").append("\n");
+
         sb.append(N1).append("\t");
         sb.append("plain").append("\t");
         sb.append(key(K1)).append("\t");
         sb.append(hash(K1)).append("\t");
         sb.append(size(K1)).append("\n");
+
+        sb.append("01.dat").append("\t");
+        sb.append("to-blob").append("\t");
+        sb.append("blob:04af649a0f44c252fd64c594ff08e2c3b03fe9e2a964df")
+                .append("5aadbc105627146fa0").append("\t");
+        sb.append("22e40e2ea67f64ad899c13e724c8cc1bd821a74281c0670ccf0")
+                .append("d0e1fcad0b750").append("\t");
+        sb.append("177").append("\n");
 
         assertEquals(sb.toString(), out.toString());
     }
@@ -91,6 +107,14 @@ public class IndexVolumeMainTest {
         sb.append(key(K1)).append("\t");
         sb.append(hash(K1)).append("\t");
         sb.append(size(K1)).append("\n");
+
+        sb.append("01.dat").append("\t");
+        sb.append("to-blob").append("\t");
+        sb.append("blob:04af649a0f44c252fd64c594ff08e2c3b03fe9e2a964df")
+                .append("5aadbc105627146fa0").append("\t");
+        sb.append("22e40e2ea67f64ad899c13e724c8cc1bd821a74281c0670ccf0")
+                .append("d0e1fcad0b750").append("\t");
+        sb.append("177").append("\n");
 
         assertEquals(sb.toString(), out.toString());
 

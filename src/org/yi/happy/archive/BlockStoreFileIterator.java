@@ -45,7 +45,7 @@ public class BlockStoreFileIterator implements Iterator<LocatorKey> {
     public BlockStoreFileIterator(File base) {
         String[] names = base.list();
         if (names == null) {
-            throw new IllegalStateException();
+            return;
         }
         Arrays.sort(names);
         for (String name : names) {
