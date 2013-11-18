@@ -64,7 +64,7 @@ public final class TagBuilder {
      *            the value of the field.
      * @return a builder that stores the given field.
      */
-    public final TagBuilder put(final String key, final String value) {
+    public final TagBuilder put(String key, String value) {
         if (key.contains("=")) {
             throw new IllegalArgumentException();
         }

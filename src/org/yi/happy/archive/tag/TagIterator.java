@@ -45,14 +45,13 @@ public class TagIterator implements Iterator<Tag>, Iterable<Tag> {
         if (item == null && lines.hasNext()) {
             TagBuilder tag = null;
             for (String line : lines) {
-                if (line.isEmpty() && tag == null) {
+                if (tag == null && line.isEmpty()) {
                     continue;
                 }
                 if (line.isEmpty()) {
-                    item = tag.create();
                     break;
                 }
-                if (tag == null) {
+                if(tag == null) {
                     tag = new TagBuilder();
                 }
                 String[] parts = line.split("=", 2);
@@ -61,6 +60,9 @@ public class TagIterator implements Iterator<Tag>, Iterable<Tag> {
                 } else {
                     tag.add(parts[0], parts[1]);
                 }
+            }
+            if (tag != null) {
+                item = tag.create();
             }
         }
         return item != null;

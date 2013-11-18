@@ -91,6 +91,19 @@ public class TagIteratorTest {
         assertEquals(tag("a", "b", "b", "c"), i.next());
     }
 
+    /**
+     * check with no trailing blank line.
+     */
+    @Test
+    public void testNoBlank() {
+        InputStream in = input("a=b\n" + "b=c\n");
+
+        TagIterator it = new TagIterator(in);
+
+        Iterator<Tag> i = it.iterator();
+        assertEquals(tag("a", "b", "b", "c"), i.next());
+    }
+    
     private static Tag tag(String... parts) {
         TagBuilder tag = new TagBuilder();
         for (int i = 0; i < parts.length; i += 2) {
