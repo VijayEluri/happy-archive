@@ -13,9 +13,7 @@ import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesInput;
 import org.yi.happy.archive.commandLine.UsesOutput;
-import org.yi.happy.archive.crypto.DigestFactory;
-import org.yi.happy.archive.crypto.DigestProvider;
-import org.yi.happy.archive.crypto.Digests;
+import org.yi.happy.archive.index.IndexWriter;
 
 /**
  * Check that the files on a volume are still readable. Do this by building a
@@ -58,8 +56,7 @@ public class IndexCheckMain implements MainCommand {
     @DuplicatedLogic("with IndexVolumeMain.process, and internally")
     public void run() throws Exception {
         String imagePath = args.get(0);
-
-        DigestProvider digest = DigestFactory.getProvider("sha-256");
+        IndexWriter index = new IndexWriter(out);
 
         String prevName = null;
         for (String line : new LineIterator(in)) {
@@ -73,16 +70,7 @@ public class IndexCheckMain implements MainCommand {
 
                 byte[] data = fs.get(path, Blocks.MAX_SIZE);
                 EncodedBlock block = EncodedBlockParse.parse(data);
-
-                String key = block.getKey().toString();
-
-                data = block.asBytes();
-
-                String hash = Base16.encode(Digests.digestData(digest, data));
-                String size = Integer.toString(data.length);
-
-                out.println(name + "\t" + "plain" + "\t" + key + "\t" + hash
-                        + "\t" + size);
+                index.write(name, "plain", block);
 
                 /*
                  * to-blob
@@ -90,16 +78,7 @@ public class IndexCheckMain implements MainCommand {
                 if (block instanceof ContentEncodedBlock) {
                     block = new BlobEncodedBlock(block.getDigest(),
                             block.getCipher(), block.getBody());
-
-                    key = block.getKey().toString();
-
-                    data = block.asBytes();
-
-                    hash = Base16.encode(Digests.digestData(digest, data));
-                    size = Integer.toString(data.length);
-
-                    out.println(name + "\t" + "to-blob" + "\t" + key + "\t"
-                            + hash + "\t" + size);
+                    index.write(name, "to-blob", block);
                 }
             } catch (IOException e) {
                 err.println("Unable to read: " + prevName);

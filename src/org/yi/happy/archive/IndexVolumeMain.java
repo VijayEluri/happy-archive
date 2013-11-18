@@ -12,9 +12,7 @@ import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesOutput;
-import org.yi.happy.archive.crypto.DigestFactory;
-import org.yi.happy.archive.crypto.DigestProvider;
-import org.yi.happy.archive.crypto.Digests;
+import org.yi.happy.archive.index.IndexWriter;
 
 /**
  * Index a volume that has been burned.
@@ -25,9 +23,9 @@ public class IndexVolumeMain implements MainCommand {
 
     private final FileStore fs;
     private final PrintStream out;
-    private final DigestProvider digest;
     private final PrintStream err;
     private final List<String> args;
+    private final IndexWriter index;
 
     /**
      * create with a context.
@@ -48,7 +46,7 @@ public class IndexVolumeMain implements MainCommand {
         this.err = err;
         this.args = args;
 
-        digest = DigestFactory.getProvider("sha-256");
+        this.index = new IndexWriter(out);
     }
 
     /**
@@ -81,16 +79,7 @@ public class IndexVolumeMain implements MainCommand {
         try {
             byte[] data = fs.get(path, Blocks.MAX_SIZE);
             EncodedBlock block = EncodedBlockParse.parse(data);
-
-            String key = block.getKey().toString();
-
-            data = block.asBytes();
-
-            String hash = Base16.encode(Digests.digestData(digest, data));
-            String size = Integer.toString(data.length);
-
-            out.println(name + "\t" + "plain" + "\t" + key + "\t" + hash + "\t"
-                    + size);
+            index.write(name, "plain", block);
 
             /*
              * to-blob
@@ -98,16 +87,7 @@ public class IndexVolumeMain implements MainCommand {
             if (block instanceof ContentEncodedBlock) {
                 block = new BlobEncodedBlock(block.getDigest(),
                         block.getCipher(), block.getBody());
-
-                key = block.getKey().toString();
-
-                data = block.asBytes();
-
-                hash = Base16.encode(Digests.digestData(digest, data));
-                size = Integer.toString(data.length);
-
-                out.println(name + "\t" + "to-blob" + "\t" + key + "\t" + hash
-                        + "\t" + size);
+                index.write(name, "to-blob", block);
             }
         } catch (Exception e) {
             e.printStackTrace(err);

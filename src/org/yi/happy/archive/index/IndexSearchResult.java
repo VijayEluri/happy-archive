@@ -5,7 +5,7 @@ import org.yi.happy.archive.key.LocatorKey;
 /**
  * A search result data object.
  */
-public class IndexSearchResult {
+public final class IndexSearchResult {
     private final String volumeSet;
     private final String volumeName;
     private final String fileName;
