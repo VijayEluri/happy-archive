@@ -33,16 +33,16 @@ public class IndexVolumeMainTest {
         String N0 = "00.dat";
         String N1 = "01.dat";
 
-        FileStore fs = new FileStoreMemory();
+        FileStore files = new FileStoreMemory();
 
-        fs.putDir(NB);
-        fs.put(NB + "/" + N0, raw(K0));
-        fs.put(NB + "/" + N1, raw(K1));
+        files.putDir(NB);
+        files.put(NB + "/" + N0, raw(K0));
+        files.put(NB + "/" + N1, raw(K1));
 
         CapturePrintStream out = CapturePrintStream.create();
 
         List<String> args = Arrays.asList(NB);
-        new IndexVolumeMain(fs, out, null, args).run();
+        new IndexVolumeMain(files, out, null, args).run();
 
         StringBuilder sb = new StringBuilder();
         sb.append(N0).append("\t");
@@ -89,17 +89,17 @@ public class IndexVolumeMainTest {
         String N0 = "00.dat";
         String N1 = "01.dat";
 
-        FileStore fs = new FileStoreMemory();
+        FileStore files = new FileStoreMemory();
 
-        fs.putDir(NB);
-        fs.put(NB + "/" + N0, raw(K0));
-        fs.put(NB + "/" + N1, raw(K1));
+        files.putDir(NB);
+        files.put(NB + "/" + N0, raw(K0));
+        files.put(NB + "/" + N1, raw(K1));
 
         CapturePrintStream out = CapturePrintStream.create();
         CapturePrintStream err = CapturePrintStream.create();
 
         List<String> args = Arrays.asList(NB);
-        new IndexVolumeMain(fs, out, err, args).run();
+        new IndexVolumeMain(files, out, err, args).run();
 
         StringBuilder sb = new StringBuilder();
         sb.append(N1).append("\t");

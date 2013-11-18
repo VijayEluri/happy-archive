@@ -52,9 +52,9 @@ public class MakeIndexDatabaseMain implements MainCommand {
 
         conn.setAutoCommit(false);
 
-        FileStore fs = new FileStoreFile();
+        FileStore files = new FileStoreFile();
         String path = "/Users/happy/archive.d/index";
-        IndexStore index = new IndexStoreFileStore(fs, path);
+        IndexStore index = new IndexStoreFileStore(files, path);
         for (String volumeSet : index.listVolumeSets()) {
             for (String volumeName : index.listVolumeNames(volumeSet)) {
                 process(index, conn, volumeSet, volumeName);

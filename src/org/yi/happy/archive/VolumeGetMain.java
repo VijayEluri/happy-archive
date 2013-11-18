@@ -19,7 +19,7 @@ import org.yi.happy.archive.commandLine.UsesBlockStore;
 @UsesInput("file-list")
 public class VolumeGetMain implements MainCommand {
 
-    private final FileStore fs;
+    private final FileStore files;
     private final InputStream in;
     private final PrintStream err;
     private final BlockStore store;
@@ -30,7 +30,7 @@ public class VolumeGetMain implements MainCommand {
      * 
      * @param store
      *            the block store to use.
-     * @param fs
+     * @param files
      *            the file system.
      * @param in
      *            the standard input.
@@ -39,10 +39,10 @@ public class VolumeGetMain implements MainCommand {
      * @param args
      *            the non-option command line arguments.
      */
-    public VolumeGetMain(BlockStore store, FileStore fs, InputStream in,
+    public VolumeGetMain(BlockStore store, FileStore files, InputStream in,
             PrintStream err, List<String> args) {
         this.store = store;
-        this.fs = fs;
+        this.files = files;
         this.in = in;
         this.err = err;
         this.args = args;
@@ -59,7 +59,7 @@ public class VolumeGetMain implements MainCommand {
     public void run() throws IOException {
         for (String line : new LineIterator(in)) {
             try {
-                byte[] data = fs.get(args.get(0) + "/" + line, Blocks.MAX_SIZE);
+                byte[] data = files.get(args.get(0) + "/" + line, Blocks.MAX_SIZE);
                 EncodedBlock b = EncodedBlockParse.parse(data);
                 store.put(b);
             } catch (Exception e) {

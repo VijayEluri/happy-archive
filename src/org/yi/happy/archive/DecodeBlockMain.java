@@ -21,22 +21,22 @@ import org.yi.happy.archive.key.FullKeyParse;
 @UsesArgs({ "input", "key" })
 @UsesOutput("output")
 public class DecodeBlockMain implements MainCommand {
-    private final FileStore fs;
+    private final FileStore files;
     private final OutputStream out;
     private final List<String> args;
 
     /**
      * create the procedure.
      * 
-     * @param fs
+     * @param files
      *            the file system to use.
      * @param out
      *            the output stream to use.
      * @param args
      *            the non-option arguments.
      */
-    public DecodeBlockMain(FileStore fs, OutputStream out, List<String> args) {
-        this.fs = fs;
+    public DecodeBlockMain(FileStore files, OutputStream out, List<String> args) {
+        this.files = files;
         this.out = out;
         this.args = args;
     }
@@ -51,7 +51,7 @@ public class DecodeBlockMain implements MainCommand {
     @Override
     @SmellsMessy
     public void run() throws IOException {
-        EncodedBlock b = EncodedBlockParse.parse(fs.get(args.get(0),
+        EncodedBlock b = EncodedBlockParse.parse(files.get(args.get(0),
                 Blocks.MAX_SIZE));
         FullKey k = FullKeyParse.parseFullKey(args.get(1));
         Block d = b.decode(k);

@@ -22,13 +22,13 @@ public class VolumeGetMainTest {
      */
     @Test
     public void test1() throws UnsupportedOperationException, IOException {
-        FileStore fs = new FileStoreMemory();
-        fs.putDir("/media");
-        fs.put("/media/00.dat", TestData.KEY_CONTENT_MAP.getBytes());
+        FileStore files = new FileStoreMemory();
+        files.putDir("/media");
+        files.put("/media/00.dat", TestData.KEY_CONTENT_MAP.getBytes());
         InputStream in = new ByteArrayInputStream("00.dat\n".getBytes("UTF-8"));
         BlockStore store = new BlockStoreMemory();
 
-        new VolumeGetMain(store, fs, in, null, Arrays.asList("/media")).run();
+        new VolumeGetMain(store, files, in, null, Arrays.asList("/media")).run();
 
         assertEquals(TestData.KEY_CONTENT_MAP.getEncodedBlock(),
                 store.get(TestData.KEY_CONTENT_MAP.getLocatorKey()));

@@ -17,7 +17,7 @@ import org.yi.happy.archive.commandLine.UsesOutput;
 @UsesOutput("result")
 public class VerifyMain implements MainCommand {
 
-    private final FileStore fileSystem;
+    private final FileStore files;
     private final PrintStream out;
     private final List<String> args;
 
@@ -31,8 +31,8 @@ public class VerifyMain implements MainCommand {
      * @param args
      *            the non-option arguments on the command line.
      */
-    public VerifyMain(FileStore fileSystem, PrintStream out, List<String> args) {
-        this.fileSystem = fileSystem;
+    public VerifyMain(FileStore files, PrintStream out, List<String> args) {
+        this.files = files;
         this.out = out;
         this.args = args;
     }
@@ -53,7 +53,7 @@ public class VerifyMain implements MainCommand {
                 /*
                  * load the file
                  */
-                byte[] data = fileSystem.get(arg, Blocks.MAX_SIZE);
+                byte[] data = files.get(arg, Blocks.MAX_SIZE);
 
                 /*
                  * parse into a block

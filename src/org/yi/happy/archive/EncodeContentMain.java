@@ -21,21 +21,21 @@ import org.yi.happy.archive.commandLine.UsesOutput;
 @UsesArgs({ "input", "output" })
 @UsesOutput("key")
 public class EncodeContentMain implements MainCommand {
-    private final FileStore fs;
+    private final FileStore files;
     private final PrintStream out;
     private final List<String> args;
 
     /**
      * 
-     * @param fs
+     * @param files
      *            the file system to use.
      * @param out
      *            where to send output.
      * @param args
      *            the non-option arguments.
      */
-    public EncodeContentMain(FileStore fs, PrintStream out, List<String> args) {
-        this.fs = fs;
+    public EncodeContentMain(FileStore files, PrintStream out, List<String> args) {
+        this.files = files;
         this.out = out;
         this.args = args;
     }
@@ -51,10 +51,10 @@ public class EncodeContentMain implements MainCommand {
     public void run() throws IOException {
         BlockEncoder encoder = BlockEncoderFactory.getContentDefault();
 
-        Block block = BlockParse.parse(fs.get(args.get(0),
+        Block block = BlockParse.parse(files.get(args.get(0),
                 Blocks.MAX_SIZE));
         BlockEncoderResult e = encoder.encode(block);
-        fs.put(args.get(1), e.getBlock().asBytes());
+        files.put(args.get(1), e.getBlock().asBytes());
 
         out.println(e.getKey());
     }

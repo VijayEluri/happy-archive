@@ -26,17 +26,17 @@ import org.yi.happy.archive.tag.TagOutputStream;
 @GlobalOutput
 public class StoreTagAddMain implements MainCommand {
     private final BlockStore store;
-    private final FileStore fs;
+    private final FileStore files;
 
     /**
      * @param store
      *            the block store to use.
-     * @param fs
+     * @param files
      *            the file system to use.
      */
-    public StoreTagAddMain(BlockStore store, FileStore fs) {
+    public StoreTagAddMain(BlockStore store, FileStore files) {
         this.store = store;
-        this.fs = fs;
+        this.files = files;
     }
 
     @Override
@@ -57,7 +57,7 @@ public class StoreTagAddMain implements MainCommand {
             TagOutputStream out = new TagOutputStream(System.out);
 
             for (Tag tag : new TagIterator(System.in)) {
-                tag = process(tag, s, fs);
+                tag = process(tag, s, files);
                 out.write(tag);
             }
         } finally {

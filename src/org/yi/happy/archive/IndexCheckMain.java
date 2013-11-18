@@ -23,7 +23,7 @@ import org.yi.happy.archive.index.IndexWriter;
 @UsesInput("index")
 @UsesOutput("index")
 public class IndexCheckMain implements MainCommand {
-    private final FileStore fs;
+    private final FileStore files;
     private final InputStream in;
     private final PrintStream out;
     private final PrintStream err;
@@ -32,7 +32,7 @@ public class IndexCheckMain implements MainCommand {
     /**
      * setup the command.
      * 
-     * @param fs
+     * @param files
      *            the file system to use.
      * @param in
      *            the input stream to use.
@@ -43,9 +43,9 @@ public class IndexCheckMain implements MainCommand {
      * @param args
      *            the arguments to use.
      */
-    public IndexCheckMain(FileStore fs, InputStream in, PrintStream out,
+    public IndexCheckMain(FileStore files, InputStream in, PrintStream out,
             PrintStream err, List<String> args) {
-        this.fs = fs;
+        this.files = files;
         this.in = in;
         this.out = out;
         this.err = err;
@@ -68,7 +68,7 @@ public class IndexCheckMain implements MainCommand {
                 }
                 prevName = name;
 
-                byte[] data = fs.get(path, Blocks.MAX_SIZE);
+                byte[] data = files.get(path, Blocks.MAX_SIZE);
                 EncodedBlock block = EncodedBlockParse.parse(data);
                 index.write(name, "plain", block);
 

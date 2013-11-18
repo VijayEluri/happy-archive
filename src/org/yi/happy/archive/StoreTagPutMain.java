@@ -23,7 +23,7 @@ import org.yi.happy.archive.tag.TagOutputStream;
 @UsesOutput("tag-list")
 public class StoreTagPutMain implements MainCommand {
 
-    private final FileStore fs;
+    private final FileStore files;
     private final PrintStream out;
     private final BlockStore store;
     private final List<String> args;
@@ -33,17 +33,17 @@ public class StoreTagPutMain implements MainCommand {
      * 
      * @param store
      *            the block store to use.
-     * @param fs
+     * @param files
      *            the file system.
      * @param out
      *            the output stream.
      * @param args
      *            the non-option arguments.
      */
-    public StoreTagPutMain(BlockStore store, FileStore fs,
+    public StoreTagPutMain(BlockStore store, FileStore files,
             PrintStream out, List<String> args) {
         this.store = store;
-        this.fs = fs;
+        this.files = files;
         this.out = out;
         this.args = args;
     }
@@ -70,12 +70,12 @@ public class StoreTagPutMain implements MainCommand {
             TagOutputStream out = new TagOutputStream(this.out);
 
             for (String arg : args) {
-                if (fs.isFile(arg)) {
+                if (files.isFile(arg)) {
                     KeyOutputStream o1 = new KeyOutputStream(s);
                     DigestOutputStream o2 = new DigestOutputStream(
                             DigestFactory.getProvider("sha-256").get());
                     TeeOutputStream o = new TeeOutputStream(o1, o2);
-                    InputStream in = fs.getStream(arg);
+                    InputStream in = files.getStream(arg);
                     try {
                         Streams.copy(in, o);
                     } finally {

@@ -28,10 +28,10 @@ public class IndexStoreFileStoreTest {
         String V = "index";
         String V0 = "onsite";
 
-        FileStore fs = new FileStoreMemory();
-        fs.putDir(V);
+        FileStore files = new FileStoreMemory();
+        files.putDir(V);
 
-        IndexStore index = new IndexStoreFileStore(fs, V);
+        IndexStore index = new IndexStoreFileStore(files, V);
 
         assertEquals(list(), index.listVolumeSets());
 
@@ -49,11 +49,11 @@ public class IndexStoreFileStoreTest {
         String V = "index";
         String V0 = "onsite";
 
-        FileStore fs = new FileStoreMemory();
-        fs.putDir(V);
-        fs.putDir(V + "/" + V0);
+        FileStore files = new FileStoreMemory();
+        files.putDir(V);
+        files.putDir(V + "/" + V0);
 
-        IndexStore index = new IndexStoreFileStore(fs, V);
+        IndexStore index = new IndexStoreFileStore(files, V);
 
         assertEquals(list(V0), index.listVolumeSets());
         assertEquals(list(), index.listVolumeNames(V0));
@@ -74,14 +74,14 @@ public class IndexStoreFileStoreTest {
         String V10 = "02";
         TestData I = TestData.INDEX_MAP;
 
-        FileStore fs = new FileStoreMemory();
-        fs.putDir(V);
-        fs.putDir(V + "/" + V0);
-        fs.put(V + "/" + V0 + "/" + V00, raw(I));
-        fs.putDir(V + "/" + V1);
-        fs.put(V + "/" + V1 + "/" + V10, raw(I));
+        FileStore files = new FileStoreMemory();
+        files.putDir(V);
+        files.putDir(V + "/" + V0);
+        files.put(V + "/" + V0 + "/" + V00, raw(I));
+        files.putDir(V + "/" + V1);
+        files.put(V + "/" + V1 + "/" + V10, raw(I));
 
-        IndexStore index = new IndexStoreFileStore(fs, V);
+        IndexStore index = new IndexStoreFileStore(files, V);
 
         assertEquals(list(V0, V1), index.listVolumeSets());
         assertEquals(list(V00), index.listVolumeNames(V0));
@@ -106,14 +106,14 @@ public class IndexStoreFileStoreTest {
         TestData I = TestData.INDEX_MAP;
         TestData IZ = TestData.INDEX_MAP_GZ;
 
-        FileStore fs = new FileStoreMemory();
-        fs.putDir(V);
-        fs.putDir(V + "/" + V0);
-        fs.put(V + "/" + V0 + "/" + V00, raw(I));
-        fs.putDir(V + "/" + V0);
-        fs.put(V + "/" + V0 + "/" + V01Z, raw(IZ));
+        FileStore files = new FileStoreMemory();
+        files.putDir(V);
+        files.putDir(V + "/" + V0);
+        files.put(V + "/" + V0 + "/" + V00, raw(I));
+        files.putDir(V + "/" + V0);
+        files.put(V + "/" + V0 + "/" + V01Z, raw(IZ));
 
-        IndexStore index = new IndexStoreFileStore(fs, V);
+        IndexStore index = new IndexStoreFileStore(files, V);
 
         assertEquals(list(V00, V01), index.listVolumeNames(V0));
         assertEquals(text(I), load(index, V0, V00));
@@ -133,13 +133,13 @@ public class IndexStoreFileStoreTest {
         String V1 = "strayfile";
         TestData I = TestData.INDEX_MAP;
 
-        FileStore fs = new FileStoreMemory();
-        fs.putDir(V);
-        fs.putDir(V + "/" + V0);
-        fs.put(V + "/" + V0 + "/" + V00, raw(I));
-        fs.put(V + "/" + V1, raw(I));
+        FileStore files = new FileStoreMemory();
+        files.putDir(V);
+        files.putDir(V + "/" + V0);
+        files.put(V + "/" + V0 + "/" + V00, raw(I));
+        files.put(V + "/" + V1, raw(I));
 
-        IndexStore index = new IndexStoreFileStore(fs, V);
+        IndexStore index = new IndexStoreFileStore(files, V);
 
         assertEquals(list(V0), index.listVolumeSets());
         assertEquals(list(V00), index.listVolumeNames(V0));

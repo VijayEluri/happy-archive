@@ -9,9 +9,9 @@ import org.yi.happy.annotate.MagicLiteral;
 import org.yi.happy.annotate.SmellsMessy;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.commandLine.UsesArgs;
+import org.yi.happy.archive.commandLine.UsesBlockStore;
 import org.yi.happy.archive.commandLine.UsesInput;
 import org.yi.happy.archive.commandLine.UsesOutput;
-import org.yi.happy.archive.commandLine.UsesBlockStore;
 import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.key.LocatorKeyParse;
 
@@ -25,7 +25,7 @@ import org.yi.happy.archive.key.LocatorKeyParse;
 @UsesOutput("size")
 public class BuildImageMain implements MainCommand {
 
-    private final FileStore fs;
+    private final FileStore files;
     private final InputStream in;
     private final PrintStream out;
     private final PrintStream err;
@@ -37,7 +37,7 @@ public class BuildImageMain implements MainCommand {
      * 
      * @param store
      *            the block store to use.
-     * @param fs
+     * @param files
      *            the file store to use.
      * @param in
      *            the input stream.
@@ -48,10 +48,10 @@ public class BuildImageMain implements MainCommand {
      * @param args
      *            the parameters.
      */
-    public BuildImageMain(BlockStore store, FileStore fs, InputStream in,
+    public BuildImageMain(BlockStore store, FileStore files, InputStream in,
             PrintStream out, PrintStream err, List<String> args) {
         this.store = store;
-        this.fs = fs;
+        this.files = files;
         this.in = in;
         this.out = out;
         this.err = err;
@@ -90,7 +90,7 @@ public class BuildImageMain implements MainCommand {
                 size.remove(data.length);
                 break;
             }
-            fs.put(imagePath + "/" + String.format("%08x.dat", count), data);
+            files.put(imagePath + "/" + String.format("%08x.dat", count), data);
             count++;
         }
 

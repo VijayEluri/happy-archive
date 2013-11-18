@@ -21,7 +21,7 @@ import org.yi.happy.archive.index.IndexWriter;
 @UsesOutput("index")
 public class IndexVolumeMain implements MainCommand {
 
-    private final FileStore fs;
+    private final FileStore files;
     private final PrintStream out;
     private final PrintStream err;
     private final List<String> args;
@@ -30,7 +30,7 @@ public class IndexVolumeMain implements MainCommand {
     /**
      * create with a context.
      * 
-     * @param fs
+     * @param files
      *            the file system to use.
      * @param out
      *            the output stream.
@@ -39,9 +39,9 @@ public class IndexVolumeMain implements MainCommand {
      * @param args
      *            the non-option arguments.
      */
-    public IndexVolumeMain(FileStore fs, PrintStream out, PrintStream err,
+    public IndexVolumeMain(FileStore files, PrintStream out, PrintStream err,
             List<String> args) {
-        this.fs = fs;
+        this.files = files;
         this.out = out;
         this.err = err;
         this.args = args;
@@ -59,7 +59,7 @@ public class IndexVolumeMain implements MainCommand {
     @Override
     public void run() throws IOException {
         try {
-            List<String> names = fs.list(args.get(0));
+            List<String> names = files.list(args.get(0));
             Collections.sort(names);
             for (String name : names) {
                 process(args.get(0) + "/" + name, name);
@@ -71,13 +71,13 @@ public class IndexVolumeMain implements MainCommand {
 
     @DuplicatedLogic("with IndexCheckMain.run, and internally")
     private void process(String path, String name) throws IOException {
-        if (fs.isDir(path)) {
+        if (files.isDir(path)) {
             processDir(path, name);
             return;
         }
 
         try {
-            byte[] data = fs.get(path, Blocks.MAX_SIZE);
+            byte[] data = files.get(path, Blocks.MAX_SIZE);
             EncodedBlock block = EncodedBlockParse.parse(data);
             index.write(name, "plain", block);
 
@@ -95,7 +95,7 @@ public class IndexVolumeMain implements MainCommand {
     }
 
     private void processDir(String path, String base) throws IOException {
-        List<String> names = fs.list(path);
+        List<String> names = files.list(path);
         Collections.sort(names);
         for (String name : names) {
             process(path + "/" + name, base + "/" + name);

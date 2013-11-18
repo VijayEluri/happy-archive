@@ -18,28 +18,28 @@ import org.yi.happy.archive.FileStore;
  */
 public class IndexStoreFileStore implements IndexStore {
 
-    private final FileStore fs;
+    private final FileStore files;
     private final String base;
 
     /**
      * Set up.
      * 
-     * @param fs
+     * @param files
      *            the {@link FileStore} where the indexes are.
      * @param base
      *            the base file name.
      */
-    public IndexStoreFileStore(FileStore fs, String base) {
-        this.fs = fs;
+    public IndexStoreFileStore(FileStore files, String base) {
+        this.files = files;
         this.base = base;
     }
 
     @Override
     public List<String> listVolumeSets() throws IOException {
         List<String> out = new ArrayList<String>();
-        if (fs.isDir(base)) {
-            for (String name : fs.list(base)) {
-                if (fs.isDir(base + "/" + name)) {
+        if (files.isDir(base)) {
+            for (String name : files.list(base)) {
+                if (files.isDir(base + "/" + name)) {
                     out.add(name);
                 }
             }
@@ -52,9 +52,9 @@ public class IndexStoreFileStore implements IndexStore {
     public List<String> listVolumeNames(String volumeSet) throws IOException {
         List<String> out = new ArrayList<String>();
         String path = base + "/" + volumeSet;
-        if (fs.isDir(path)) {
-            for (String name : fs.list(path)) {
-                if (fs.isFile(path + "/" + name)) {
+        if (files.isDir(path)) {
+            for (String name : files.list(path)) {
+                if (files.isFile(path + "/" + name)) {
                     if (name.endsWith(".gz")) {
                         name = name.substring(0, name.length() - 3);
                     }
@@ -73,10 +73,10 @@ public class IndexStoreFileStore implements IndexStore {
         try {
             InputStream stream = in;
             try {
-                in = fs.getStream(name);
+                in = files.getStream(name);
                 stream = in;
             } catch (FileNotFoundException e) {
-                in = fs.getStream(name + ".gz");
+                in = files.getStream(name + ".gz");
                 stream = new GZIPInputStream(in);
             }
 
