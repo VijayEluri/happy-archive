@@ -27,7 +27,7 @@ import org.yi.happy.archive.key.LocatorKey;
 @UsesOutput("key-list")
 @DuplicatedLogic("LocalCandidateListMain")
 public class CriticalListMain implements MainCommand {
-    private final BlockStore store;
+    private final BlockStore blocks;
     private final IndexSearch indexSearch;
     private final PrintStream out;
     private final PrintStream err;
@@ -36,7 +36,7 @@ public class CriticalListMain implements MainCommand {
      * Set up the command to make a candidate list from a local store and local
      * index.
      * 
-     * @param store
+     * @param blocks
      *            the store.
      * @param indexSearch
      *            the index searching interface.
@@ -45,9 +45,9 @@ public class CriticalListMain implements MainCommand {
      * @param err
      *            the error stream.
      */
-    public CriticalListMain(BlockStore store, IndexSearch indexSearch,
+    public CriticalListMain(BlockStore blocks, IndexSearch indexSearch,
             PrintStream out, PrintStream err) {
-        this.store = store;
+        this.blocks = blocks;
         this.indexSearch = indexSearch;
         this.out = out;
         this.err = err;
@@ -67,7 +67,7 @@ public class CriticalListMain implements MainCommand {
          * load list of keys in store.
          */
         final Set<LocatorKey> want = new HashSet<LocatorKey>();
-        for (LocatorKey key : store) {
+        for (LocatorKey key : blocks) {
             want.add(key);
         }
 
@@ -101,7 +101,7 @@ public class CriticalListMain implements MainCommand {
         {
             final Map<LocatorKey, Long> order = new HashMap<LocatorKey, Long>();
             for (LocatorKey i : nowhere) {
-                order.put(i, store.getTime(i));
+                order.put(i, blocks.getTime(i));
             }
 
             List<LocatorKey> out = new ArrayList<LocatorKey>(nowhere);

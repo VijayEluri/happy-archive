@@ -26,11 +26,12 @@ public class VolumeGetMainTest {
         files.putDir("/media");
         files.put("/media/00.dat", TestData.KEY_CONTENT_MAP.getBytes());
         InputStream in = new ByteArrayInputStream("00.dat\n".getBytes("UTF-8"));
-        BlockStore store = new BlockStoreMemory();
+        BlockStore blocks = new BlockStoreMemory();
 
-        new VolumeGetMain(store, files, in, null, Arrays.asList("/media")).run();
+        new VolumeGetMain(blocks, files, in, null, Arrays.asList("/media"))
+                .run();
 
         assertEquals(TestData.KEY_CONTENT_MAP.getEncodedBlock(),
-                store.get(TestData.KEY_CONTENT_MAP.getLocatorKey()));
+                blocks.get(TestData.KEY_CONTENT_MAP.getLocatorKey()));
     }
 }

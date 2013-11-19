@@ -15,12 +15,12 @@ import org.yi.happy.archive.key.LocatorKey;
 public class StoreListMain implements MainCommand {
 
     private final PrintStream out;
-    private final BlockStore store;
+    private final BlockStore blocks;
 
     /**
      * Create with context.
      * 
-     * @param store
+     * @param blocks
      *            the block store to use.
      * @param fs
      *            the file system.
@@ -28,8 +28,8 @@ public class StoreListMain implements MainCommand {
      *            the output stream.
      * @param err
      */
-    public StoreListMain(BlockStore store, PrintStream out) {
-        this.store = store;
+    public StoreListMain(BlockStore blocks, PrintStream out) {
+        this.blocks = blocks;
         this.out = out;
     }
 
@@ -42,7 +42,7 @@ public class StoreListMain implements MainCommand {
      */
     @Override
     public void run() throws IOException {
-        for (LocatorKey key : store) {
+        for (LocatorKey key : blocks) {
             out.println(key);
         }
         out.flush();

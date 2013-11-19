@@ -22,13 +22,13 @@ public class VolumeGetMain implements MainCommand {
     private final FileStore files;
     private final InputStream in;
     private final PrintStream err;
-    private final BlockStore store;
+    private final BlockStore blocks;
     private final List<String> args;
 
     /**
      * create with context.
      * 
-     * @param store
+     * @param blocks
      *            the block store to use.
      * @param files
      *            the file system.
@@ -39,9 +39,9 @@ public class VolumeGetMain implements MainCommand {
      * @param args
      *            the non-option command line arguments.
      */
-    public VolumeGetMain(BlockStore store, FileStore files, InputStream in,
+    public VolumeGetMain(BlockStore blocks, FileStore files, InputStream in,
             PrintStream err, List<String> args) {
-        this.store = store;
+        this.blocks = blocks;
         this.files = files;
         this.in = in;
         this.err = err;
@@ -61,7 +61,7 @@ public class VolumeGetMain implements MainCommand {
             try {
                 byte[] data = files.get(args.get(0) + "/" + line, Blocks.MAX_SIZE);
                 EncodedBlock b = EncodedBlockParse.parse(data);
-                store.put(b);
+                blocks.put(b);
             } catch (Exception e) {
                 e.printStackTrace(err);
             }

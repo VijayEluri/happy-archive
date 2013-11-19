@@ -25,13 +25,13 @@ public class StoreTagPutMain implements MainCommand {
 
     private final FileStore files;
     private final PrintStream out;
-    private final BlockStore store;
+    private final BlockStore blocks;
     private final List<String> args;
 
     /**
      * create with context.
      * 
-     * @param store
+     * @param blocks
      *            the block store to use.
      * @param files
      *            the file system.
@@ -40,9 +40,9 @@ public class StoreTagPutMain implements MainCommand {
      * @param args
      *            the non-option arguments.
      */
-    public StoreTagPutMain(BlockStore store, FileStore files,
+    public StoreTagPutMain(BlockStore blocks, FileStore files,
             PrintStream out, List<String> args) {
-        this.store = store;
+        this.blocks = blocks;
         this.files = files;
         this.out = out;
         this.args = args;
@@ -65,7 +65,7 @@ public class StoreTagPutMain implements MainCommand {
              */
 
             ClearBlockTargetStore s = new ClearBlockTargetStore(
-                    BlockEncoderFactory.getContentDefault(), store);
+                    BlockEncoderFactory.getContentDefault(), blocks);
 
             TagOutputStream out = new TagOutputStream(this.out);
 

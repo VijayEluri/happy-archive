@@ -23,13 +23,13 @@ public class StoreStreamPutMainTest {
     public void test1() throws IOException {
         InputStream in = new ByteArrayInputStream(ByteString.toBytes("hello\n"));
         CapturePrintStream out = CapturePrintStream.create();
-        BlockStore store = new BlockStoreMemory();
+        BlockStore blocks = new BlockStoreMemory();
 
-        new StoreStreamPutMain(store, in, out).run();
+        new StoreStreamPutMain(blocks, in, out).run();
 
         assertEquals(TestData.KEY_CONTENT_AES128.getFullKey() + "\n", out
                 .toString());
 
-        assertTrue(store.contains(TestData.KEY_CONTENT_AES128.getLocatorKey()));
+        assertTrue(blocks.contains(TestData.KEY_CONTENT_AES128.getLocatorKey()));
     }
 }

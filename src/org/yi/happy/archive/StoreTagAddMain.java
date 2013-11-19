@@ -6,9 +6,9 @@ import java.io.InputStream;
 import org.yi.happy.annotate.GlobalInput;
 import org.yi.happy.annotate.GlobalOutput;
 import org.yi.happy.archive.block.encoder.BlockEncoderFactory;
+import org.yi.happy.archive.commandLine.UsesBlockStore;
 import org.yi.happy.archive.commandLine.UsesInput;
 import org.yi.happy.archive.commandLine.UsesOutput;
-import org.yi.happy.archive.commandLine.UsesBlockStore;
 import org.yi.happy.archive.crypto.DigestFactory;
 import org.yi.happy.archive.tag.Tag;
 import org.yi.happy.archive.tag.TagBuilder;
@@ -25,17 +25,17 @@ import org.yi.happy.archive.tag.TagOutputStream;
 @GlobalInput
 @GlobalOutput
 public class StoreTagAddMain implements MainCommand {
-    private final BlockStore store;
+    private final BlockStore blocks;
     private final FileStore files;
 
     /**
-     * @param store
+     * @param blocks
      *            the block store to use.
      * @param files
      *            the file system to use.
      */
-    public StoreTagAddMain(BlockStore store, FileStore files) {
-        this.store = store;
+    public StoreTagAddMain(BlockStore blocks, FileStore files) {
+        this.blocks = blocks;
         this.files = files;
     }
 
@@ -52,7 +52,7 @@ public class StoreTagAddMain implements MainCommand {
              */
 
             ClearBlockTargetStore s = new ClearBlockTargetStore(
-                    BlockEncoderFactory.getContentDefault(), store);
+                    BlockEncoderFactory.getContentDefault(), blocks);
 
             TagOutputStream out = new TagOutputStream(System.out);
 

@@ -29,13 +29,13 @@ public class BuildImageMain implements MainCommand {
     private final InputStream in;
     private final PrintStream out;
     private final PrintStream err;
-    private final BlockStore store;
+    private final BlockStore blocks;
     private final List<String> args;
 
     /**
      * create with context.
      * 
-     * @param store
+     * @param blocks
      *            the block store to use.
      * @param files
      *            the file store to use.
@@ -48,9 +48,9 @@ public class BuildImageMain implements MainCommand {
      * @param args
      *            the parameters.
      */
-    public BuildImageMain(BlockStore store, FileStore files, InputStream in,
+    public BuildImageMain(BlockStore blocks, FileStore files, InputStream in,
             PrintStream out, PrintStream err, List<String> args) {
-        this.store = store;
+        this.blocks = blocks;
         this.files = files;
         this.in = in;
         this.out = out;
@@ -78,7 +78,7 @@ public class BuildImageMain implements MainCommand {
             LocatorKey key = LocatorKeyParse.parseLocatorKey(line);
             EncodedBlock block;
             try {
-                block = store.get(key);
+                block = blocks.get(key);
             } catch (DecodeException e) {
                 err.println("error loading block: " + key);
                 e.printStackTrace(err);

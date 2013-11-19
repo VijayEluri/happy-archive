@@ -22,13 +22,13 @@ public class BlockStoreMemoryTest {
      */
     @Test
     public void test1() throws IOException {
-        BlockStore store = new BlockStoreMemory();
-        store.put(TestData.KEY_CONTENT.getEncodedBlock());
-        store.put(TestData.KEY_CONTENT_1.getEncodedBlock());
-        store.put(TestData.KEY_CONTENT_2.getEncodedBlock());
+        BlockStore blocks = new BlockStoreMemory();
+        blocks.put(TestData.KEY_CONTENT.getEncodedBlock());
+        blocks.put(TestData.KEY_CONTENT_1.getEncodedBlock());
+        blocks.put(TestData.KEY_CONTENT_2.getEncodedBlock());
 
         final List<LocatorKey> keys = new ArrayList<LocatorKey>();
-        for (LocatorKey key : store) {
+        for (LocatorKey key : blocks) {
             keys.add(key);
         }
 

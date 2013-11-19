@@ -20,12 +20,12 @@ import org.yi.happy.archive.commandLine.UsesBlockStore;
 public class StoreStreamPutMain implements MainCommand {
     private InputStream in;
     private PrintStream out;
-    private final BlockStore store;
+    private final BlockStore blocks;
 
     /**
      * create.
      * 
-     * @param store
+     * @param blocks
      *            the block store.
      * @param fs
      *            the file system to use.
@@ -34,8 +34,8 @@ public class StoreStreamPutMain implements MainCommand {
      * @param out
      *            the stream to write the result.
      */
-    public StoreStreamPutMain(BlockStore store, InputStream in, PrintStream out) {
-        this.store = store;
+    public StoreStreamPutMain(BlockStore blocks, InputStream in, PrintStream out) {
+        this.blocks = blocks;
         this.in = in;
         this.out = out;
     }
@@ -52,7 +52,7 @@ public class StoreStreamPutMain implements MainCommand {
         BlockEncoder encoder = BlockEncoderFactory.getContentDefault();
 
         KeyOutputStream s = new KeyOutputStream(new ClearBlockTargetStore(encoder,
-                store));
+                blocks));
 
         Streams.copy(in, s);
         s.close();

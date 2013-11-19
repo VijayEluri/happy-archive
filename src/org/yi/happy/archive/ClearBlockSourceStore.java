@@ -15,23 +15,23 @@ public class ClearBlockSourceStore implements ClearBlockSource {
     /**
      * create attached to a storage object
      * 
-     * @param storage
-     *            the storage object
+     * @param blocks
+     *            the block store.
      */
-    public ClearBlockSourceStore(BlockStore storage) {
-        this.storage = storage;
+    public ClearBlockSourceStore(BlockStore blocks) {
+        this.blocks = blocks;
     }
 
     /**
      * the storage service I am attached to.
      */
-    private final BlockStore storage;
+    private final BlockStore blocks;
 
     @Override
     public Block get(FullKey key) throws IOException {
         EncodedBlock b;
         try {
-            b = storage.get(key.toLocatorKey());
+            b = blocks.get(key.toLocatorKey());
             if (b == null) {
                 return null;
             }

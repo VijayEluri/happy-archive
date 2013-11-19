@@ -15,22 +15,22 @@ import org.yi.happy.archive.commandLine.UsesBlockStore;
 @UsesArgs({ "block..." })
 public class StoreBlockPutMain implements MainCommand {
     private final FileStore files;
-    private final BlockStore store;
+    private final BlockStore blocks;
     private final List<String> args;
 
     /**
      * create.
      * 
-     * @param store
+     * @param blocks
      *            the block store to use.
      * @param files
      *            the file system to use.
      * @param args
      *            the non-option arguments.
      */
-    public StoreBlockPutMain(BlockStore store, FileStore files,
+    public StoreBlockPutMain(BlockStore blocks, FileStore files,
             List<String> args) {
-        this.store = store;
+        this.blocks = blocks;
         this.files = files;
         this.args = args;
     }
@@ -47,7 +47,7 @@ public class StoreBlockPutMain implements MainCommand {
         for (String arg : args) {
             EncodedBlock b = EncodedBlockParse.parse(files.get(arg,
                     Blocks.MAX_SIZE));
-            store.put(b);
+            blocks.put(b);
         }
     }
 }

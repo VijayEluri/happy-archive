@@ -27,12 +27,12 @@ public class StoreTagPutMainTest {
     public void test1() throws IOException {
         FileStore files = new FileStoreMemory();
         files.put("test.txt", TestData.FILE_CONTENT.getBytes());
-        BlockStore store = new BlockStoreMemory();
+        BlockStore blocks = new BlockStoreMemory();
 
         CapturePrintStream out = CapturePrintStream.create();
 
         List<String> args = Arrays.asList("test.txt");
-        new StoreTagPutMain(store, files, out, args).run();
+        new StoreTagPutMain(blocks, files, out, args).run();
 
         out.flush();
 
@@ -53,12 +53,12 @@ public class StoreTagPutMainTest {
     public void test2() throws IOException {
         FileStore files = new FileStoreMemory();
         files.put("test.txt", TestData.FILE_CONTENT.getBytes());
-        BlockStore store = new BlockStoreMemory();
+        BlockStore blocks = new BlockStoreMemory();
 
         CapturePrintStream out = CapturePrintStream.create();
 
         List<String> args = Arrays.asList("test.txt");
-        new StoreTagPutMain(store, files, out, args).run();
+        new StoreTagPutMain(blocks, files, out, args).run();
 
         out.flush();
 

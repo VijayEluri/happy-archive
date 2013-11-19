@@ -24,14 +24,14 @@ public class StoreListMainTest {
      */
     @Test
     public void test1() throws IOException {
-        BlockStore store = new BlockStoreMemory();
-        store.put(block(C1));
-        store.put(block(C2));
-        store.put(block(C3));
+        BlockStore blocks = new BlockStoreMemory();
+        blocks.put(block(C1));
+        blocks.put(block(C2));
+        blocks.put(block(C3));
 
         CapturePrintStream out = CapturePrintStream.create();
 
-        new StoreListMain(store, out).run();
+        new StoreListMain(blocks, out).run();
 
         String want = key(C1) + "\n" + key(C2) + "\n" + key(C3) + "\n";
         assertEquals(want, out.toString());

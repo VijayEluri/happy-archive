@@ -13,23 +13,23 @@ import org.yi.happy.archive.key.FullKey;
  */
 public class ClearBlockTargetStore implements ClearBlockTarget {
 
-    private final BlockStore store;
+    private final BlockStore blocks;
     private final BlockEncoder encoder;
 
     /**
      * 
      * @param encoder
-     * @param store
+     * @param blocks
      */
-    public ClearBlockTargetStore(BlockEncoder encoder, BlockStore store) {
+    public ClearBlockTargetStore(BlockEncoder encoder, BlockStore blocks) {
         this.encoder = encoder;
-        this.store = store;
+        this.blocks = blocks;
     }
 
     @Override
     public FullKey put(Block block) throws IOException {
         BlockEncoderResult e = encoder.encode(block);
-        store.put(e.getBlock());
+        blocks.put(e.getBlock());
         return e.getKey();
     }
 
