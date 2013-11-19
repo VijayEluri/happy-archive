@@ -8,7 +8,7 @@ import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.encoder.BlockEncoder;
 import org.yi.happy.archive.block.encoder.BlockEncoderFactory;
 import org.yi.happy.archive.block.encoder.BlockEncoderResult;
-import org.yi.happy.archive.block.parser.BlockParse;
+import org.yi.happy.archive.block.parser.GenericBlockParse;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesOutput;
 
@@ -51,7 +51,7 @@ public class EncodeContentMain implements MainCommand {
     public void run() throws IOException {
         BlockEncoder encoder = BlockEncoderFactory.getContentDefault();
 
-        Block block = BlockParse.parse(files.get(args.get(0),
+        Block block = GenericBlockParse.parse(files.get(args.get(0),
                 Blocks.MAX_SIZE));
         BlockEncoderResult e = encoder.encode(block);
         files.put(args.get(1), e.getBlock().asBytes());

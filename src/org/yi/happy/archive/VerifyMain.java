@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.EncodedBlock;
-import org.yi.happy.archive.block.parser.BlockParse;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
+import org.yi.happy.archive.block.parser.GenericBlockParse;
 import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesOutput;
 
@@ -58,7 +58,7 @@ public class VerifyMain implements MainCommand {
                 /*
                  * parse into a block
                  */
-                Block block = BlockParse.parse(data);
+                Block block = GenericBlockParse.parse(data);
 
                 /*
                  * try to parse into an encoded block

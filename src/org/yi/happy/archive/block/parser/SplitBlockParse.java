@@ -1,11 +1,16 @@
-package org.yi.happy.archive.block;
+package org.yi.happy.archive.block.parser;
+
+import java.util.Map;
+import java.util.Set;
+
+import org.yi.happy.archive.block.Block;
+import org.yi.happy.archive.block.SplitBlock;
 
 
 /**
  * A parser for {@link SplitBlock}.
  */
 public class SplitBlockParse {
-
     /**
      * make a {@link SplitBlock}.
      * 
@@ -16,6 +21,17 @@ public class SplitBlockParse {
     public static SplitBlock parseSplitBlock(Block block) {
         if (block instanceof SplitBlock) {
             return (SplitBlock) block;
+        }
+
+        Map<String, String> meta = block.getMeta();
+
+        if (!meta.keySet().equals(META)) {
+            throw new IllegalArgumentException("meta mismatch");
+        }
+
+        String type = block.getMeta().get(SplitBlock.TYPE_META);
+        if (!type.equals(SplitBlock.TYPE)) {
+            throw new IllegalArgumentException("wrong key-type");
         }
 
         String countString = block.getMeta().get(SplitBlock.SPLIT_COUNT_META);
@@ -39,4 +55,8 @@ public class SplitBlockParse {
 
         return type.equals(SplitBlock.TYPE);
     }
+
+    private static final Set<String> META = new SetBuilder<String>(
+            SplitBlock.SPLIT_COUNT_META, SplitBlock.TYPE_META,
+            SplitBlock.SIZE_META).createImmutable();
 }

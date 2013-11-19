@@ -1,28 +1,28 @@
 package org.yi.happy.archive.block.parser;
 
 /**
- * A range.
+ * An offset and length.
  */
-public class Range {
+public class Segment {
     private final int offset;
     private final int length;
 
     /**
-     * create a range.
+     * create a segment.
      * 
      * @param offset
-     *            the offset where the range starts.
+     *            the offset where the segment starts.
      * @param length
-     *            the length of the range.
+     *            the length of the segment.
      */
-    public Range(int offset, int length) {
+    public Segment(int offset, int length) {
         this.offset = offset;
         this.length = length;
     }
 
     /**
      * 
-     * @return the offset where the range starts.
+     * @return the offset where the segment starts.
      */
     public int getOffset() {
         return offset;
@@ -30,17 +30,17 @@ public class Range {
 
     /**
      * 
-     * @return the length of the range.
+     * @return the length of the segment.
      */
     public int getLength() {
         return length;
     }
 
     /**
-     * The end of the range, as in the index after the last index that is part
-     * of the range.
+     * The end of the segment, as in the index after the last index that is part
+     * of the segment.
      * 
-     * @return index just past the end of the range.
+     * @return index just past the end of the segment.
      */
     public int getEnd() {
         return offset + length;
@@ -63,7 +63,7 @@ public class Range {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Range other = (Range) obj;
+        Segment other = (Segment) obj;
         if (length != other.length)
             return false;
         if (offset != other.offset)
@@ -72,49 +72,50 @@ public class Range {
     }
 
     /**
-     * the slice of the current range that is before the given range.
+     * the slice of the current segment that is before the given segment.
      * 
      * @param other
-     *            the range to compare to.
-     * @return a range that starts at the minimum of the start of this and
+     *            the segment to compare to.
+     * @return a segment that starts at the minimum of the start of this and
      *         other, and ends at the minimum of the end of this and the
      *         beginning of other.
      */
-    public Range before(Range other) {
+    public Segment before(Segment other) {
         if (this.getEnd() < other.getOffset()) {
             return this;
         }
 
         if (other.getOffset() < this.getOffset()) {
-            return new Range(other.getOffset(), 0);
+            return new Segment(other.getOffset(), 0);
         }
 
-        return new Range(this.getOffset(), other.getOffset() - this.getOffset());
+        return new Segment(this.getOffset(), other.getOffset() - this.getOffset());
     }
 
     /**
-     * the slice of the current range that is after the given range.
+     * the slice of the current segment that is after the given segment.
      * 
      * @param other
-     *            the range to compare to.
-     * @return a range that starts at the maximum of the end of the other range
-     *         and the beginning of this range, and ends at the maximum of the
-     *         end of the other range and the end of this range.
+     *            the segment to compare to.
+     * @return a segment that starts at the maximum of the end of the other
+     *         segment and the beginning of this segment, and ends at the
+     *         maximum of the end of the other segment and the end of this
+     *         segment.
      */
-    public Range after(Range other) {
+    public Segment after(Segment other) {
         if (other.getEnd() < this.getOffset()) {
             return this;
         }
 
         if (other.getEnd() > this.getEnd()) {
-            return new Range(other.getEnd(), 0);
+            return new Segment(other.getEnd(), 0);
         }
 
-        return new Range(other.getEnd(), this.getEnd() - other.getEnd());
+        return new Segment(other.getEnd(), this.getEnd() - other.getEnd());
     }
 
     @Override
     public String toString() {
-        return "(" + getOffset() + ".." + getEnd() + ")";
+        return "(" + getOffset() + " + " + getLength() + " = " + getEnd() + ")";
     }
 }

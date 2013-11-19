@@ -1,4 +1,4 @@
-package org.yi.happy.archive.block.parser;
+package org.yi.happy.archive.block.encoder;
 
 import java.util.Collections;
 import java.util.HashMap;

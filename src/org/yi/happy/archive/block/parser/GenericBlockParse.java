@@ -16,7 +16,7 @@ import org.yi.happy.archive.block.GenericBlock;
 public class GenericBlockParse {
 
     /**
-     * A very tolerant generic block parser. If the size header is present than
+     * A very tolerant generic block parser. If the size header is present then
      * it must be valid, and the body is trimmed to the value of it.
      * 
      * @param bytes
@@ -25,17 +25,17 @@ public class GenericBlockParse {
      * @throws IllegalArgumentException
      *             if a header is repeated, or if the size header is not valid.
      */
-    public GenericBlock parse(byte[] bytes) {
+    public static GenericBlock parse(byte[] bytes) {
         Map<String, String> meta = new LinkedHashMap<String, String>();
 
-        Range rest = new Range(0, bytes.length);
+        Segment rest = new Segment(0, bytes.length);
 
         /*
          * parse the headers
          */
         while (true) {
-            Range endOfLine = findNewLine(bytes, rest);
-            Range line = rest.before(endOfLine);
+            Segment endOfLine = findNewLine(bytes, rest);
+            Segment line = rest.before(endOfLine);
             rest = rest.after(endOfLine);
 
             /*
@@ -46,7 +46,7 @@ public class GenericBlockParse {
                 break;
             }
 
-            Range divider = findDivider(bytes, line);
+            Segment divider = findDivider(bytes, line);
 
             String name = ByteString.fromUtf8(bytes, line.before(divider));
             String value = ByteString.fromUtf8(bytes, line.after(divider));
@@ -92,7 +92,7 @@ public class GenericBlockParse {
             /*
              * otherwise trim it.
              */
-            rest = new Range(rest.getOffset(), i);
+            rest = new Segment(rest.getOffset(), i);
         }
 
         /*
@@ -109,51 +109,51 @@ public class GenericBlockParse {
      * @param bytes
      *            the bytes being parsed.
      * @param line
-     *            the range that is the line.
-     * @return the range that is the divider, or the end of the range if not
-     *         found. Before this range is the key, after this range is the
+     *            the segment that is the line.
+     * @return the segment that is the divider, or the end of the segment if not
+     *         found. Before this segment is the key, after this segment is the
      *         value.
      */
-    private Range findDivider(byte[] bytes, Range line) {
+    private static Segment findDivider(byte[] bytes, Segment line) {
         for (int i = line.getOffset(); i < line.getEnd(); i++) {
             if (bytes[i] == Block.COLON) {
                 if (i + 1 < line.getEnd() && bytes[i + 1] == Block.SPACE) {
-                    return new Range(i, 2);
+                    return new Segment(i, 2);
                 }
-                return new Range(i, 1);
+                return new Segment(i, 1);
             }
         }
 
-        return new Range(line.getEnd(), 0);
+        return new Segment(line.getEnd(), 0);
     }
 
     /**
-     * find the first line break in the range.
+     * find the first line break in the segment.
      * 
      * @param bytes
      *            the bytes.
-     * @param range
-     *            the range to search in.
-     * @return range that is the line break, or the end of the range if none
-     *         found. Before this range is the first line, after this range is
-     *         the start of the next line.
+     * @param segment
+     *            the segment to search in.
+     * @return segment that is the line break, or the end of the segment if none
+     *         found. Before this segment is the first line, after this segment
+     *         is the start of the next line.
      */
-    public static Range findNewLine(byte[] bytes, Range range) {
-        for (int i = range.getOffset(); i < range.getEnd(); i++) {
+    private static Segment findNewLine(byte[] bytes, Segment segment) {
+        for (int i = segment.getOffset(); i < segment.getEnd(); i++) {
             if (bytes[i] == Block.CR) {
-                if (i + 1 < range.getEnd() && bytes[i + 1] == Block.LF) {
-                    return new Range(i, 2);
+                if (i + 1 < segment.getEnd() && bytes[i + 1] == Block.LF) {
+                    return new Segment(i, 2);
                 }
-                return new Range(i, 1);
+                return new Segment(i, 1);
             }
             if (bytes[i] == Block.LF) {
-                if (i + 1 < range.getEnd() && bytes[i + 1] == Block.CR) {
-                    return new Range(i, 2);
+                if (i + 1 < segment.getEnd() && bytes[i + 1] == Block.CR) {
+                    return new Segment(i, 2);
                 }
-                return new Range(i, 1);
+                return new Segment(i, 1);
             }
         }
 
-        return new Range(range.getEnd(), 0);
+        return new Segment(segment.getEnd(), 0);
     }
 }

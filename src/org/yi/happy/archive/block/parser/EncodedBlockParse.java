@@ -1,11 +1,5 @@
 package org.yi.happy.archive.block.parser;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-
-import org.yi.happy.archive.Blocks;
-import org.yi.happy.archive.Streams;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.EncodedBlock;
 import org.yi.happy.archive.key.KeyType;
@@ -14,31 +8,6 @@ import org.yi.happy.archive.key.KeyType;
  * parser for encoded blocks.
  */
 public class EncodedBlockParse {
-    private EncodedBlockParse() {
-
-    }
-
-    /**
-     * load an encoded block from a URL.
-     * 
-     * @param url
-     *            the url to load from.
-     * @return the encoded block.
-     * @throws IOException
-     *             on IO errors.
-     * @throws IllegalArgumentException
-     *             on parsing errors.
-     */
-    public static EncodedBlock load(URL url) throws IOException {
-        InputStream in = url.openStream();
-        try {
-            byte[] data = Streams.load(in, Blocks.MAX_SIZE);
-            return parse(data);
-        } finally {
-            in.close();
-        }
-    }
-
     /**
      * parse an encoded block from bytes.
      * 
@@ -47,7 +16,7 @@ public class EncodedBlockParse {
      * @return the encoded block.
      */
     public static EncodedBlock parse(byte[] data) {
-        Block block = new GenericBlockParse().parse(data);
+        Block block = GenericBlockParse.parse(data);
         return parse(block);
     }
 
@@ -65,6 +34,7 @@ public class EncodedBlockParse {
 
         String keyType = block.getMeta().get(EncodedBlock.KEY_TYPE_META);
         if (keyType == null) {
+            // data block
             throw new IllegalArgumentException("missing key-type");
         }
 
@@ -80,6 +50,6 @@ public class EncodedBlockParse {
             return NameEncodedBlockParse.parse(block);
         }
 
-        throw new UnknownKeyTypeException();
+        throw new UnknownKeyTypeException(keyType);
     }
 }

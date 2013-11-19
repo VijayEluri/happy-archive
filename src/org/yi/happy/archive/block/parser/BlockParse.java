@@ -1,84 +1,72 @@
 package org.yi.happy.archive.block.parser;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
+import java.util.Map;
 
-import org.yi.happy.archive.Blocks;
-import org.yi.happy.archive.Streams;
+import org.yi.happy.annotate.ExternalValue;
 import org.yi.happy.archive.block.Block;
+import org.yi.happy.archive.block.EncodedBlock;
+import org.yi.happy.archive.block.IndirectBlock;
+import org.yi.happy.archive.block.ListBlock;
+import org.yi.happy.archive.block.MapBlock;
+import org.yi.happy.archive.block.SplitBlock;
 
 /**
- * Generic block parsing.
+ * Parse any type of block into the specific form.
  */
 public class BlockParse {
-    private BlockParse() {
-
-    }
-
     /**
-     * parse a block from a byte array
+     * Parse any block.
      * 
      * @param bytes
-     *            the byte array
-     * @return the block
+     *            the block data.
+     * @return a {@link Block}.
      */
     public static Block parse(byte[] bytes) {
-        return new GenericBlockParse().parse(bytes);
+        Block block = GenericBlockParse.parse(bytes);
+        return parse(block);
     }
 
     /**
-     * load a block into memory
-     * 
-     * @param in
-     *            the stream to load
-     * @return the loaded block
-     * @throws IOException
-     *             on IO errors.
-     * @throws IllegalArgumentException
-     *             on parsing errors.
+     * the meta-data field name for type.
      */
-    public static Block load(InputStream in) throws IOException,
-            IllegalArgumentException {
-        byte[] bytes = Streams.load(in, Blocks.MAX_SIZE);
-        return parse(bytes);
-    }
+    @ExternalValue
+    public static final String TYPE_META = "type";
 
     /**
-     * load a block into memory
+     * Parse any type of block into the specific form.
      * 
-     * @param resource
-     *            the url to load
-     * @return the loaded block
-     * @throws IOException
-     *             on IO errors
+     * @param block
+     *            a {@link Block}.
+     * @return a {@link Block}.
      */
-    public static Block load(URL resource) throws IOException {
-        InputStream in = resource.openStream();
-        try {
-            return load(in);
-        } finally {
-            in.close();
+    public static Block parse(Block block) {
+        Map<String, String> meta = block.getMeta();
+
+        if (meta.containsKey(EncodedBlock.KEY_TYPE_META)) {
+            return EncodedBlockParse.parse(block);
         }
-    }
 
-    /**
-     * load a block into memory.
-     * 
-     * @param file
-     *            the file to load.
-     * @return the loaded block.
-     * @throws IOException
-     *             on IO errors.
-     */
-    public static Block load(File file) throws IOException {
-        FileInputStream in = new FileInputStream(file);
-        try {
-            return load(in);
-        } finally {
-            in.close();
+        String type = meta.get(TYPE_META);
+        if (type == null) {
+            return DataBlockParse.parse(block);
         }
+
+        if (type.equals(MapBlock.TYPE)) {
+            return MapBlockParse.parseMapBlock(block);
+        }
+
+        if (type.equals(ListBlock.TYPE)) {
+            return ListBlockParse.parseListBlock(block);
+        }
+
+        if (type.equals(SplitBlock.TYPE)) {
+            return SplitBlockParse.parseSplitBlock(block);
+        }
+
+        if (type.equals(IndirectBlock.TYPE)) {
+            return IndirectBlockParse.parseIndirectBlock(block);
+        }
+
+        return block;
     }
 }

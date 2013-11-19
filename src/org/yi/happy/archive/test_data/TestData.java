@@ -9,8 +9,9 @@ import java.net.URL;
 import org.yi.happy.archive.Streams;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.block.EncodedBlock;
-import org.yi.happy.archive.block.parser.BlockParse;
+import org.yi.happy.archive.block.GenericBlock;
 import org.yi.happy.archive.block.parser.EncodedBlockParse;
+import org.yi.happy.archive.block.parser.GenericBlockParse;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.FullKeyParse;
 import org.yi.happy.archive.key.LocatorKey;
@@ -491,7 +492,7 @@ public enum TestData {
      *             on error.
      */
     public EncodedBlock getEncodedBlock() throws IOException {
-        return EncodedBlockParse.load(getUrl());
+        return EncodedBlockParse.parse(getBlock());
     }
 
     /**
@@ -501,8 +502,8 @@ public enum TestData {
      * @throws IOException
      *             on error.
      */
-    public Block getBlock() throws IOException {
-        return BlockParse.load(getUrl());
+    public GenericBlock getBlock() throws IOException {
+        return GenericBlockParse.parse(getBytes());
     }
 
     /**

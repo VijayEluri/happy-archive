@@ -20,9 +20,8 @@ public class GenericBlockParseTest {
      */
     @Test
     public void testSampleBlock() {
-        GenericBlockParse p = new GenericBlockParse();
-
-        GenericBlock have = p.parse(GenericBlockTest.createSampleBytes());
+        GenericBlock have = GenericBlockParse
+                .parse(GenericBlockTest.createSampleBytes());
 
         assertEquals(GenericBlockTest.createSampleBlock(), have);
     }
@@ -32,9 +31,8 @@ public class GenericBlockParseTest {
      */
     @Test
     public void testMangledBlock() {
-        GenericBlockParse p = new GenericBlockParse();
-
-        GenericBlock have = p.parse(ByteString.toBytes("a\nb: c\r\rbody\n"));
+        GenericBlock have = GenericBlockParse.parse(ByteString
+                .toBytes("a\nb: c\r\rbody\n"));
 
         assertArrayEquals(ByteString.toBytes("a: \r\nb: c\r\n\r\nbody\n"), have
                 .asBytes());
@@ -45,9 +43,7 @@ public class GenericBlockParseTest {
      */
     @Test
     public void testEmptyBlock() {
-        GenericBlockParse p = new GenericBlockParse();
-
-        GenericBlock have = p.parse(new byte[0]);
+        GenericBlock have = GenericBlockParse.parse(new byte[0]);
 
         assertEquals(Collections.emptyMap(), have.getMeta());
         assertEquals(new Bytes(), have.getBody());

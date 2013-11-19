@@ -1,13 +1,18 @@
-package org.yi.happy.archive.block;
+package org.yi.happy.archive.block.parser;
 
 import java.util.Map;
+import java.util.Set;
 
-import org.yi.happy.archive.Sets;
+import org.yi.happy.archive.block.Block;
+import org.yi.happy.archive.block.DataBlock;
 
 /**
  * A parser for a basic data block.
  */
 public class DataBlockParse {
+
+    private static final Set<String> META = new SetBuilder<String>(
+            DataBlock.SIZE_META).createImmutable();
 
     /**
      * parse a basic data block.
@@ -25,7 +30,7 @@ public class DataBlockParse {
 
         Map<String, String> meta = block.getMeta();
 
-        if (!meta.keySet().equals(Sets.asSet("size"))) {
+        if (!meta.keySet().equals(META)) {
             throw new IllegalArgumentException("not a plain data block");
         }
 
@@ -38,8 +43,7 @@ public class DataBlockParse {
      * @return true if the block is a basic data block.
      */
     public static boolean isDataBlock(Block block) {
-        String type = block.getMeta().get("type");
-        return type == null;
+        return block.getMeta().keySet().equals(META);
     }
 
 }

@@ -2,7 +2,7 @@ package org.yi.happy.archive;
 
 import java.io.UnsupportedEncodingException;
 
-import org.yi.happy.archive.block.parser.Range;
+import org.yi.happy.archive.block.parser.Segment;
 
 /**
  * convert byte arrays to 8 bit strings and back.
@@ -127,7 +127,7 @@ public class ByteString {
      * @throws Utf8NotSupportedError
      *             if UTF-8 encoding is not supported.
      */
-    public static String fromUtf8(byte[] data, Range range) {
+    public static String fromUtf8(byte[] data, Segment range) {
         return fromUtf8(data, range.getOffset(), range.getLength());
     }
 

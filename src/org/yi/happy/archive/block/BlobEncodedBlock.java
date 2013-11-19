@@ -9,7 +9,7 @@ import org.yi.happy.archive.BadSignatureException;
 import org.yi.happy.archive.ByteString;
 import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.UnknownDigestAlgorithmException;
-import org.yi.happy.archive.block.parser.BlockParse;
+import org.yi.happy.archive.block.parser.GenericBlockParse;
 import org.yi.happy.archive.crypto.Cipher;
 import org.yi.happy.archive.crypto.CipherProvider;
 import org.yi.happy.archive.crypto.DigestProvider;
@@ -148,7 +148,7 @@ public final class BlobEncodedBlock extends AbstractBlock implements
     }
 
     @Override
-    public Block decode(FullKey fullKey) {
+    public GenericBlock decode(FullKey fullKey) {
         if (!fullKey.toLocatorKey().equals(key)) {
             throw new IllegalArgumentException("the key is not for this block");
         }
@@ -165,6 +165,6 @@ public final class BlobEncodedBlock extends AbstractBlock implements
         byte[] out = body.toByteArray();
         c.decrypt(out);
 
-        return BlockParse.parse(out);
+        return GenericBlockParse.parse(out);
     }
 }
