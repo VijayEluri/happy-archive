@@ -24,8 +24,8 @@ public class VerifyMain implements MainCommand {
     /**
      * create, injecting the dependencies.
      * 
-     * @param fileSystem
-     *            the file system to use.
+     * @param files
+     *            the file store to use.
      * @param out
      *            where to send the output.
      * @param args
