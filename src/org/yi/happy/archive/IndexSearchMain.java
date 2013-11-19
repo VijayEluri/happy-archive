@@ -10,8 +10,8 @@ import java.util.concurrent.ExecutionException;
 import org.yi.happy.archive.commandLine.UsesIndexStore;
 import org.yi.happy.archive.commandLine.UsesInput;
 import org.yi.happy.archive.commandLine.UsesOutput;
+import org.yi.happy.archive.index.IndexEntry;
 import org.yi.happy.archive.index.IndexSearch;
-import org.yi.happy.archive.index.IndexSearchResult;
 import org.yi.happy.archive.key.LocatorKey;
 import org.yi.happy.archive.key.LocatorKeyParse;
 
@@ -63,12 +63,15 @@ public class IndexSearchMain implements MainCommand {
 
         indexSearch.search(keys, new IndexSearch.Handler() {
             @Override
-            public void gotResult(IndexSearchResult result) {
-                out.println(result);
+            public void gotResult(String volumeSet, String volumeName,
+                    IndexEntry result) {
+                out.println(volumeSet + "\t" + volumeName + "\t"
+                        + result.getName() + "\t" + result.getKey());
             }
 
             @Override
-            public void gotException(Throwable cause) {
+            public void gotException(String volumeSet, String volumeName,
+                    Throwable cause) {
                 cause.printStackTrace(err);
             }
         });

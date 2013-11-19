@@ -45,54 +45,44 @@ public class IndexSearch {
     public void search(Set<LocatorKey> want, Handler handler)
             throws IOException, InterruptedException {
         ExecutorService exec = Executors.newFixedThreadPool(2);
-
-        /*
-         * get the tasks
-         */
-        List<Callable<List<IndexSearchResult>>> tasks = getSearchTasks(want);
-
-        /*
-         * launch tasks
-         */
-        Queue<Future<List<IndexSearchResult>>> results = new ArrayDeque<Future<List<IndexSearchResult>>>();
-        for (Callable<List<IndexSearchResult>> task : tasks) {
-            results.add(exec.submit(task));
-        }
-
-        /*
-         * process results
-         */
-        while (results.isEmpty() == false) {
-            Future<List<IndexSearchResult>> result = results.remove();
-            try {
-                for (IndexSearchResult i : result.get()) {
-                    handler.gotResult(i);
+        try {
+            /*
+             * launch tasks
+             */
+            Queue<SearchVolume> searches = new ArrayDeque<SearchVolume>();
+            for (String set : index.listVolumeSets()) {
+                for (String name : index.listVolumeNames(set)) {
+                    SearchVolume task = new SearchVolume(set, name, want);
+                    task.setResult(exec.submit(task));
+                    searches.add(task);
                 }
-            } catch (ExecutionException e) {
-                handler.gotException(e.getCause());
             }
-        }
 
-        exec.shutdown();
+            /*
+             * process results
+             */
+            while (searches.isEmpty() == false) {
+                SearchVolume search = searches.remove();
+                try {
+                    for (IndexEntry entry : search.getResult()) {
+                        handler.gotResult(search.getVolumeSet(),
+                                search.getVolumeName(), entry);
+                    }
+                } catch (ExecutionException e) {
+                    handler.gotException(search.getVolumeSet(),
+                            search.getVolumeName(), e.getCause());
+                }
+            }
+        } finally {
+            exec.shutdownNow();
+        }
     }
 
-    private List<Callable<List<IndexSearchResult>>> getSearchTasks(
-            final Set<LocatorKey> want) throws IOException {
-        final List<Callable<List<IndexSearchResult>>> out;
-        out = new ArrayList<Callable<List<IndexSearchResult>>>();
-        for (String set : index.listVolumeSets()) {
-            for (String name : index.listVolumeNames(set)) {
-                SearchVolume task = new SearchVolume(set, name, want);
-                out.add(task);
-            }
-        }
-        return out;
-    }
-
-    private class SearchVolume implements Callable<List<IndexSearchResult>> {
+    private class SearchVolume implements Callable<List<IndexEntry>> {
         private final String volumeSet;
         private final String volumeName;
         private final Set<LocatorKey> want;
+        private Future<List<IndexEntry>> result;
 
         public SearchVolume(String volumeSet, String volumeName,
                 Set<LocatorKey> want) {
@@ -101,16 +91,22 @@ public class IndexSearch {
             this.want = want;
         }
 
+        public void setResult(Future<List<IndexEntry>> result) {
+            this.result = result;
+        }
+
         @Override
-        public List<IndexSearchResult> call() throws Exception {
-            List<IndexSearchResult> out = new ArrayList<IndexSearchResult>();
+        public List<IndexEntry> call() throws Exception {
+            List<IndexEntry> out = new ArrayList<IndexEntry>();
 
             Reader in = index.open(volumeSet, volumeName);
             try {
                 for (IndexEntry entry : new IndexIterator(in)) {
+                    if (!entry.getLoader().equals("plain")) {
+                        continue;
+                    }
                     if (want.contains(entry.getKey())) {
-                        out.add(new IndexSearchResult(volumeSet, volumeName,
-                                entry.getName(), entry.getKey()));
+                        out.add(entry);
                     }
                 }
             } catch (IndexOutOfBoundsException e) {
@@ -119,6 +115,19 @@ public class IndexSearch {
                 in.close();
             }
             return out;
+        }
+
+        public String getVolumeSet() {
+            return volumeSet;
+        }
+
+        public String getVolumeName() {
+            return volumeName;
+        }
+
+        public List<IndexEntry> getResult() throws InterruptedException,
+                ExecutionException {
+            return result.get();
         }
     }
 
@@ -130,17 +139,25 @@ public class IndexSearch {
         /**
          * Called for each index search result.
          * 
+         * @param volumeSet
+         *            the volume set.
+         * @param volumeName
+         *            the volume name.
          * @param result
          *            the search result.
          */
-        void gotResult(IndexSearchResult result);
+        void gotResult(String volumeSet, String volumeName, IndexEntry result);
 
         /**
          * Called for each search failure.
          * 
+         * @param volumeSet
+         *            the volume set.
+         * @param volumeName
+         *            the volume name.
          * @param cause
          *            the cause of the failure.
          */
-        void gotException(Throwable cause);
+        void gotException(String volumeSet, String volumeName, Throwable cause);
     }
 }

@@ -12,11 +12,11 @@ import java.util.Map;
 import java.util.Set;
 
 import org.yi.happy.annotate.DuplicatedLogic;
+import org.yi.happy.archive.commandLine.UsesBlockStore;
 import org.yi.happy.archive.commandLine.UsesIndexStore;
 import org.yi.happy.archive.commandLine.UsesOutput;
-import org.yi.happy.archive.commandLine.UsesBlockStore;
+import org.yi.happy.archive.index.IndexEntry;
 import org.yi.happy.archive.index.IndexSearch;
-import org.yi.happy.archive.index.IndexSearchResult;
 import org.yi.happy.archive.key.LocatorKey;
 
 /**
@@ -77,12 +77,14 @@ public class CriticalListMain implements MainCommand {
         final Set<LocatorKey> exists = new HashSet<LocatorKey>();
         indexSearch.search(want, new IndexSearch.Handler() {
             @Override
-            public void gotResult(IndexSearchResult result) {
+            public void gotResult(String volumeSet, String volumeName,
+                    IndexEntry result) {
                 exists.add(result.getKey());
             }
 
             @Override
-            public void gotException(Throwable cause) {
+            public void gotException(String volumeSet, String volumeName,
+                    Throwable cause) {
                 err.println(cause.getMessage());
             }
 

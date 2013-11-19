@@ -32,12 +32,15 @@ public class IndexSearchTest {
         results = new HashSet<IndexSearchResult>();
         capture = new IndexSearch.Handler() {
             @Override
-            public void gotResult(IndexSearchResult result) {
-                results.add(result);
+            public void gotResult(String volumeSet, String volumeName,
+                    IndexEntry result) {
+                results.add(new IndexSearchResult(volumeSet, volumeName, result
+                        .getName(), result.getKey()));
             }
 
             @Override
-            public void gotException(Throwable cause) {
+            public void gotException(String volumeSet, String volumeName,
+                    Throwable cause) {
                 fail();
             }
         };
