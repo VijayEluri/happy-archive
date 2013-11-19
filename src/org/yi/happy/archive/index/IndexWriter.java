@@ -1,6 +1,5 @@
 package org.yi.happy.archive.index;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -22,14 +21,15 @@ public class IndexWriter {
     private final DigestProvider digest;
 
     /**
-     * Prepare to write lines on an {@link OutputStream}.
+     * Prepare to write lines on an {@link OutputStream}. The
+     * {@link OutputStream} is flushed after every write.
      * 
      * @param out
      *            the {@link OutputStream}.
      */
     public IndexWriter(OutputStream out) {
         try {
-            this.out = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
+            this.out = new OutputStreamWriter(out, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             throw new Utf8NotSupportedError(e);
         }
@@ -55,16 +55,8 @@ public class IndexWriter {
      */
     public void write(String name, String loader, String key, String hash,
             String size) throws IOException {
-        out.write(name);
-        out.write("\t");
-        out.write(loader);
-        out.write("\t");
-        out.write(key);
-        out.write("\t");
-        out.write(hash);
-        out.write("\t");
-        out.write(size);
-        out.write("\n");
+        out.write(name + "\t" + loader + "\t" + key + "\t" + hash + "\t" + size
+                + "\n");
         out.flush();
     }
 
@@ -90,5 +82,4 @@ public class IndexWriter {
 
         write(name, loader, key, hash, size);
     }
-
 }

@@ -13,9 +13,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.yi.happy.archive.LineIterator;
 import org.yi.happy.archive.key.LocatorKey;
-import org.yi.happy.archive.key.LocatorKeyParse;
 
 /**
  * The index search algorithm.
@@ -107,23 +105,18 @@ public class IndexSearch {
         public List<IndexSearchResult> call() throws Exception {
             List<IndexSearchResult> out = new ArrayList<IndexSearchResult>();
 
-            Reader in0 = index.open(volumeSet, volumeName);
+            Reader in = index.open(volumeSet, volumeName);
             try {
-                for (String line0 : new LineIterator(in0)) {
-                    String[] line = line0.split("\t", -1);
-                    if (line.length < 3) {
-                        throw new IndexOutOfBoundsException("short line in "
-                                + volumeSet + "/" + volumeName);
-                    }
-                    LocatorKey key = LocatorKeyParse.parseLocatorKey(line[2]);
-                    if (want.contains(key)) {
-                        String fileName = line[0];
+                for (IndexEntry entry : new IndexIterator(in)) {
+                    if (want.contains(entry.getKey())) {
                         out.add(new IndexSearchResult(volumeSet, volumeName,
-                                fileName, key));
+                                entry.getName(), entry.getKey()));
                     }
                 }
+            } catch (IndexOutOfBoundsException e) {
+                throw new IOException("in " + volumeSet + "/" + volumeName, e);
             } finally {
-                in0.close();
+                in.close();
             }
             return out;
         }
