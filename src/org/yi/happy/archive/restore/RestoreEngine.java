@@ -258,6 +258,13 @@ public class RestoreEngine {
     }
 
     /**
+     * @return the number of work items for the current job.
+     */
+    public int getJobSize() {
+        return getWork().count();
+    }
+
+    /**
      * skip the current item.
      */
     public void skip() {

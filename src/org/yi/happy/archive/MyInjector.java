@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.yi.happy.annotate.GlobalFilesystem;
 import org.yi.happy.archive.commandLine.Env;
+import org.yi.happy.archive.gui.RestoreGuiMain;
 import org.yi.happy.archive.index.IndexSearch;
 import org.yi.happy.archive.index.IndexStore;
 import org.yi.happy.archive.index.IndexStoreFileStore;
@@ -477,6 +478,17 @@ public class MyInjector {
     public static Map<String, Class<? extends MainCommand>> injectCommands(
             ApplicationScope scope) {
         return scope.getCommands();
+    }
+
+    /**
+     * get a {@link RestoreGuiMain}.
+     * 
+     * @param scope
+     *            the scope object.
+     * @return the object.
+     */
+    public static RestoreGuiMain injectRestoreGuiMain(ApplicationScope scope) {
+        return new RestoreGuiMain();
     }
 
     /**

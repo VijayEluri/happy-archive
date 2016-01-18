@@ -10,6 +10,7 @@ import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.commandLine.MyEnv;
 import org.yi.happy.archive.commandLine.Requirement;
 import org.yi.happy.archive.commandLine.RequirementLoader;
+import org.yi.happy.archive.gui.RestoreGuiMain;
 
 /**
  * The top level entry point that dispatches to the sub-commands.
@@ -42,6 +43,7 @@ public class Main {
         c.put("build-image", BuildImageMain.class);
         c.put("volume-get", VolumeGetMain.class);
         c.put("show-env", ShowEnvMain.class);
+        c.put("restore-gui", RestoreGuiMain.class);
         c.put("help", HelpMain.class);
 
         commands = Collections.unmodifiableMap(c);
