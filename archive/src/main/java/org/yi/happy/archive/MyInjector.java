@@ -68,6 +68,10 @@ public class MyInjector {
                 injectInput(scope));
     }
 
+    public static MainCommand injectStoreTagGetStepMain(ApplicationScope scope) {
+        return new StoreTagGetStepMain();
+    }
+
     /**
      * get a {@link NotReadyHandler}
      * 

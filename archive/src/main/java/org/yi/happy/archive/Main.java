@@ -33,6 +33,7 @@ public class Main {
         c.put("tag-put", StoreTagPutMain.class);
         c.put("tag-add", StoreTagAddMain.class);
         c.put("tag-get", StoreTagGetMain.class);
+        c.put("tag-get-step", StoreTagGetStepMain.class);
         c.put("backup-list", LocalCandidateListMain.class);
         c.put("backup-critical-list", CriticalListMain.class);
         c.put("store-list", StoreListMain.class);
