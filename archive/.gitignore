@@ -1,2 +1,4 @@
 /bin
 /target/
+/maven-build.properties
+/maven-build.xml
