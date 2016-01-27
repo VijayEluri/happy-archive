@@ -69,7 +69,7 @@ public class MyInjector {
     }
 
     public static MainCommand injectStoreTagGetStepMain(ApplicationScope scope) {
-        return new StoreTagGetStepMain();
+        return new StoreTagGetStepMain(injectClearBlockSource(scope), injectFragmentSave(scope), injectArgs(scope));
     }
 
     /**

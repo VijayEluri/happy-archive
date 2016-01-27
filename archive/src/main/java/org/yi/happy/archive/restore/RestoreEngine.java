@@ -8,6 +8,7 @@ import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.Fragment;
 import org.yi.happy.archive.block.Block;
 import org.yi.happy.archive.key.FullKey;
+import org.yi.happy.archive.key.FullKeyParse;
 
 /**
  * Assistance with the logic required to use {@link RestoreWork} to put one or
@@ -186,7 +187,7 @@ public class RestoreEngine {
                 return false;
             }
 
-            if (getWork().count() == 0) {
+            if (isJobDone()) {
                 jobs.remove(jobIndex);
                 index = 0;
                 continue;
@@ -205,6 +206,10 @@ public class RestoreEngine {
 
             return true;
         }
+    }
+
+    public boolean isJobDone() {
+        return getWork().count() == 0;
     }
 
     /**
@@ -296,5 +301,36 @@ public class RestoreEngine {
 
     private RestoreWork getWork() {
         return getJob().work;
+    }
+
+    public RestoreState getState() {
+        RestoreState state = new RestoreState();
+        for (Job job : jobs) {
+            RestoreStateJob stateJob = new RestoreStateJob();
+            stateJob.setName(job.name);
+            RestoreWork parts = job.work;
+            for (int i = 0; i < parts.count(); i++) {
+                RestoreStateJobPart stateJobPart = new RestoreStateJobPart();
+                stateJobPart.setOffset(parts.getOffset(i));
+                stateJobPart.setKey(parts.getKey(i).toString());
+                stateJob.getParts().add(stateJobPart);
+            }
+            state.getJobs().add(stateJob);
+        }
+        return state;
+    }
+
+    public void setState(RestoreState state) {
+        jobs.clear();
+        start();
+
+        for (RestoreStateJob stateJob : state.getJobs()) {
+            RestoreWork work = new RestoreWork();
+            for (RestoreStateJobPart stateJobPart : stateJob.getParts()) {
+                FullKey key = FullKeyParse.parseFullKey(stateJobPart.getKey());
+                work.add(key, stateJobPart.getOffset());
+            }
+            jobs.add(new Job(stateJob.getName(), work));
+        }
     }
 }
