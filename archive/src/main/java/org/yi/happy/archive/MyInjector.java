@@ -29,8 +29,8 @@ public class MyInjector {
      * @return the object.
      */
     public static MainCommand injectStoreTagPutMain(ApplicationScope scope) {
-        return new StoreTagPutMain(injectBlockStore(scope),
-                injectFileStore(scope), injectOutput(scope), injectArgs(scope));
+        return new StoreTagPutMain(injectBlockStore(scope), injectFileStore(scope), injectOutput(scope),
+                injectArgs(scope));
     }
 
     /**
@@ -63,9 +63,8 @@ public class MyInjector {
      * @return the object.
      */
     public static MainCommand injectStoreTagGetMain(ApplicationScope scope) {
-        return new StoreTagGetMain(injectClearBlockSource(scope),
-                injectFragmentSave(scope), injectNotReadyHandler(scope),
-                injectInput(scope));
+        return new StoreTagGetMain(injectClearBlockSource(scope), injectFragmentSave(scope),
+                injectNotReadyHandler(scope), injectInput(scope));
     }
 
     public static MainCommand injectStoreTagGetStepMain(ApplicationScope scope) {
@@ -134,10 +133,8 @@ public class MyInjector {
      *            the scope object.
      * @return the object.
      */
-    public static MainCommand injectLocalCandidateListMain(
-            ApplicationScope scope) {
-        return new LocalCandidateListMain(injectBlockStore(scope),
-                injectIndexSearch(scope), injectOutput(scope),
+    public static MainCommand injectLocalCandidateListMain(ApplicationScope scope) {
+        return new LocalCandidateListMain(injectBlockStore(scope), injectIndexSearch(scope), injectOutput(scope),
                 injectError(scope), injectArgs(scope));
     }
 
@@ -171,8 +168,23 @@ public class MyInjector {
      * @return the object.
      */
     public static MainCommand injectIndexSearchMain(ApplicationScope scope) {
-        return new IndexSearchMain(injectInput(scope), injectOutput(scope),
-                injectError(scope), injectIndexSearch(scope));
+        return new IndexSearchMain(injectInput(scope), injectOutput(scope), injectError(scope),
+                injectIndexSearch(scope));
+    }
+
+    public static MainCommand injectIndexSearchFirstMain(ApplicationScope scope) {
+        return new IndexSearchFirstMain(injectArgs(scope), injectInput(scope), injectOutput(scope),
+                injectIndexStore(scope));
+    }
+
+    public static MainCommand injectIndexSearchNextMain(ApplicationScope scope) {
+        return new IndexSearchNextMain(injectArgs(scope), injectInput(scope), injectOutput(scope),
+                injectIndexStore(scope));
+    }
+
+    public static MainCommand injectIndexSearchOneMain(ApplicationScope scope) {
+        return new IndexSearchOneMain(injectArgs(scope), injectInput(scope), injectOutput(scope),
+                injectIndexStore(scope));
     }
 
     /**
@@ -183,8 +195,7 @@ public class MyInjector {
      * @return the object.
      */
     public static MainCommand injectIndexVolumeMain(ApplicationScope scope) {
-        return new IndexVolumeMain(injectFileStore(scope), injectOutput(scope),
-                injectError(scope), injectArgs(scope));
+        return new IndexVolumeMain(injectFileStore(scope), injectOutput(scope), injectError(scope), injectArgs(scope));
     }
 
     /**
@@ -195,8 +206,7 @@ public class MyInjector {
      * @return the object.
      */
     public static MainCommand injectBuildImageMain(ApplicationScope scope) {
-        return new BuildImageMain(injectBlockStore(scope),
-                injectFileStore(scope), injectInput(scope),
+        return new BuildImageMain(injectBlockStore(scope), injectFileStore(scope), injectInput(scope),
                 injectOutput(scope), injectError(scope), injectArgs(scope));
     }
 
@@ -230,9 +240,8 @@ public class MyInjector {
      * @return the object.
      */
     public static MainCommand injectVolumeGetMain(ApplicationScope scope) {
-        return new VolumeGetMain(injectBlockStore(scope),
-                injectFileStore(scope), injectInput(scope), injectError(scope),
-                injectArgs(scope));
+        return new VolumeGetMain(injectBlockStore(scope), injectFileStore(scope), injectInput(scope),
+                injectError(scope), injectArgs(scope));
     }
 
     /**
@@ -243,8 +252,7 @@ public class MyInjector {
      * @return the object.
      */
     public static MainCommand injectVerifyMain(ApplicationScope scope) {
-        return new VerifyMain(injectFileStore(scope), injectOutput(scope),
-                injectArgs(scope));
+        return new VerifyMain(injectFileStore(scope), injectOutput(scope), injectArgs(scope));
     }
 
     /**
@@ -255,8 +263,7 @@ public class MyInjector {
      * @return the object.
      */
     public static MainCommand injectEncodeContentMain(ApplicationScope scope) {
-        return new EncodeContentMain(injectFileStore(scope),
-                injectOutput(scope), injectArgs(scope));
+        return new EncodeContentMain(injectFileStore(scope), injectOutput(scope), injectArgs(scope));
     }
 
     /**
@@ -267,8 +274,7 @@ public class MyInjector {
      * @return the object.
      */
     public static MainCommand injectDecodeBlockMain(ApplicationScope scope) {
-        return new DecodeBlockMain(injectFileStore(scope), injectOutput(scope),
-                injectArgs(scope));
+        return new DecodeBlockMain(injectFileStore(scope), injectOutput(scope), injectArgs(scope));
     }
 
     /**
@@ -279,8 +285,7 @@ public class MyInjector {
      * @return the object.
      */
     public static MainCommand injectStoreTagAddMain(ApplicationScope scope) {
-        return new StoreTagAddMain(injectBlockStore(scope),
-                injectFileStore(scope));
+        return new StoreTagAddMain(injectBlockStore(scope), injectFileStore(scope));
     }
 
     /**
@@ -291,8 +296,7 @@ public class MyInjector {
      * @return the object.
      */
     public static MainCommand injectStoreStreamPutMain(ApplicationScope scope) {
-        return new StoreStreamPutMain(injectBlockStore(scope),
-                injectInput(scope), injectOutput(scope));
+        return new StoreStreamPutMain(injectBlockStore(scope), injectInput(scope), injectOutput(scope));
     }
 
     /**
@@ -303,8 +307,7 @@ public class MyInjector {
      * @return the object.
      */
     public static MainCommand injectStoreStreamGetMain(ApplicationScope scope) {
-        return new StoreStreamGetMain(injectClearBlockSource(scope),
-                injectOutput(scope), injectNotReadyHandler(scope),
+        return new StoreStreamGetMain(injectClearBlockSource(scope), injectOutput(scope), injectNotReadyHandler(scope),
                 injectArgs(scope));
     }
 
@@ -316,8 +319,7 @@ public class MyInjector {
      * @return the object.
      */
     public static MainCommand injectStoreBlockPutMain(ApplicationScope scope) {
-        return new StoreBlockPutMain(injectBlockStore(scope),
-                injectFileStore(scope), injectArgs(scope));
+        return new StoreBlockPutMain(injectBlockStore(scope), injectFileStore(scope), injectArgs(scope));
     }
 
     /**
@@ -339,9 +341,8 @@ public class MyInjector {
      * @return the object.
      */
     public static MainCommand injectStoreFileGetMain(ApplicationScope scope) {
-        return new StoreFileGetMain(injectClearBlockSource(scope),
-                injectFragmentSave(scope), injectNotReadyHandler(scope),
-                injectArgs(scope));
+        return new StoreFileGetMain(injectClearBlockSource(scope), injectFragmentSave(scope),
+                injectNotReadyHandler(scope), injectArgs(scope));
     }
 
     /**
@@ -421,8 +422,7 @@ public class MyInjector {
      * @return the object.
      */
     public static MainCommand injectCriticalListMain(ApplicationScope scope) {
-        return new CriticalListMain(injectBlockStore(scope),
-                injectIndexSearch(scope), injectOutput(scope),
+        return new CriticalListMain(injectBlockStore(scope), injectIndexSearch(scope), injectOutput(scope),
                 injectError(scope));
     }
 
@@ -445,8 +445,7 @@ public class MyInjector {
      * @return the object.
      */
     public static IndexStore injectIndexStore(ApplicationScope scope) {
-        return new IndexStoreFileStore(injectFileStore(scope),
-                injectIndex(scope));
+        return new IndexStoreFileStore(injectFileStore(scope), injectIndex(scope));
     }
 
     /**
@@ -468,8 +467,8 @@ public class MyInjector {
      * @return the object.
      */
     public static IndexCheckMain injectIndexCheckMain(ApplicationScope scope) {
-        return new IndexCheckMain(injectFileStore(scope), injectInput(scope),
-                injectOutput(scope), injectError(scope), injectArgs(scope));
+        return new IndexCheckMain(injectFileStore(scope), injectInput(scope), injectOutput(scope), injectError(scope),
+                injectArgs(scope));
     }
 
     /**
@@ -479,8 +478,7 @@ public class MyInjector {
      *            the scope object.
      * @return the object.
      */
-    public static Map<String, Class<? extends MainCommand>> injectCommands(
-            ApplicationScope scope) {
+    public static Map<String, Class<? extends MainCommand>> injectCommands(ApplicationScope scope) {
         return scope.getCommands();
     }
 
@@ -512,12 +510,10 @@ public class MyInjector {
      * @throws ProvisionException
      *             on any {@link Exception}s.
      */
-    public static <T> T inject(Class<T> type, String name,
-            ApplicationScope scope) throws ProvisionException {
+    public static <T> T inject(Class<T> type, String name, ApplicationScope scope) throws ProvisionException {
         try {
             name = "inject" + name;
-            Method method = MyInjector.class.getMethod(name,
-                    ApplicationScope.class);
+            Method method = MyInjector.class.getMethod(name, ApplicationScope.class);
             Object object = method.invoke(null, scope);
             return type.cast(object);
         } catch (InvocationTargetException e) {

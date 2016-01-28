@@ -39,6 +39,9 @@ public class Main {
         c.put("store-list", StoreListMain.class);
         c.put("store-remove", StoreRemoveMain.class);
         c.put("index-search", IndexSearchMain.class);
+        c.put("index-search-first", IndexSearchFirstMain.class);
+        c.put("index-search-next", IndexSearchNextMain.class);
+        c.put("index-search-one", IndexSearchOneMain.class);
         c.put("index-volume", IndexVolumeMain.class);
         c.put("index-check", IndexCheckMain.class);
         c.put("build-image", BuildImageMain.class);
