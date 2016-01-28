@@ -22,6 +22,7 @@ import org.yi.happy.archive.commandLine.UsesArgs;
 import org.yi.happy.archive.commandLine.UsesBlockStore;
 import org.yi.happy.archive.key.FullKey;
 import org.yi.happy.archive.key.FullKeyParse;
+import org.yi.happy.archive.restore.DuplicateJobName;
 import org.yi.happy.archive.restore.RestoreEngine;
 import org.yi.happy.archive.restore.RestoreState;
 import org.yi.happy.archive.tag.Tag;
@@ -96,7 +97,11 @@ public class StoreTagGetStepMain implements MainCommand {
                         }
 
                         if (type.equals("file")) {
-                            engine.add(name, key);
+                            try {
+                                engine.add(name, key);
+                            } catch (DuplicateJobName e) {
+                                System.err.println("warning: already working on " + name);
+                            }
                             continue;
                         }
 

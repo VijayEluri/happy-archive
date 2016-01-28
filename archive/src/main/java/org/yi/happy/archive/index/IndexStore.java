@@ -4,9 +4,12 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.List;
 
+import com.google.inject.ImplementedBy;
+
 /**
  * A collection of volume indexes.
  */
+@ImplementedBy(IndexStoreFileStore.class)
 public interface IndexStore {
     /**
      * List all the volume sets in this collection.

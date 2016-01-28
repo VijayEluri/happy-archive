@@ -3,6 +3,7 @@ package org.yi.happy.archive.restore;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Objects;
 
 import org.yi.happy.archive.Bytes;
 import org.yi.happy.archive.Fragment;
@@ -150,8 +151,20 @@ public class RestoreEngine {
      * @param key
      *            the key to put together.
      */
-    public void add(String name, FullKey key) {
+    public void add(String name, FullKey key) throws DuplicateJobName {
+        if (hasJob(name)) {
+            throw new DuplicateJobName(name);
+        }
         add(name, new RestoreWork(key));
+    }
+
+    private boolean hasJob(String name) {
+        for (Job job : jobs) {
+            if (Objects.equals(job.name, name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
