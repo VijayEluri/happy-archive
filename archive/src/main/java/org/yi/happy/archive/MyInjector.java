@@ -172,14 +172,6 @@ public class MyInjector {
                 injectIndexSearch(scope));
     }
 
-    public static MainCommand injectIndexSearchFirstMain(ApplicationScope scope) {
-        return guice.getInstance(IndexSearchFirstMain.class);
-    }
-
-    public static MainCommand injectIndexSearchNextMain(ApplicationScope scope) {
-        return guice.getInstance(IndexSearchNextMain.class);
-    }
-
     public static MainCommand injectIndexSearchOneMain(ApplicationScope scope) {
         return new IndexSearchOneMain(injectArgs(scope), injectInput(scope), injectOutput(scope),
                 injectIndexSearch(scope));
@@ -509,9 +501,13 @@ public class MyInjector {
     public static <T> T inject(Class<T> type, String name, ApplicationScope scope) throws ProvisionException {
         try {
             name = "inject" + name;
-            Method method = MyInjector.class.getMethod(name, ApplicationScope.class);
-            Object object = method.invoke(null, scope);
-            return type.cast(object);
+            try {
+                Method method = MyInjector.class.getMethod(name, ApplicationScope.class);
+                Object object = method.invoke(null, scope);
+                return type.cast(object);
+            } catch (NoSuchMethodException e) {
+                return guice.getInstance(type);
+            }
         } catch (InvocationTargetException e) {
             Throwable ex = e.getCause();
             if (ex instanceof ProvisionException) {
