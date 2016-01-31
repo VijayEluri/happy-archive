@@ -1,7 +1,6 @@
 package org.yi.happy.archive;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.HashSet;
 import java.util.Set;
@@ -25,7 +24,6 @@ public class IndexSearchMain implements MainCommand {
     private final PrintStream out;
     private final IndexSearch indexSearch;
     private final PrintStream err;
-    private final InputStream in;
 
     /**
      * create with context.
@@ -39,9 +37,8 @@ public class IndexSearchMain implements MainCommand {
      * @param indexSearch
      *            the index search interface.
      */
-    public IndexSearchMain(InputStream in, PrintStream out, PrintStream err,
+    public IndexSearchMain(PrintStream out, PrintStream err,
             IndexSearch indexSearch) {
-        this.in = in;
         this.out = out;
         this.err = err;
         this.indexSearch = indexSearch;
@@ -79,9 +76,9 @@ public class IndexSearchMain implements MainCommand {
         out.flush();
     }
 
-    private Set<LocatorKey> loadKeyList() throws IOException {
+    public static Set<LocatorKey> loadKeyList() throws IOException {
         Set<LocatorKey> keys = new HashSet<LocatorKey>();
-        for (String line : new LineIterator(in)) {
+        for (String line : new LineIterator(System.in)) {
             keys.add(LocatorKeyParse.parseLocatorKey(line));
         }
         return keys;

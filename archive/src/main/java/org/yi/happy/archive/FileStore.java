@@ -4,9 +4,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import com.google.inject.ImplementedBy;
+
 /**
  * A file storage service. The file paths components are '/' separated.
  */
+@ImplementedBy(FileStoreFile.class)
 public interface FileStore {
     /**
      * The path component separator.

@@ -2,6 +2,7 @@ package org.yi.happy.archive;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.yi.happy.annotate.EntryPoint;
@@ -12,12 +13,17 @@ import org.yi.happy.archive.commandLine.Requirement;
 import org.yi.happy.archive.commandLine.RequirementLoader;
 import org.yi.happy.archive.gui.RestoreGuiMain;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.TypeLiteral;
+
 /**
  * The top level entry point that dispatches to the sub-commands.
  */
 @GlobalOutput
 public class Main {
     private static final Map<String, Class<? extends MainCommand>> commands;
+
     static {
         Map<String, Class<? extends MainCommand>> c;
         c = new LinkedHashMap<String, Class<? extends MainCommand>>();
@@ -42,6 +48,8 @@ public class Main {
         c.put("index-search-first", IndexSearchFirstMain.class);
         c.put("index-search-next", IndexSearchNextMain.class);
         c.put("index-search-one", IndexSearchOneMain.class);
+        c.put("index-search-prev", IndexSearchPrevMain.class);
+        c.put("index-search-last", IndexSearchLastMain.class);
         c.put("index-volume", IndexVolumeMain.class);
         c.put("index-check", IndexCheckMain.class);
         c.put("build-image", BuildImageMain.class);
@@ -117,8 +125,25 @@ public class Main {
         System.err.println();
     }
 
-    private static MainCommand getCommandObject(
-            Class<? extends MainCommand> type, ApplicationScope scope) {
+    private static MainCommand getCommandObject(Class<? extends MainCommand> type, final ApplicationScope scope) {
+        /*
+         * TODO create the Guice Module and Injector here, set it on a static
+         * field of MyInjector, and from there you can start to have it take
+         * over the inject methods in there.
+         * 
+         * what about using a static block? There are some injected variables in
+         * the ApplicationScope.
+         */
+        MyInjector.guice = Guice.createInjector(new AbstractModule() {
+            @Override
+            protected void configure() {
+                bind(new TypeLiteral<List<String>>() {
+                }).annotatedWith(EnvArgs.class).toInstance(scope.getArgs());
+
+                bind(String.class).annotatedWith(EnvIndex.class).toInstance(scope.getIndex());
+            }
+        });
+
         return MyInjector.inject(type, type.getSimpleName(), scope);
     }
 

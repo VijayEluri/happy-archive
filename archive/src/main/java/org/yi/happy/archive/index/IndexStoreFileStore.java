@@ -10,8 +10,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
+import org.yi.happy.archive.EnvIndex;
 import org.yi.happy.archive.FileStore;
 
+import com.google.inject.Inject;
 
 /**
  * An {@link IndexStore} in a {@link FileStore}.
@@ -29,7 +31,8 @@ public class IndexStoreFileStore implements IndexStore {
      * @param base
      *            the base file name.
      */
-    public IndexStoreFileStore(FileStore files, String base) {
+    @Inject
+    public IndexStoreFileStore(FileStore files, @EnvIndex String base) {
         this.files = files;
         this.base = base;
     }

@@ -60,7 +60,13 @@ public class IndexSearchMainTest {
 
         InputStream in = input(key(K0) + "\n");
 
-        new IndexSearchMain(in, out, null, indexSearch).run();
+        InputStream oldIn = System.in;
+        System.setIn(in);
+        try {
+            new IndexSearchMain(out, null, indexSearch).run();
+        } finally {
+            System.setIn(oldIn);
+        }
 
         StringBuilder sb = new StringBuilder();
         sb.append(V0 + "\t" + V00 + "\t" + N0 + "\t" + key(K0) + "\n");

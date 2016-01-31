@@ -12,8 +12,8 @@ import org.yi.happy.annotate.GlobalFilesystem;
 import org.yi.happy.archive.commandLine.Env;
 import org.yi.happy.archive.gui.RestoreGuiMain;
 import org.yi.happy.archive.index.IndexSearch;
-import org.yi.happy.archive.index.IndexStore;
-import org.yi.happy.archive.index.IndexStoreFileStore;
+
+import com.google.inject.Injector;
 
 /**
  * The dependency injector for this project, this gives me much more flexibility
@@ -168,23 +168,30 @@ public class MyInjector {
      * @return the object.
      */
     public static MainCommand injectIndexSearchMain(ApplicationScope scope) {
-        return new IndexSearchMain(injectInput(scope), injectOutput(scope), injectError(scope),
+        return new IndexSearchMain(injectOutput(scope), injectError(scope),
                 injectIndexSearch(scope));
     }
 
     public static MainCommand injectIndexSearchFirstMain(ApplicationScope scope) {
-        return new IndexSearchFirstMain(injectArgs(scope), injectInput(scope), injectOutput(scope),
-                injectIndexStore(scope));
+        return guice.getInstance(IndexSearchFirstMain.class);
     }
 
     public static MainCommand injectIndexSearchNextMain(ApplicationScope scope) {
-        return new IndexSearchNextMain(injectArgs(scope), injectInput(scope), injectOutput(scope),
-                injectIndexStore(scope));
+        return guice.getInstance(IndexSearchNextMain.class);
     }
 
     public static MainCommand injectIndexSearchOneMain(ApplicationScope scope) {
         return new IndexSearchOneMain(injectArgs(scope), injectInput(scope), injectOutput(scope),
-                injectIndexStore(scope));
+                injectIndexSearch(scope));
+    }
+
+    public static MainCommand injectIndexSearchPrevMain(ApplicationScope scope) {
+        return new IndexSearchPrevMain(injectArgs(scope), injectInput(scope), injectOutput(scope),
+                injectIndexSearch(scope));
+    }
+
+    public static MainCommand injectIndexSearchLastMain(ApplicationScope scope) {
+        return new IndexSearchLastMain(injectArgs(scope), injectOutput(scope), injectIndexSearch(scope));
     }
 
     /**
@@ -434,18 +441,7 @@ public class MyInjector {
      * @return the object.
      */
     public static IndexSearch injectIndexSearch(ApplicationScope scope) {
-        return new IndexSearch(injectIndexStore(scope));
-    }
-
-    /**
-     * get a {@link IndexStore}.
-     * 
-     * @param scope
-     *            the scope object.
-     * @return the object.
-     */
-    public static IndexStore injectIndexStore(ApplicationScope scope) {
-        return new IndexStoreFileStore(injectFileStore(scope), injectIndex(scope));
+        return guice.getInstance(IndexSearch.class);
     }
 
     /**
@@ -526,4 +522,11 @@ public class MyInjector {
             throw new ProvisionException(e);
         }
     }
+
+    /**
+     * This is a transition variable, the functionality of MyInjector is
+     * disappearing into here, after which this whole class goes away.
+     */
+    public static Injector guice;
+
 }

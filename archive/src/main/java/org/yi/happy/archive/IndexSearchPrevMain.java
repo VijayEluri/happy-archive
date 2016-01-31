@@ -2,6 +2,7 @@ package org.yi.happy.archive;
 
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -17,13 +18,13 @@ import org.yi.happy.archive.key.LocatorKey;
 @UsesInput("key-list")
 @UsesOutput("result")
 @UsesArgs({ "volume-set", "volume-name" })
-public class IndexSearchOneMain implements MainCommand {
+public class IndexSearchPrevMain implements MainCommand {
     private List<String> args;
     private PrintStream out;
     private InputStream in;
     private IndexSearch index;
 
-    public IndexSearchOneMain(List<String> args, InputStream in, PrintStream out, IndexSearch index) {
+    public IndexSearchPrevMain(List<String> args, InputStream in, PrintStream out, IndexSearch index) {
         this.args = args;
         this.in = in;
         this.out = out;
@@ -33,13 +34,27 @@ public class IndexSearchOneMain implements MainCommand {
     @Override
     public void run() throws Exception {
         String volumeSet = args.get(0);
-        String volumeName = args.get(1);
+        String lastVolumeName = args.get(1);
         Set<LocatorKey> want = IndexSearchMain.loadKeyList();
 
-        List<IndexEntry> found = index.searchOne(volumeSet, volumeName, want);
+        List<String> volumeNames = index.listVolumeNames(volumeSet);
+        Collections.reverse(volumeNames);
+        for (String volumeName : volumeNames) {
+            if (volumeName.compareTo(lastVolumeName) >= 0) {
+                continue;
+            }
 
-        for (IndexEntry result : found) {
-            out.println(volumeSet + "\t" + volumeName + "\t" + result.getName() + "\t" + result.getKey());
+            List<IndexEntry> found = index.searchOne(volumeSet, volumeName, want);
+
+            if (found.isEmpty()) {
+                continue;
+            }
+
+            for (IndexEntry result : found) {
+                out.println(volumeSet + "\t" + volumeName + "\t" + result.getName() + "\t" + result.getKey());
+            }
+
+            break;
         }
     }
 }
