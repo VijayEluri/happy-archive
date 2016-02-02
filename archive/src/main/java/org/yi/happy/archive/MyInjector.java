@@ -172,11 +172,6 @@ public class MyInjector {
                 injectIndexSearch(scope));
     }
 
-    public static MainCommand injectIndexSearchOneMain(ApplicationScope scope) {
-        return new IndexSearchOneMain(injectArgs(scope), injectInput(scope), injectOutput(scope),
-                injectIndexSearch(scope));
-    }
-
     public static MainCommand injectIndexSearchPrevMain(ApplicationScope scope) {
         return new IndexSearchPrevMain(injectArgs(scope), injectInput(scope), injectOutput(scope),
                 injectIndexSearch(scope));

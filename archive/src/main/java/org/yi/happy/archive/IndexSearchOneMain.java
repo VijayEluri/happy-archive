@@ -13,6 +13,8 @@ import org.yi.happy.archive.index.IndexEntry;
 import org.yi.happy.archive.index.IndexSearch;
 import org.yi.happy.archive.key.LocatorKey;
 
+import com.google.inject.Inject;
+
 @UsesIndexStore
 @UsesInput("key-list")
 @UsesOutput("result")
@@ -23,7 +25,9 @@ public class IndexSearchOneMain implements MainCommand {
     private InputStream in;
     private IndexSearch index;
 
-    public IndexSearchOneMain(List<String> args, InputStream in, PrintStream out, IndexSearch index) {
+    @Inject
+    public IndexSearchOneMain(@EnvArgs List<String> args, @EnvIn InputStream in, @EnvOut PrintStream out,
+            IndexSearch index) {
         this.args = args;
         this.in = in;
         this.out = out;

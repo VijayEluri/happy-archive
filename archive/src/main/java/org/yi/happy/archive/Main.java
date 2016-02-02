@@ -1,5 +1,7 @@
 package org.yi.happy.archive;
 
+import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -141,6 +143,9 @@ public class Main {
                 }).annotatedWith(EnvArgs.class).toInstance(scope.getArgs());
 
                 bind(String.class).annotatedWith(EnvIndex.class).toInstance(scope.getIndex());
+                bind(InputStream.class).annotatedWith(EnvIn.class).toInstance(System.in);
+                bind(PrintStream.class).annotatedWith(EnvOut.class).toInstance(System.out);
+                bind(PrintStream.class).annotatedWith(EnvErr.class).toInstance(System.err);
             }
         });
 
